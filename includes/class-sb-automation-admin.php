@@ -277,17 +277,19 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          *
          * @since     0.1
          */
-        public function appearance_meta_box_callback( $post ) { 
-
-            //var_dump( get_post_meta( $post->ID, 'show_email' ) );
+        public function appearance_meta_box_callback( $post ) {
 
             ?>
 
             <?php wp_nonce_field( basename( __FILE__ ), 'sb_notification_meta_box_nonce' ); ?>
 
             <p>
-                <input type="checkbox" id="show_email" name="show_email" value="1" <?php checked(1, get_post_meta( $post->ID, 'show_email', true ), true); ?> />
-                <label for="show_email"><?php _e( 'Show Email Field?', 'sb-automation' ); ?></label>
+                <input type="checkbox" name="show_chat" value="1" <?php checked( get_post_meta( $post->ID, 'show_chat', 1 ) ); ?> />
+                <label for="show_chat"><?php _e( 'Show chat?', 'sb-automation' ); ?></label>
+            </p>
+            <p>
+                <input type="checkbox" id="show_optin" name="show_optin" value="1" <?php checked("1", get_post_meta( $post->ID, 'show_optin', true ), true); ?> />
+                <label for="show_optin"><?php _e( 'Show opt-in?', 'sb-automation' ); ?></label>
                 <div id="show-email-options">
                 <label for="opt_in_message"><?php _e( 'Message', 'sb-automation' ); ?></label>
                 <input class="widefat" type="text" name="opt_in_message" id="opt_in_message" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
@@ -433,8 +435,9 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             if ( !current_user_can( 'edit_post', $post_id ) )
                 return $post_id;
 
-            $keys = array( 
-                'show_email', 
+            $keys = array(
+                'show_chat', 
+                'show_optin', 
                 'opt_in_message',
                 'opt_in_confirmation',
                 'opt_in_placeholder',
@@ -451,8 +454,10 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
 
             // sanitize data
             foreach ($keys as $key => $value) {
-                if( empty( $_POST[ $value ] ) )
+                if( empty( $_POST[ $value ] ) ) {
+                    delete_post_meta( $post_id, $value );
                     continue;
+                }
                 $sanitized = sanitize_text_field( $_POST[ $value ] );
                 update_post_meta( $post_id, $value, $sanitized );
             }

@@ -95,11 +95,20 @@
     .on('click', '.sb-email-btn', sbAutomation.emailSubmitted )
     .on('click', '#sb-floating-btn', sbAutomation.toggleHide )
     .on('click', '.sb-interaction', sbAutomation.interactionLink )
+    .on('click', '.sb-full-right', sbAutomation.fullRight )
     .on('click', '.sb-text i', sbAutomation.sendText );
 
     $('.sb-text-input').on('keypress', sbAutomation.submitChatTextOnEnter );
 
     $('.sb-email-input').on('keypress', sbAutomation.submitEmailOnEnter );
+
+  }
+
+  sbAutomation.fullRight = function() {
+
+    var item = $( '#' + sbAutomation.activeID );
+    item.toggleClass('sb-full-right');
+    return false;
 
   }
 
@@ -132,12 +141,14 @@
     }
 
     // Show email opt-in
-    if( options.showOptin === 'true' && options.showChat != 'true' ) {
+    if( options.showOptin === '1' && options.showChat != '1' ) {
       sbAutomation.transitionIn( sbAutomation.noteOptin );
       // Setup localized vars
       var textInput = document.querySelector('#' + sbAutomation.activeID + ' .sb-email-input');
-      if( textInput )
-        textInput.setAttribute('placeholder', options.placeholder );
+      textInput.setAttribute('placeholder', options.placeholder );
+      
+      $('.sb-away-msg').remove();
+      $('#' + sbAutomation.activeID + ' .sb-email-row').prepend( '<span class="sb-away-msg">' + sbAutomation.activeOptions.optinMsg + '</span>' );
     }
 
     // Button should not be shown
@@ -145,7 +156,7 @@
       sbAutomation.hide( sbAutomation.floatingBtn );
 
     // Should we show the chat box?
-    if( options.showChat === 'true' ) {
+    if( options.showChat === '1' ) {
       sbAutomation.transitionIn( sbAutomation.chatBox );
     }
 

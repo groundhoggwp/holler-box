@@ -100,16 +100,24 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             // active notification IDs
             $array['active'] = self::$active;
 
-            $array['1839'] = array( 
-                'content' => '<p>Join our webinar this Thursday at 11am PT. Enter your email below to register.</p><a href="#" class="read-more">Read More</a> More content here.',
-                // 'content' => '<p>Hi there, have any questions?</p>',
-                'showOptin' => 'true',
-                'visitor' => 'returning',
-                'showChat' => 'true',
-                'optinMsg' => 'Please enter your email and we will reply asap.',
-                'placeholder' => 'Email',
-                'confirmMsg' => 'Sent, thanks!'
-            );
+            foreach (self::$active as $key => $value) {
+
+                $content_post = get_post($value);
+                $content = $content_post->post_content;
+                $content = apply_filters('the_content', $content);
+                $content = apply_filters('the_content_more_link', $content);
+                $content = str_replace(']]>', ']]&gt;', $content);
+
+                $array[$value] = array( 
+                    'content' => $content,
+                    'showOptin' => get_post_meta($value, 'show_optin', 1),
+                    'visitor' => get_post_meta($value, 'new_or_returning', 1),
+                    'showChat' => get_post_meta($value, 'show_chat', 1),
+                    'optinMsg' => get_post_meta($value, 'opt_in_message', 1),
+                    'placeholder' => get_post_meta($value, 'opt_in_placeholder', 1),
+                    'confirmMsg' => get_post_meta($value, 'opt_in_confirmation', 1)
+                );
+            }
 
             $array['delay'] = '1000'; // time delay in milliseconds, default 100
 
@@ -175,6 +183,8 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
 
             <div id="sb-<?php echo $id; ?>" class="sb-notification-box">
                 
+                <div class="sb-close"><i class="icon icon-cancel"></i> <i class="icon icon-cancel sb-full-right"></i></div>
+                
                 <div class="sb-box-rows">
                         <?php echo get_avatar('scott@apppresser.com', 50 ); ?>
                     <div class="sb-row sb-first-row"></div>
@@ -194,7 +204,6 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 </div>
 
                 <span class="sb-powered-by"><a href="http://scottbolinger.com" target="_blank">Scottomator</a></span>
-                <div class="sb-close"><i class="icon icon-cancel"></i></div>
  
             </div>
             <?php

@@ -38,7 +38,7 @@
   	}
 
   	$('body')
-	.on('change', '#show_email', sbAdmin.toggleEmail )
+	.on('change', '#show_optin', sbAdmin.toggleEmail )
 	.on('change', 'input[name=show_until]', sbAdmin.toggleDatepicker )
 	.on('change', 'input[name=show_on]', sbAdmin.toggleShowOn )
 	.on('keyup', '#content', sbAdmin.updatePreviewContent )
@@ -57,7 +57,7 @@
 
   sbAdmin.toggleEmail = function() {
 
-  	if( $('#show_email').is(':checked') ) {
+  	if( $('#show_optin').is(':checked') ) {
 		$("#show-email-options, #sb-note-optin").show();
 	} else {
 		$("#show-email-options, #sb-note-optin").hide();
