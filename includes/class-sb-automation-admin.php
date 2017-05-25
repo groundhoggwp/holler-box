@@ -130,8 +130,9 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
 
                     <li class="sb-item sb-list-header">
                         <span class="sb-col">Title</span>
-                        <span class="sb-col">Interactions</span>
                         <span class="sb-col">Active</span>
+                        <span class="sb-col">Interactions</span>
+                        <span class="sb-col">Date</span>
                     </li>
 
                     <?php echo $this->get_list(); ?>
@@ -167,9 +168,11 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                     $id = get_the_id();
                     $output .= '<li class="sb-item">';
                     $output .= '<span class="sb-col sb-item-title"><a href="' . admin_url() . 'admin.php?page=sb_automation&view=single&id=' . $id . '">' . get_the_title() . '</a></span>';
+                    $output .= '<span class="sb-col"><label class="sb-switch"><input type="checkbox"><div class="sb-slider sb-round"></div></label></span>';                   
                     $output .= '<span class="sb-col">24</span>';
-                    $output .= '<span class="sb-col"><label class="sb-switch"><input type="checkbox"><div class="sb-slider sb-round"></div></label></span>';
+                    $output .= '<span class="sb-col">' . get_the_date() . '</span>';
                     $output .= '</li>';
+
                     //$output .= get_post_meta( get_the_id() );
                 }
 
@@ -206,7 +209,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'labels'                => $labels,
                 'public'                => true,
                 'publicly_queryable' => false,
-                'show_ui'           => false,
+                'show_ui'           => true,
                 'show_in_nav_menus' => false,
                 'show_in_menu'      => true,
                 'show_in_rest'      => false,
@@ -217,9 +220,9 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'hierarchical'      => true,
                 //'menu_position'     => 50,
                 //'menu_icon'         => 'dashicons-welcome-add-page',
-                //'supports'          => array( 'title', 'editor' ),
+                'supports'          => array( 'title', 'editor' ),
                 'show_in_customizer' => false,
-                //'register_meta_box_cb' => array( $this, 'notification_meta_boxes' )
+                'register_meta_box_cb' => array( $this, 'notification_meta_boxes' )
             );
 
             register_post_type( 'sb_notification', $args );
@@ -366,6 +369,10 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 <input type="radio" name="show_until" value="date" <?php checked('date', get_post_meta( $post->ID, 'show_until', true ), true); ?>> A certain date
                 <div id="sb-until-datepicker" class="sb-datepicker"></div>
             </p>
+            <p>
+                <input type="checkbox" id="sb_active" name="sb_active" value="1" <?php checked(1, get_post_meta( $post->ID, 'sb_active', true ), true); ?> />
+                <label for="sb_active"><?php _e( 'Activate?', 'sb-automation' ); ?></label>
+            </p>
 
         <?php }
 
@@ -439,7 +446,8 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'logged_in',
                 'new_or_returning',
                 'avatar_email',
-                'show_until' );
+                'show_until',
+                'sb_active' );
 
             // sanitize data
             foreach ($keys as $key => $value) {

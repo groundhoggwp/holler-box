@@ -4,76 +4,86 @@
 
   sbAutomation.init = function() {
 
-    sbAutomation.cacheSelectors();
+    // set defaults
+    sbAutomation.newVisitor = false;
+    sbAutomation.noteInteracted = false;
+    sbAutomation.noteHidden = false;
+
+    // determine if new or returning visitor
+    sbAutomation.checkCookie();
+
+    // if we have active items, loop through them
+    if( window.sbAutoVars.active )
+      sbAutomation.doActive( window.sbAutoVars.active );
     
+  }
+
+  // Notification box exists
+  sbAutomation.doActive = function( ids ) {
+
+    for (var i = 0; i < ids.length; i++) {
+      sbAutomation.doChecks( ids[i] );
+    }
+
+  }
+
+  // Check if we should display item
+  sbAutomation.doChecks = function( id ) {
+
+    console.log('dochecks' + id)
+
+    // If markup doesn't exist, bail
+    var item = document.getElementById( 'sb-' + id );
+    if( !item )
+      return;
+
+    var vars = window.sbAutoVars[id];
+
+    if( !vars.visitor )
+      return;
+
+    if( vars.visitor === 'new' && sbAutomation.newVisitor != true )
+      return;
+
+    if( vars.visitor === 'returning' && sbAutomation.newVisitor != false )
+      return;
+
+    // passes checks, show it
+    sbAutomation.activeID = 'sb-' + id;
+    sbAutomation.activeOptions = vars;
+    sbAutomation.cacheSelectors();
+    sbAutomation.noteListeners();
+
+    setTimeout( function() {
+      sbAutomation.showNote();
+    }, sbAutomation.delay );
+
+  } 
+
+  // determine if new or returning visitor
+  sbAutomation.checkCookie = function() {
+
+    if( sbAutomation.getCookie('sb_visit') === "" ) {
+
+      // New visitor, set cookie
+      var cookie = sbAutomation.setCookie('sb_visit', Date.now(), parseInt( window.sbAutoVars.expires ));
+      sbAutomation.newVisitor = true;
+
+    }
+
+    console.log('new visitor?' + sbAutomation.newVisitor )
+
   }
 
   // Cache selectors and fire up the item display
   sbAutomation.cacheSelectors = function() {
 
     sbAutomation.floatingBtn = document.getElementById('sb-floating-btn');
-    sbAutomation.notificationBox = document.getElementById( 'sb-notification-box' );
-    sbAutomation.banner = document.getElementById( 'sb-banner' );
-    sbAutomation.chatBox = document.getElementById( 'sb-chat' );
-    sbAutomation.noteOptin = document.getElementById( 'sb-note-optin' );
+    // sbAutomation.banner = document.getElementById( 'sb-banner' );
+    sbAutomation.chatBox = document.querySelector('#' + sbAutomation.activeID + ' .sb-chat');
+    sbAutomation.noteOptin = document.querySelector('#' + sbAutomation.activeID + ' .sb-note-optin');
     sbAutomation.delay = ( window.sbAutoVars.delay ? parseInt( window.sbAutoVars.delay ) : '1000' );
-    sbAutomation.firstRow = document.getElementById( 'sb-first-row');
-
-    // set defaults
-    sbAutomation.newVisitor = true;
-    sbAutomation.noteInteracted = false;
-    sbAutomation.noteHidden = false;
-
-    if( sbAutomation.notificationBox )
-      sbAutomation.doNotification();
-
-    if( sbAutomation.banner )
-      sbAutomation.doBanner();
-
-  }
-
-  // Notification box exists
-  sbAutomation.doNotification = function() {
-
-    sbAutomation.noteVisitorChecks();
-
-  }
-
-  // Banner exists
-  sbAutomation.doBanner = function() {
-
-  }
-
-  // Check if user is new, returning, interacted, run showNote(content)
-  sbAutomation.noteVisitorChecks = function() {
-
-    // Check if user interacted or not
-    if( sbAutomation.getCookie('sb_note_int') === 'true' && window.sbAutoVars.noteInteracted ) {
-
-      // visitor interacted
-      sbAutomation.noteInteracted = true;
-      sbAutomation.currentContent = window.sbAutoVars.noteInteracted;
-
-    } else if( sbAutomation.getCookie('sb_visit') === "" ) {
-
-      // New visitor, set cookie
-      var cookie = sbAutomation.setCookie('sb_visit', Date.now(), parseInt( window.sbAutoVars.expires ));
-      sbAutomation.currentContent = window.sbAutoVars.noteDefault;
-
-    } else {
-
-      // returning visitor
-      sbAutomation.newVisitor = false;
-      sbAutomation.currentContent = ( window.sbAutoVars.noteReturning ? window.sbAutoVars.noteReturning : window.sbAutoVars.noteDefault );
-
-    }
-
-    setTimeout( function() {
-
-      sbAutomation.showNote( sbAutomation.currentContent );
-      sbAutomation.noteListeners();
-
-    }, sbAutomation.delay );
+    sbAutomation.firstRow = document.querySelector('#' + sbAutomation.activeID + ' .sb-first-row');
 
   }
 
@@ -82,19 +92,23 @@
 
     $('body')
     .on('click', '.sb-close', sbAutomation.hideItem )
-    .on('click', '#sb-submit-email', sbAutomation.emailSubmitted )
+    .on('click', '.sb-email-btn', sbAutomation.emailSubmitted )
     .on('click', '#sb-floating-btn', sbAutomation.toggleHide )
     .on('click', '.sb-interaction', sbAutomation.interactionLink )
-    .on('click', '#sb-submit-text', sbAutomation.sendText );
+    .on('click', '.sb-text i', sbAutomation.sendText );
 
-    $('#sb-text-input').on('keypress', sbAutomation.submitChatTextOnEnter );
+    $('.sb-text-input').on('keypress', sbAutomation.submitChatTextOnEnter );
 
-    $('#sb-email-input').on('keypress', sbAutomation.submitEmailOnEnter );
+    $('.sb-email-input').on('keypress', sbAutomation.submitEmailOnEnter );
 
   }
 
   // Show/hide elements based on options object
-  sbAutomation.showNote = function( options ) {
+  sbAutomation.showNote = function() {
+
+    var options = sbAutomation.activeOptions;
+
+    var item = document.getElementById( sbAutomation.activeID );
 
     sbAutomation.firstRow.innerHTML = options.content;
 
@@ -102,7 +116,7 @@
     if( options.hideFirst === 'true' || window.localStorage.getItem( 'sb_hide_note' ) === 'true' ) {
 
       // hide box, show btn
-      sbAutomation.transitionOut( sbAutomation.notificationBox );
+      sbAutomation.transitionOut( item );
 
       if( options.showBtn != 'false' )
         sbAutomation.transitionIn( sbAutomation.floatingBtn );
@@ -110,7 +124,7 @@
     } else {
 
       // Show the box
-      sbAutomation.transitionIn( sbAutomation.notificationBox );
+      sbAutomation.transitionIn( item );
 
       if( options.showBtn != 'false' )
         sbAutomation.transitionOut( sbAutomation.floatingBtn );
@@ -121,7 +135,7 @@
     if( options.showOptin === 'true' && options.showChat != 'true' ) {
       sbAutomation.transitionIn( sbAutomation.noteOptin );
       // Setup localized vars
-      var textInput = document.getElementById('sb-email-input');
+      var textInput = document.querySelector('#' + sbAutomation.activeID + ' .sb-email-input');
       if( textInput )
         textInput.setAttribute('placeholder', options.placeholder );
     }
@@ -219,7 +233,7 @@
       }, 1000);
     }
 
-    sbAutomation.showNote( sbAutomation.currentContent );
+    sbAutomation.showNote();
 
   }
 
@@ -228,23 +242,22 @@
     item.style.display = 'block';
 
     setTimeout( function() {
-      item.classList = 'sb-transition-in';
+      $(item).removeClass('sb-hide').addClass('sb-transition-in');
     }, 1);
 
     setTimeout( function() {
-      item.classList = 'sb-show';
+      $(item).removeClass('sb-transition-in').addClass('sb-show');
     }, 100);
 
   }
 
   sbAutomation.transitionOut = function(item) {
     
-    item.classList = 'sb-transition-out';
+    $(item).addClass('sb-transition-out');
 
     setTimeout( function() {
-      item.classList = 'sb-hide';
+      $(item).removeClass('sb-transition-out, sb-show').addClass('sb-hide');
       item.removeAttribute('style');
-
     }, 500);
 
   }
@@ -252,13 +265,13 @@
   sbAutomation.show = function(item) {
     
     item.style.display = 'block';
-    item.classList = 'sb-show';
+    $(item).removeClass('sb-hide').addClass('sb-show');
 
   }
 
   sbAutomation.hide = function(item) {
     
-    item.classList = 'sb-hide';
+    $(item).removeClass('sb-show').addClass('sb-hide');
     item.removeAttribute('style');
 
   }
@@ -272,7 +285,7 @@
       var msgs = msg.split("/n");
 
       for (var i = 0; i < msgs.length; i++) {
-        $('.sb-box-rows').append('<div class="sb-row sb-visitor-row">' + msgs[i] + '</div>');
+        $( '#' + sbAutomation.activeID + ' .sb-box-rows').append('<div class="sb-row sb-visitor-row">' + msgs[i] + '</div>');
       }
 
       sbAutomation.showEmailSubmit();
@@ -307,10 +320,10 @@
 
   // Add chat text on click
   sbAutomation.sendText = function(e) {
-    var text = $('#sb-text-input').val();
+    var text = $('#' + sbAutomation.activeID + ' .sb-text-input').val();
     if ( text && text != '' ) {
       sbAutomation.submitText(text);
-      $('#sb-text-input').val('').focus();
+      $('#' + sbAutomation.activeID + ' .sb-text-input').val('').focus();
     }
   }
 
@@ -319,7 +332,7 @@
 
     var fullMsg = window.localStorage.getItem('sb-full-msg');
 
-    $('.sb-box-rows').append('<div class="sb-row sb-visitor-row">' + text + '</div>');
+    $('#' + sbAutomation.activeID + ' .sb-box-rows').append('<div class="sb-row sb-visitor-row">' + text + '</div>');
 
     if( fullMsg ) {
       fullMsg += '/n' + text; 
@@ -337,7 +350,8 @@
 
   // Show email field
   sbAutomation.showEmailSubmit = function() {
-    var emailRow = $('.sb-email-row');
+
+    var emailRow = $('#' + sbAutomation.activeID + ' .sb-email-row');
 
     // don't show duplicates
     if( emailRow.hasClass('sb-show') )
@@ -345,15 +359,15 @@
 
     emailRow.removeClass('sb-hide').addClass('sb-show');
 
-    emailRow.prepend( '<span class="sb-away-msg">' + window.sbAutoVars.noteDefault.optinMsg + '</span>' );
+    emailRow.prepend( '<span class="sb-away-msg">' + sbAutomation.activeOptions.optinMsg + '</span>' );
 
-    $('#sb-email-input').focus();
+    $('#' + sbAutomation.activeID + ' .sb-email-input').focus();
   }
 
   // User submitted email, send to server
   sbAutomation.emailSubmitted = function(e) {
 
-    var email = $('#sb-email-input').val()
+    var email = $('#' + sbAutomation.activeID + ' .sb-email-input').val()
 
     // validate email
     if( !email || email.indexOf('@') === -1 || email.indexOf('.') === -1 ) {
@@ -396,7 +410,7 @@
 
     if( !$(sbAutomation.chatBox).hasClass('sb-hide') ) {
       window.localStorage.removeItem('sb-full-msg');
-      $('.sb-visitor-row, .sb-away-msg').remove();
+      $('#' + sbAutomation.activeID + ' .sb-visitor-row, #' + sbAutomation.activeID + ' .sb-away-msg').remove();
     }
 
     sbAutomation.hide( sbAutomation.noteOptin );
@@ -411,7 +425,7 @@
   // Callback for user interaction
   sbAutomation.interacted = function( data ) {
 
-    var params = { action: 'sb_track_event', nonce: window.sbAutoVars.sbNonce, event: data.event };
+    var params = { action: 'sb_track_event', nonce: window.sbAutoVars.sbNonce, event: data.event, id: sbAutomation.activeID };
 
     if( data.data ) {
       params.details = data.details;
@@ -436,7 +450,7 @@
 
   sbAutomation.showConfirmation = function() {
 
-    sbAutomation.firstRow.innerHTML = sbAutomation.currentContent.confirmMsg;
+    sbAutomation.firstRow.innerHTML = sbAutomation.activeOptions.confirmMsg;
 
   }
 

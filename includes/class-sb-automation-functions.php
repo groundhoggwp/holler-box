@@ -23,6 +23,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
          */
         private static $instance;
         public static $errorpath = '../php-error-log.php';
+        public static $active = array();
         // sample: error_log("meta: " . $meta . "\r\n",3,self::$errorpath);
 
         /**
@@ -51,25 +52,11 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
          */
         private function hooks() {
 
-            add_action( 'wp', array( $this, 'show_logic' ) );
+            add_action('wp', array( $this, 'get_active_items' ) );
+            add_action( 'wp_footer', array( $this, 'maybe_display_items' ) );
+            // add_filter( 'body_class', array( $this, 'body_classes' ) );
+            add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
 
-        }
-
-        /**
-         * Determine if we should show items, if so, add hooks
-         *
-         * @since       0.1.0
-         * @return      void
-         */
-        public function show_logic() {
-
-            // @TODO: is user logged in check, page conditionals
-            //if( !is_user_logged_in() ) {
-                add_action( 'wp_footer', array( $this, 'display_notification_box' ) );
-                // add_filter( 'body_class', array( $this, 'body_classes' ) );
-                add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
-            //}
-                
         }
 
         /**
@@ -110,27 +97,19 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
 
             // $array['expires'] = '90'; // how long we should show this in num days
 
-            $array['noteDefault'] = array( 
-                'content' => '<p>Join our webinar this Thursday at 11am PT. Enter your email below to register.</p> <iframe width="560" height="315" src="https://www.youtube.com/embed/6BlOsGWiXJg?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>',
+            // active notification IDs
+            $array['active'] = self::$active;
+
+            $array['1839'] = array( 
+                'content' => '<p>Join our webinar this Thursday at 11am PT. Enter your email below to register.</p><a href="#" class="read-more">Read More</a> More content here.',
                 // 'content' => '<p>Hi there, have any questions?</p>',
                 'showOptin' => 'true',
-                // 'showChat' => 'true',
+                'visitor' => 'returning',
+                'showChat' => 'true',
                 'optinMsg' => 'Please enter your email and we will reply asap.',
                 'placeholder' => 'Email',
                 'confirmMsg' => 'Sent, thanks!'
             );
-
-            // $array['noteInteracted'] = array( 
-            //     'content' => '<p>Thanks for interacting!</p>',
-            //     'showOptin' => 'false'
-            // );
-
-            // $array['noteReturning'] = array( 
-            //     'content' => '<p>Hi again!</p>',
-            //     'showOptin' => 'false',
-            //     'optinMsg' => 'Enter your email.',
-            //     'placeholder' => 'Email'
-            // );
 
             $array['delay'] = '1000'; // time delay in milliseconds, default 100
 
@@ -143,37 +122,81 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
          * @since       0.1.0
          * @return      HTML
          */
-        public function display_notification_box() {
+        public function maybe_display_items() {
 
+            // do checks for page conditionals, logged in, etc here
+
+            foreach (self::$active as $key => $value) {
+                $this->display_notification_box( $value );
+            }
+
+        }
+
+        /**
+         * Loop through items, store active items in self::$active[] for later use
+         *
+         * @since       0.1.0
+         * @return      HTML
+         */
+        public function get_active_items() {
+
+            $args = array( 'post_type' => 'sb_notification' );
+            // The Query
+            $the_query = new WP_Query( $args );
+
+            // The Loop
+            if ( $the_query->have_posts() ) {
+
+                while ( $the_query->have_posts() ) {
+                    $the_query->the_post();
+                    $id = get_the_id();
+                    if( get_post_meta( $id, 'sb_active', 1 ) != '1' )
+                        continue;
+
+                    self::$active[] = strval( $id );
+
+                }
+
+                /* Restore original Post Data */
+                wp_reset_postdata();
+            }
+
+        }
+
+        /**
+         * Output notification markup
+         *
+         * @since       0.1.0
+         * @return      HTML
+         */
+        public function display_notification_box( $id ) {
             ?>
-
             <div id="sb-floating-btn"><i class="icon icon-chat"></i></div>
 
-            <div id="sb-notification-box">
+            <div id="sb-<?php echo $id; ?>" class="sb-notification-box">
                 
                 <div class="sb-box-rows">
                         <?php echo get_avatar('scott@apppresser.com', 50 ); ?>
-                    <div class="sb-row" id="sb-first-row"></div>
+                    <div class="sb-row sb-first-row"></div>
                 </div>
 
-                <div id="sb-note-optin" class="sb-row sb-email-row sb-hide">
-                    <input type="email" name="email" id="sb-email-input" placeholder="Enter email" autocomplete="on" autocapitalize="off" />
-                    <button class="sb-email-btn" id="sb-submit-email"><?php echo _e('Send', 'sb-automation' ); ?></button>
+                <div class="sb-row sb-note-optin sb-email-row sb-hide">
+                    <input type="email" name="email" class="sb-email-input" placeholder="Enter email" autocomplete="on" autocapitalize="off" />
+                    <button class="sb-email-btn"><?php echo _e('Send', 'sb-automation' ); ?></button>
                 </div>
                 
-                <div id="sb-chat" class="sb-hide">
+                <div class="sb-chat sb-hide">
                     
                     <div class="sb-row sb-text">
-                        <input type="text" id="sb-text-input" placeholder="Type your message" />
-                        <i id="sb-submit-text" class="icon icon-mail"></i>
+                        <input type="text" class="sb-text-input" placeholder="Type your message" />
+                        <i class="icon icon-mail"></i>
                     </div>
                 </div>
 
-                <span id="sb-powered-by"><a href="http://scottbolinger.com" target="_blank">Scottomator</a></span>
+                <span class="sb-powered-by"><a href="http://scottbolinger.com" target="_blank">Scottomator</a></span>
                 <div class="sb-close"><i class="icon icon-cancel"></i></div>
  
             </div>
-
             <?php
         }
 
