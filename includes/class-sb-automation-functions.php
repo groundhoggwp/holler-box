@@ -111,7 +111,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             // $array['expires'] = '90'; // how long we should show this in num days
 
             $array['noteDefault'] = array( 
-                'content' => '<p>Join our webinar Thursday at 11, <a href="#">click here to register.</a></p>',
+                'content' => '<p>Join our webinar this Thursday at 11am PT. Enter your email below to register.</p> <iframe width="560" height="315" src="https://www.youtube.com/embed/6BlOsGWiXJg?rel=0&amp;showinfo=0" frameborder="0" allowfullscreen></iframe>',
                 // 'content' => '<p>Hi there, have any questions?</p>',
                 'showOptin' => 'true',
                 // 'showChat' => 'true',
@@ -125,12 +125,12 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             //     'showOptin' => 'false'
             // );
 
-            $array['noteReturning'] = array( 
-                'content' => '<p>Hi again!</p>',
-                'showOptin' => 'false',
-                'optinMsg' => 'Enter your email.',
-                'placeholder' => 'Email'
-            );
+            // $array['noteReturning'] = array( 
+            //     'content' => '<p>Hi again!</p>',
+            //     'showOptin' => 'false',
+            //     'optinMsg' => 'Enter your email.',
+            //     'placeholder' => 'Email'
+            // );
 
             $array['delay'] = '1000'; // time delay in milliseconds, default 100
 

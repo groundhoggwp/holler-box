@@ -101,7 +101,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          */
         public function settings_page() {
 
-            add_submenu_page( 'options-general.php', 'SB Automation', 'SB Automation', 'manage_options', 'sb_automation', array( $this, 'render_settings') );
+            add_menu_page( 'SB Automation', 'SB Automation', 'manage_options', 'sb_automation', array( $this, 'render_settings'), 'dashicons-welcome-add-page', 50 );
             
         }
 
@@ -116,11 +116,70 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             ?>
             <div id="sb-automation-wrap" class="wrap">
 
-                <h2>Interactions: <?php echo get_option('sb_interactions', true ); ?></h2>
+            <?php
+
+            if ( isset( $_GET['view'] ) && 'single' == $_GET['view'] ) :
+                require_once SB_Automation_DIR . 'includes/view-single-notification.php';
+            else :
+
+            ?>            
+
+            <h2><?php _e('Notifications', 'sb-automation'); ?></h2>
+
+                <ul class="sb-list">
+
+                    <li class="sb-item sb-list-header">
+                        <span class="sb-col">Title</span>
+                        <span class="sb-col">Interactions</span>
+                        <span class="sb-col">Active</span>
+                    </li>
+
+                    <?php echo $this->get_list(); ?>
+
+                </ul>
 
             </div>
             <?php
+
+            endif;
             
+        }
+
+        /**
+         * List notifications
+         *
+         * @access      public
+         * @since       0.1
+         */
+        public function get_list() {
+
+            $args = array( 'post_type' => 'sb_notification' );
+            // The Query
+            $the_query = new WP_Query( $args );
+
+            $output = '';
+
+            // The Loop
+            if ( $the_query->have_posts() ) {
+
+                while ( $the_query->have_posts() ) {
+                    $the_query->the_post();
+                    $id = get_the_id();
+                    $output .= '<li class="sb-item">';
+                    $output .= '<span class="sb-col sb-item-title"><a href="' . admin_url() . 'admin.php?page=sb_automation&view=single&id=' . $id . '">' . get_the_title() . '</a></span>';
+                    $output .= '<span class="sb-col">24</span>';
+                    $output .= '<span class="sb-col"><label class="sb-switch"><input type="checkbox"><div class="sb-slider sb-round"></div></label></span>';
+                    $output .= '</li>';
+                    //$output .= get_post_meta( get_the_id() );
+                }
+
+                /* Restore original Post Data */
+                wp_reset_postdata();
+            } else {
+                $output = '';
+            }
+
+            return $output;
         }
 
         // Register sb_notification post type
@@ -147,20 +206,20 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'labels'                => $labels,
                 'public'                => true,
                 'publicly_queryable' => false,
-                'show_ui'           => true,
+                'show_ui'           => false,
                 'show_in_nav_menus' => false,
                 'show_in_menu'      => true,
                 'show_in_rest'      => false,
                 'query_var'         => true,
-                'rewrite'           => array( 'slug' => 'sb_notifications' ),
+                // 'rewrite'           => array( 'slug' => 'sb_notifications' ),
                 'capability_type'   => 'post',
                 'has_archive'       => true,
                 'hierarchical'      => true,
-                'menu_position'     => 50,
-                'menu_icon'         => 'dashicons-welcome-add-page',
-                'supports'          => array( 'title', 'editor' ),
+                //'menu_position'     => 50,
+                //'menu_icon'         => 'dashicons-welcome-add-page',
+                //'supports'          => array( 'title', 'editor' ),
                 'show_in_customizer' => false,
-                'register_meta_box_cb' => array( $this, 'notification_meta_boxes' )
+                //'register_meta_box_cb' => array( $this, 'notification_meta_boxes' )
             );
 
             register_post_type( 'sb_notification', $args );
@@ -391,7 +450,6 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             }
 
         }
-
 
     }
 

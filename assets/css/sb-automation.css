@@ -33,6 +33,10 @@
 	height: auto;
 }
 
+#sb-notification-box iframe {
+	height: auto;
+}
+
 .sb-transition-in {
 	opacity: 1 !important;
 	-moz-transform: translateX(0px) translateY(0px);
