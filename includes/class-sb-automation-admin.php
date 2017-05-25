@@ -123,24 +123,24 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             
         }
 
-        // Register sb_campaign post type
+        // Register sb_notification post type
         public function register_cpt() {
 
             $labels = array(
-                'name'              => __( 'SB Campaigns', 'sb-automation' ),
-                'singular_name'     => __( 'Campaign', 'sb-automation' ),
-                'menu_name'         => __( 'SB Campaigns', 'sb-automation' ),
-                'name_admin_bar'        => __( 'Campaign', 'sb-automation' ),
+                'name'              => __( 'SB Notifications', 'sb-automation' ),
+                'singular_name'     => __( 'Notification', 'sb-automation' ),
+                'menu_name'         => __( 'SB Notifications', 'sb-automation' ),
+                'name_admin_bar'        => __( 'Notification', 'sb-automation' ),
                 'add_new'           => __( 'Add New', 'sb-automation' ),
-                'add_new_item'      => __( 'Add New Campaign', 'sb-automation' ),
-                'new_item'          => __( 'New Campaign', 'sb-automation' ),
-                'edit_item'         => __( 'Edit Campaign', 'sb-automation' ),
-                'view_item'         => __( 'View Campaign', 'sb-automation' ),
-                'all_items'         => __( 'All Campaigns', 'sb-automation' ),
-                'search_items'      => __( 'Search Campaigns', 'sb-automation' ),
-                'parent_item_colon' => __( 'Parent Campaigns:', 'sb-automation' ),
-                'not_found'         => __( 'No Campaigns found.', 'sb-automation' ),
-                'not_found_in_trash' => __( 'No Campaigns found in Trash.', 'sb-automation' )
+                'add_new_item'      => __( 'Add New Notification', 'sb-automation' ),
+                'new_item'          => __( 'New Notification', 'sb-automation' ),
+                'edit_item'         => __( 'Edit Notification', 'sb-automation' ),
+                'view_item'         => __( 'View Notification', 'sb-automation' ),
+                'all_items'         => __( 'All Notifications', 'sb-automation' ),
+                'search_items'      => __( 'Search Notifications', 'sb-automation' ),
+                'parent_item_colon' => __( 'Parent Notifications:', 'sb-automation' ),
+                'not_found'         => __( 'No Notifications found.', 'sb-automation' ),
+                'not_found_in_trash' => __( 'No Notifications found in Trash.', 'sb-automation' )
             );
 
             $args = array(
@@ -152,7 +152,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'show_in_menu'      => true,
                 'show_in_rest'      => false,
                 'query_var'         => true,
-                'rewrite'           => array( 'slug' => 'campaigns' ),
+                'rewrite'           => array( 'slug' => 'sb_notifications' ),
                 'capability_type'   => 'post',
                 'has_archive'       => true,
                 'hierarchical'      => true,
@@ -160,10 +160,10 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'menu_icon'         => 'dashicons-welcome-add-page',
                 'supports'          => array( 'title', 'editor' ),
                 'show_in_customizer' => false,
-                'register_meta_box_cb' => array( $this, 'campaign_meta_boxes' )
+                'register_meta_box_cb' => array( $this, 'notification_meta_boxes' )
             );
 
-            register_post_type( 'sb_campaign', $args );
+            register_post_type( 'sb_notification', $args );
         }
 
         /**
@@ -171,22 +171,22 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          *
          * @since     0.1
          */
-        public function campaign_meta_boxes() {
-
-            add_meta_box(
-                'targeting_meta_box',
-                __( 'Targeting', 'sb-automation' ),
-                array( $this, 'targeting_meta_box_callback' ),
-                'sb_campaign',
-                'normal',
-                'high'
-            );
+        public function notification_meta_boxes() {
 
             add_meta_box(
                 'appearance_meta_box',
                 __( 'Appearance', 'sb-automation' ),
                 array( $this, 'appearance_meta_box_callback' ),
-                'sb_campaign',
+                'sb_notification',
+                'normal',
+                'high'
+            );
+
+            add_meta_box(
+                'targeting_meta_box',
+                __( 'Targeting', 'sb-automation' ),
+                array( $this, 'targeting_meta_box_callback' ),
+                'sb_notification',
                 'normal',
                 'high'
             );
@@ -195,7 +195,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'settings_meta_box',
                 __( 'Settings', 'sb-automation' ),
                 array( $this, 'settings_meta_box_callback' ),
-                'sb_campaign',
+                'sb_notification',
                 'normal',
                 'high'
             );
@@ -204,11 +204,51 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'preview_meta_box',
                 __( 'Preview', 'sb-automation' ),
                 array( $this, 'preview_meta_box_callback' ),
-                'sb_campaign',
+                'sb_notification',
                 'side'
             );
 
         }
+
+        /**
+         * Display appearance meta box
+         *
+         * @since     0.1
+         */
+        public function appearance_meta_box_callback( $post ) { 
+
+            //var_dump( get_post_meta( $post->ID, 'show_email' ) );
+
+            ?>
+
+            <?php wp_nonce_field( basename( __FILE__ ), 'sb_notification_meta_box_nonce' ); ?>
+
+            <p>
+                <input type="checkbox" id="show_email" name="show_email" value="1" <?php checked(1, get_post_meta( $post->ID, 'show_email', true ), true); ?> />
+                <label for="show_email"><?php _e( 'Show Email Field?', 'sb-automation' ); ?></label>
+                <div id="show-email-options">
+                <label for="opt_in_message"><?php _e( 'Message', 'sb-automation' ); ?></label>
+                <input class="widefat" type="text" name="opt_in_message" id="opt_in_message" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
+
+                <label for="opt_in_placeholder"><?php _e( 'Placeholder', 'sb-automation' ); ?></label>
+                <input class="widefat" type="text" name="opt_in_placeholder" id="opt_in_placeholder" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_placeholder', true ) ); ?>" size="20" />
+
+                <label for="opt_in_confirmation"><?php _e( 'Confirmation Message', 'sb-automation' ); ?></label>
+                <input class="widefat" type="text" name="opt_in_confirmation" id="opt_in_confirmation" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_confirmation', true ) ); ?>" size="20" />
+
+                <label for="opt_in_send_to"><?php _e( 'Send to', 'sb-automation' ); ?></label>
+                <input class="widefat" type="email" name="opt_in_send_to" id="opt_in_send_to" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_send_to', true ) ); ?>" size="20" />
+
+                </div>
+            </p>
+
+            <p>Button color</p>
+            <input type="text" name="button_color1" value="<?php echo esc_html( get_post_meta( $post->ID, 'button_color1', true ) ); ?>" class="sb-automation-colors" data-default-color="#effeff" />
+            
+            <p>Background color</p>
+            <input type="text" name="bg_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'bg_color', true ) ); ?>" class="sb-automation-colors" data-default-color="#ffffff" />
+
+        <?php }
 
         /**
          * Display targeting meta box
@@ -217,66 +257,35 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          */
         public function targeting_meta_box_callback( $post ) { ?>
 
-            <?php wp_nonce_field( basename( __FILE__ ), 'sb_campaign_meta_box_nonce' ); ?>
-
-            <h3>Show on these pages</h3>
+            <h4><?php _e( 'Show on', 'sb-automation' ); ?></h4>
 
             <p>
-                <label for="show-on"><?php _e( 'Show on:', 'sb-automation' ); ?></label>
-                <br>
-                <input type="radio" name="show-on" value="all" checked> All pages<br>
-                <input type="radio" name="show-on" value="limited"> Certain pages<br>
+                <input type="radio" name="show_on" value="all" <?php checked('all', get_post_meta( $post->ID, 'show_on', true ), true); ?>> All pages<br>
+                <input type="radio" name="show_on" value="limited" <?php checked('limited', get_post_meta( $post->ID, 'show_on', true ), true); ?>> Certain pages<br>
                 <div id="show-certain-pages">
                 <p>Enter page/post IDs:</p>
-                <input placeholder="Example: 2,25,311" class="widefat" type="text" name="sb-page-ids" id="sb-page-ids" value="<?php echo esc_attr( get_post_meta( $post->ID, 'sb_page_ids', true ) ); ?>" size="20" />
+                <input placeholder="Example: 2,25,311" class="widefat" type="text" name="sb_page_ids" id="sb_page_ids" value="<?php echo esc_attr( get_post_meta( $post->ID, 'sb_page_ids', true ) ); ?>" size="20" />
                 </div>
             </p>
 
-            <h3>Show to these visitors (default: all visitors)</h3>
+            <hr>
+
+            <h4>Show to these visitors</h4>
+
+            <p><label for="logged_in"><?php _e( 'Logged in/out', 'sb-automation' ); ?></label></p>
 
             <p> 
-                <label for="logged-in"><?php _e( 'Logged in/out', 'sb-automation' ); ?></label><br>
-                <input type="radio" name="logged-in" value="all" checked> All visitors<br>
-                <input type="radio" name="logged-in" value="logged-in"> Logged in<br>
-                <input type="radio" name="logged-in" value="logged-out"> Logged out
+                <input type="radio" name="logged_in" value="all" <?php checked('all', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> All visitors<br>
+                <input type="radio" name="logged_in" value="logged_in" <?php checked('logged_in', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> Logged in<br>
+                <input type="radio" name="logged_in" value="logged_out" <?php checked('logged_out', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> Logged out
             </p>
+            <hr>
+            <p><label for="visitor"><?php _e( 'New or returning', 'sb-automation' ); ?></label></p>
             <p>
-                <label for="visitor"><?php _e( 'New or returning', 'sb-automation' ); ?></label><br>
-                <input type="radio" name="new-or-returning" value="all" checked> All visitors<br>
-                <input type="radio" name="new-or-returning" value="new"> New visitors only<br>
-                <input type="radio" name="new-or-returning" value="returning"> Returning visitors only
+                <input type="radio" name="new_or_returning" value="all" <?php checked('all', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> All visitors<br>
+                <input type="radio" name="new_or_returning" value="new" <?php checked('new', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> New visitors only<br>
+                <input type="radio" name="new_or_returning" value="returning" <?php checked('returning', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> Returning visitors only
             </p>
-
-        <?php }
-
-        /**
-         * Display appearance meta box
-         *
-         * @since     0.1
-         */
-        public function appearance_meta_box_callback( $post ) { ?>
-
-            <p>
-                <input type="checkbox" id="show-email" name="show-email" value="true">
-                <label for="show-email"><?php _e( 'Show Email Field?', 'sb-automation' ); ?></label>
-                <div id="show-email-options">
-                <label for="opt-in-message"><?php _e( 'Message', 'sb-automation' ); ?></label>
-                <input class="widefat" type="text" name="opt-in-message" id="opt-in-message" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
-
-                <label for="opt-in-placeholder"><?php _e( 'Placeholder', 'sb-automation' ); ?></label>
-                <input class="widefat" type="text" name="opt-in-placeholder" id="opt-in-placeholder" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_placeholder', true ) ); ?>" size="20" />
-
-                <label for="opt-in-confirmation"><?php _e( 'Confirmation Message', 'sb-automation' ); ?></label>
-                <input class="widefat" type="text" name="opt-in-confirmation" id="opt-in-confirmation" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_confirmation', true ) ); ?>" size="20" />
-
-                </div>
-            </p>
-
-            <p>Accent color</p>
-            <input type="text" value="#bada55" class="sb-automation-colors" data-default-color="#effeff" />
-            
-            <p>Background color</p>
-            <input type="text" value="#ffffff" class="sb-automation-colors" data-default-color="#ffffff" />
 
         <?php }
 
@@ -287,14 +296,15 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          */
         public function settings_meta_box_callback( $post ) { ?>
 
+            <p><label for="avatar_email"><?php _e( 'Gravatar Email', 'sb-automation' ); ?></label></p>
             <p>
-                <label for="avatar-email"><?php _e( 'Gravatar Email', 'sb-automation' ); ?></label><br>
-                <input type="text" class="widefat" name="avatar-email" size="20" /> 
+                <input type="text" class="widefat" name="avatar_email" size="20" value="<?php echo esc_html( get_post_meta( $post->ID, 'avatar_email', true ) ); ?>" /> 
+            </p>
             <p>
                 <label for="visitor"><?php _e( 'Show until', 'sb-automation' ); ?></label><br>
-                <input type="radio" name="show-until" value="always" checked> Always<br>
-                <input type="radio" name="show-until" value="interaction"> User interacts (Submit email, click link)<br>
-                <input type="radio" name="show-until" value="date"> A certain date
+                <input type="radio" name="show_until" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_until', true ), true); ?>> Always<br>
+                <input type="radio" name="show_until" value="interaction" <?php checked('interaction', get_post_meta( $post->ID, 'show_until', true ), true); ?>> User interacts (Submit email, click link)<br>
+                <input type="radio" name="show_until" value="date" <?php checked('date', get_post_meta( $post->ID, 'show_until', true ), true); ?>> A certain date
                 <div id="sb-until-datepicker" class="sb-datepicker"></div>
             </p>
 
@@ -344,20 +354,41 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
         public function save_meta_boxes( $post_id ) {
 
             // nonce check
-            if ( !isset( $_POST['sb_campaign_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['sb_campaign_meta_box_nonce'], basename( __FILE__ ) ) )
+            if ( !isset( $_POST['sb_notification_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['sb_notification_meta_box_nonce'], basename( __FILE__ ) ) )
                 return $post_id;
 
             $post_type = get_post_type($post_id);
 
-            // If this isn't a 'book' post, don't update it.
-            if ( "sb_campaign" != $post_type ) 
+            // If this isn't our post type, don't update it.
+            if ( "sb_notification" != $post_type ) 
                 return;
 
             // Check if the current user has permission to edit the post.
             if ( !current_user_can( 'edit_post', $post_id ) )
                 return $post_id;
 
-            // update_post_meta();
+            $keys = array( 
+                'show_email', 
+                'opt_in_message',
+                'opt_in_confirmation',
+                'opt_in_placeholder',
+                'opt_in_send_to',
+                'button_color1',
+                'bg_color',
+                'show_on',
+                'sb_page_ids',
+                'logged_in',
+                'new_or_returning',
+                'avatar_email',
+                'show_until' );
+
+            // sanitize data
+            foreach ($keys as $key => $value) {
+                if( empty( $_POST[ $value ] ) )
+                    continue;
+                $sanitized = sanitize_text_field( $_POST[ $value ] );
+                update_post_meta( $post_id, $value, $sanitized );
+            }
 
         }
 

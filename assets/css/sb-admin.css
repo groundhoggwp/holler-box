@@ -29,6 +29,12 @@
 	margin-bottom: 5px;
 }
 
+#sb-notification-box img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
 #sb-first-row {
 	clear: none;
 }
@@ -61,6 +67,8 @@
 
 .sb-away-msg {
 	font-size: 11px;
+	display: block;
+	clear: both;
 }
 
 .sb-row.sb-email-row, .sb-row.sb-text {

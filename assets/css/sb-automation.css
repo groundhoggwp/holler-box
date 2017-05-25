@@ -27,6 +27,12 @@
     margin-top: 10px;
 }
 
+#sb-notification-box img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+}
+
 .sb-transition-in {
 	opacity: 1 !important;
 	-moz-transform: translateX(0px) translateY(0px);

@@ -111,9 +111,11 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             // $array['expires'] = '90'; // how long we should show this in num days
 
             $array['noteDefault'] = array( 
-                'content' => '<p>Join a live demo (webinar) of AppPresser on Thursday at 10am US Pacific Time.</p>',
+                'content' => '<p>Join our webinar Thursday at 11, <a href="#">click here to register.</a></p>',
+                // 'content' => '<p>Hi there, have any questions?</p>',
                 'showOptin' => 'true',
-                'optinMsg' => 'Enter your email.',
+                // 'showChat' => 'true',
+                'optinMsg' => 'Please enter your email and we will reply asap.',
                 'placeholder' => 'Email',
                 'confirmMsg' => 'Sent, thanks!'
             );
@@ -123,12 +125,12 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             //     'showOptin' => 'false'
             // );
 
-            // $array['noteReturning'] = array( 
-            //     'content' => '<p>Hi again!</p>',
-            //     'showOptin' => 'false',
-            //     'optinMsg' => 'Enter your email.',
-            //     'placeholder' => 'Email'
-            // );
+            $array['noteReturning'] = array( 
+                'content' => '<p>Hi again!</p>',
+                'showOptin' => 'false',
+                'optinMsg' => 'Enter your email.',
+                'placeholder' => 'Email'
+            );
 
             $array['delay'] = '1000'; // time delay in milliseconds, default 100
 
@@ -162,7 +164,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 <div id="sb-chat" class="sb-hide">
                     
                     <div class="sb-row sb-text">
-                        <input type="text" id="sb-text-input" />
+                        <input type="text" id="sb-text-input" placeholder="Type your message" />
                         <i id="sb-submit-text" class="icon icon-mail"></i>
                     </div>
                 </div>

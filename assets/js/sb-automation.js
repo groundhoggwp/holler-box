@@ -48,10 +48,11 @@
   sbAutomation.noteVisitorChecks = function() {
 
     // Check if user interacted or not
-    if( sbAutomation.getCookie('sb_note_int') === 'true' ) {
+    if( sbAutomation.getCookie('sb_note_int') === 'true' && window.sbAutoVars.noteInteracted ) {
 
+      // visitor interacted
       sbAutomation.noteInteracted = true;
-      sbAutomation.currentContent = ( window.sbAutoVars.noteInteracted ? window.sbAutoVars.noteInteracted : window.sbAutoVars.noteDefault );
+      sbAutomation.currentContent = window.sbAutoVars.noteInteracted;
 
     } else if( sbAutomation.getCookie('sb_visit') === "" ) {
 
@@ -61,7 +62,7 @@
 
     } else {
 
-      // returning visitor with no interaction
+      // returning visitor
       sbAutomation.newVisitor = false;
       sbAutomation.currentContent = ( window.sbAutoVars.noteReturning ? window.sbAutoVars.noteReturning : window.sbAutoVars.noteDefault );
 
@@ -117,10 +118,10 @@
     }
 
     // Show email opt-in
-    if( options.showOptin === 'true' ) {
+    if( options.showOptin === 'true' && options.showChat != 'true' ) {
       sbAutomation.transitionIn( sbAutomation.noteOptin );
       // Setup localized vars
-      var textInput = document.getElementById('sb-text-input');
+      var textInput = document.getElementById('sb-email-input');
       if( textInput )
         textInput.setAttribute('placeholder', options.placeholder );
     }
@@ -330,7 +331,7 @@
 
     setTimeout( function() {
       sbAutomation.showEmailSubmit();
-    }, 7000 );
+    }, 5000 );
     
   }
 
@@ -344,7 +345,7 @@
 
     emailRow.removeClass('sb-hide').addClass('sb-show');
 
-    emailRow.prepend( '<span class="sb-away-msg">' + window.sbAutoVars.optinMsg + '</span>' );
+    emailRow.prepend( '<span class="sb-away-msg">' + window.sbAutoVars.noteDefault.optinMsg + '</span>' );
 
     $('#sb-email-input').focus();
   }

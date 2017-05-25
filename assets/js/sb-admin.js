@@ -8,7 +8,6 @@
   	sbAdmin.toggleShowOn();
   	sbAdmin.toggleDatepicker();
   	sbAdmin.toggleEmail();
-  	sbAdmin.updatePreviewContent( $('.wp-editor-area').val() );
 
     $('.sb-datepicker').datepicker({
 		dateFormat : 'D, m/d/yy'
@@ -20,19 +19,35 @@
 
   sbAdmin.listeners = function() {
 
+  	// Handle live preview update with visual editor
+  	$(document).on( 'tinymce-editor-init', function( event, editor ) {
+
+  		// Update preview on first page load
+  		sbAdmin.updatePreviewContent();
+
+  		// add listener to visual editor for live updates
+  		window.tinymce.activeEditor.on( 'keyup', function(e) {
+  			sbAdmin.updatePreviewContent();
+  		})
+
+  	} );
+
+  	// Updates preview if page loaded with HTML editor tab
+  	if( $('#wp-content-wrap').hasClass('html-active') ) {
+  		sbAdmin.updatePreviewContent();
+  	}
+
   	$('body')
-	.on('change', '#show-email', sbAdmin.toggleEmail )
-	.on('change', 'input[name=show-until]', sbAdmin.toggleDatepicker )
-	.on('change', 'input[name=show-on]', sbAdmin.toggleShowOn )
-	.on('keyup', '.wp-editor-area', function(e) {
-		sbAdmin.updatePreviewContent( e.target.value );
-	})
+	.on('change', '#show_email', sbAdmin.toggleEmail )
+	.on('change', 'input[name=show_until]', sbAdmin.toggleDatepicker )
+	.on('change', 'input[name=show_on]', sbAdmin.toggleShowOn )
+	.on('keyup', '#content', sbAdmin.updatePreviewContent )
 
   }
 
   sbAdmin.toggleShowOn = function() {
 
-	if( $('input[name=show-on]:checked').val() === 'limited' ) {
+	if( $('input[name=show_on]:checked').val() === 'limited' ) {
 		$('#show-certain-pages').show();
 	} else {
 		$('#show-certain-pages').hide();
@@ -42,7 +57,7 @@
 
   sbAdmin.toggleEmail = function() {
 
-  	if( $('#show-email').is(':checked') ) {
+  	if( $('#show_email').is(':checked') ) {
 		$("#show-email-options, #sb-note-optin").show();
 	} else {
 		$("#show-email-options, #sb-note-optin").hide();
@@ -52,7 +67,7 @@
 
   sbAdmin.toggleDatepicker = function() {
 
-	if( $('input[name=show-until]:checked').val() === 'date' ) {
+	if( $('input[name=show_until]:checked').val() === 'date' ) {
 		$('#sb-until-datepicker').show();
 	} else {
 		$('#sb-until-datepicker').hide();
@@ -60,7 +75,18 @@
 
   }
 
-  sbAdmin.updatePreviewContent = function( content ) {
+  sbAdmin.updatePreviewContent = function() {
+
+  	var content;
+
+  	if( $('#wp-content-wrap').hasClass('tmce-active') ) {
+  		// rich editor selected
+  		content = window.tinymce.get('content').getContent();
+  	} else {
+  		// HTML editor selected
+  		content = $('#content').val();
+  	}
+
   	document.getElementById('sb-first-row').innerHTML = content;
   }
 
