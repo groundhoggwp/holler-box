@@ -242,7 +242,7 @@
     item.style.display = 'block';
 
     setTimeout( function() {
-      $(item).removeClass('sb-hide').addClass('sb-transition-in');
+      $(item).addClass('sb-transition-in').removeClass('sb-hide');
     }, 1);
 
     setTimeout( function() {
@@ -253,10 +253,10 @@
 
   sbAutomation.transitionOut = function(item) {
     
-    $(item).addClass('sb-transition-out');
+    $(item).addClass('sb-transition-out').removeClass('sb-show');
 
     setTimeout( function() {
-      $(item).removeClass('sb-transition-out, sb-show').addClass('sb-hide');
+      $(item).removeClass('sb-transition-out').addClass('sb-hide');
       item.removeAttribute('style');
     }, 500);
 
