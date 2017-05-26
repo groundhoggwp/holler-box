@@ -94,14 +94,14 @@ if( !class_exists( 'SB_Automation_Ajax' ) ) {
 
             // Tracking should be post meta, need to send post ID
 
-            // $link = $_GET['link'];
+            $id = $_GET['id'];
 
             // $email = $_GET['email'];
 
-            if( $interactions = get_option( 'sb_interactions' ) ) {
-                update_option( 'sb_interactions', $interactions + 1 );
+            if( $interactions = get_post_meta( $id, 'sb_interactions', 1 ) ) {
+                update_post_meta( $id, 'sb_interactions', intval( $interactions ) + 1 );
             } else {
-                $interactions = update_option( 'sb_interactions', 1 );
+                $interactions = update_post_meta( $id, 'sb_interactions', 1 );
             }
 
             wp_send_json_success( 'Interaction tracked, total: ' . $interactions );

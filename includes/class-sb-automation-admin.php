@@ -53,10 +53,12 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          */
         private function hooks() {
 
-            add_action( 'admin_menu', array( $this, 'settings_page' ) );
+            // add_action( 'admin_menu', array( $this, 'settings_page' ) );
             add_action( 'init', array( $this, 'register_cpt' ) );
             add_action( 'save_post', array( $this, 'save_meta_boxes' ), 10, 2 );
             add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
+            add_filter('manage_edit-sb_notification_columns', array( $this, 'notification_columns' ) );
+            add_action( 'manage_sb_notification_posts_custom_column', array( $this, 'custom_columns' ), 10, 2 );
 
         }
 
@@ -183,6 +185,38 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             }
 
             return $output;
+        }
+
+        /**
+         * Add columns
+         *
+         * @access      public
+         * @since       0.1
+         * @return      void
+         */
+        public function notification_columns( $columns ) {
+            $date = $columns['date'];
+            unset($columns['date']);
+            $columns["interactions"] = "Interactions";
+            $columns['date'] = $date;
+            return $columns;
+        }
+
+        /**
+         * Column content
+         *
+         * @access      public
+         * @since       0.1
+         * @return      void
+         */
+        public function custom_columns( $column, $post_id ) {
+
+            switch ( $column ) {
+                case 'interactions':
+                    echo get_post_meta( $post_id, 'sb_interactions', 1);
+                    break;
+            }
+
         }
 
         // Register sb_notification post type
@@ -362,7 +396,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
 
             <p><label for="avatar_email"><?php _e( 'Gravatar Email', 'sb-automation' ); ?></label></p>
             <p>
-                <input type="text" class="widefat" name="avatar_email" size="20" value="<?php echo esc_html( get_post_meta( $post->ID, 'avatar_email', true ) ); ?>" /> 
+                <input type="text" class="widefat" name="avatar_email" size="20" value="<?php echo sanitize_email( get_post_meta( $post->ID, 'avatar_email', true ) ); ?>" /> 
             </p>
             <p>
                 <label for="visitor"><?php _e( 'Show until', 'sb-automation' ); ?></label><br>

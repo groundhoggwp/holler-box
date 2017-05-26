@@ -178,15 +178,19 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
          * @return      HTML
          */
         public function display_notification_box( $id ) {
+
+            $avatar_email = get_post_meta($id, 'avatar_email', 1);
+            if( empty($avatar_email) )
+                $avatar_email = get_option('admin_email');
             ?>
             <div id="sb-floating-btn"><i class="icon icon-chat"></i></div>
 
-            <div id="sb-<?php echo $id; ?>" class="sb-notification-box">
+            <div id="sb-<?php echo $id; ?>" class="sb-notification-box sb-hide">
                 
                 <div class="sb-close"><i class="icon icon-cancel"></i> <i class="icon icon-cancel sb-full-right"></i></div>
                 
                 <div class="sb-box-rows">
-                        <?php echo get_avatar('scott@apppresser.com', 50 ); ?>
+                        <?php echo get_avatar($avatar_email, 50 ); ?>
                     <div class="sb-row sb-first-row"></div>
                 </div>
 

@@ -10,10 +10,10 @@
   	sbAdmin.toggleEmail();
 
     $('.sb-datepicker').datepicker({
-		dateFormat : 'D, m/d/yy'
-	});
+  		dateFormat : 'D, m/d/yy'
+  	});
 
-	$('.sb-automation-colors').wpColorPicker();
+  	$('.sb-automation-colors').wpColorPicker();
     
   }
 
@@ -38,40 +38,41 @@
   	}
 
   	$('body')
-	.on('change', '#show_optin', sbAdmin.toggleEmail )
-	.on('change', 'input[name=show_until]', sbAdmin.toggleDatepicker )
-	.on('change', 'input[name=show_on]', sbAdmin.toggleShowOn )
-	.on('keyup', '#content', sbAdmin.updatePreviewContent )
+  	.on('change', '#show_optin', sbAdmin.toggleEmail )
+    .on('change', '#show_chat', sbAdmin.toggleChat )
+  	.on('change', 'input[name=show_until]', sbAdmin.toggleDatepicker )
+  	.on('change', 'input[name=show_on]', sbAdmin.toggleShowOn )
+  	.on('keyup', '#content', sbAdmin.updatePreviewContent )
 
   }
 
   sbAdmin.toggleShowOn = function() {
 
-	if( $('input[name=show_on]:checked').val() === 'limited' ) {
-		$('#show-certain-pages').show();
-	} else {
-		$('#show-certain-pages').hide();
-	}
+  	if( $('input[name=show_on]:checked').val() === 'limited' ) {
+  		$('#show-certain-pages').show();
+  	} else {
+  		$('#show-certain-pages').hide();
+  	}
 
   }
 
   sbAdmin.toggleEmail = function() {
 
   	if( $('#show_optin').is(':checked') ) {
-		$("#show-email-options, #sb-note-optin").show();
-	} else {
-		$("#show-email-options, #sb-note-optin").hide();
-	}
+  		$("#show-email-options, #sb-note-optin").show();
+  	} else {
+  		$("#show-email-options, #sb-note-optin").hide();
+  	}
 
   }
 
   sbAdmin.toggleDatepicker = function() {
 
-	if( $('input[name=show_until]:checked').val() === 'date' ) {
-		$('#sb-until-datepicker').show();
-	} else {
-		$('#sb-until-datepicker').hide();
-	}
+  	if( $('input[name=show_until]:checked').val() === 'date' ) {
+  		$('#sb-until-datepicker').show();
+  	} else {
+  		$('#sb-until-datepicker').hide();
+  	}
 
   }
 

@@ -146,7 +146,7 @@
       // Setup localized vars
       var textInput = document.querySelector('#' + sbAutomation.activeID + ' .sb-email-input');
       textInput.setAttribute('placeholder', options.placeholder );
-      
+
       $('.sb-away-msg').remove();
       $('#' + sbAutomation.activeID + ' .sb-email-row').prepend( '<span class="sb-away-msg">' + sbAutomation.activeOptions.optinMsg + '</span>' );
     }
@@ -436,7 +436,9 @@
   // Callback for user interaction
   sbAutomation.interacted = function( data ) {
 
-    var params = { action: 'sb_track_event', nonce: window.sbAutoVars.sbNonce, event: data.event, id: sbAutomation.activeID };
+    var id = sbAutomation.activeID.split('-')[1];
+
+    var params = { action: 'sb_track_event', nonce: window.sbAutoVars.sbNonce, event: data.event, id: id };
 
     if( data.data ) {
       params.details = data.details;
