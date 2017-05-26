@@ -139,6 +139,11 @@ body.admin-bar #sb-banner {
 	top: 0;
 	right: 0;
 	bottom: 0;
+	transition: all .1s;
+}
+
+.sb-minimizing {
+	transition: none;
 }
 
 .sb-notification-box.sb-full-right .sb-close .sb-full-right, .sb-notification-box.sb-full-right .sb-show-full {

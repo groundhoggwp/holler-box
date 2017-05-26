@@ -95,7 +95,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             // @TODO: if( setting exists )
             // $array['lastSeen'] = 'none'; // in days. default is none
 
-            // $array['expires'] = '90'; // how long we should show this in num days
+            $array['expires'] = '999'; // how long we should show this in num days
 
             // active notification IDs
             $array['active'] = self::$active;
@@ -135,6 +135,21 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             // do checks for page conditionals, logged in, etc here
 
             foreach (self::$active as $key => $value) {
+
+                $logged_in = is_user_logged_in();
+                $logged_in_meta = get_post_meta( $value, 'logged_in', 1 );
+
+                // check logged in conditional
+                if( $logged_in && $logged_in_meta === 'logged_out' || !$logged_in && $logged_in_meta === 'logged_in' )
+                    continue;
+
+                $show_on = get_post_meta( $value, 'show_on', 1 );
+                $page_id = get_the_ID();
+
+                // if page conditionals set, only show on those pages
+                if( is_array( $show_on ) && !in_array( $page_id, $show_on ) )
+                    continue;
+
                 $this->display_notification_box( $value );
             }
 

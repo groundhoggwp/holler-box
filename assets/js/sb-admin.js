@@ -39,6 +39,7 @@
 
   	$('body')
   	.on('change', '#show_optin', sbAdmin.toggleEmail )
+    .on('change', '.sb-switch input', sbAdmin.toggleSwitch )
     .on('change', '#show_chat', sbAdmin.toggleChat )
   	.on('change', 'input[name=show_until]', sbAdmin.toggleDatepicker )
   	.on('change', 'input[name=show_on]', sbAdmin.toggleShowOn )
@@ -63,6 +64,32 @@
   	} else {
   		$("#show-email-options, #sb-note-optin").hide();
   	}
+
+  }
+
+  sbAdmin.toggleSwitch = function() {
+
+    sbAdmin.toggleActiveAjax( $(this).data('id') );
+
+  }
+
+  // Toggle meta value via ajax
+  sbAdmin.toggleActiveAjax = function( id ) {
+
+    var params = { action: 'sb_toggle_active', id: id };
+
+    // store interaction data
+    $.ajax({
+      method: "GET",
+      url: window.ajaxurl,
+      data: params
+      })
+      .done(function(msg) {
+        console.log(msg);
+      })
+      .fail(function(err) {
+        console.log(err);
+      });
 
   }
 

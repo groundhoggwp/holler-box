@@ -57,6 +57,8 @@ if( !class_exists( 'SB_Automation_Ajax' ) ) {
             add_action( 'wp_ajax_nopriv_sb_track_event', array( $this, 'sb_track_event' ) );
             add_action( 'wp_ajax_sb_track_event', array( $this, 'sb_track_event' ) );
 
+            add_action( 'wp_ajax_sb_toggle_active', array( $this, 'toggle_active' ) );
+
         }
 
         /**
@@ -96,8 +98,6 @@ if( !class_exists( 'SB_Automation_Ajax' ) ) {
 
             $id = $_GET['id'];
 
-            // $email = $_GET['email'];
-
             if( $interactions = get_post_meta( $id, 'sb_interactions', 1 ) ) {
                 update_post_meta( $id, 'sb_interactions', intval( $interactions ) + 1 );
             } else {
@@ -105,6 +105,29 @@ if( !class_exists( 'SB_Automation_Ajax' ) ) {
             }
 
             wp_send_json_success( 'Interaction tracked, total: ' . $interactions );
+                
+        }
+
+        /**
+         * Toggle active meta value. ID is required
+         *
+         * @since       0.1.0
+         * @return      void
+         */
+        public function toggle_active() {
+
+            $id = $_GET['id'];
+
+            if( empty($id) )
+                wp_send_json_error('ID is required.');
+
+            if( get_post_meta( $id, 'sb_active', 1 ) === '1' ) {
+                delete_post_meta( $id, 'sb_active' );
+            } else {
+                update_post_meta( $id, 'sb_active', '1' );
+            }
+
+            wp_send_json_success( 'Toggled. New value: ' . get_post_meta( $id, 'sb_active', 1 ) );
                 
         }
 

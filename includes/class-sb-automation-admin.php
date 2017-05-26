@@ -198,6 +198,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             $date = $columns['date'];
             unset($columns['date']);
             $columns["interactions"] = "Interactions";
+            $columns["active"] = "Active";
             $columns['date'] = $date;
             return $columns;
         }
@@ -214,6 +215,9 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             switch ( $column ) {
                 case 'interactions':
                     echo get_post_meta( $post_id, 'sb_interactions', 1);
+                    break;
+                case 'active':
+                    echo '<label class="sb-switch"><input data-id="' . $post_id . '" type="checkbox" value="1" ' . checked(1, get_post_meta( $post_id, 'sb_active', true ), false) . ' /><div class="sb-slider sb-round"></div></label>';
                     break;
             }
 
@@ -357,9 +361,11 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
 
             <h4><?php _e( 'Show on', 'sb-automation' ); ?></h4>
 
+            <?php var_dump( get_post_meta( $post->ID, 'show_on', 1 ) ); ?>
+
             <p>
-                <input type="radio" name="show_on" value="all" <?php checked('all', get_post_meta( $post->ID, 'show_on', true ), true); ?>> All pages<br>
-                <input type="radio" name="show_on" value="limited" <?php checked('limited', get_post_meta( $post->ID, 'show_on', true ), true); ?>> Certain pages<br>
+                <input type="radio" name="show_on" value="all" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "all" ) echo 'checked="checked"'; ?>> All pages<br>
+                <input type="radio" name="show_on" value="limited" <?php if( is_array( get_post_meta( $post->ID, 'show_on', 1 ) ) ) echo 'checked="checked"'; ?>> Certain pages<br>
                 <div id="show-certain-pages">
                 <p>Enter page/post IDs:</p>
                 <input placeholder="Example: 2,25,311" class="widefat" type="text" name="sb_page_ids" id="sb_page_ids" value="<?php echo esc_attr( get_post_meta( $post->ID, 'sb_page_ids', true ) ); ?>" size="20" />
@@ -478,7 +484,6 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'opt_in_send_to',
                 'button_color1',
                 'bg_color',
-                'show_on',
                 'sb_page_ids',
                 'logged_in',
                 'new_or_returning',
@@ -496,6 +501,20 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 update_post_meta( $post_id, $value, $sanitized );
             }
 
+            // keys that need special handling
+            if( empty( $_POST[ 'show_on' ] ) ) {
+                delete_post_meta( $post_id, 'show_on' );
+            } elseif( $_POST[ 'show_on' ] === 'limited' && !empty( $_POST[ 'sb_page_ids' ] ) ) {
+
+                // sanitize, remove whitespace, explode into array
+                $sanitized = sanitize_text_field( $_POST[ 'sb_page_ids' ] );
+                $sanitized = preg_replace('/\s+/', '', $sanitized);
+                update_post_meta( $post_id, 'show_on', explode( ',', $sanitized ) );
+
+            } else {
+                update_post_meta( $post_id, 'show_on', $_POST[ 'show_on' ] );
+            }
+            
         }
 
     }
