@@ -104,7 +104,8 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
 
                 $content_post = get_post($value);
                 $content = $content_post->post_content;
-                $content = apply_filters('the_content', $content);
+                // adding the_content filter has crazy results, like CK forms
+                $content = apply_filters('sb_notification_content', $content);
                 $content = apply_filters('the_content_more_link', $content);
                 $content = str_replace(']]>', ']]&gt;', $content);
 
@@ -119,7 +120,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 );
             }
 
-            $array['delay'] = '1000'; // time delay in milliseconds, default 100
+            $array['delay'] = '5000'; // time delay in milliseconds, default 100
 
             return $array;
         }
@@ -222,7 +223,9 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                     </div>
                 </div>
 
-                <span class="sb-powered-by"><a href="http://scottbolinger.com" target="_blank">Scottomator</a></span>
+                <?php if( get_post_meta( $id, 'show_search', 1 ) === '1' ) get_search_form(); ?>
+
+                <!-- <span class="sb-powered-by"><a href="http://scottbolinger.com" target="_blank">Scottomator</a></span> -->
  
             </div>
             <?php

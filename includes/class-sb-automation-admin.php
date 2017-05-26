@@ -323,11 +323,15 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
 
             <p>
                 <input type="checkbox" name="show_chat" value="1" <?php checked( get_post_meta( $post->ID, 'show_chat', 1 ) ); ?> />
-                <label for="show_chat"><?php _e( 'Show chat?', 'sb-automation' ); ?></label>
+                <label for="show_chat"><?php _e( 'Show chat', 'sb-automation' ); ?></label>
+            </p>
+            <p>
+                <input type="checkbox" name="show_search" value="1" <?php checked( get_post_meta( $post->ID, 'show_search', 1 ) ); ?> />
+                <label for="show_search"><?php _e( 'Show search', 'sb-automation' ); ?></label>
             </p>
             <p>
                 <input type="checkbox" id="show_optin" name="show_optin" value="1" <?php checked("1", get_post_meta( $post->ID, 'show_optin', true ), true); ?> />
-                <label for="show_optin"><?php _e( 'Show opt-in?', 'sb-automation' ); ?></label>
+                <label for="show_optin"><?php _e( 'Show opt-in', 'sb-automation' ); ?></label>
                 <div id="show-email-options">
                 <label for="opt_in_message"><?php _e( 'Message', 'sb-automation' ); ?></label>
                 <input class="widefat" type="text" name="opt_in_message" id="opt_in_message" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
@@ -360,8 +364,6 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
         public function targeting_meta_box_callback( $post ) { ?>
 
             <h4><?php _e( 'Show on', 'sb-automation' ); ?></h4>
-
-            <?php var_dump( get_post_meta( $post->ID, 'show_on', 1 ) ); ?>
 
             <p>
                 <input type="radio" name="show_on" value="all" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "all" ) echo 'checked="checked"'; ?>> All pages<br>
@@ -489,7 +491,27 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'new_or_returning',
                 'avatar_email',
                 'show_until',
-                'sb_active' );
+                'sb_active',
+                'show_search' );
+
+            global $allowedposttags;
+            $allowedposttags["iframe"] = array(
+
+                'align' => true,
+                'width' => true,
+                'height' => true,
+                'frameborder' => true,
+                'name' => true,
+                'src' => true,
+                'id' => true,
+                'class' => true,
+                'style' => true,
+                'scrolling' => true,
+                'marginwidth' => true,
+                'marginheight' => true,
+                'allowfullscreen' => true
+
+            );
 
             // sanitize data
             foreach ($keys as $key => $value) {
@@ -497,7 +519,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                     delete_post_meta( $post_id, $value );
                     continue;
                 }
-                $sanitized = sanitize_text_field( $_POST[ $value ] );
+                $sanitized = wp_kses( $_POST[ $value ], $allowedposttags);
                 update_post_meta( $post_id, $value, $sanitized );
             }
 

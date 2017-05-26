@@ -82,9 +82,9 @@
 	background-color: #eee;
 }
 
-body.admin-bar {
+/*body.admin-bar {
 	margin-top: 60px !important;
-}
+}*/
 
 body.admin-bar #sb-banner {
 	top: 32px;
@@ -210,15 +210,26 @@ body.admin-bar #sb-banner {
 	position: relative;
 }
 
-.sb-email-input {
+.sb-notification-box input[type="text"], .sb-notification-box input[type="email"], .sb-notification-box input#s {
 	border: 1px solid #1191cb;
 	border-radius: 3px 0 0 3px;
-	width: 80%;
 	height: 40px;
     border: none;
-    background: #eee;
+    background-color: #eee;
     box-shadow: none;
 	box-sizing: border-box;
+	padding: 8px;
+    font-size: 15px;
+}
+
+.sb-email-input {
+	width: 80%;
+}
+
+.sb-notification-box input#s {
+	margin: 10px 0;
+	width: 100%;
+	background-position: right center;
 }
 
 .sb-text-input {
