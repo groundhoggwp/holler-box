@@ -412,7 +412,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             <p>
                 <input type="radio" name="display_when" value="immediately" <?php checked('immediately', get_post_meta( $post->ID, 'display_when', true ), true); ?>> Immediately<br>
                 <input type="radio" name="display_when" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'display_when', true ), true); ?>> Delay of <input type="number" id="scroll_delay" name="scroll_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'scroll_delay', true ) ); ?>" /> seconds<br>
-                <input type="radio" name="display_when" value="scroll" <?php checked('scroll', get_post_meta( $post->ID, 'display_when', true ), true); ?>> User scrolls halfway down the page
+                <input type="radio" name="display_when" value="scroll" <?php checked('scroll', get_post_meta( $post->ID, 'display_when', true ), true); ?>> User scrolls partway down the page
             </p>
             <p>
                 <label for="visitor"><?php _e( 'Show until', 'sb-automation' ); ?></label>

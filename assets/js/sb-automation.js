@@ -64,11 +64,11 @@
 
     } else {
 
-      // detect scroll to show
-      
+      sbAutomation.detectScroll();
+
     } 
 
-  } 
+  }
 
   // determine if new or returning visitor
   sbAutomation.checkCookie = function() {
@@ -113,6 +113,21 @@
     $('.sb-text-input').on('keypress', sbAutomation.submitChatTextOnEnter );
 
     $('.sb-email-input').on('keypress', sbAutomation.submitEmailOnEnter );
+
+  }
+
+  // detecte when user scrolls partway down the page
+  sbAutomation.detectScroll = function() {
+
+    $(window).scroll(
+      // debounce so we don't adversely affect scroll performance
+      sbAutomation.debounce( function() {
+        // when user scrolls below fold, show it
+        if( $(window).scrollTop() >= 850 && !sbAutomation.show[sbAutomation.activeID] ) {
+          sbAutomation.showNote();
+          sbAutomation.show[sbAutomation.activeID] = true
+        }
+      }, 250) )
 
   }
 
@@ -202,6 +217,18 @@
           }
       }
       return "";
+  }
+
+  // Reusable function to throttle or debounce function calls
+  sbAutomation.debounce = function(fn, delay) {
+    var timer = null;
+    return function () {
+      var context = this, args = arguments;
+      clearTimeout(timer);
+      timer = setTimeout(function () {
+        fn.apply(context, args);
+      }, delay);
+    };
   }
 
   // check how old cookie is
