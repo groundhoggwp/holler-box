@@ -116,11 +116,11 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                     'showChat' => get_post_meta($value, 'show_chat', 1),
                     'optinMsg' => get_post_meta($value, 'opt_in_message', 1),
                     'placeholder' => get_post_meta($value, 'opt_in_placeholder', 1),
-                    'confirmMsg' => get_post_meta($value, 'opt_in_confirmation', 1)
+                    'confirmMsg' => get_post_meta($value, 'opt_in_confirmation', 1),
+                    'display_when' => get_post_meta($value, 'display_when', 1),
+                    'delay' => get_post_meta($value, 'scroll_delay', 1)
                 );
             }
-
-            $array['delay'] = '5000'; // time delay in milliseconds, default 100
 
             return $array;
         }

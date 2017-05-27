@@ -381,16 +381,16 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             <p><label for="logged_in"><?php _e( 'Logged in/out', 'sb-automation' ); ?></label></p>
 
             <p> 
+                <input type="radio" name="logged_in" value="logged_in" <?php checked('logged_in', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> Logged in only<br>
+                <input type="radio" name="logged_in" value="logged_out" <?php checked('logged_out', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> Logged out only<br>
                 <input type="radio" name="logged_in" value="all" <?php checked('all', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> All visitors<br>
-                <input type="radio" name="logged_in" value="logged_in" <?php checked('logged_in', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> Logged in<br>
-                <input type="radio" name="logged_in" value="logged_out" <?php checked('logged_out', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> Logged out
             </p>
             <hr>
             <p><label for="visitor"><?php _e( 'New or returning', 'sb-automation' ); ?></label></p>
             <p>
-                <input type="radio" name="new_or_returning" value="all" <?php checked('all', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> All visitors<br>
                 <input type="radio" name="new_or_returning" value="new" <?php checked('new', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> New visitors only<br>
-                <input type="radio" name="new_or_returning" value="returning" <?php checked('returning', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> Returning visitors only
+                <input type="radio" name="new_or_returning" value="returning" <?php checked('returning', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> Returning visitors only<br>
+                <input type="radio" name="new_or_returning" value="all" <?php checked('all', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> All visitors<br>
             </p>
 
         <?php }
@@ -407,7 +407,17 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 <input type="text" class="widefat" name="avatar_email" size="20" value="<?php echo sanitize_email( get_post_meta( $post->ID, 'avatar_email', true ) ); ?>" /> 
             </p>
             <p>
-                <label for="visitor"><?php _e( 'Show until', 'sb-automation' ); ?></label><br>
+                <label for="visitor"><?php _e( 'Display item', 'sb-automation' ); ?></label>
+            </p>
+            <p>
+                <input type="radio" name="display_when" value="immediately" <?php checked('immediately', get_post_meta( $post->ID, 'display_when', true ), true); ?>> Immediately<br>
+                <input type="radio" name="display_when" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'display_when', true ), true); ?>> Delay of <input type="number" id="scroll_delay" name="scroll_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'scroll_delay', true ) ); ?>" /> seconds<br>
+                <input type="radio" name="display_when" value="scroll" <?php checked('scroll', get_post_meta( $post->ID, 'display_when', true ), true); ?>> User scrolls halfway down the page
+            </p>
+            <p>
+                <label for="visitor"><?php _e( 'Show until', 'sb-automation' ); ?></label>
+            </p>
+            <p>
                 <input type="radio" name="show_until" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_until', true ), true); ?>> Always<br>
                 <input type="radio" name="show_until" value="interaction" <?php checked('interaction', get_post_meta( $post->ID, 'show_until', true ), true); ?>> User interacts (Submit email, click link)<br>
                 <input type="radio" name="show_until" value="date" <?php checked('date', get_post_meta( $post->ID, 'show_until', true ), true); ?>> A certain date
@@ -444,7 +454,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 <div id="sb-chat" class="sb-hide">
                     
                     <div class="sb-row sb-text">
-                        <input type="text" id="sb-text-input" />
+                        <input type="text" id="sb-text-input" placeholder="Type your message" />
                         <i id="sb-submit-text" class="icon icon-mail"></i>
                     </div>
                 </div>
@@ -492,7 +502,9 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'avatar_email',
                 'show_until',
                 'sb_active',
-                'show_search' );
+                'show_search',
+                'display_when',
+                'scroll_delay' );
 
             global $allowedposttags;
             $allowedposttags["iframe"] = array(

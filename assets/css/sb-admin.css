@@ -228,6 +228,10 @@ input:checked + .sb-slider:before {
   transform: translateX(26px);
 }
 
+input#scroll_delay {
+	width: 50px;
+}
+
 /* Rounded sb-sliders */
 .sb-slider.sb-round {
   border-radius: 34px;

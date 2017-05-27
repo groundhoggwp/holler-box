@@ -8,6 +8,7 @@
   	sbAdmin.toggleShowOn();
   	sbAdmin.toggleDatepicker();
   	sbAdmin.toggleEmail();
+    sbAdmin.toggleChat();
 
     $('.sb-datepicker').datepicker({
   		dateFormat : 'D, m/d/yy'
@@ -40,10 +41,13 @@
   	$('body')
   	.on('change', '#show_optin', sbAdmin.toggleEmail )
     .on('change', '.sb-switch input', sbAdmin.toggleSwitch )
-    .on('change', '#show_chat', sbAdmin.toggleChat )
+    .on('change', 'input[name=show_chat]', sbAdmin.toggleChat )
   	.on('change', 'input[name=show_until]', sbAdmin.toggleDatepicker )
   	.on('change', 'input[name=show_on]', sbAdmin.toggleShowOn )
   	.on('keyup', '#content', sbAdmin.updatePreviewContent )
+    .on('focus', 'input#scroll_delay', function() {
+      $('input[name=display_when][value=delay]').prop('checked', 'checked'); 
+    })
 
   }
 
@@ -64,6 +68,16 @@
   	} else {
   		$("#show-email-options, #sb-note-optin").hide();
   	}
+
+  }
+
+  sbAdmin.toggleChat = function() {
+
+    if( $('input[name=show_chat]').is(':checked') ) {
+      $('#sb-chat').removeClass('sb-hide');
+    } else {
+      $('#sb-chat').addClass('sb-hide');
+    }
 
   }
 
