@@ -30,8 +30,6 @@
   // Check if we should display item
   sbAutomation.doChecks = function( id ) {
 
-    console.log('dochecks' + id)
-
     // If markup doesn't exist, bail
     var item = document.getElementById( 'sb-' + id );
     if( !item )
@@ -48,12 +46,22 @@
     if( vars.visitor === 'returning' && sbAutomation.newVisitor != false )
       return;
 
+    var shown = sbAutomation.getCookie( 'sb_' + id + '_shown' );
+
+    // only show once?
+    if( vars.show_settings === 'once' && shown === 'true' ) {
+      return;
+    } else if( vars.show_settings === 'once' && shown === '' ) {
+      sbAutomation.setCookie( 'sb_' + id + '_shown', 'true', 1 );
+    }
+
     // passes checks, show it
     sbAutomation.activeID = 'sb-' + id;
     sbAutomation.activeOptions = vars;
     sbAutomation.cacheSelectors();
     sbAutomation.noteListeners();
 
+    // Delay showing item?
     if( vars.display_when != 'scroll' ) {
 
       var delay = ( vars.display_when === 'delay' ? parseInt( vars.delay ) : 0 );
@@ -64,9 +72,10 @@
 
     } else {
 
+      // Use scroll detect setting
       sbAutomation.detectScroll();
 
-    } 
+    }
 
   }
 
@@ -116,14 +125,19 @@
 
   }
 
-  // detecte when user scrolls partway down the page
+  // detect when user scrolls partway down the page
+  // https://www.sitepoint.com/jquery-capture-vertical-scroll-percentage/
   sbAutomation.detectScroll = function() {
 
     $(window).scroll(
       // debounce so we don't adversely affect scroll performance
       sbAutomation.debounce( function() {
+
+        var wintop = $(window).scrollTop(), docheight = $(document).height(), winheight = $(window).height();
+        var  scrolltrigger = 0.5;
+
         // when user scrolls below fold, show it
-        if( $(window).scrollTop() >= 850 && !sbAutomation.show[sbAutomation.activeID] ) {
+        if( (wintop/(docheight-winheight)) > scrolltrigger && !sbAutomation.show[sbAutomation.activeID] ) {
           sbAutomation.showNote();
           sbAutomation.show[sbAutomation.activeID] = true
         }
@@ -189,6 +203,15 @@
     // Should we show the chat box?
     if( options.showChat === '1' ) {
       sbAutomation.transitionIn( sbAutomation.chatBox );
+    }
+
+    // Should we hide it
+    if( options.hide_after === 'delay' ) {
+
+      setTimeout( function() {
+        sbAutomation.transitionOut( item );
+      }, parseInt( options.hide_after_delay ) * 1000 );
+
     }
 
   }
@@ -389,7 +412,7 @@
     $('#' + sbAutomation.activeID + ' .sb-box-rows').append('<div class="sb-row sb-visitor-row">' + text + '</div>');
 
     if( fullMsg ) {
-      fullMsg += '/n' + text; 
+      fullMsg += '\n' + text; 
     } else {
       fullMsg = text;
     }

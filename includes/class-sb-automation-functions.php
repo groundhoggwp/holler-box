@@ -114,11 +114,15 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                     'showOptin' => get_post_meta($value, 'show_optin', 1),
                     'visitor' => get_post_meta($value, 'new_or_returning', 1),
                     'showChat' => get_post_meta($value, 'show_chat', 1),
+                    'showBtn' => 'false',
                     'optinMsg' => get_post_meta($value, 'opt_in_message', 1),
                     'placeholder' => get_post_meta($value, 'opt_in_placeholder', 1),
                     'confirmMsg' => get_post_meta($value, 'opt_in_confirmation', 1),
                     'display_when' => get_post_meta($value, 'display_when', 1),
-                    'delay' => get_post_meta($value, 'scroll_delay', 1)
+                    'delay' => get_post_meta($value, 'scroll_delay', 1),
+                    'show_settings' => get_post_meta($value, 'show_settings', 1),
+                    'hide_after' => get_post_meta($value, 'hide_after', 1),
+                    'hide_after_delay' => get_post_meta($value, 'hide_after_delay', 1)
                 );
             }
 
@@ -204,6 +208,8 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             <div id="sb-<?php echo $id; ?>" class="sb-notification-box sb-hide">
                 
                 <div class="sb-close"><i class="icon icon-cancel"></i> <i class="icon icon-cancel sb-full-right"></i></div>
+
+                <?php do_action('sb_notification_above_content'); ?>
                 
                 <div class="sb-box-rows">
                         <?php echo get_avatar($avatar_email, 50 ); ?>
@@ -223,7 +229,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                     </div>
                 </div>
 
-                <?php if( get_post_meta( $id, 'show_search', 1 ) === '1' ) get_search_form(); ?>
+                <?php do_action('sb_notification_below_content'); ?>
 
                 <!-- <span class="sb-powered-by"><a href="http://scottbolinger.com" target="_blank">Scottomator</a></span> -->
  

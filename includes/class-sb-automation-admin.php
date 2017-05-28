@@ -326,10 +326,6 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 <label for="show_chat"><?php _e( 'Show chat', 'sb-automation' ); ?></label>
             </p>
             <p>
-                <input type="checkbox" name="show_search" value="1" <?php checked( get_post_meta( $post->ID, 'show_search', 1 ) ); ?> />
-                <label for="show_search"><?php _e( 'Show search', 'sb-automation' ); ?></label>
-            </p>
-            <p>
                 <input type="checkbox" id="show_optin" name="show_optin" value="1" <?php checked("1", get_post_meta( $post->ID, 'show_optin', true ), true); ?> />
                 <label for="show_optin"><?php _e( 'Show opt-in', 'sb-automation' ); ?></label>
                 <div id="show-email-options">
@@ -411,16 +407,24 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             </p>
             <p>
                 <input type="radio" name="display_when" value="immediately" <?php checked('immediately', get_post_meta( $post->ID, 'display_when', true ), true); ?>> Immediately<br>
-                <input type="radio" name="display_when" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'display_when', true ), true); ?>> Delay of <input type="number" id="scroll_delay" name="scroll_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'scroll_delay', true ) ); ?>" /> seconds<br>
-                <input type="radio" name="display_when" value="scroll" <?php checked('scroll', get_post_meta( $post->ID, 'display_when', true ), true); ?>> User scrolls partway down the page
+                <input type="radio" name="display_when" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'display_when', true ), true); ?>> Delay of <input type="number" class="sb-number-input" id="scroll_delay" name="scroll_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'scroll_delay', true ) ); ?>" /> seconds<br>
+                <input type="radio" name="display_when" value="scroll" <?php checked('scroll', get_post_meta( $post->ID, 'display_when', true ), true); ?>> User scrolls halfway down the page
             </p>
             <p>
-                <label for="visitor"><?php _e( 'Show until', 'sb-automation' ); ?></label>
+                <label for="show_settings"><?php _e( 'Show this item', 'sb-automation' ); ?></label>
             </p>
             <p>
-                <input type="radio" name="show_until" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_until', true ), true); ?>> Always<br>
-                <input type="radio" name="show_until" value="interaction" <?php checked('interaction', get_post_meta( $post->ID, 'show_until', true ), true); ?>> User interacts (Submit email, click link)<br>
-                <input type="radio" name="show_until" value="date" <?php checked('date', get_post_meta( $post->ID, 'show_until', true ), true); ?>> A certain date
+                <input type="radio" name="show_settings" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Always<br>
+                <input type="radio" name="show_settings" value="once" <?php checked('once', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Once per visitor, per day<br>
+            </p>
+            <p>
+                <label for="hide_after"><?php _e( 'Hide this item', 'sb-automation' ); ?></label>
+            </p>
+            <p>
+                <input type="radio" name="hide_after" value="always" <?php checked('never', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> Never<br>
+                <input type="radio" name="hide_after" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> Delay of <input type="number" class="sb-number-input" id="hide_after_delay" name="hide_after_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_after_delay', true ) ); ?>" /> seconds<br>
+                <input type="radio" name="hide_after" value="interaction" <?php checked('interaction', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> User interacts (Submit email, click link)<br>
+                <input type="radio" name="hide_after" value="date" <?php checked('date', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> A certain date
                 <div id="sb-until-datepicker" class="sb-datepicker"></div>
             </p>
             <p>
@@ -500,9 +504,10 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'logged_in',
                 'new_or_returning',
                 'avatar_email',
-                'show_until',
+                'show_settings',
+                'hide_after',
+                'hide_after_delay',
                 'sb_active',
-                'show_search',
                 'display_when',
                 'scroll_delay' );
 
