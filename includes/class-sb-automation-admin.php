@@ -59,6 +59,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
             add_filter('manage_edit-sb_notification_columns', array( $this, 'notification_columns' ) );
             add_action( 'manage_sb_notification_posts_custom_column', array( $this, 'custom_columns' ), 10, 2 );
+            add_action(  'transition_post_status',  array( $this, 'save_default_meta' ), 10, 3 );
 
         }
 
@@ -283,17 +284,8 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             );
 
             add_meta_box(
-                'targeting_meta_box',
-                __( 'Targeting', 'sb-automation' ),
-                array( $this, 'targeting_meta_box_callback' ),
-                'sb_notification',
-                'normal',
-                'high'
-            );
-
-            add_meta_box(
                 'settings_meta_box',
-                __( 'Settings', 'sb-automation' ),
+                __( 'Advanced Settings', 'sb-automation' ),
                 array( $this, 'settings_meta_box_callback' ),
                 'sb_notification',
                 'normal',
@@ -322,12 +314,17 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             <?php wp_nonce_field( basename( __FILE__ ), 'sb_notification_meta_box_nonce' ); ?>
 
             <p>
-                <input type="checkbox" name="show_chat" value="1" <?php checked( get_post_meta( $post->ID, 'show_chat', 1 ) ); ?> />
-                <label for="show_chat"><?php _e( 'Show chat', 'sb-automation' ); ?></label>
+                <label for="item_type"><?php _e( 'Choose a display type. Settings automatically configure based on your selection to easy defaults. For more customization, view advanced settings below.', 'sb-automation' ); ?></label>
             </p>
             <p>
-                <input type="checkbox" id="show_optin" name="show_optin" value="1" <?php checked("1", get_post_meta( $post->ID, 'show_optin', true ), true); ?> />
-                <label for="show_optin"><?php _e( 'Show opt-in', 'sb-automation' ); ?></label>
+                <input type="radio" name="item_type" value="default" <?php checked( "default", get_post_meta( $post->ID, 'item_type', 1 ) ); ?> />
+                <?php _e( 'Simple message', 'sb-automation' ); ?>
+                <input type="radio" id="show_optin" name="item_type" value="optin" <?php checked( "optin", get_post_meta( $post->ID, 'item_type', 1 ) ); ?> />
+                <?php _e( 'Email opt-in', 'sb-automation' ); ?>
+                <input type="radio" name="item_type" value="chatbox" <?php checked("chatbox", get_post_meta( $post->ID, 'item_type', true ), true); ?> />
+                <?php _e( 'Chat box', 'sb-automation' ); ?>
+                <input type="radio" name="item_type" value="quickie" <?php checked("quickie", get_post_meta( $post->ID, 'item_type', true ), true); ?> />
+                <?php _e( 'Quickie', 'sb-automation' ); ?>
                 <div id="show-email-options">
                 <label for="opt_in_message"><?php _e( 'Message', 'sb-automation' ); ?></label>
                 <input class="widefat" type="text" name="opt_in_message" id="opt_in_message" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
@@ -350,16 +347,21 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             <p>Background color</p>
             <input type="text" name="bg_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'bg_color', true ) ); ?>" class="sb-automation-colors" data-default-color="#ffffff" />
 
+            <p>
+                <input type="checkbox" id="sb_active" name="sb_active" value="1" <?php checked(1, get_post_meta( $post->ID, 'sb_active', true ), true); ?> />
+                <label for="sb_active"><?php _e( 'Activate?', 'sb-automation' ); ?></label>
+            </p>
+
         <?php }
 
         /**
-         * Display targeting meta box
+         * Display settings meta box
          *
          * @since     0.1
          */
-        public function targeting_meta_box_callback( $post ) { ?>
+        public function settings_meta_box_callback( $post ) { ?>
 
-            <h4><?php _e( 'Show on', 'sb-automation' ); ?></h4>
+            <h4><?php _e( 'What pages?', 'sb-automation' ); ?></h4>
 
             <p>
                 <input type="radio" name="show_on" value="all" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "all" ) echo 'checked="checked"'; ?>> All pages<br>
@@ -374,8 +376,6 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
 
             <h4>Show to these visitors</h4>
 
-            <p><label for="logged_in"><?php _e( 'Logged in/out', 'sb-automation' ); ?></label></p>
-
             <p> 
                 <input type="radio" name="logged_in" value="logged_in" <?php checked('logged_in', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> Logged in only<br>
                 <input type="radio" name="logged_in" value="logged_out" <?php checked('logged_out', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> Logged out only<br>
@@ -388,37 +388,18 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 <input type="radio" name="new_or_returning" value="returning" <?php checked('returning', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> Returning visitors only<br>
                 <input type="radio" name="new_or_returning" value="all" <?php checked('all', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> All visitors<br>
             </p>
-
-        <?php }
-
-        /**
-         * Display settings meta box
-         *
-         * @since     0.1
-         */
-        public function settings_meta_box_callback( $post ) { ?>
-
-            <p><label for="avatar_email"><?php _e( 'Gravatar Email', 'sb-automation' ); ?></label></p>
+            <hr>
             <p>
-                <input type="text" class="widefat" name="avatar_email" size="20" value="<?php echo sanitize_email( get_post_meta( $post->ID, 'avatar_email', true ) ); ?>" /> 
-            </p>
-            <p>
-                <label for="visitor"><?php _e( 'Display item', 'sb-automation' ); ?></label>
+                <label for="visitor"><?php _e( 'When should we show it?', 'sb-automation' ); ?></label>
             </p>
             <p>
                 <input type="radio" name="display_when" value="immediately" <?php checked('immediately', get_post_meta( $post->ID, 'display_when', true ), true); ?>> Immediately<br>
                 <input type="radio" name="display_when" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'display_when', true ), true); ?>> Delay of <input type="number" class="sb-number-input" id="scroll_delay" name="scroll_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'scroll_delay', true ) ); ?>" /> seconds<br>
                 <input type="radio" name="display_when" value="scroll" <?php checked('scroll', get_post_meta( $post->ID, 'display_when', true ), true); ?>> User scrolls halfway down the page
             </p>
+            <hr>
             <p>
-                <label for="show_settings"><?php _e( 'Show this item', 'sb-automation' ); ?></label>
-            </p>
-            <p>
-                <input type="radio" name="show_settings" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Always<br>
-                <input type="radio" name="show_settings" value="once" <?php checked('once', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Once per visitor, per day<br>
-            </p>
-            <p>
-                <label for="hide_after"><?php _e( 'Hide this item', 'sb-automation' ); ?></label>
+                <label for="hide_after"><?php _e( 'After it displays, when should it go away?', 'sb-automation' ); ?></label>
             </p>
             <p>
                 <input type="radio" name="hide_after" value="always" <?php checked('never', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> Never<br>
@@ -427,9 +408,18 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 <input type="radio" name="hide_after" value="date" <?php checked('date', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> A certain date
                 <div id="sb-until-datepicker" class="sb-datepicker"></div>
             </p>
+            <hr>
             <p>
-                <input type="checkbox" id="sb_active" name="sb_active" value="1" <?php checked(1, get_post_meta( $post->ID, 'sb_active', true ), true); ?> />
-                <label for="sb_active"><?php _e( 'Activate?', 'sb-automation' ); ?></label>
+                <label for="show_settings"><?php _e( 'How often should we show it to each visitor?', 'sb-automation' ); ?></label>
+            </p>
+            <p>
+                <input type="radio" name="show_settings" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Always<br>
+                <input type="radio" name="show_settings" value="hide_for" <?php checked('hide_for', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Show, then hide for <input type="number" class="sb-number-input" id="hide_for_days" name="hide_for_days" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_for_days', true ) ); ?>" /> days<br>
+            </p>
+            <hr>
+            <p><label for="avatar_email"><?php _e( 'Gravatar Email', 'sb-automation' ); ?></label></p>
+            <p>
+                <input type="text" class="widefat" name="avatar_email" size="20" value="<?php echo sanitize_email( get_post_meta( $post->ID, 'avatar_email', true ) ); ?>" /> 
             </p>
 
         <?php }
@@ -471,6 +461,36 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
         <?php }
 
         /**
+         * Save meta box defaults when new post is created
+         *
+         * @since     0.1
+         */
+        public function save_default_meta( $new_status, $old_status, $post ) {
+            
+            if ( $old_status === 'new' && $new_status === 'auto-draft' && $post->post_type === 'sb_notification' ) {
+
+                // if we already have a setting, bail
+                if( !empty( get_post_meta( $post->ID, 'item_type' ) ) )
+                    return;
+
+                // set some defaults
+                update_post_meta( $post->ID, 'item_type', 'default' );
+                update_post_meta( $post->ID, 'show_on', 'all' );
+                update_post_meta( $post->ID, 'logged_in', 'all' );
+                update_post_meta( $post->ID, 'avatar_email', get_option('admin_email') );
+                update_post_meta( $post->ID, 'display_when', 'delay' );
+                update_post_meta( $post->ID, 'scroll_delay', 1 );
+                update_post_meta( $post->ID, 'show_settings', 'always' );
+                update_post_meta( $post->ID, 'new_or_returning', 'all' );
+                update_post_meta( $post->ID, 'hide_after', 'never' );
+                update_post_meta( $post->ID, 'hide_after_delay', 3 );
+                update_post_meta( $post->ID, 'hide_for_days', 1 );
+
+            }
+
+        }
+
+        /**
          * Save meta box settings
          *
          * @since     0.1
@@ -492,8 +512,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 return $post_id;
 
             $keys = array(
-                'show_chat', 
-                'show_optin', 
+                'item_type', 
                 'opt_in_message',
                 'opt_in_confirmation',
                 'opt_in_placeholder',
@@ -505,6 +524,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'new_or_returning',
                 'avatar_email',
                 'show_settings',
+                'hide_for_days',
                 'hide_after',
                 'hide_after_delay',
                 'sb_active',

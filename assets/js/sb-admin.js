@@ -7,8 +7,7 @@
   	sbAdmin.listeners();
   	sbAdmin.toggleShowOn();
   	sbAdmin.toggleDatepicker();
-  	sbAdmin.toggleEmail();
-    sbAdmin.toggleChat();
+  	sbAdmin.toggleItems();
 
     $('.sb-datepicker').datepicker({
   		dateFormat : 'D, m/d/yy'
@@ -39,9 +38,8 @@
   	}
 
   	$('body')
-  	.on('change', '#show_optin', sbAdmin.toggleEmail )
+  	.on('change', 'input[name=item_type]', sbAdmin.toggleItems )
     .on('change', '.sb-switch input', sbAdmin.toggleSwitch )
-    .on('change', 'input[name=show_chat]', sbAdmin.toggleChat )
   	.on('change', 'input[name=show_until]', sbAdmin.toggleDatepicker )
   	.on('change', 'input[name=show_on]', sbAdmin.toggleShowOn )
   	.on('keyup', '#content', sbAdmin.updatePreviewContent )
@@ -61,13 +59,34 @@
 
   }
 
-  sbAdmin.toggleEmail = function() {
+  // New item selected, update preview and settings display
+  sbAdmin.toggleItems = function() {
 
-  	if( $('#show_optin').is(':checked') ) {
+    var checkedItemVal = $('input[name=item_type]:checked').val();
+
+  	if( checkedItemVal === 'optin' ) {
+
   		$("#show-email-options, #sb-note-optin").show();
-  	} else {
-  		$("#show-email-options, #sb-note-optin").hide();
-  	}
+      $('#sb-chat').attr("class", "sb-hide" );
+
+  	} else if( checkedItemVal === 'chatbox' ) {
+
+  		$('#sb-chat').removeClass('sb-hide');
+      $("#show-email-options, #sb-note-optin").hide();
+
+  	} else if( checkedItemVal === 'quickie' ) {
+      // quickie
+      $('#sb-chat').attr("class", "sb-hide" );
+      $("#show-email-options, #sb-note-optin").hide();
+
+      $('input[name=hide_after][value=delay]').prop('checked', 'checked');
+      $('input[value=hide_for]').prop('checked', 'checked');
+    } else {
+
+      $('#sb-chat').attr("class", "sb-hide" );
+      $("#show-email-options, #sb-note-optin").hide();
+      
+    }
 
   }
 

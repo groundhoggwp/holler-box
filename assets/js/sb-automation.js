@@ -49,10 +49,12 @@
     var shown = sbAutomation.getCookie( 'sb_' + id + '_shown' );
 
     // only show once?
-    if( vars.show_settings === 'once' && shown === 'true' ) {
+    if( vars.showSettings === 'hide_for' && shown === 'true' ) {
       return;
-    } else if( vars.show_settings === 'once' && shown === '' ) {
-      sbAutomation.setCookie( 'sb_' + id + '_shown', 'true', 1 );
+    } else if( vars.showSettings === 'hide_for' && shown === '' ) {
+      var hideFor = ( vars.hideForDays ? parseInt( vars.hideForDays ) : 1 );
+      console.log('hide for ' + hideFor)
+      sbAutomation.setCookie( 'sb_' + id + '_shown', 'true', hideFor );
     }
 
     // passes checks, show it
@@ -186,7 +188,7 @@
     }
 
     // Show email opt-in
-    if( options.showOptin === '1' && options.showChat != '1' ) {
+    if( options.itemType === "optin" ) {
       sbAutomation.transitionIn( sbAutomation.noteOptin );
       // Setup localized vars
       var textInput = document.querySelector('#' + sbAutomation.activeID + ' .sb-email-input');
@@ -201,7 +203,7 @@
       sbAutomation.hide( sbAutomation.floatingBtn );
 
     // Should we show the chat box?
-    if( options.showChat === '1' ) {
+    if( options.itemType === 'chatbox' ) {
       sbAutomation.transitionIn( sbAutomation.chatBox );
     }
 
