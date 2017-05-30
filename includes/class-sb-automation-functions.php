@@ -56,6 +56,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             add_action( 'wp_footer', array( $this, 'maybe_display_items' ) );
             // add_filter( 'body_class', array( $this, 'body_classes' ) );
             add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
+            add_action( 'sb_email_form', array( $this, 'email_forms' ) );
 
         }
 
@@ -105,7 +106,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 $content_post = get_post($value);
                 $content = $content_post->post_content;
                 // adding the_content filter has crazy results, like CK forms
-                $content = apply_filters('sb_notification_content', $content);
+                $content = apply_filters('sb_notification_content', $content, $value );
                 $content = apply_filters('the_content_more_link', $content);
                 $content = str_replace(']]>', ']]&gt;', $content);
 
@@ -113,7 +114,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                     'content' => $content,
                     'itemType' => get_post_meta($value, 'item_type', 1),
                     'visitor' => get_post_meta($value, 'new_or_returning', 1),
-                    // 'showBtn' => 'false',
+                    'hideBtn' => get_post_meta($value, 'hide_btn', 1),
                     'optinMsg' => get_post_meta($value, 'opt_in_message', 1),
                     'placeholder' => get_post_meta($value, 'opt_in_placeholder', 1),
                     'confirmMsg' => get_post_meta($value, 'opt_in_confirmation', 1),
@@ -122,7 +123,9 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                     'showSettings' => get_post_meta($value, 'show_settings', 1),
                     'hideForDays' => get_post_meta($value, 'hide_for_days', 1),
                     'hide_after' => get_post_meta($value, 'hide_after', 1),
-                    'hide_after_delay' => get_post_meta($value, 'hide_after_delay', 1)
+                    'hide_after_delay' => get_post_meta($value, 'hide_after_delay', 1),
+                    'bgColor' => get_post_meta($value, 'bg_color', 1),
+                    'btnColor1' => get_post_meta($value, 'button_color1', 1)
                 );
             }
 
@@ -200,25 +203,22 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
         public function display_notification_box( $id ) {
 
             $avatar_email = get_post_meta($id, 'avatar_email', 1);
-            if( empty($avatar_email) )
-                $avatar_email = get_option('admin_email');
             ?>
-            <div id="sb-floating-btn"><i class="icon icon-chat"></i></div>
+            <div id="sb-floating-btn" class="<?php echo get_post_meta( $id, 'position', 1 ); ?>"><i class="icon icon-chat"></i></div>
 
-            <div id="sb-<?php echo $id; ?>" class="sb-notification-box sb-hide">
+            <div id="sb-<?php echo $id; ?>" class="sb-notification-box sb-hide <?php echo get_post_meta( $id, 'position', 1 ); ?>">
                 
-                <div class="sb-close"><i class="icon icon-cancel"></i> <i class="icon icon-cancel sb-full-right"></i></div>
+                <div class="sb-close"><i class="icon icon-cancel"></i> <i class="icon icon-cancel sb-full-side"></i></div>
 
                 <?php do_action('sb_notification_above_content'); ?>
                 
                 <div class="sb-box-rows">
-                        <?php echo get_avatar($avatar_email, 50 ); ?>
+                        <?php if( !empty($avatar_email) ) echo get_avatar($avatar_email, 50 ); ?>
                     <div class="sb-row sb-first-row"></div>
                 </div>
 
                 <div class="sb-row sb-note-optin sb-email-row sb-hide">
-                    <input type="email" name="email" class="sb-email-input" placeholder="Enter email" autocomplete="on" autocapitalize="off" />
-                    <button class="sb-email-btn"><?php echo _e('Send', 'sb-automation' ); ?></button>
+                    <?php do_action('sb_email_form'); ?>
                 </div>
                 
                 <div class="sb-chat sb-hide">
@@ -246,6 +246,42 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
         public function body_classes( $classes ) {
             $classes[] = 'sb-top-margin';
             return $classes;
+        }
+
+        public function email_forms() {
+
+            if( get_option('sb_email_provider') === 'mailchimp' ) {
+
+                ?>
+                <!-- Begin MailChimp Signup Form -->
+                <div id="mc_embed_signup">
+                <form action="//apppresser.us7.list-manage.com/subscribe/post?u=b517e9a1d1cd785bb2c33be23&amp;id=e95992dcd2" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                    <div id="mc_embed_signup_scroll">
+                    
+                <div class="mc-field-group">
+                    <label for="mce-EMAIL">Email Address </label>
+                    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
+                </div>
+                    <div id="mce-responses" class="clear">
+                        <div class="response" id="mce-error-response" style="display:none"></div>
+                        <div class="response" id="mce-success-response" style="display:none"></div>
+                    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_b517e9a1d1cd785bb2c33be23_e95992dcd2" tabindex="-1" value=""></div>
+                    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
+                    </div>
+                </form>
+                </div>
+
+                <!--End mc_embed_signup-->
+
+                <?php
+
+            } else {
+                ?>
+                <input type="email" name="email" class="sb-email-input" placeholder="Enter email" autocomplete="on" autocapitalize="off" />
+                <button class="sb-email-btn"><?php echo _e('Send', 'sb-automation' ); ?></button>
+                <?php
+            }
         }
 
     }

@@ -63,6 +63,12 @@
     sbAutomation.cacheSelectors();
     sbAutomation.noteListeners();
 
+    if( vars.bgColor )
+      item.style.backgroundColor = vars.bgColor;
+
+    if( vars.btnColor1 )
+      $('#' + 'sb-' + id + ' .sb-email-btn, #sb-floating-btn' ).css('background-color', vars.btnColor1 );
+
     // Delay showing item?
     if( vars.display_when != 'scroll' ) {
 
@@ -118,8 +124,9 @@
     .on('click', '.sb-email-btn', sbAutomation.emailSubmitted )
     .on('click', '#sb-floating-btn', sbAutomation.toggleHide )
     .on('click', '.sb-interaction', sbAutomation.interactionLink )
-    .on('click', '.sb-full-right', sbAutomation.fullRight )
-    .on('click', '.sb-text i', sbAutomation.sendText );
+    .on('click', '.sb-full-side', sbAutomation.fullSide )
+    .on('click', '.sb-text i', sbAutomation.sendText )
+    .on('submit', '#' + sbAutomation.activeID + ' form', sbAutomation.handleForms );
 
     $('.sb-text-input').on('keypress', sbAutomation.submitChatTextOnEnter );
 
@@ -147,11 +154,11 @@
 
   }
 
-  sbAutomation.fullRight = function() {
+  sbAutomation.fullSide = function() {
 
     var item = $( '#' + sbAutomation.activeID );
-    item.toggleClass('sb-full-right');
-    item.toggleClass('sb-minimizing', !item.hasClass('sb-full-right') );
+    item.toggleClass('sb-full-side');
+    item.toggleClass('sb-minimizing', !item.hasClass('sb-full-side') );
     setTimeout( function() {
       item.removeClass('sb-minimizing');
     }, 30000);
@@ -174,7 +181,7 @@
       // hide box, show btn
       sbAutomation.transitionOut( item );
 
-      if( options.showBtn != 'false' )
+      if( options.hideBtn != '1' )
         sbAutomation.transitionIn( sbAutomation.floatingBtn );
 
     } else {
@@ -182,7 +189,7 @@
       // Show the box
       sbAutomation.transitionIn( item );
 
-      if( options.showBtn != 'false' )
+      if( options.hideBtn != '1' )
         sbAutomation.transitionOut( sbAutomation.floatingBtn );
 
     }
@@ -192,6 +199,11 @@
       sbAutomation.transitionIn( sbAutomation.noteOptin );
       // Setup localized vars
       var textInput = document.querySelector('#' + sbAutomation.activeID + ' .sb-email-input');
+
+      // if text input is missing, we are using a different email form
+      if(!textInput)
+        return;
+      
       textInput.setAttribute('placeholder', options.placeholder );
 
       $('.sb-away-msg').remove();
@@ -199,7 +211,7 @@
     }
 
     // Button should not be shown
-    if( options.showBtn === 'false' )
+    if( options.hideBtn === '1' )
       sbAutomation.hide( sbAutomation.floatingBtn );
 
     // Should we show the chat box?
@@ -336,8 +348,8 @@
 
     setTimeout( function() {
       $(item).removeClass('sb-transition-out').addClass('sb-hide');
-      item.removeAttribute('style');
-    }, 500);
+      $(item).css('display','');
+    }, 200);
 
   }
 
@@ -351,7 +363,7 @@
   sbAutomation.hide = function(item) {
     
     $(item).removeClass('sb-show').addClass('sb-hide');
-    item.removeAttribute('style');
+    $(item).css('display','');
 
   }
 
@@ -446,10 +458,13 @@
   // User submitted email, send to server
   sbAutomation.emailSubmitted = function(e) {
 
-    var email = $('#' + sbAutomation.activeID + ' .sb-email-input').val()
+    var email = $('#' + sbAutomation.activeID + ' .sb-email-input').val();
+
+    if( !email )
+      return;
 
     // validate email
-    if( !email || email.indexOf('@') === -1 || email.indexOf('.') === -1 ) {
+    if( email.indexOf('@') === -1 || email.indexOf('.') === -1 ) {
       alert('Something is wrong with your email, please try again.')
       return;
     }
@@ -527,6 +542,14 @@
 
     sbAutomation.setCookie('sb_note_int', 'true', 1 );
 
+  }
+
+  sbAutomation.handleForms = function(e) {
+    
+    sbAutomation.interacted(null);
+    $(this).hide();
+    sbAutomation.showConfirmation();
+    
   }
 
   sbAutomation.showConfirmation = function() {

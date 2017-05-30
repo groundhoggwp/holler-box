@@ -7,7 +7,7 @@
   	sbAdmin.listeners();
   	sbAdmin.toggleShowOn();
   	sbAdmin.toggleDatepicker();
-  	sbAdmin.toggleItems();
+  	//sbAdmin.toggleItems();
 
     $('.sb-datepicker').datepicker({
   		dateFormat : 'D, m/d/yy'
@@ -63,28 +63,30 @@
   sbAdmin.toggleItems = function() {
 
     var checkedItemVal = $('input[name=item_type]:checked').val();
+    var chat = $('#sb-chat');
+    var optin = $("#show-email-options, #sb-note-optin");
 
   	if( checkedItemVal === 'optin' ) {
 
-  		$("#show-email-options, #sb-note-optin").show();
-      $('#sb-chat').attr("class", "sb-hide" );
+  		optin.show();
+      chat.attr("class", "sb-hide" );
 
   	} else if( checkedItemVal === 'chatbox' ) {
 
-  		$('#sb-chat').removeClass('sb-hide');
-      $("#show-email-options, #sb-note-optin").hide();
+  		chat.removeClass('sb-hide');
+      optin.hide();
 
   	} else if( checkedItemVal === 'quickie' ) {
       // quickie
-      $('#sb-chat').attr("class", "sb-hide" );
-      $("#show-email-options, #sb-note-optin").hide();
+      chat.attr("class", "sb-hide" );
+      optin.hide();
 
       $('input[name=hide_after][value=delay]').prop('checked', 'checked');
       $('input[value=hide_for]').prop('checked', 'checked');
     } else {
 
-      $('#sb-chat').attr("class", "sb-hide" );
-      $("#show-email-options, #sb-note-optin").hide();
+      chat.attr("class", "sb-hide" );
+      optin.hide();
       
     }
 

@@ -53,7 +53,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          */
         private function hooks() {
 
-            // add_action( 'admin_menu', array( $this, 'settings_page' ) );
+            add_action( 'admin_menu', array( $this, 'settings_page' ) );
             add_action( 'init', array( $this, 'register_cpt' ) );
             add_action( 'save_post', array( $this, 'save_meta_boxes' ), 10, 2 );
             add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -104,7 +104,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          */
         public function settings_page() {
 
-            add_menu_page( 'SB Automation', 'SB Automation', 'manage_options', 'sb_automation', array( $this, 'render_settings'), 'dashicons-welcome-add-page', 50 );
+            add_submenu_page( 'edit.php?post_type=sb_notification', 'SB Automation Settings', 'Settings', 'manage_options', 'sb_automation', array( $this, 'render_settings') );
             
         }
 
@@ -116,41 +116,35 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          */
         public function render_settings() {
 
+            if( isset( $_POST['sb_email_provider'] ) ) {
+                update_option( 'sb_email_provider', $_POST['sb_email_provider'] );
+            }
+
             ?>
-            <div id="sb-automation-wrap" class="wrap">
+            <div id="sb-automation-wrap" class="wrap">          
 
-            <?php
+            <h2><?php _e('Settings', 'sb-automation'); ?></h2>
 
-            if ( isset( $_GET['view'] ) && 'single' == $_GET['view'] ) :
-                require_once SB_Automation_DIR . 'includes/view-single-notification.php';
-            else :
+            <form method="post" action="edit.php?post_type=sb_notification&page=sb_automation">
 
-            ?>            
+                <p>To subscribe email opt-ins to your list, choose your provider below. For integration instructions, please see our documentation.</p>
+                
+                <input type="radio" name="sb_email_provider" value="none" <?php checked("none", get_option('sb_email_provider', 'none' ), true); ?> />
+                None<br>
+                <input type="radio" name="sb_email_provider" value="mailchimp" <?php checked("mailchimp", get_option('sb_email_provider' ), true); ?> /> MailChimp<br>
+                <input type="radio" name="sb_email_provider" value="convertkit" <?php checked("convertkit", get_option('sb_email_provider' ), true); ?> /> Convertkit for WordPress plugin <a href="https://wordpress.org/plugins/convertkit/" target="_blank">(plugin link)</a><br>
 
-            <h2><?php _e('Notifications', 'sb-automation'); ?></h2>
+            <?php submit_button(); ?>
 
-                <ul class="sb-list">
-
-                    <li class="sb-item sb-list-header">
-                        <span class="sb-col">Title</span>
-                        <span class="sb-col">Active</span>
-                        <span class="sb-col">Interactions</span>
-                        <span class="sb-col">Date</span>
-                    </li>
-
-                    <?php echo $this->get_list(); ?>
-
-                </ul>
+            </form>
 
             </div>
             <?php
-
-            endif;
             
         }
 
         /**
-         * List notifications
+         * List notifications (not used)
          *
          * @access      public
          * @since       0.1
@@ -275,9 +269,9 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
         public function notification_meta_boxes() {
 
             add_meta_box(
-                'appearance_meta_box',
-                __( 'Appearance', 'sb-automation' ),
-                array( $this, 'appearance_meta_box_callback' ),
+                'display_meta_box',
+                __( 'Display', 'sb-automation' ),
+                array( $this, 'display_meta_box_callback' ),
                 'sb_notification',
                 'normal',
                 'high'
@@ -307,7 +301,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          *
          * @since     0.1
          */
-        public function appearance_meta_box_callback( $post ) {
+        public function display_meta_box_callback( $post ) {
 
             ?>
 
@@ -326,23 +320,42 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 <input type="radio" name="item_type" value="quickie" <?php checked("quickie", get_post_meta( $post->ID, 'item_type', true ), true); ?> />
                 <?php _e( 'Quickie', 'sb-automation' ); ?>
                 <div id="show-email-options">
-                <label for="opt_in_message"><?php _e( 'Message', 'sb-automation' ); ?></label>
-                <input class="widefat" type="text" name="opt_in_message" id="opt_in_message" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
 
-                <label for="opt_in_placeholder"><?php _e( 'Placeholder', 'sb-automation' ); ?></label>
-                <input class="widefat" type="text" name="opt_in_placeholder" id="opt_in_placeholder" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_placeholder', true ) ); ?>" size="20" />
+                <?php if( !get_option('sb_email_provider') || get_option('sb_email_provider') === 'none' ) : ?>
+
+                    <label for="opt_in_message"><?php _e( 'Message', 'sb-automation' ); ?></label>
+                    <input class="widefat" type="text" name="opt_in_message" id="opt_in_message" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
+
+                    <label for="opt_in_placeholder"><?php _e( 'Placeholder', 'sb-automation' ); ?></label>
+                    <input class="widefat" type="text" name="opt_in_placeholder" id="opt_in_placeholder" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_placeholder', true ) ); ?>" size="20" />
+
+                    <label for="opt_in_send_to"><?php _e( 'Send to email', 'sb-automation' ); ?></label>
+                    <input class="widefat" type="email" name="opt_in_send_to" id="opt_in_send_to" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_send_to', true ) ); ?>" size="20" />
+
+                <?php endif; ?>
 
                 <label for="opt_in_confirmation"><?php _e( 'Confirmation Message', 'sb-automation' ); ?></label>
                 <input class="widefat" type="text" name="opt_in_confirmation" id="opt_in_confirmation" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_confirmation', true ) ); ?>" size="20" />
 
-                <label for="opt_in_send_to"><?php _e( 'Send to', 'sb-automation' ); ?></label>
-                <input class="widefat" type="email" name="opt_in_send_to" id="opt_in_send_to" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_send_to', true ) ); ?>" size="20" />
-
                 </div>
             </p>
 
+            <p>
+                <label for="position"><?php _e( 'Position' ); ?></label>
+            </p>
+            <p>
+                <input type="radio" name="position" value="sb-bottomright" <?php checked( "sb-bottomright", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
+                <?php _e( 'Bottom right', 'sb-automation' ); ?>
+                <input type="radio" name="position" value="sb-bottomleft" <?php checked( "sb-bottomleft", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
+                <?php _e( 'Bottom left', 'sb-automation' ); ?>
+                <input type="radio" name="position" value="sb-topright" <?php checked( "sb-topright", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
+                <?php _e( 'Top right', 'sb-automation' ); ?>
+                <input type="radio" name="position" value="sb-topleft" <?php checked( "sb-topleft", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
+                <?php _e( 'Top left', 'sb-automation' ); ?>
+            </p>
+
             <p>Button color</p>
-            <input type="text" name="button_color1" value="<?php echo esc_html( get_post_meta( $post->ID, 'button_color1', true ) ); ?>" class="sb-automation-colors" data-default-color="#effeff" />
+            <input type="text" name="button_color1" value="<?php echo esc_html( get_post_meta( $post->ID, 'button_color1', true ) ); ?>" class="sb-automation-colors" data-default-color="#1191cb" />
             
             <p>Background color</p>
             <input type="text" name="bg_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'bg_color', true ) ); ?>" class="sb-automation-colors" data-default-color="#ffffff" />
@@ -402,7 +415,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 <label for="hide_after"><?php _e( 'After it displays, when should it go away?', 'sb-automation' ); ?></label>
             </p>
             <p>
-                <input type="radio" name="hide_after" value="always" <?php checked('never', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> Never<br>
+                <input type="radio" name="hide_after" value="always" <?php checked('never', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> When user clicks hide<br>
                 <input type="radio" name="hide_after" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> Delay of <input type="number" class="sb-number-input" id="hide_after_delay" name="hide_after_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_after_delay', true ) ); ?>" /> seconds<br>
                 <input type="radio" name="hide_after" value="interaction" <?php checked('interaction', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> User interacts (Submit email, click link)<br>
                 <input type="radio" name="hide_after" value="date" <?php checked('date', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> A certain date
@@ -413,8 +426,13 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 <label for="show_settings"><?php _e( 'How often should we show it to each visitor?', 'sb-automation' ); ?></label>
             </p>
             <p>
-                <input type="radio" name="show_settings" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Always<br>
+                <input type="radio" name="show_settings" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Every page load<br>
                 <input type="radio" name="show_settings" value="hide_for" <?php checked('hide_for', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Show, then hide for <input type="number" class="sb-number-input" id="hide_for_days" name="hide_for_days" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_for_days', true ) ); ?>" /> days<br>
+            </p>
+            <hr>
+            <p>
+                <input type="checkbox" id="hide_btn" name="hide_btn" value="1" <?php checked(1, get_post_meta( $post->ID, 'hide_btn', true ), true); ?> />
+                <label for="hide_btn"><?php _e( 'Hide the floating button? (Appears when notification is closed)', 'sb-automation' ); ?></label>
             </p>
             <hr>
             <p><label for="avatar_email"><?php _e( 'Gravatar Email', 'sb-automation' ); ?></label></p>
@@ -485,6 +503,8 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 update_post_meta( $post->ID, 'hide_after', 'never' );
                 update_post_meta( $post->ID, 'hide_after_delay', 3 );
                 update_post_meta( $post->ID, 'hide_for_days', 1 );
+                update_post_meta( $post->ID, 'sb_active', '1' );
+                update_post_meta( $post->ID, 'position', 'sb-bottomright' );
 
             }
 
@@ -529,7 +549,9 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'hide_after_delay',
                 'sb_active',
                 'display_when',
-                'scroll_delay' );
+                'scroll_delay',
+                'position',
+                'hide_btn' );
 
             global $allowedposttags;
             $allowedposttags["iframe"] = array(

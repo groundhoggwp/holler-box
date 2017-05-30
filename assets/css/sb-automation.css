@@ -2,8 +2,6 @@
 	opacity: 0;
 	position: fixed;
 	z-index: 99998;
-    bottom: 25px;
-    right: 25px;
     width: 60px;
     height: 60px;
     background: #1191cb;
@@ -21,6 +19,44 @@
     position: relative;
     top: 8px;
     color: #fff;
+}
+
+.sb-notification-box {
+	opacity: 0;
+	position: fixed;
+	z-index: 99997;
+	width: 300px;
+	height: auto;
+	border-radius: 3px;
+	padding: 15px;
+	overflow: hidden;
+	background-color: #fff;
+	border: 1px solid #eee;
+	-webkit-box-shadow: 2px 2px 15px 2px rgba(0,0,0,0.06);
+	-moz-box-shadow: 2px 2px 15px 2px rgba(0,0,0,0.06);
+	box-shadow: 2px 2px 15px 2px rgba(0,0,0,0.06);
+	transition: all .3s;
+	box-sizing: border-box;
+}
+
+#sb-floating-btn.sb-bottomright, .sb-notification-box.sb-bottomright {
+	right: 25px;
+	bottom: 25px;
+}
+
+#sb-floating-btn.sb-bottomleft, .sb-notification-box.sb-bottomleft {
+	left: 25px;
+	bottom: 25px;
+}
+
+#sb-floating-btn.sb-topright, .sb-notification-box.sb-topright {
+	right: 25px;
+	top: 25px;
+}
+
+#sb-floating-btn.sb-topleft, .sb-notification-box.sb-topleft {
+	left: 25px;
+	top: 25px;
 }
 
 .sb-row.sb-note-optin {
@@ -111,33 +147,12 @@ body.admin-bar #sb-banner {
 	float: right;
 }
 
-.sb-close .sb-full-right, .sb-show-full {
+.sb-close .sb-full-side, .sb-show-full {
 	display: none;
 }
 
-.sb-notification-box {
-	opacity: 0;
-	position: fixed;
-	z-index: 99997;
-	bottom: 25px;
-	width: 300px;
-	right: 25px;
-	height: auto;
-	border-radius: 3px;
-	padding: 15px;
-	overflow: hidden;
-	background-color: #fff;
-	border: 1px solid #eee;
-	-webkit-box-shadow: 2px 2px 15px 2px rgba(0,0,0,0.06);
-	-moz-box-shadow: 2px 2px 15px 2px rgba(0,0,0,0.06);
-	box-shadow: 2px 2px 15px 2px rgba(0,0,0,0.06);
-	transition: all .3s;
-	box-sizing: border-box;
-}
-
-.sb-notification-box.sb-full-right {
+.sb-notification-box.sb-full-side {
 	top: 0;
-	right: 0;
 	bottom: 0;
 	transition: all .1s;
 }
@@ -146,19 +161,27 @@ body.admin-bar #sb-banner {
 	transition: none;
 }
 
-.sb-notification-box.sb-full-right .sb-close .sb-full-right, .sb-notification-box.sb-full-right .sb-show-full {
+.sb-notification-box.sb-full-side .sb-close .sb-full-side, .sb-notification-box.sb-full-side .sb-show-full {
 	display: block;
 }
 
-.sb-notification-box.sb-full-right .sb-chat {
+.sb-notification-box.sb-full-side .sb-chat {
 	position: absolute;
 	bottom: 10px;
     left: 10px;
     right: 10px;
 }
 
-.admin-bar .sb-notification-box.sb-full-right {
+.admin-bar .sb-notification-box.sb-full-side {
 	top: 32px;
+}
+
+.sb-bottomright.sb-full-side, .sb-topright.sb-full-side {
+	right: 0;
+}
+
+.sb-bottomleft.sb-full-side, .sb-topleft.sb-full-side {
+	left: 0;
 }
 
 .sb-notification-box p {
@@ -196,7 +219,7 @@ body.admin-bar #sb-banner {
 .sb-visitor-row {
 	text-align: right;
 	float: right;
-	background-color: #1191cb;
+	background-color: #444;
 	color: #fff;
 }
 
