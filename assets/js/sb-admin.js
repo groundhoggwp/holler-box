@@ -10,7 +10,7 @@
   	//sbAdmin.toggleItems();
 
     $('.sb-datepicker').datepicker({
-  		dateFormat : 'D, m/d/yy'
+  		dateFormat : 'mm/dd/yy'
   	});
 
   	$('.sb-automation-colors').wpColorPicker();
@@ -40,7 +40,7 @@
   	$('body')
   	.on('change', 'input[name=item_type]', sbAdmin.toggleItems )
     .on('change', '.sb-switch input', sbAdmin.toggleSwitch )
-  	.on('change', 'input[name=show_until]', sbAdmin.toggleDatepicker )
+  	.on('change', 'input[name=expiration]', sbAdmin.toggleDatepicker )
   	.on('change', 'input[name=show_on]', sbAdmin.toggleShowOn )
   	.on('keyup', '#content', sbAdmin.updatePreviewContent )
     .on('focus', 'input#scroll_delay', function() {
@@ -130,7 +130,7 @@
 
   sbAdmin.toggleDatepicker = function() {
 
-  	if( $('input[name=show_until]:checked').val() === 'date' ) {
+  	if( $('input[name=expiration]').is(':checked') ) {
   		$('#sb-until-datepicker').show();
   	} else {
   		$('#sb-until-datepicker').hide();

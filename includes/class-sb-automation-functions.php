@@ -144,6 +144,17 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
 
             foreach (self::$active as $key => $value) {
 
+                $should_expire = get_post_meta( $value, 'expiration', 1 );
+                $expiration = get_post_meta( $value, 'sb_until_date', 1 );
+
+                if( $should_expire === '1' && !empty( $expiration ) ) {
+                    // check if we've passed expiration date
+                    if( strtotime('now') >= strtotime( $expiration ) ) {
+                        delete_post_meta( $value, 'sb_active' );
+                        continue;
+                    }
+                }
+
                 $logged_in = is_user_logged_in();
                 $logged_in_meta = get_post_meta( $value, 'logged_in', 1 );
 

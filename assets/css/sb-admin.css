@@ -2,6 +2,10 @@
 	display: none;
 }
 
+.sb-datepicker {
+	margin: 10px 0 0;
+}
+
 /* For preview */
 
 #sb-notification-box {

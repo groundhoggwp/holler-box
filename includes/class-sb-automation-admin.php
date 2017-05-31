@@ -412,14 +412,11 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             </p>
             <hr>
             <p>
-                <label for="hide_after"><?php _e( 'After it displays, when should it go away?', 'sb-automation' ); ?></label>
+                <label for="hide_after"><?php _e( 'After it displays, when should it disappear?', 'sb-automation' ); ?></label>
             </p>
             <p>
-                <input type="radio" name="hide_after" value="always" <?php checked('never', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> When user clicks hide<br>
+                <input type="radio" name="hide_after" value="never" <?php checked('never', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> When user clicks hide<br>
                 <input type="radio" name="hide_after" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> Delay of <input type="number" class="sb-number-input" id="hide_after_delay" name="hide_after_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_after_delay', true ) ); ?>" /> seconds<br>
-                <input type="radio" name="hide_after" value="interaction" <?php checked('interaction', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> User interacts (Submit email, click link)<br>
-                <input type="radio" name="hide_after" value="date" <?php checked('date', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> A certain date
-                <div id="sb-until-datepicker" class="sb-datepicker"></div>
             </p>
             <hr>
             <p>
@@ -428,6 +425,11 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             <p>
                 <input type="radio" name="show_settings" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Every page load<br>
                 <input type="radio" name="show_settings" value="hide_for" <?php checked('hide_for', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Show, then hide for <input type="number" class="sb-number-input" id="hide_for_days" name="hide_for_days" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_for_days', true ) ); ?>" /> days<br>
+            </p>
+            <hr>
+            <p>
+                <input type="checkbox" name="expiration" value="1" <?php checked('1', get_post_meta( $post->ID, 'expiration', true ), true); ?>> Automatically deactivate on a certain date?<br>
+                <input type="text" placeholder="05/28/2018" value="<?php echo get_post_meta( $post->ID, 'sb_until_date', true ); ?>" name="sb_until_date" id="sb-until-datepicker" class="sb-datepicker" />
             </p>
             <hr>
             <p>
@@ -594,6 +596,20 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
 
             } else {
                 update_post_meta( $post_id, 'show_on', $_POST[ 'show_on' ] );
+            }
+
+            // notification expiration date
+            if( empty( $_POST[ 'expiration' ] ) ) {
+                delete_post_meta( $post_id, 'expiration' );
+                delete_post_meta( $post_id, 'sb_until_date' );
+            } elseif( $_POST[ 'expiration' ] === '1' && !empty( $_POST[ 'sb_until_date' ] ) ) {
+
+                $sanitized = wp_kses( $_POST[ 'sb_until_date' ], $allowedposttags);
+                update_post_meta( $post_id, 'sb_until_date', $sanitized );
+                update_post_meta( $post_id, 'expiration', '1' );
+
+            } else {
+                update_post_meta( $post_id, 'expiration', $_POST[ 'expiration' ] );
             }
             
         }
