@@ -112,7 +112,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
 
                 $array[$value] = array( 
                     'content' => $content,
-                    'itemType' => get_post_meta($value, 'item_type', 1),
+                    'showEmail' => get_post_meta($value, 'show_optin', 1),
                     'visitor' => get_post_meta($value, 'new_or_returning', 1),
                     'hideBtn' => get_post_meta($value, 'hide_btn', 1),
                     'optinMsg' => get_post_meta($value, 'opt_in_message', 1),
@@ -221,7 +221,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 
                 <div class="sb-close"><i class="icon icon-cancel"></i> <i class="icon icon-cancel sb-full-side"></i></div>
 
-                <?php do_action('sb_notification_above_content'); ?>
+                <?php do_action('sb_notification_above_content', $id); ?>
                 
                 <div class="sb-box-rows">
                         <?php if( !empty($avatar_email) ) echo get_avatar($avatar_email, 50 ); ?>
@@ -229,7 +229,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 </div>
 
                 <div class="sb-row sb-note-optin sb-email-row sb-hide">
-                    <?php do_action('sb_email_form'); ?>
+                    <?php do_action('sb_email_form', $id); ?>
                 </div>
                 
                 <div class="sb-chat sb-hide">
@@ -240,7 +240,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                     </div>
                 </div>
 
-                <?php do_action('sb_notification_below_content'); ?>
+                <?php do_action('sb_notification_below_content', $id); ?>
 
                 <!-- <span class="sb-powered-by"><a href="http://scottbolinger.com" target="_blank">Scottomator</a></span> -->
  
@@ -259,34 +259,58 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             return $classes;
         }
 
-        public function email_forms() {
+        public function email_forms( $id ) {
 
-            if( get_option('sb_email_provider') === 'mailchimp' ) {
+            $provider = get_post_meta( $id, 'email_provider', 1 );
+
+            if( $provider === 'custom' ) {
+
+                echo get_post_meta( $id, 'custom_email_form', 1 );
+
+            } elseif( $provider === 'ck' ) { 
+
+                $ckid = get_post_meta( $id, 'ck_id', 1 );
 
                 ?>
-                <!-- Begin MailChimp Signup Form -->
-                <div id="mc_embed_signup">
-                <form action="//apppresser.us7.list-manage.com/subscribe/post?u=b517e9a1d1cd785bb2c33be23&amp;id=e95992dcd2" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-                    <div id="mc_embed_signup_scroll">
-                    
-                <div class="mc-field-group">
-                    <label for="mce-EMAIL">Email Address </label>
-                    <input type="email" value="" name="EMAIL" class="required email" id="mce-EMAIL">
-                </div>
-                    <div id="mce-responses" class="clear">
-                        <div class="response" id="mce-error-response" style="display:none"></div>
-                        <div class="response" id="mce-success-response" style="display:none"></div>
-                    </div>    <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_b517e9a1d1cd785bb2c33be23_e95992dcd2" tabindex="-1" value=""></div>
-                    <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button"></div>
-                    </div>
-                </form>
-                </div>
 
+                <form id="ck_subscribe_form" class="ck_subscribe_form" action="https://app.convertkit.com/landing_pages/<?php echo $ckid; ?>/subscribe" target="_blank">
+                    <input type="hidden" name="id" value="<?php echo $ckid; ?>" id="landing_page_id">
+                    <input type="hidden" name="ck_form_recaptcha" value="" id="ck_form_recaptcha">
+                    <input type="email" name="email" class="sb-email-input" id="ck_emailField" placeholder="Email Address">
+                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="captcha2_h" class="ck-captcha2-h" id="ck_captcha2_h"></div>
+
+                    <button class="sb-email-btn" id="ck_subscribe_button">
+                    <?php echo _e('Send', 'sb-automation' ); ?>
+                    </button>
+                </form>
+                <?php
+
+            } elseif( $provider === 'mc' ) {
+
+                $url = get_post_meta( $id, 'mc_url', 1 );
+
+                // parse url to get captcha name attribute
+                $parts = parse_url($url);
+                parse_str($parts['query'], $query);
+                $u = ( isset( $query['u'] ) ? $query['u'] : '' );
+                $list_id = ( isset( $query['amp;id'] ) ? $query['amp;id'] : '' );
+                $captcha_name = 'b_' . $u . '_' . $list_id;
+
+                // add /post to url
+                $url = explode( '?', $url );
+                $url = $url[0] . 'post?' . $url[1];
+
+                ?>
+
+                <!-- Begin MailChimp Signup Form -->
+                <form action="<?php echo $url; ?>" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                    <input type="email" value="" name="EMAIL" class="required email sb-email-input" id="mce-EMAIL">
+                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="<?php echo $captcha_name; ?>" tabindex="-1" value=""></div>
+                    <input type="submit" value="Send" name="subscribe" id="mc-embedded-subscribe" class="sb-email-btn">
+                </form>
                 <!--End mc_embed_signup-->
 
                 <?php
-
             } else {
                 ?>
                 <input type="email" name="email" class="sb-email-input" placeholder="Enter email" autocomplete="on" autocapitalize="off" />

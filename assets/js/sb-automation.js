@@ -53,9 +53,12 @@
       return;
     } else if( vars.showSettings === 'hide_for' && shown === '' ) {
       var hideFor = ( vars.hideForDays ? parseInt( vars.hideForDays ) : 1 );
-      console.log('hide for ' + hideFor)
       sbAutomation.setCookie( 'sb_' + id + '_shown', 'true', hideFor );
     }
+
+    // hide after interacted with?
+    if( vars.showSettings === 'interacts' && sbAutomation.getCookie( 'sb_' + id + '_int' ) != '' )
+      return;
 
     // passes checks, show it
     sbAutomation.activeID = 'sb-' + id;
@@ -195,7 +198,7 @@
     }
 
     // Show email opt-in
-    if( options.itemType === "optin" ) {
+    if( options.showEmail === "1" ) {
       sbAutomation.transitionIn( sbAutomation.noteOptin );
       // Setup localized vars
       var textInput = document.querySelector('#' + sbAutomation.activeID + ' .sb-email-input');
@@ -213,11 +216,6 @@
     // Button should not be shown
     if( options.hideBtn === '1' )
       sbAutomation.hide( sbAutomation.floatingBtn );
-
-    // Should we show the chat box?
-    if( options.itemType === 'chatbox' ) {
-      sbAutomation.transitionIn( sbAutomation.chatBox );
-    }
 
     // Should we hide it
     if( options.hide_after === 'delay' ) {
@@ -521,7 +519,7 @@
 
     var id = sbAutomation.activeID.split('-')[1];
 
-    var params = { action: 'sb_track_event', nonce: window.sbAutoVars.sbNonce, event: data.event, id: id };
+    var params = { action: 'sb_track_event', nonce: window.sbAutoVars.sbNonce, id: id };
 
     if( data.data ) {
       params.details = data.details;
@@ -540,16 +538,18 @@
         console.log(err);
       });
 
-    sbAutomation.setCookie('sb_note_int', 'true', 1 );
+    sbAutomation.setCookie('sb_' + id + '_int', 'true', 1 );
 
   }
 
   sbAutomation.handleForms = function(e) {
+
+    console.log('handleForms');
     
     sbAutomation.interacted(null);
     $(this).hide();
     sbAutomation.showConfirmation();
-    
+
   }
 
   sbAutomation.showConfirmation = function() {

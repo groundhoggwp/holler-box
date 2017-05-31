@@ -7,13 +7,16 @@
   	sbAdmin.listeners();
   	sbAdmin.toggleShowOn();
   	sbAdmin.toggleDatepicker();
-  	//sbAdmin.toggleItems();
+  	sbAdmin.emailCheckbox();
+    sbAdmin.toggleEmailForm();
 
     $('.sb-datepicker').datepicker({
   		dateFormat : 'mm/dd/yy'
   	});
 
   	$('.sb-automation-colors').wpColorPicker();
+
+    $('#settings_meta_box').addClass('closed');
     
   }
 
@@ -38,10 +41,11 @@
   	}
 
   	$('body')
-  	.on('change', 'input[name=item_type]', sbAdmin.toggleItems )
+  	.on('change', 'input[name=show_optin]', sbAdmin.emailCheckbox )
     .on('change', '.sb-switch input', sbAdmin.toggleSwitch )
   	.on('change', 'input[name=expiration]', sbAdmin.toggleDatepicker )
   	.on('change', 'input[name=show_on]', sbAdmin.toggleShowOn )
+    .on('change', 'input[name=email_provider]', sbAdmin.toggleEmailForm )
   	.on('keyup', '#content', sbAdmin.updatePreviewContent )
     .on('focus', 'input#scroll_delay', function() {
       $('input[name=display_when][value=delay]').prop('checked', 'checked'); 
@@ -60,34 +64,62 @@
   }
 
   // New item selected, update preview and settings display
-  sbAdmin.toggleItems = function() {
+  sbAdmin.emailCheckbox = function() {
 
-    var checkedItemVal = $('input[name=item_type]:checked').val();
-    var chat = $('#sb-chat');
     var optin = $("#show-email-options, #sb-note-optin");
 
-  	if( checkedItemVal === 'optin' ) {
+    if( $('input[name=show_optin]').is(':checked') ) {
 
-  		optin.show();
-      chat.attr("class", "sb-hide" );
+      optin.show();
 
-  	} else if( checkedItemVal === 'chatbox' ) {
-
-  		chat.removeClass('sb-hide');
-      optin.hide();
-
-  	} else if( checkedItemVal === 'quickie' ) {
-      // quickie
-      chat.attr("class", "sb-hide" );
-      optin.hide();
-
-      $('input[name=hide_after][value=delay]').prop('checked', 'checked');
-      $('input[value=hide_for]').prop('checked', 'checked');
     } else {
 
-      chat.attr("class", "sb-hide" );
       optin.hide();
-      
+
+    }
+
+
+  }
+
+  // Handle display of different email options
+  sbAdmin.toggleEmailForm = function() {
+
+    var defaultDiv = $('#default-email-options');
+    var custom = $('#custom-email-options');
+    var checkedVal = $('input[name=email_provider]:checked').val();
+    var itemTypeVal = $('input[name=item_type]:checked').val();
+    var optin = $("#sb-note-optin");
+    var mcUrl = $('#mc_url');
+    var ckId = $('#ck_id');
+
+    // Show optin in preview
+    if( itemTypeVal === 'optin' ) {
+
+      optin.show();
+      $('#show-email-options').show();
+
+    }
+
+    if( checkedVal === 'default' ) {
+      defaultDiv.show();
+      custom.hide();
+      ckId.hide();
+      mcUrl.hide();
+    } else if( checkedVal === 'custom' ) {
+      custom.show();
+      defaultDiv.hide();
+      ckId.hide();
+      mcUrl.hide();
+    } else if( checkedVal === 'mc' ) {
+      mcUrl.show();
+      ckId.hide();
+      custom.hide();
+      defaultDiv.hide();
+    } else if( checkedVal === 'ck' ) {
+      ckId.show();
+      mcUrl.hide();
+      custom.hide();
+      defaultDiv.hide();
     }
 
   }

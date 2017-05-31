@@ -308,36 +308,8 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             <?php wp_nonce_field( basename( __FILE__ ), 'sb_notification_meta_box_nonce' ); ?>
 
             <p>
-                <label for="item_type"><?php _e( 'Choose a display type. Settings automatically configure based on your selection to easy defaults. For more customization, view advanced settings below.', 'sb-automation' ); ?></label>
-            </p>
-            <p>
-                <input type="radio" name="item_type" value="default" <?php checked( "default", get_post_meta( $post->ID, 'item_type', 1 ) ); ?> />
-                <?php _e( 'Simple message', 'sb-automation' ); ?>
-                <input type="radio" id="show_optin" name="item_type" value="optin" <?php checked( "optin", get_post_meta( $post->ID, 'item_type', 1 ) ); ?> />
-                <?php _e( 'Email opt-in', 'sb-automation' ); ?>
-                <input type="radio" name="item_type" value="chatbox" <?php checked("chatbox", get_post_meta( $post->ID, 'item_type', true ), true); ?> />
-                <?php _e( 'Chat box', 'sb-automation' ); ?>
-                <input type="radio" name="item_type" value="quickie" <?php checked("quickie", get_post_meta( $post->ID, 'item_type', true ), true); ?> />
-                <?php _e( 'Quickie', 'sb-automation' ); ?>
-                <div id="show-email-options">
-
-                <?php if( !get_option('sb_email_provider') || get_option('sb_email_provider') === 'none' ) : ?>
-
-                    <label for="opt_in_message"><?php _e( 'Message', 'sb-automation' ); ?></label>
-                    <input class="widefat" type="text" name="opt_in_message" id="opt_in_message" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
-
-                    <label for="opt_in_placeholder"><?php _e( 'Placeholder', 'sb-automation' ); ?></label>
-                    <input class="widefat" type="text" name="opt_in_placeholder" id="opt_in_placeholder" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_placeholder', true ) ); ?>" size="20" />
-
-                    <label for="opt_in_send_to"><?php _e( 'Send to email', 'sb-automation' ); ?></label>
-                    <input class="widefat" type="email" name="opt_in_send_to" id="opt_in_send_to" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_send_to', true ) ); ?>" size="20" />
-
-                <?php endif; ?>
-
-                <label for="opt_in_confirmation"><?php _e( 'Confirmation Message', 'sb-automation' ); ?></label>
-                <input class="widefat" type="text" name="opt_in_confirmation" id="opt_in_confirmation" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_confirmation', true ) ); ?>" size="20" />
-
-                </div>
+                <input type="checkbox" id="sb_active" name="sb_active" value="1" <?php checked(1, get_post_meta( $post->ID, 'sb_active', true ), true); ?> />
+                <label for="sb_active"><?php _e( 'Activate? Check to show this notification.', 'sb-automation' ); ?></label>
             </p>
 
             <p>
@@ -361,8 +333,43 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             <input type="text" name="bg_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'bg_color', true ) ); ?>" class="sb-automation-colors" data-default-color="#ffffff" />
 
             <p>
-                <input type="checkbox" id="sb_active" name="sb_active" value="1" <?php checked(1, get_post_meta( $post->ID, 'sb_active', true ), true); ?> />
-                <label for="sb_active"><?php _e( 'Activate?', 'sb-automation' ); ?></label>
+                <input type="checkbox" id="show_optin" name="show_optin" value="1" <?php checked('1', get_post_meta( $post->ID, 'show_optin', true ), true); ?> />
+                <?php _e( 'Show email opt-in', 'sb-automation' ); ?>
+                <div id="show-email-options">
+
+                    <p>
+                    <input type="radio" name="email_provider" value="default" <?php checked("default", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
+                    <?php _e( 'Default', 'sb-automation' ); ?><br>
+                    <input type="radio" name="email_provider" value="ck" <?php checked("ck", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
+                    <?php _e( 'Convertkit', 'sb-automation' ); ?><input id="ck_id" name="ck_id" value="<?php echo get_post_meta( $post->ID, 'ck_id', 1 ); ?>" placeholder="Convertkit list ID" type="text" /><br>
+                    <input type="radio" name="email_provider" value="mc" <?php checked("mc", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
+                    <?php _e( 'MailChimp', 'sb-automation' ); ?><input id="mc_url" name="mc_url" placeholder="MailChimp list url" value="<?php echo get_post_meta( $post->ID, 'mc_url', 1 ); ?>" type="text" /><br>
+                    <input type="radio" name="email_provider" value="custom" <?php checked("custom", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
+                    <?php _e( 'Custom', 'sb-automation' ); ?>
+                    </p>
+
+                    <div id="default-email-options">
+
+                        <label for="opt_in_message"><?php _e( 'Message', 'sb-automation' ); ?></label>
+                        <input class="widefat" type="text" name="opt_in_message" id="opt_in_message" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
+
+                        <label for="opt_in_placeholder"><?php _e( 'Placeholder', 'sb-automation' ); ?></label>
+                        <input class="widefat" type="text" name="opt_in_placeholder" id="opt_in_placeholder" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_placeholder', true ) ); ?>" size="20" />
+
+                        <label for="opt_in_send_to"><?php _e( 'Send to email', 'sb-automation' ); ?></label>
+                        <input class="widefat" type="email" name="opt_in_send_to" id="opt_in_send_to" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_send_to', true ) ); ?>" size="20" />
+
+                    </div>
+
+                    <div id="custom-email-options">
+                        <label for="custom_email_form"><?php _e( 'Insert HTML form code here', 'sb-automation' ); ?></label>
+                        <textarea class="sb-textarea" name="custom_email_form" id="custom_email_form"><?php echo esc_html( get_post_meta( $post->ID, 'custom_email_form', true ) ); ?></textarea>
+                    </div>
+
+                    <label for="opt_in_confirmation"><?php _e( 'Confirmation Message', 'sb-automation' ); ?></label>
+                    <input class="widefat" type="text" name="opt_in_confirmation" id="opt_in_confirmation" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_confirmation', true ) ); ?>" size="20" />
+
+                </div>
             </p>
 
         <?php }
@@ -374,7 +381,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          */
         public function settings_meta_box_callback( $post ) { ?>
 
-            <h4><?php _e( 'What pages?', 'sb-automation' ); ?></h4>
+            <label><?php _e( 'What pages?', 'sb-automation' ); ?></label>
 
             <p>
                 <input type="radio" name="show_on" value="all" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "all" ) echo 'checked="checked"'; ?>> All pages<br>
@@ -387,7 +394,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
 
             <hr>
 
-            <h4>Show to these visitors</h4>
+            <label>Show to these visitors</label>
 
             <p> 
                 <input type="radio" name="logged_in" value="logged_in" <?php checked('logged_in', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> Logged in only<br>
@@ -425,6 +432,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             <p>
                 <input type="radio" name="show_settings" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Every page load<br>
                 <input type="radio" name="show_settings" value="hide_for" <?php checked('hide_for', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Show, then hide for <input type="number" class="sb-number-input" id="hide_for_days" name="hide_for_days" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_for_days', true ) ); ?>" /> days<br>
+                <input type="radio" name="show_settings" value="interacts" <?php checked('interacts', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Hide after user interacts (clicks link or submits email)
             </p>
             <hr>
             <p>
@@ -494,7 +502,6 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                     return;
 
                 // set some defaults
-                update_post_meta( $post->ID, 'item_type', 'default' );
                 update_post_meta( $post->ID, 'show_on', 'all' );
                 update_post_meta( $post->ID, 'logged_in', 'all' );
                 update_post_meta( $post->ID, 'avatar_email', get_option('admin_email') );
@@ -534,7 +541,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 return $post_id;
 
             $keys = array(
-                'item_type', 
+                'show_optin', 
                 'opt_in_message',
                 'opt_in_confirmation',
                 'opt_in_placeholder',
@@ -553,7 +560,11 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'display_when',
                 'scroll_delay',
                 'position',
-                'hide_btn' );
+                'hide_btn',
+                'email_provider',
+                'custom_email_form',
+                'ck_id',
+                'mc_url' );
 
             global $allowedposttags;
             $allowedposttags["iframe"] = array(
@@ -572,6 +583,20 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'marginheight' => true,
                 'allowfullscreen' => true
 
+            );
+            $allowedposttags["input"] = array(
+                'type' => true,
+                'value' => true,
+                'id' => true,
+                'name' => true,
+                'class' => true,
+                'placeholder' => true,
+            );
+            $allowedposttags["div"] = array(
+                'style' => true,
+                'id' => true,
+                'class' => true,
+                'align' => true
             );
 
             // sanitize data

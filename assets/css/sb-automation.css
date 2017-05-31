@@ -67,6 +67,15 @@
 	display: block;
 	max-width: 100%;
 	height: auto;
+	border: none;
+}
+
+.sb-notification-box img.alignleft {
+	margin: 0 5px 5px 0;
+}
+
+.sb-notification-box img.alignright {
+	margin: 0 0 5px 5px;
 }
 
 .sb-notification-box iframe {

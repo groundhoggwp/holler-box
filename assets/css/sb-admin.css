@@ -1,9 +1,16 @@
-#show-certain-pages, #show-email-options, #sb-until-datepicker {
+#show-certain-pages, #show-email-options, #sb-until-datepicker, #custom-email-options, #default-email-options, #mc_url, #ck_id {
 	display: none;
 }
 
 .sb-datepicker {
 	margin: 10px 0 0;
+}
+
+.sb-textarea {
+	display: block;
+    margin: 12px 0 0;
+    height: 4em;
+    width: 100%;
 }
 
 /* For preview */
