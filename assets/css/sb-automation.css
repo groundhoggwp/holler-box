@@ -1,3 +1,23 @@
+.sb-notification-box h1, .sb-notification-box h2, .sb-notification-box h3, .sb-notification-box h4 {
+	clear: none;
+}
+
+.sb-notification-box h1 {
+	font-size: 26px;
+}
+
+.sb-notification-box h2 {
+	font-size: 22px;
+}
+
+.sb-notification-box h3 {
+	font-size: 18px;
+}
+
+.sb-notification-box h4 {
+	font-size: 16px;
+}
+
 #sb-floating-btn {
 	opacity: 0;
 	position: fixed;
@@ -100,6 +120,14 @@
 	transform: translateX(0px) translateY(15px);
 }
 
+.sb-banner-top.sb-transition-out {
+	-moz-transform: translateX(0px) translateY(0px);
+	-webkit-transform: translateX(0px) translateY(0px);
+	-o-transform: translateX(0px) translateY(0px);
+	-ms-transform: translateX(0px) translateY(0px);
+	transform: translateX(0px) translateY(0px);
+}
+
 .sb-hide {
 	display: none;
 	opacity: 0;
@@ -113,32 +141,6 @@
 .sb-show {
 	display: block;
 	opacity: 1 !important;
-}
-
-#sb-banner {
-	position: absolute;
-	z-index: 99998;
-	top: 0;
-	left: 0;
-	right: 0;
-	height: auto;
-	padding: 5px;
-	overflow: hidden;
-	background-color: #eee;
-}
-
-/*body.admin-bar {
-	margin-top: 60px !important;
-}*/
-
-body.admin-bar #sb-banner {
-	top: 32px;
-}
-
-.sb-banner-inside {
-	text-align: center;
-	font-weight: bold;
-	margin: 0 auto;
 }
 
 .sb-close {
@@ -302,6 +304,58 @@ span.sb-powered-by a {
     text-decoration: underline;
     margin-top: 5px;
 }
+
+/*
+ * Banner 
+ */
+
+.sb-banner-top {
+	top: 0;
+	left: 0;
+	right: 0;
+	width: auto;
+	max-height: 50px;
+	border-radius: 0;
+	padding: 10px;
+	overflow: hidden;
+	text-align: center;
+	position: absolute;
+	border: none;
+	border-bottom: 1px solid #eee;
+	transition: opacity .3s;
+}
+
+#sb-floating-btn.sb-banner-top {
+	display: none !important;
+}
+
+.sb-banner-top .avatar {
+	display: none;
+}
+
+.sb-banner-top .sb-row {
+	background-color: transparent;
+	padding: 0;
+	margin: 0;
+}
+
+body.admin-bar .sb-banner-top {
+	top: 32px;
+}
+
+body.has-sb-banner-top {
+	margin-top: 50px;
+}
+
+.sb-banner-inside {
+	text-align: center;
+	font-weight: bold;
+	margin: 0 auto;
+}
+
+/*
+ * Media Queries
+ */
 
 @media (max-width: 600px) {
 	.sb-notification-box {

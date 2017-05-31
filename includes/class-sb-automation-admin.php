@@ -144,45 +144,6 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
         }
 
         /**
-         * List notifications (not used)
-         *
-         * @access      public
-         * @since       0.1
-         */
-        public function get_list() {
-
-            $args = array( 'post_type' => 'sb_notification' );
-            // The Query
-            $the_query = new WP_Query( $args );
-
-            $output = '';
-
-            // The Loop
-            if ( $the_query->have_posts() ) {
-
-                while ( $the_query->have_posts() ) {
-                    $the_query->the_post();
-                    $id = get_the_id();
-                    $output .= '<li class="sb-item">';
-                    $output .= '<span class="sb-col sb-item-title"><a href="' . admin_url() . 'admin.php?page=sb_automation&view=single&id=' . $id . '">' . get_the_title() . '</a></span>';
-                    $output .= '<span class="sb-col"><label class="sb-switch"><input type="checkbox"><div class="sb-slider sb-round"></div></label></span>';                   
-                    $output .= '<span class="sb-col">24</span>';
-                    $output .= '<span class="sb-col">' . get_the_date() . '</span>';
-                    $output .= '</li>';
-
-                    //$output .= get_post_meta( get_the_id() );
-                }
-
-                /* Restore original Post Data */
-                wp_reset_postdata();
-            } else {
-                $output = '';
-            }
-
-            return $output;
-        }
-
-        /**
          * Add columns
          *
          * @access      public
@@ -324,6 +285,8 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 <?php _e( 'Top right', 'sb-automation' ); ?>
                 <input type="radio" name="position" value="sb-topleft" <?php checked( "sb-topleft", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
                 <?php _e( 'Top left', 'sb-automation' ); ?>
+                <input type="radio" name="position" value="sb-banner-top" <?php checked( "sb-banner-top", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
+                <?php _e( 'Banner Top', 'sb-automation' ); ?>
             </p>
 
             <p>Button color</p>
@@ -331,6 +294,9 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             
             <p>Background color</p>
             <input type="text" name="bg_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'bg_color', true ) ); ?>" class="sb-automation-colors" data-default-color="#ffffff" />
+
+            <p>Text color</p>
+            <input type="text" name="text_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'text_color', true ) ); ?>" class="sb-automation-colors" data-default-color="#333333" />
 
             <p>
                 <input type="checkbox" id="show_optin" name="show_optin" value="1" <?php checked('1', get_post_meta( $post->ID, 'show_optin', true ), true); ?> />
@@ -548,6 +514,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'opt_in_send_to',
                 'button_color1',
                 'bg_color',
+                'text_color',
                 'sb_page_ids',
                 'logged_in',
                 'new_or_returning',

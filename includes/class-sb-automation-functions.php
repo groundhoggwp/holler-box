@@ -125,7 +125,8 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                     'hide_after' => get_post_meta($value, 'hide_after', 1),
                     'hide_after_delay' => get_post_meta($value, 'hide_after_delay', 1),
                     'bgColor' => get_post_meta($value, 'bg_color', 1),
-                    'btnColor1' => get_post_meta($value, 'button_color1', 1)
+                    'btnColor1' => get_post_meta($value, 'button_color1', 1),
+                    'position' => get_post_meta($value, 'position', 1)
                 );
             }
 
@@ -215,6 +216,9 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
 
             $avatar_email = get_post_meta($id, 'avatar_email', 1);
             ?>
+            <style type="text/css">
+            #sb-<?php echo $id; ?>, #sb-<?php echo $id; ?> a, #sb-<?php echo $id; ?> i { color: <?php echo get_post_meta( $id, 'text_color', 1 ); ?>; }
+            </style>
             <div id="sb-floating-btn" class="<?php echo get_post_meta( $id, 'position', 1 ); ?>"><i class="icon icon-chat"></i></div>
 
             <div id="sb-<?php echo $id; ?>" class="sb-notification-box sb-hide <?php echo get_post_meta( $id, 'position', 1 ); ?>">

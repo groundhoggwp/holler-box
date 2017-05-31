@@ -66,6 +66,8 @@
     sbAutomation.cacheSelectors();
     sbAutomation.noteListeners();
 
+    console.log( sbAutomation.activeID );
+
     if( vars.bgColor )
       item.style.backgroundColor = vars.bgColor;
 
@@ -103,8 +105,6 @@
     } else if( sbAutomation.getCookie('sb_new') != "" ) {
       sbAutomation.newVisitor = true;
     }
-
-    console.log('new visitor?' + sbAutomation.newVisitor )
 
   }
 
@@ -172,6 +172,8 @@
   // Show/hide elements based on options object
   sbAutomation.showNote = function() {
 
+    console.log( sbAutomation.activeID );
+
     var options = sbAutomation.activeOptions;
 
     var item = document.getElementById( sbAutomation.activeID );
@@ -179,7 +181,7 @@
     sbAutomation.firstRow.innerHTML = options.content;
 
     // visitor has hidden this item, don't show box
-    if( options.hideFirst === 'true' || window.localStorage.getItem( 'sb_hide_note' ) === 'true' ) {
+    if( options.hideFirst === 'true' || sbAutomation.getCookie( sbAutomation.activeID + '_hide' ) === 'true' ) {
 
       // hide box, show btn
       sbAutomation.transitionOut( item );
@@ -196,6 +198,8 @@
         sbAutomation.transitionOut( sbAutomation.floatingBtn );
 
     }
+
+    console.log('here' + sbAutomation.activeID)
 
     // Show email opt-in
     if( options.showEmail === "1" ) {
@@ -216,6 +220,9 @@
     // Button should not be shown
     if( options.hideBtn === '1' )
       sbAutomation.hide( sbAutomation.floatingBtn );
+
+    if( options.position === 'sb-banner-top' && sbAutomation.getCookie( sbAutomation.activeID + '_hide' ) != 'true' )
+      sbAutomation.toggleBannerClass();
 
     // Should we hide it
     if( options.hide_after === 'delay' ) {
@@ -266,6 +273,11 @@
     };
   }
 
+  sbAutomation.toggleBannerClass = function() {
+    console.log('toggle')
+    $('body').toggleClass('has-sb-banner-top');
+  }
+
   // check how old cookie is
   // return true or false
   // sbAutomation.lastSeen = function( cookie ) {
@@ -296,10 +308,10 @@
   // User clicked hide
   sbAutomation.hideItem = function( e ) {
 
-    // hide the item that was clicked
-    // var el = $(e.target).closest('.sb-show');
-
     sbAutomation.toggleHide();
+
+    if( $(e.target).closest('.sb-notification-box').hasClass('sb-banner-top') )
+      sbAutomation.toggleBannerClass();
 
     // prevent duplicate firing
     return false;
@@ -309,12 +321,12 @@
   // Handle show/hide storage items, then run showNote func. Used when floating btn is clicked
   sbAutomation.toggleHide = function() {
 
-    var hide = window.localStorage.getItem('sb_hide_note');
+    var hide = sbAutomation.getCookie( sbAutomation.activeID + '_hide');
 
     if( hide === 'true' ) {
-      window.localStorage.removeItem('sb_hide_note');
+      sbAutomation.setCookie( sbAutomation.activeID + '_hide', 'true', -1 );
     } else {
-      window.localStorage.setItem('sb_hide_note', 'true');
+      sbAutomation.setCookie( sbAutomation.activeID + '_hide', 'true', 1 );
 
       setTimeout( function() {
         // clear current chat if hidden
