@@ -61,12 +61,10 @@
       return;
 
     // passes checks, show it
-    sbAutomation.activeID = 'sb-' + id;
-    sbAutomation.activeOptions = vars;
-    sbAutomation.cacheSelectors();
-    sbAutomation.noteListeners();
 
-    console.log( sbAutomation.activeID );
+    sbAutomation.floatingBtn = document.getElementById('sb-floating-btn');
+
+    sbAutomation.noteListeners();
 
     if( vars.bgColor )
       item.style.backgroundColor = vars.bgColor;
@@ -80,13 +78,13 @@
       var delay = ( vars.display_when === 'delay' ? parseInt( vars.delay ) : 0 );
 
       setTimeout( function() {
-        sbAutomation.showNote();
+        sbAutomation.showNote( id );
       }, delay * 1000 );
 
     } else {
 
       // Use scroll detect setting
-      sbAutomation.detectScroll();
+      sbAutomation.detectScroll( id );
 
     }
 
@@ -108,28 +106,17 @@
 
   }
 
-  // Cache selectors and fire up the item display
-  sbAutomation.cacheSelectors = function() {
-
-    sbAutomation.floatingBtn = document.getElementById('sb-floating-btn');
-    // sbAutomation.banner = document.getElementById( 'sb-banner' );
-    sbAutomation.chatBox = document.querySelector('#' + sbAutomation.activeID + ' .sb-chat');
-    sbAutomation.noteOptin = document.querySelector('#' + sbAutomation.activeID + ' .sb-note-optin');
-    sbAutomation.firstRow = document.querySelector('#' + sbAutomation.activeID + ' .sb-first-row');
-
-  }
-
   // Event listeners
   sbAutomation.noteListeners = function() {
 
     $('body')
     .on('click', '.sb-close', sbAutomation.hideItem )
     .on('click', '.sb-email-btn', sbAutomation.emailSubmitted )
-    .on('click', '#sb-floating-btn', sbAutomation.toggleHide )
+    .on('click', '#sb-floating-btn', sbAutomation.btnClick )
     .on('click', '.sb-interaction', sbAutomation.interactionLink )
     .on('click', '.sb-full-side', sbAutomation.fullSide )
     .on('click', '.sb-text i', sbAutomation.sendText )
-    .on('submit', '#' + sbAutomation.activeID + ' form', sbAutomation.handleForms );
+    .on('submit', '.sb-notification-box form', sbAutomation.handleForms );
 
     $('.sb-text-input').on('keypress', sbAutomation.submitChatTextOnEnter );
 
@@ -139,7 +126,7 @@
 
   // detect when user scrolls partway down the page
   // https://www.sitepoint.com/jquery-capture-vertical-scroll-percentage/
-  sbAutomation.detectScroll = function() {
+  sbAutomation.detectScroll = function( id ) {
 
     $(window).scroll(
       // debounce so we don't adversely affect scroll performance
@@ -149,44 +136,50 @@
         var  scrolltrigger = 0.5;
 
         // when user scrolls below fold, show it
-        if( (wintop/(docheight-winheight)) > scrolltrigger && !sbAutomation.show[sbAutomation.activeID] ) {
-          sbAutomation.showNote();
-          sbAutomation.show[sbAutomation.activeID] = true
+        if( (wintop/(docheight-winheight)) > scrolltrigger && !sbAutomation.show['sb-' + id] ) {
+          sbAutomation.showNote( id );
+          sbAutomation.show['sb-' + id] = true
         }
       }, 250) )
 
   }
 
-  sbAutomation.fullSide = function() {
+  sbAutomation.fullSide = function(e) {
 
-    var item = $( '#' + sbAutomation.activeID );
+    // prevents firing twice
+    e.stopImmediatePropagation();
+
+    var id = $(e.target).closest('.sb-notification-box').attr('id');
+
+    var item = $( '#' + id );
+    
     item.toggleClass('sb-full-side');
+
     item.toggleClass('sb-minimizing', !item.hasClass('sb-full-side') );
     setTimeout( function() {
       item.removeClass('sb-minimizing');
     }, 1000);
+
     return false;
 
   }
 
   // Show/hide elements based on options object
-  sbAutomation.showNote = function() {
+  sbAutomation.showNote = function( id ) {
 
-    console.log( sbAutomation.activeID );
+    var options = window.sbAutoVars[id];
 
-    var options = sbAutomation.activeOptions;
+    var item = document.getElementById( 'sb-' + id );
 
-    var item = document.getElementById( sbAutomation.activeID );
-
-    sbAutomation.firstRow.innerHTML = options.content;
+    $('#sb-' + id + ' .sb-first-row').html( options.content );
 
     // visitor has hidden this item, don't show box
-    if( options.hideFirst === 'true' || sbAutomation.getCookie( sbAutomation.activeID + '_hide' ) === 'true' ) {
+    if( options.hideFirst === 'true' || sbAutomation.getCookie( 'sb-' + id + '_hide' ) === 'true' ) {
 
       // hide box, show btn
       sbAutomation.transitionOut( item );
 
-      if( options.hideBtn != '1' )
+      if( options.hideBtn != '1' && options.position != 'sb-banner-top' )
         sbAutomation.transitionIn( sbAutomation.floatingBtn );
 
     } else {
@@ -194,18 +187,16 @@
       // Show the box
       sbAutomation.transitionIn( item );
 
-      if( options.hideBtn != '1' )
+      if( options.hideBtn != '1' && options.position != 'sb-banner-top' )
         sbAutomation.transitionOut( sbAutomation.floatingBtn );
 
     }
 
-    console.log('here' + sbAutomation.activeID)
-
     // Show email opt-in
     if( options.showEmail === "1" ) {
-      sbAutomation.transitionIn( sbAutomation.noteOptin );
+      sbAutomation.show( document.querySelector( '#sb-' + id + ' .sb-note-optin' ) );
       // Setup localized vars
-      var textInput = document.querySelector('#' + sbAutomation.activeID + ' .sb-email-input');
+      var textInput = document.querySelector('#sb-' + id + ' .sb-email-input');
 
       // if text input is missing, we are using a different email form
       if(!textInput)
@@ -214,16 +205,16 @@
       textInput.setAttribute('placeholder', options.placeholder );
 
       $('.sb-away-msg').remove();
-      $('#' + sbAutomation.activeID + ' .sb-email-row').prepend( '<span class="sb-away-msg">' + sbAutomation.activeOptions.optinMsg + '</span>' );
+      $('#sb-' + id + ' .sb-email-row').prepend( '<span class="sb-away-msg">' + options.optinMsg + '</span>' );
 
-      $('#' + sbAutomation.activeID ).addClass('has-optin');
+      $('#sb-' + id ).addClass('has-optin');
     }
 
     // Button should not be shown
     if( options.hideBtn === '1' )
       sbAutomation.hide( sbAutomation.floatingBtn );
 
-    if( options.position === 'sb-banner-top' && sbAutomation.getCookie( sbAutomation.activeID + '_hide' ) != 'true' )
+    if( options.position === 'sb-banner-top' && sbAutomation.getCookie( 'sb-' + id + '_hide' ) != 'true' )
       sbAutomation.toggleBannerClass();
 
     // Should we hide it
@@ -310,9 +301,15 @@
   // User clicked hide
   sbAutomation.hideItem = function( e ) {
 
-    sbAutomation.toggleHide();
+    e.stopImmediatePropagation();
 
-    if( $(e.target).closest('.sb-notification-box').hasClass('sb-banner-top') )
+    var closest = $(e.target).closest('.sb-notification-box');
+
+    var id = closest.attr('id').split('-')[1];
+
+    sbAutomation.toggleHide( id );
+
+    if( closest.hasClass('sb-banner-top') )
       sbAutomation.toggleBannerClass();
 
     // prevent duplicate firing
@@ -320,15 +317,26 @@
 
   }
 
-  // Handle show/hide storage items, then run showNote func. Used when floating btn is clicked
-  sbAutomation.toggleHide = function() {
+  // floating button clicked
+  sbAutomation.btnClick = function(e) {
 
-    var hide = sbAutomation.getCookie( sbAutomation.activeID + '_hide');
+    e.stopImmediatePropagation();
+
+    var id = $(this).data('id');
+
+    sbAutomation.toggleHide( id );
+
+  }
+
+  // Handle show/hide storage items, then run showNote func. Used when floating btn is clicked
+  sbAutomation.toggleHide = function( id ) {
+
+    var hide = sbAutomation.getCookie( 'sb-' + id + '_hide');
 
     if( hide === 'true' ) {
-      sbAutomation.setCookie( sbAutomation.activeID + '_hide', 'true', -1 );
+      sbAutomation.setCookie( 'sb-' + id + '_hide', 'true', -1 );
     } else {
-      sbAutomation.setCookie( sbAutomation.activeID + '_hide', 'true', 1 );
+      sbAutomation.setCookie( 'sb-' + id + '_hide', 'true', 1 );
 
       setTimeout( function() {
         // clear current chat if hidden
@@ -336,11 +344,13 @@
       }, 1000);
     }
 
-    sbAutomation.showNote();
+    sbAutomation.showNote( id );
 
   }
 
   sbAutomation.transitionIn = function(item) {
+
+    console.log( 'in', item)
 
     item.style.display = 'block';
 
@@ -355,6 +365,8 @@
   }
 
   sbAutomation.transitionOut = function(item) {
+
+    console.log( 'out', item)
     
     $(item).addClass('sb-transition-out').removeClass('sb-show');
 
@@ -504,9 +516,9 @@
 
         // reset to defaults
         sbAutomation.clearChat();
-        sbAutomation.showConfirmation();
+        sbAutomation.showConfirmation( id );
 
-        sbAutomation.interacted({ event:'message_sent' });
+        sbAutomation.interacted( id );
 
       })
       .fail(function(err) {
@@ -527,19 +539,14 @@
 
   // callback when interaction link clicked
   sbAutomation.interactionLink = function(e) {
-    sbAutomation.interacted( { event:'link_clicked', details: { href: e.target.href } } );
+    var id = $(this).data('id');
+    sbAutomation.interacted( id );
   }
 
   // Callback for user interaction
-  sbAutomation.interacted = function( data ) {
-
-    var id = sbAutomation.activeID.split('-')[1];
+  sbAutomation.interacted = function( id ) {
 
     var params = { action: 'sb_track_event', nonce: window.sbAutoVars.sbNonce, id: id };
-
-    if( data && data.data ) {
-      params.details = data.details;
-    }
 
     // store interaction data
     $.ajax({
@@ -560,21 +567,25 @@
 
   sbAutomation.handleForms = function(e) {
 
+    var id = $(e.target).closest('.sb-notification-box').attr('id').split('-')[1];
+
     setTimeout( function() {
-      sbAutomation.interacted(null);
-      $(this).hide();
-      sbAutomation.showConfirmation();
+      sbAutomation.interacted(id);
+      $(e.target).closest('.sb-email-row').hide();
+      sbAutomation.showConfirmation(id);
     }, 1000);
 
   }
 
-  sbAutomation.showConfirmation = function() {
+  sbAutomation.showConfirmation = function( id ) {
 
-    var msg = ( sbAutomation.activeOptions.confirmMsg != '' ? sbAutomation.activeOptions.confirmMsg : "Thanks!" );
+    var options = window.sbAutoVars[id];
 
-    if( sbAutomation.activeOptions.position === 'sb-banner-top' ) {
+    var msg = ( options.confirmMsg != '' ? options.confirmMsg : "Thanks!" );
 
-      $('#' + sbAutomation.activeID + ' .sb-box-rows').addClass('sb-full-width').html(msg);
+    if( options.position === 'sb-banner-top' ) {
+
+      $('#sb-' + id + ' .sb-box-rows').addClass('sb-full-width').html(msg);
 
     } else {
 

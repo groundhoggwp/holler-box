@@ -220,7 +220,10 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             <style type="text/css">
             #sb-<?php echo $id; ?>, #sb-<?php echo $id; ?> a, #sb-<?php echo $id; ?> i { color: <?php echo get_post_meta( $id, 'text_color', 1 ); ?>; }
             </style>
-            <div id="sb-floating-btn" class="<?php echo get_post_meta( $id, 'position', 1 ); ?>"><i class="icon icon-chat"></i></div>
+
+            <?php if( get_post_meta( $id, 'position', 1 ) != 'sb-banner-top' ) : ?>
+            <div id="sb-floating-btn" data-id="<?php echo $id; ?>" class="<?php echo get_post_meta( $id, 'position', 1 ); ?>"><i class="icon icon-chat"></i></div>
+            <?php endif; ?>
 
             <div id="sb-<?php echo $id; ?>" class="sb-notification-box sb-hide <?php echo get_post_meta( $id, 'position', 1 ); ?>">
 
