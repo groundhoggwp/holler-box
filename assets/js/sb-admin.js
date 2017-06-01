@@ -182,7 +182,9 @@
   		content = $('#content').val();
   	}
 
-  	document.getElementById('sb-first-row').innerHTML = content;
+    var firstRow = document.getElementById('sb-first-row');
+    if( firstRow )
+  	 firstRow.innerHTML = content;
   }
 
   sbAdmin.init();

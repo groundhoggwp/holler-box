@@ -111,16 +111,16 @@
 
     $('body')
     .on('click', '.sb-close', sbAutomation.hideItem )
-    .on('click', '.sb-email-btn', sbAutomation.emailSubmitted )
+    //.on('click', '.sb-email-btn', sbAutomation.emailSubmitClick )
     .on('click', '#sb-floating-btn', sbAutomation.btnClick )
     .on('click', '.sb-interaction', sbAutomation.interactionLink )
     .on('click', '.sb-full-side', sbAutomation.fullSide )
     .on('click', '.sb-text i', sbAutomation.sendText )
     .on('submit', '.sb-notification-box form', sbAutomation.handleForms );
 
-    $('.sb-text-input').on('keypress', sbAutomation.submitChatTextOnEnter );
+    //$('.sb-text-input').on('keypress', sbAutomation.submitChatTextOnEnter );
 
-    $('.sb-email-input').on('keypress', sbAutomation.submitEmailOnEnter );
+    //$('.sb-email-input').on('keypress', sbAutomation.submitEmailOnEnter );
 
   }
 
@@ -215,7 +215,7 @@
       sbAutomation.hide( sbAutomation.floatingBtn );
 
     if( options.position === 'sb-banner-top' && sbAutomation.getCookie( 'sb-' + id + '_hide' ) != 'true' )
-      sbAutomation.toggleBannerClass();
+      sbAutomation.toggleBnrMargin( id );
 
     // Should we hide it
     if( options.hide_after === 'delay' ) {
@@ -266,9 +266,16 @@
     };
   }
 
-  sbAutomation.toggleBannerClass = function() {
-    console.log('toggle')
-    $('body').toggleClass('has-sb-banner-top');
+  // Add top-margin to body when banner is present
+  sbAutomation.toggleBnrMargin = function( id, hide ) {
+
+    if( hide && hide === true ) {
+      $('body').css('margin-top', '');
+    } else {
+      var height = $('#sb-' + id).outerHeight();
+      $('body').css('margin-top', height);
+    }
+    
   }
 
   // check how old cookie is
@@ -310,7 +317,7 @@
     sbAutomation.toggleHide( id );
 
     if( closest.hasClass('sb-banner-top') )
-      sbAutomation.toggleBannerClass();
+      sbAutomation.toggleBnrMargin( id, true );
 
     // prevent duplicate firing
     return false;
@@ -435,6 +442,7 @@
 
   // Add chat text on click
   sbAutomation.sendText = function(e) {
+    e.stopImmediatePropagation();
     var text = $('#' + sbAutomation.activeID + ' .sb-text-input').val();
     if ( text && text != '' ) {
       sbAutomation.submitText(text);
@@ -479,10 +487,21 @@
     $('#' + sbAutomation.activeID + ' .sb-email-input').focus();
   }
 
-  // User submitted email, send to server
-  sbAutomation.emailSubmitted = function(e) {
+  sbAutomation.emailSubmitClick = function(e) {
 
-    var email = $('#' + sbAutomation.activeID + ' .sb-email-input').val();
+    e.stopImmediatePropagation();
+
+    var id = $(e.target).closest('.sb-notification-box').attr('id').split('-')[1];
+
+    console.log(id)
+
+    sbAutomation.emailSubmitted( id );
+  }
+
+  // User submitted email, send to server
+  sbAutomation.emailSubmitted = function( id ) {
+
+    var email = $('#sb-' + id + ' .sb-email-input').val();
 
     if( !email )
       return;
@@ -497,14 +516,12 @@
     // concatenate messages together
     var fullMsg = window.localStorage.getItem('sb-full-msg');
 
-    sbAutomation.sendMsg( email, fullMsg );
+    sbAutomation.sendMsg( email, fullMsg, id );
 
   }
 
   // Send email along with chat message to server
-  sbAutomation.sendMsg = function( email, msg ) {
-
-    var id = sbAutomation.activeID.split('-')[1];
+  sbAutomation.sendMsg = function( email, msg, id ) {
 
     $.ajax({
       method: "GET",
@@ -539,6 +556,7 @@
 
   // callback when interaction link clicked
   sbAutomation.interactionLink = function(e) {
+    e.stopImmediatePropagation();
     var id = $(this).data('id');
     sbAutomation.interacted( id );
   }
@@ -589,8 +607,7 @@
 
     } else {
 
-      sbAutomation.firstRow.innerHTML = msg;
-
+      $('#sb-' + id + ' .sb-first-row').html(msg);
     }
 
   }

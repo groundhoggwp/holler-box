@@ -53,7 +53,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          */
         private function hooks() {
 
-            add_action( 'admin_menu', array( $this, 'settings_page' ) );
+            // add_action( 'admin_menu', array( $this, 'settings_page' ) );
             add_action( 'init', array( $this, 'register_cpt' ) );
             add_action( 'save_post', array( $this, 'save_meta_boxes' ), 10, 2 );
             add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -247,13 +247,13 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 'high'
             );
 
-            add_meta_box(
-                'preview_meta_box',
-                __( 'Preview', 'sb-automation' ),
-                array( $this, 'preview_meta_box_callback' ),
-                'sb_notification',
-                'side'
-            );
+            // add_meta_box(
+            //     'preview_meta_box',
+            //     __( 'Preview', 'sb-automation' ),
+            //     array( $this, 'preview_meta_box_callback' ),
+            //     'sb_notification',
+            //     'side'
+            // );
 
         }
 
@@ -353,7 +353,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 <input type="radio" name="show_on" value="all" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "all" ) echo 'checked="checked"'; ?>> All pages<br>
                 <input type="radio" name="show_on" value="limited" <?php if( is_array( get_post_meta( $post->ID, 'show_on', 1 ) ) ) echo 'checked="checked"'; ?>> Certain pages<br>
                 <div id="show-certain-pages">
-                <p>Enter page/post IDs:</p>
+                <p>Enter page/post IDs, separated by comma:</p>
                 <input placeholder="Example: 2,25,311" class="widefat" type="text" name="sb_page_ids" id="sb_page_ids" value="<?php echo esc_attr( get_post_meta( $post->ID, 'sb_page_ids', true ) ); ?>" size="20" />
                 </div>
             </p>
@@ -430,7 +430,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
             <div id="sb-notification-box">
                 
                 <div class="sb-box-rows">
-                        <?php echo get_avatar('scott@apppresser.com', 50 ); ?>
+                        <img alt="" src="<?php echo plugins_url( 'assets/img/mystery-man.png', dirname(__FILE__) ); ?>" class="avatar avatar-50 photo" height="50" width="50">
                     <div class="sb-row" id="sb-first-row"></div>
                 </div>
 

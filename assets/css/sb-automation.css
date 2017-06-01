@@ -1,21 +1,31 @@
+/*** Resets ***/
+
 .sb-notification-box h1, .sb-notification-box h2, .sb-notification-box h3, .sb-notification-box h4 {
 	clear: none;
 }
 
 .sb-notification-box h1 {
 	font-size: 26px;
+	line-height: 40px;
 }
 
 .sb-notification-box h2 {
 	font-size: 22px;
+	line-height: 36px;
 }
 
 .sb-notification-box h3 {
 	font-size: 18px;
+	line-height: 32px;
 }
 
 .sb-notification-box h4 {
 	font-size: 16px;
+	line-height: 28px;
+}
+
+.sb-notification-box form {
+	margin: 0;
 }
 
 #sb-floating-btn {
@@ -36,9 +46,12 @@
 
 #sb-floating-btn i {
     font-size: 24px;
+    line-height: 40px;
     position: relative;
     top: 8px;
     color: #fff;
+    height: auto;
+    width: auto;
 }
 
 .sb-notification-box {
@@ -257,7 +270,8 @@
 }
 
 .sb-email-input {
-	width: 80%;
+	width: 80% !important;
+	float: left;
 }
 
 .sb-notification-box input#s {
@@ -295,6 +309,7 @@
 	float: right;
 	cursor: pointer;
 	padding: 0;
+	margin: 0;
 }
 
 span.sb-powered-by a {
@@ -323,6 +338,10 @@ span.sb-powered-by a {
 	border: none;
 	border-bottom: 1px solid #eee;
 	transition: opacity .3s;
+}
+
+.sb-banner-top p, .sb-banner-top h1, .sb-banner-top h2, .sb-banner-top h3, .sb-banner-top h4 {
+	margin: 0;
 }
 
 #sb-floating-btn.sb-banner-top {
@@ -360,6 +379,10 @@ span.sb-powered-by a {
 	max-width: 100%;
 }
 
+.sb-banner-top .sb-first-row {
+	line-height: 28px;
+}
+
 .sb-banner-top .sb-email-row {
 	float: left;
 	width: 23%;
@@ -374,14 +397,16 @@ body.admin-bar .sb-banner-top {
 	top: 32px;
 }
 
-body.has-sb-banner-top {
-	margin-top: 50px;
-}
-
 .sb-banner-inside {
 	text-align: center;
 	font-weight: bold;
 	margin: 0 auto;
+}
+
+.masthead-fixed .sb-banner-top {
+	top: 48px;
+	position: fixed;
+	z-index: 3;
 }
 
 /*
@@ -389,20 +414,18 @@ body.has-sb-banner-top {
  */
 
 @media (max-width: 600px) {
-	/*.sb-notification-box {
+	.sb-notification-box.sb-bottomright, .sb-notification-box.sb-bottomleft {
 		width: 100%;
 		bottom: 0;
 		left: 0;
 		right: 0;
 		box-shadow: none;
-	}
-	.sb-notification-box.sb-show {
 		-moz-transform: translateX(0px) translateY(0px);
 		-webkit-transform: translateX(0px) translateY(0px);
 		-o-transform: translateX(0px) translateY(0px);
 		-ms-transform: translateX(0px) translateY(0px);
 		transform: translateX(0px) translateY(0px);
-	}*/
+	}
 
 	.sb-banner-top .sb-row, .sb-banner-top.has-optin .sb-box-rows {
 		float: none;

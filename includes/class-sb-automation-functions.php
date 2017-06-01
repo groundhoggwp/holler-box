@@ -54,7 +54,6 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
 
             add_action('wp', array( $this, 'get_active_items' ) );
             add_action( 'wp_footer', array( $this, 'maybe_display_items' ) );
-            // add_filter( 'body_class', array( $this, 'body_classes' ) );
             add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
             add_action( 'sb_email_form', array( $this, 'email_forms' ) );
 
@@ -261,16 +260,11 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
         }
 
         /**
-         * Add body class
+         * Handle different email provider forms
          *
          * @since       0.1.0
          * @return      array()
          */
-        public function body_classes( $classes ) {
-            $classes[] = 'sb-top-margin';
-            return $classes;
-        }
-
         public function email_forms( $id ) {
 
             $provider = get_post_meta( $id, 'email_provider', 1 );
@@ -284,6 +278,10 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 $ckid = get_post_meta( $id, 'ck_id', 1 );
 
                 ?>
+
+                <div id="ck_success_msg" style="display:none;">
+                  <p>Thanks!</p>
+                </div>
 
                 <form id="ck_subscribe_form" class="ck_subscribe_form" action="https://app.convertkit.com/landing_pages/<?php echo $ckid; ?>/subscribe" target="_blank">
                     <input type="hidden" name="id" value="<?php echo $ckid; ?>" id="landing_page_id">
