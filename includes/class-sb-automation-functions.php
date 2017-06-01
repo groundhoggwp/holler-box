@@ -107,6 +107,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 $content = $content_post->post_content;
                 // adding the_content filter has crazy results, like CK forms
                 $content = apply_filters('sb_notification_content', $content, $value );
+                $content = do_shortcode( $content );
                 $content = apply_filters('the_content_more_link', $content);
                 $content = str_replace(']]>', ']]&gt;', $content);
 
@@ -222,6 +223,8 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             <div id="sb-floating-btn" class="<?php echo get_post_meta( $id, 'position', 1 ); ?>"><i class="icon icon-chat"></i></div>
 
             <div id="sb-<?php echo $id; ?>" class="sb-notification-box sb-hide <?php echo get_post_meta( $id, 'position', 1 ); ?>">
+
+                <div class="sb-notification-inside">
                 
                 <div class="sb-close"><i class="icon icon-cancel"></i> <i class="icon icon-cancel sb-full-side"></i></div>
 
@@ -247,6 +250,8 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 <?php do_action('sb_notification_below_content', $id); ?>
 
                 <!-- <span class="sb-powered-by"><a href="http://scottbolinger.com" target="_blank">Scottomator</a></span> -->
+
+                </div>
  
             </div>
             <?php

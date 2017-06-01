@@ -314,9 +314,9 @@ span.sb-powered-by a {
 	left: 0;
 	right: 0;
 	width: auto;
-	max-height: 50px;
+	height: auto;
 	border-radius: 0;
-	padding: 10px;
+	padding: 10px 40px;
 	overflow: hidden;
 	text-align: center;
 	position: absolute;
@@ -329,6 +329,15 @@ span.sb-powered-by a {
 	display: none !important;
 }
 
+.sb-banner-top .sb-close {
+	right: 15px;
+	top: 10px;
+}
+
+.sb-full-width {
+	width: 100% !important;
+}
+
 .sb-banner-top .avatar {
 	display: none;
 }
@@ -337,6 +346,28 @@ span.sb-powered-by a {
 	background-color: transparent;
 	padding: 0;
 	margin: 0;
+	clear: none;
+}
+
+.sb-banner-top.has-optin .sb-box-rows {
+	float: left;
+	width: 75%;
+}
+
+.sb-banner-top .sb-notification-inside {
+	width: 1000px;
+	margin: 0 auto;
+	max-width: 100%;
+}
+
+.sb-banner-top .sb-email-row {
+	float: left;
+	width: 23%;
+	margin-left: 2%;
+}
+
+.sb-banner-top input[type="email"], .sb-banner-top .sb-email-btn {
+	height: 30px;
 }
 
 body.admin-bar .sb-banner-top {
@@ -358,7 +389,7 @@ body.has-sb-banner-top {
  */
 
 @media (max-width: 600px) {
-	.sb-notification-box {
+	/*.sb-notification-box {
 		width: 100%;
 		bottom: 0;
 		left: 0;
@@ -371,6 +402,15 @@ body.has-sb-banner-top {
 		-o-transform: translateX(0px) translateY(0px);
 		-ms-transform: translateX(0px) translateY(0px);
 		transform: translateX(0px) translateY(0px);
+	}*/
+
+	.sb-banner-top .sb-row, .sb-banner-top.has-optin .sb-box-rows {
+		float: none;
+		width: 100%;
+	}
+
+	.sb-banner-top .sb-email-row {
+		margin-top: 10px;
 	}
 }
 

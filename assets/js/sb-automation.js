@@ -164,7 +164,7 @@
     item.toggleClass('sb-minimizing', !item.hasClass('sb-full-side') );
     setTimeout( function() {
       item.removeClass('sb-minimizing');
-    }, 30000);
+    }, 1000);
     return false;
 
   }
@@ -215,6 +215,8 @@
 
       $('.sb-away-msg').remove();
       $('#' + sbAutomation.activeID + ' .sb-email-row').prepend( '<span class="sb-away-msg">' + sbAutomation.activeOptions.optinMsg + '</span>' );
+
+      $('#' + sbAutomation.activeID ).addClass('has-optin');
     }
 
     // Button should not be shown
@@ -489,11 +491,13 @@
 
   // Send email along with chat message to server
   sbAutomation.sendMsg = function( email, msg ) {
-    // @TODO: add nonce
+
+    var id = sbAutomation.activeID.split('-')[1];
+
     $.ajax({
       method: "GET",
       url: window.sbAutoVars.ajaxurl,
-      data: { email: email, msg: msg, action: 'sb_send_email', nonce: window.sbAutoVars.sbNonce }
+      data: { email: email, id: id, msg: msg, action: 'sb_send_email', nonce: window.sbAutoVars.sbNonce }
       })
       .done(function(msg) {
         console.log(msg);
@@ -533,7 +537,7 @@
 
     var params = { action: 'sb_track_event', nonce: window.sbAutoVars.sbNonce, id: id };
 
-    if( data.data ) {
+    if( data && data.data ) {
       params.details = data.details;
     }
 
@@ -556,17 +560,27 @@
 
   sbAutomation.handleForms = function(e) {
 
-    console.log('handleForms');
-    
-    sbAutomation.interacted(null);
-    $(this).hide();
-    sbAutomation.showConfirmation();
+    setTimeout( function() {
+      sbAutomation.interacted(null);
+      $(this).hide();
+      sbAutomation.showConfirmation();
+    }, 1000);
 
   }
 
   sbAutomation.showConfirmation = function() {
 
-    sbAutomation.firstRow.innerHTML = sbAutomation.activeOptions.confirmMsg;
+    var msg = ( sbAutomation.activeOptions.confirmMsg != '' ? sbAutomation.activeOptions.confirmMsg : "Thanks!" );
+
+    if( sbAutomation.activeOptions.position === 'sb-banner-top' ) {
+
+      $('#' + sbAutomation.activeID + ' .sb-box-rows').addClass('sb-full-width').html(msg);
+
+    } else {
+
+      sbAutomation.firstRow.innerHTML = msg;
+
+    }
 
   }
 

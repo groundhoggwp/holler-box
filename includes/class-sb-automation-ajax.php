@@ -73,14 +73,20 @@ if( !class_exists( 'SB_Automation_Ajax' ) ) {
                 wp_send_json_error('Verification failed.' );
             }
 
+            if( empty( $_GET['id'] ) || empty( $_GET['email'] ) )
+                wp_send_json_error('Missing required field.' );
 
             $msg = $_GET['msg'];
 
             $email = $_GET['email'];
 
+            $id = $_GET['id'];
+
+            $sendto = get_post_meta( $id, 'opt_in_send_to', 1);
+
             $headers = array( 'Reply-To: <' . $email . '>' );
 
-            $success = wp_mail( 'support@apppresser.com', 'New SB Message', $msg, $headers );
+            $success = wp_mail( $sendto, 'New Message', $msg, $headers );
 
             wp_send_json_success( 'Sent ' . $msg . ' from ' . $email . ' Success: ' . $success );
                 
