@@ -6,8 +6,6 @@
 
     // set defaults
     sbAutomation.newVisitor = false;
-    sbAutomation.noteInteracted = false;
-    sbAutomation.noteHidden = false;
 
     // determine if new or returning visitor
     sbAutomation.checkCookie();
@@ -16,6 +14,22 @@
     if( window.sbAutoVars.active )
       sbAutomation.doActive( window.sbAutoVars.active );
     
+  }
+
+  // determine if new or returning visitor
+  sbAutomation.checkCookie = function() {
+
+    if( sbAutomation.getCookie('sb_visit') === "" ) {
+
+      // New visitor, set visitor cookie. This tracks original visit
+      sbAutomation.setCookie('sb_visit', Date.now(), parseInt( window.sbAutoVars.expires ));
+      sbAutomation.setCookie('sb_new', 'true', 1 );
+      sbAutomation.newVisitor = true;
+
+    } else if( sbAutomation.getCookie('sb_new') != "" ) {
+      sbAutomation.newVisitor = true;
+    }
+
   }
 
   // Notification box exists
@@ -90,22 +104,6 @@
 
   }
 
-  // determine if new or returning visitor
-  sbAutomation.checkCookie = function() {
-
-    if( sbAutomation.getCookie('sb_visit') === "" ) {
-
-      // New visitor, set visitor cookie. This tracks original visit
-      sbAutomation.setCookie('sb_visit', Date.now(), parseInt( window.sbAutoVars.expires ));
-      sbAutomation.setCookie('sb_new', 'true', 1 );
-      sbAutomation.newVisitor = true;
-
-    } else if( sbAutomation.getCookie('sb_new') != "" ) {
-      sbAutomation.newVisitor = true;
-    }
-
-  }
-
   // Event listeners
   sbAutomation.noteListeners = function( id ) {
 
@@ -115,16 +113,12 @@
     .on('click', '.sb-interaction', sbAutomation.interactionLink )
     .on('click', '.sb-full-side', sbAutomation.fullSide )
     .on('click', '.sb-text i', sbAutomation.sendText )
-    .on('submit', '.sb-notification-box form', sbAutomation.handleForms );
+    .on('click', '#sb-' + id + ' .sb-email-btn', sbAutomation.emailSubmitClick )
+    // .on('submit', '.sb-notification-box form', sbAutomation.handleForms );
 
     $('.sb-text-input').on('keypress', sbAutomation.submitChatTextOnEnter );
 
-    if( window.sbAutoVars[id].emailProvider != 'mc' ) {
-      $('body').on('click', '#sb-' + id + ' .sb-email-btn', sbAutomation.emailSubmitClick );
-      $('#sb-' + id + ' .sb-email-input').on('keypress', sbAutomation.submitEmailOnEnter );
-    }
-
-    
+    $('#sb-' + id + ' .sb-email-input').on('keypress', sbAutomation.submitEmailOnEnter );
 
   }
 
@@ -436,6 +430,8 @@
 
       var id = $(e.target).closest('.sb-notification-box').attr('id').split('-')[1];
 
+      e.preventDefault();
+
       sbAutomation.emailSubmitted( id );
 
     }
@@ -492,10 +488,9 @@
   sbAutomation.emailSubmitClick = function(e) {
 
     e.stopImmediatePropagation();
+    e.preventDefault();
 
     var id = $(e.target).closest('.sb-notification-box').attr('id').split('-')[1];
-
-    console.log(id)
 
     sbAutomation.emailSubmitted( id );
   }
@@ -521,6 +516,9 @@
     if( window.sbAutoVars[id].emailProvider === 'ck' ) {
       sbAutomation.ckSubscribe( email, id );
       return;
+    } else if( window.sbAutoVars[id].emailProvider === 'mc' ) {
+      sbAutomation.mcSubscribe( id );
+      return;
     }
 
     // send message to server
@@ -538,7 +536,7 @@
     var options = window.sbAutoVars[id];
 
     var formId = $('#sb-' + id + ' .ck-form-id').val();
-    var apiUrl = 'https://api.convertkit.com/v3/forms/' + formId + '/subscribe';
+    var apiUrl = 'https://aapi.convertkit.com/v3/forms/' + formId + '/subscribe';
 
     $.ajax({
       method: "POST",
@@ -555,9 +553,59 @@
 
       })
       .fail(function(err) {
-        $('#sb-' + id + ' .sb-email-row').prepend('There seems to be a problem, can you try again?');
+
+        $('#sb-' + id + ' .sb-email-row').prepend('<span id="sb-err">There seems to be a problem, can you try again?</span>');
+
+        setTimeout( function() {
+          $('#sb-err').remove();
+        }, 3000);
+
         console.log(err);
       });
+
+  }
+
+  // Submit the form with an ajax/jsonp request.
+  // https://github.com/rydama/mailchimp-ajax-signup/blob/master/ajax-subscribe.html
+  // Based on http://stackoverflow.com/a/15120409/215821
+  sbAutomation.mcSubscribe = function( id ) {
+
+    var form = $('#sb-' + id + ' form.sb-mc-form');
+
+    $.ajax({
+        type: "GET",
+        url: form.attr("action"),
+        data: form.serialize(),
+        cache: false,
+        dataType: "jsonp",
+        jsonp: "c", // trigger MailChimp to return a JSONP response
+        contentType: "application/json; charset=utf-8",
+        error: function(error){
+            // According to jquery docs, this is never called for cross-domain JSONP requests
+            console.log(error)
+        },
+        success: function(data){
+            if (data.result != "success") {
+
+                var message = data.msg || "Sorry. Unable to subscribe. Please try again later.";
+                if (data.msg && data.msg.indexOf("already subscribed") >= 0) {
+                    message = "You're already subscribed. Thank you.";
+                }
+
+                $('#sb-' + id + ' .sb-email-row').prepend('<span id="sb-err">' + message + '</span>');
+
+                setTimeout( function() {
+                  $('#sb-err').remove();
+                }, 3000);
+
+            } else {
+              // reset to defaults
+              sbAutomation.showConfirmation( id );
+              $('#sb-' + id + ' .sb-email-row').hide();
+              sbAutomation.interacted( id );
+            }
+        }
+    });
 
   }
 

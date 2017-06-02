@@ -152,7 +152,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
         public function notification_columns( $columns ) {
             $date = $columns['date'];
             unset($columns['date']);
-            $columns["interactions"] = "Interactions";
+            $columns["conversions"] = "Conversions";
             $columns["active"] = "Active";
             $columns['date'] = $date;
             return $columns;
@@ -168,8 +168,8 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
         public function custom_columns( $column, $post_id ) {
 
             switch ( $column ) {
-                case 'interactions':
-                    echo get_post_meta( $post_id, 'sb_interactions', 1);
+                case 'conversions':
+                    echo get_post_meta( $post_id, 'sb_conversions', 1);
                     break;
                 case 'active':
                     echo '<label class="sb-switch"><input data-id="' . $post_id . '" type="checkbox" value="1" ' . checked(1, get_post_meta( $post_id, 'sb_active', true ), false) . ' /><div class="sb-slider sb-round"></div></label>';
@@ -308,7 +308,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                     <input type="radio" name="email_provider" value="ck" <?php checked("ck", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
                     <?php _e( 'Convertkit', 'sb-automation' ); ?><input id="ck_id" name="ck_id" value="<?php echo get_post_meta( $post->ID, 'ck_id', 1 ); ?>" placeholder="Convertkit list ID" type="text" /><br>
                     <input type="radio" name="email_provider" value="mc" <?php checked("mc", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
-                    <?php _e( 'MailChimp', 'sb-automation' ); ?><input id="mc_url" name="mc_url" placeholder="MailChimp list url" value="<?php echo get_post_meta( $post->ID, 'mc_url', 1 ); ?>" type="text" /><br>
+                    <?php _e( 'MailChimp', 'sb-automation' ); ?><input id="mc_url" name="mc_url" placeholder="MailChimp list url" value="<?php echo get_post_meta( $post->ID, 'mc_url', 1 ); ?>" type="text" /> <span class="mc-description">Get your list url under Signup forms => General forms => Signup form URL. Do not use shortened url.</span><br>
                     <input type="radio" name="email_provider" value="custom" <?php checked("custom", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
                     <?php _e( 'Custom', 'sb-automation' ); ?>
                     </p>

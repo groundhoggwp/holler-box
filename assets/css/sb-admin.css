@@ -13,6 +13,12 @@
     width: 100%;
 }
 
+span.mc-description {
+	font-size: 10px;
+	display: none;
+	clear: both;
+}
+
 /* For preview */
 
 #sb-notification-box {

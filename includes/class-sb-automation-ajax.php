@@ -104,13 +104,13 @@ if( !class_exists( 'SB_Automation_Ajax' ) ) {
 
             $id = $_GET['id'];
 
-            if( $interactions = get_post_meta( $id, 'sb_interactions', 1 ) ) {
-                update_post_meta( $id, 'sb_interactions', intval( $interactions ) + 1 );
+            if( $conversions = get_post_meta( $id, 'sb_conversions', 1 ) ) {
+                update_post_meta( $id, 'sb_conversions', intval( $conversions ) + 1 );
             } else {
-                $interactions = update_post_meta( $id, 'sb_interactions', 1 );
+                $conversions = update_post_meta( $id, 'sb_conversions', 1 );
             }
 
-            wp_send_json_success( 'Interaction tracked, total: ' . $interactions );
+            wp_send_json_success( 'Interaction tracked, total: ' . $conversions );
                 
         }
 

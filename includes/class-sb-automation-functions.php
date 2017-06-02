@@ -288,15 +288,15 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
 
                 // add /post to url
                 $url = explode( '?', $url );
-                $url = $url[0] . 'post?' . $url[1];
+                $url = $url[0] . 'post-json?' . $url[1];
 
                 ?>
 
                 <!-- Begin MailChimp Signup Form -->
-                <form action="<?php echo $url; ?>" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                <form action="<?php echo $url; ?>" method="get" name="sb-mc-form" class="sb-mc-form">
                     <input type="email" value="" name="EMAIL" class="required email sb-email-input" id="mce-EMAIL">
-                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="<?php echo $captcha_name; ?>" tabindex="-1" value=""></div>
-                    <input type="submit" value="Send" name="subscribe" id="mc-embedded-subscribe" class="sb-email-btn">
+                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="sb_hp" tabindex="-1" value=""></div>
+                    <button class="sb-email-btn"><?php echo _e('Send', 'sb-automation' ); ?></button>
                 </form>
                 <!--End mc_embed_signup-->
 
