@@ -113,6 +113,8 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 $array[$value] = array( 
                     'content' => $content,
                     'showEmail' => get_post_meta($value, 'show_optin', 1),
+                    'emailProvider' => get_post_meta( $value, 'email_provider', 1 ),
+                    'ckApi' => get_option( 'sb_ck_api_key' ),
                     'visitor' => get_post_meta($value, 'new_or_returning', 1),
                     'hideBtn' => get_post_meta($value, 'hide_btn', 1),
                     'optinMsg' => get_post_meta($value, 'opt_in_message', 1),
@@ -273,28 +275,6 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
 
                 echo get_post_meta( $id, 'custom_email_form', 1 );
 
-            } elseif( $provider === 'ck' ) { 
-
-                $ckid = get_post_meta( $id, 'ck_id', 1 );
-
-                ?>
-
-                <div id="ck_success_msg" style="display:none;">
-                  <p>Thanks!</p>
-                </div>
-
-                <form id="ck_subscribe_form" class="ck_subscribe_form" action="https://app.convertkit.com/landing_pages/<?php echo $ckid; ?>/subscribe" target="_blank">
-                    <input type="hidden" name="id" value="<?php echo $ckid; ?>" id="landing_page_id">
-                    <input type="hidden" name="ck_form_recaptcha" value="" id="ck_form_recaptcha">
-                    <input type="email" name="email" class="sb-email-input" id="ck_emailField" placeholder="Email Address">
-                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="captcha2_h" class="ck-captcha2-h" id="ck_captcha2_h"></div>
-
-                    <button class="sb-email-btn" id="ck_subscribe_button">
-                    <?php echo _e('Send', 'sb-automation' ); ?>
-                    </button>
-                </form>
-                <?php
-
             } elseif( $provider === 'mc' ) {
 
                 $url = get_post_meta( $id, 'mc_url', 1 );
@@ -322,7 +302,10 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
 
                 <?php
             } else {
+                if( $provider === 'ck' )
+                    echo '<input type="hidden" class="ck-form-id" value="' . get_post_meta( $id, 'ck_id', 1 ) . '" />';
                 ?>
+                <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="sb_hp" tabindex="-1" value=""></div>
                 <input type="email" name="email" class="sb-email-input" placeholder="Enter email" autocomplete="on" autocapitalize="off" />
                 <button class="sb-email-btn"><?php echo _e('Send', 'sb-automation' ); ?></button>
                 <?php

@@ -3,7 +3,7 @@
  * Plugin Name:     SB Marketing Automation
  * Plugin URI:      http://scottbolinger.com
  * Description:     Convert visitors to customers with personalized messaging.
- * Version:         0.2
+ * Version:         0.3
  * Author:          Scott Bolinger
  * Author URI:      http://scottbolinger.com
  * Text Domain:     sb-automation
@@ -62,7 +62,7 @@ if( !class_exists( 'SB_Automation' ) ) {
          */
         private function setup_constants() {
             // Plugin version
-            define( 'SB_Automation_VER', '0.2' );
+            define( 'SB_Automation_VER', '0.3' );
 
             // Plugin path
             define( 'SB_Automation_DIR', plugin_dir_path( __FILE__ ) );

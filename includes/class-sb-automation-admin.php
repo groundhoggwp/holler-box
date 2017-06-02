@@ -53,7 +53,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          */
         private function hooks() {
 
-            // add_action( 'admin_menu', array( $this, 'settings_page' ) );
+            add_action( 'admin_menu', array( $this, 'settings_page' ) );
             add_action( 'init', array( $this, 'register_cpt' ) );
             add_action( 'save_post', array( $this, 'save_meta_boxes' ), 10, 2 );
             add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -116,8 +116,8 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          */
         public function render_settings() {
 
-            if( isset( $_POST['sb_email_provider'] ) ) {
-                update_option( 'sb_email_provider', $_POST['sb_email_provider'] );
+            if( isset( $_POST['sb_ck_api_key'] ) ) {
+                update_option( 'sb_ck_api_key', sanitize_text_field( $_POST['sb_ck_api_key'] ) );
             }
 
             ?>
@@ -127,12 +127,11 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
 
             <form method="post" action="edit.php?post_type=sb_notification&page=sb_automation">
 
-                <p>To subscribe email opt-ins to your list, choose your provider below. For integration instructions, please see our documentation.</p>
+                <h3><?php _e('Convertkit', 'sb-automation'); ?></h3>
+
+                <p><?php _e('Enter your Convertkit API key, it can be found on your <a href="https://app.convertkit.com/account/edit#account_info" target="_blank">account info page.</a>', 'sb-automation'); ?></p>
                 
-                <input type="radio" name="sb_email_provider" value="none" <?php checked("none", get_option('sb_email_provider', 'none' ), true); ?> />
-                None<br>
-                <input type="radio" name="sb_email_provider" value="mailchimp" <?php checked("mailchimp", get_option('sb_email_provider' ), true); ?> /> MailChimp<br>
-                <input type="radio" name="sb_email_provider" value="convertkit" <?php checked("convertkit", get_option('sb_email_provider' ), true); ?> /> Convertkit for WordPress plugin <a href="https://wordpress.org/plugins/convertkit/" target="_blank">(plugin link)</a><br>
+                <input id="sb_ck_api_key" name="sb_ck_api_key" value="<?php echo esc_html( get_option( 'sb_ck_api_key' ) ); ?>" placeholder="Convertkit API key" type="text" size="50" />
 
             <?php submit_button(); ?>
 

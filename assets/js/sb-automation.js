@@ -64,7 +64,7 @@
 
     sbAutomation.floatingBtn = document.getElementById('sb-floating-btn');
 
-    sbAutomation.noteListeners();
+    sbAutomation.noteListeners( id );
 
     if( vars.bgColor )
       item.style.backgroundColor = vars.bgColor;
@@ -107,20 +107,24 @@
   }
 
   // Event listeners
-  sbAutomation.noteListeners = function() {
+  sbAutomation.noteListeners = function( id ) {
 
     $('body')
     .on('click', '.sb-close', sbAutomation.hideItem )
-    //.on('click', '.sb-email-btn', sbAutomation.emailSubmitClick )
     .on('click', '#sb-floating-btn', sbAutomation.btnClick )
     .on('click', '.sb-interaction', sbAutomation.interactionLink )
     .on('click', '.sb-full-side', sbAutomation.fullSide )
     .on('click', '.sb-text i', sbAutomation.sendText )
     .on('submit', '.sb-notification-box form', sbAutomation.handleForms );
 
-    //$('.sb-text-input').on('keypress', sbAutomation.submitChatTextOnEnter );
+    $('.sb-text-input').on('keypress', sbAutomation.submitChatTextOnEnter );
 
-    //$('.sb-email-input').on('keypress', sbAutomation.submitEmailOnEnter );
+    if( window.sbAutoVars[id].emailProvider != 'mc' ) {
+      $('body').on('click', '#sb-' + id + ' .sb-email-btn', sbAutomation.emailSubmitClick );
+      $('#sb-' + id + ' .sb-email-input').on('keypress', sbAutomation.submitEmailOnEnter );
+    }
+
+    
 
   }
 
@@ -357,8 +361,6 @@
 
   sbAutomation.transitionIn = function(item) {
 
-    console.log( 'in', item)
-
     item.style.display = 'block';
 
     setTimeout( function() {
@@ -372,8 +374,6 @@
   }
 
   sbAutomation.transitionOut = function(item) {
-
-    console.log( 'out', item)
     
     $(item).addClass('sb-transition-out').removeClass('sb-show');
 
@@ -434,7 +434,9 @@
 
     if ( e.target.value && e.target.value != '' && e.keyCode == 13 ) {
 
-      sbAutomation.emailSubmitted();
+      var id = $(e.target).closest('.sb-notification-box').attr('id').split('-')[1];
+
+      sbAutomation.emailSubmitted( id );
 
     }
 
@@ -512,11 +514,50 @@
       return;
     }
 
+    // honeypot
+    if( $( '#sb-' + id + ' input[name=sb_hp]').val() != "" )
+      return;
+
+    if( window.sbAutoVars[id].emailProvider === 'ck' ) {
+      sbAutomation.ckSubscribe( email, id );
+      return;
+    }
+
     // send message to server
     // concatenate messages together
     var fullMsg = window.localStorage.getItem('sb-full-msg');
 
     sbAutomation.sendMsg( email, fullMsg, id );
+
+  }
+
+
+  // Convertkit subscribe through API
+  sbAutomation.ckSubscribe = function( email, id ) {
+
+    var options = window.sbAutoVars[id];
+
+    var formId = $('#sb-' + id + ' .ck-form-id').val();
+    var apiUrl = 'https://api.convertkit.com/v3/forms/' + formId + '/subscribe';
+
+    $.ajax({
+      method: "POST",
+      url: apiUrl,
+      data: { email: email, api_key: options.ckApi }
+      })
+      .done(function(msg) {
+        console.log(msg);
+
+        // reset to defaults
+        sbAutomation.showConfirmation( id );
+        $('#sb-' + id + ' .sb-email-row').hide();
+        sbAutomation.interacted( id );
+
+      })
+      .fail(function(err) {
+        $('#sb-' + id + ' .sb-email-row').prepend('There seems to be a problem, can you try again?');
+        console.log(err);
+      });
 
   }
 
