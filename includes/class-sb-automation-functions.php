@@ -294,7 +294,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
 
                 <!-- Begin MailChimp Signup Form -->
                 <form action="<?php echo $url; ?>" method="get" name="sb-mc-form" class="sb-mc-form">
-                    <input type="email" value="" name="EMAIL" class="required email sb-email-input" id="mce-EMAIL">
+                    <input type="email" value="" name="EMAIL" class="sb-email-input" id="mce-EMAIL">
                     <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="sb_hp" tabindex="-1" value=""></div>
                     <button class="sb-email-btn"><?php echo _e('Send', 'sb-automation' ); ?></button>
                 </form>

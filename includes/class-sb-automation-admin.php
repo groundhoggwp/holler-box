@@ -167,9 +167,19 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          */
         public function custom_columns( $column, $post_id ) {
 
+            $conversions = get_post_meta( $post_id, 'sb_conversions', 1);
+            $views = get_post_meta( $post_id, 'sb_views', 1);
+
+            if( empty( $conversions ) || empty( $views ) ) {
+                $rate = '0%';
+            } else {
+                $rate = intval( $conversions ) / intval( $views );
+                $rate = number_format( $rate, 3 ) * 100 . '%';
+            }
+
             switch ( $column ) {
                 case 'conversions':
-                    echo get_post_meta( $post_id, 'sb_conversions', 1);
+                    echo $rate;
                     break;
                 case 'active':
                     echo '<label class="sb-switch"><input data-id="' . $post_id . '" type="checkbox" value="1" ' . checked(1, get_post_meta( $post_id, 'sb_active', true ), false) . ' /><div class="sb-slider sb-round"></div></label>';

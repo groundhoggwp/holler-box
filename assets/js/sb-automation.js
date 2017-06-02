@@ -93,6 +93,10 @@
 
       setTimeout( function() {
         sbAutomation.showNote( id );
+
+        // Track that note was shown. Here because this loads once per page, showNote() loads on hide/show, too many times.
+        sbAutomation.countNoteShown(id);
+
       }, delay * 1000 );
 
     } else {
@@ -485,6 +489,7 @@
     $('#' + sbAutomation.activeID + ' .sb-email-input').focus();
   }
 
+  // handle click of email submit btn
   sbAutomation.emailSubmitClick = function(e) {
 
     e.stopImmediatePropagation();
@@ -513,6 +518,7 @@
     if( $( '#sb-' + id + ' input[name=sb_hp]').val() != "" )
       return;
 
+    // do different things for email providers
     if( window.sbAutoVars[id].emailProvider === 'ck' ) {
       sbAutomation.ckSubscribe( email, id );
       return;
@@ -521,7 +527,7 @@
       return;
     }
 
-    // send message to server
+    // send default message to server
     // concatenate messages together
     var fullMsg = window.localStorage.getItem('sb-full-msg');
 
@@ -536,7 +542,7 @@
     var options = window.sbAutoVars[id];
 
     var formId = $('#sb-' + id + ' .ck-form-id').val();
-    var apiUrl = 'https://aapi.convertkit.com/v3/forms/' + formId + '/subscribe';
+    var apiUrl = 'https://api.convertkit.com/v3/forms/' + formId + '/subscribe';
 
     $.ajax({
       method: "POST",
@@ -549,7 +555,7 @@
         // reset to defaults
         sbAutomation.showConfirmation( id );
         $('#sb-' + id + ' .sb-email-row').hide();
-        sbAutomation.interacted( id );
+        sbAutomation.conversion( id );
 
       })
       .fail(function(err) {
@@ -602,7 +608,7 @@
               // reset to defaults
               sbAutomation.showConfirmation( id );
               $('#sb-' + id + ' .sb-email-row').hide();
-              sbAutomation.interacted( id );
+              sbAutomation.conversion( id );
             }
         }
     });
@@ -624,7 +630,7 @@
         sbAutomation.clearChat();
         sbAutomation.showConfirmation( id );
 
-        sbAutomation.interacted( id );
+        sbAutomation.conversion( id );
 
       })
       .fail(function(err) {
@@ -647,11 +653,11 @@
   sbAutomation.interactionLink = function(e) {
     e.stopImmediatePropagation();
     var id = $(this).data('id');
-    sbAutomation.interacted( id );
+    sbAutomation.conversion( id );
   }
 
   // Callback for user interaction
-  sbAutomation.interacted = function( id ) {
+  sbAutomation.conversion = function( id ) {
 
     var params = { action: 'sb_track_event', nonce: window.sbAutoVars.sbNonce, id: id };
 
@@ -672,18 +678,20 @@
 
   }
 
+  // not used
   sbAutomation.handleForms = function(e) {
 
     var id = $(e.target).closest('.sb-notification-box').attr('id').split('-')[1];
 
     setTimeout( function() {
-      sbAutomation.interacted(id);
+      sbAutomation.conversion(id);
       $(e.target).closest('.sb-email-row').hide();
       sbAutomation.showConfirmation(id);
     }, 1000);
 
   }
 
+  // show confirmation message after email submitted
   sbAutomation.showConfirmation = function( id ) {
 
     var options = window.sbAutoVars[id];
@@ -698,6 +706,26 @@
 
       $('#sb-' + id + ' .sb-first-row').html(msg);
     }
+
+  }
+
+  // Callback for tracking views
+  sbAutomation.countNoteShown = function( id ) {
+
+    var params = { action: 'sb_track_view', nonce: window.sbAutoVars.sbNonce, id: id };
+
+    // store interaction data
+    $.ajax({
+      method: "GET",
+      url: window.sbAutoVars.ajaxurl,
+      data: params
+      })
+      .done(function(msg) {
+        //console.log(msg);
+      })
+      .fail(function(err) {
+        //console.log(err);
+      });
 
   }
 
