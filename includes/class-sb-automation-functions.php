@@ -113,6 +113,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 $array[$value] = array( 
                     'content' => $content,
                     'showEmail' => get_post_meta($value, 'show_optin', 1),
+                    'showChat' => get_post_meta( $value, 'show_chat', 1 ),
                     'emailProvider' => get_post_meta( $value, 'email_provider', 1 ),
                     'ckApi' => get_option( 'sb_ck_api_key' ),
                     'visitor' => get_post_meta($value, 'new_or_returning', 1),

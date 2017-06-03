@@ -55,7 +55,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
 
             add_action( 'admin_menu', array( $this, 'settings_page' ) );
             add_action( 'init', array( $this, 'register_cpt' ) );
-            add_action( 'save_post', array( $this, 'save_meta_boxes' ), 10, 2 );
+            add_action( 'save_post', array( $this, 'save_settings' ), 10, 2 );
             add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
             add_filter('manage_edit-sb_notification_columns', array( $this, 'notification_columns' ) );
             add_action( 'manage_sb_notification_posts_custom_column', array( $this, 'custom_columns' ), 10, 2 );
@@ -347,6 +347,11 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
                 </div>
             </p>
 
+            <p>
+                <input type="checkbox" id="show_chat" name="show_chat" value="1" <?php checked('1', get_post_meta( $post->ID, 'show_chat', true ), true); ?> />
+                <?php _e( 'Show chat', 'sb-automation' ); ?>
+            </p>
+
         <?php }
 
         /**
@@ -499,7 +504,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
          *
          * @since     0.1
          */
-        public function save_meta_boxes( $post_id ) {
+        public function save_settings( $post_id ) {
 
             // nonce check
             if ( !isset( $_POST['sb_notification_meta_box_nonce'] ) || !wp_verify_nonce( $_POST['sb_notification_meta_box_nonce'], basename( __FILE__ ) ) )
@@ -517,6 +522,7 @@ if( !class_exists( 'SB_Automation_Admin' ) ) {
 
             $keys = array(
                 'show_optin', 
+                'show_chat',
                 'opt_in_message',
                 'opt_in_confirmation',
                 'opt_in_placeholder',

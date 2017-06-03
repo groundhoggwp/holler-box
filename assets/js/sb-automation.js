@@ -194,27 +194,23 @@
 
     }
 
-    // Show email opt-in
-    if( options.showEmail === "1" ) {
-      sbAutomation.show( document.querySelector( '#sb-' + id + ' .sb-note-optin' ) );
-      // Setup localized vars
-      var textInput = document.querySelector('#sb-' + id + ' .sb-email-input');
-
-      // if text input is missing, we are using a different email form
-      if(!textInput)
-        return;
+    // Show email opt-in, but not if we have a chatbox (it gets shown after user input)
+    if( options.showEmail === "1" && options.showChat != "1" ) {
       
-      textInput.setAttribute('placeholder', options.placeholder );
+      sbAutomation.showEmailSubmit( id );
 
-      $('.sb-away-msg').remove();
-      $('#sb-' + id + ' .sb-email-row').prepend( '<span class="sb-away-msg">' + options.optinMsg + '</span>' );
-
-      $('#sb-' + id ).addClass('has-optin');
     }
 
     // Button should not be shown
     if( options.hideBtn === '1' )
       sbAutomation.hide( sbAutomation.floatingBtn );
+
+    // show the chatbox
+    if( options.showChat === '1' ) {
+
+      sbAutomation.transitionIn( document.querySelector( '#sb-' + id + ' .sb-chat' ) );
+
+    }
 
     if( options.position === 'sb-banner-top' && sbAutomation.getCookie( 'sb-' + id + '_hide' ) != 'true' )
       sbAutomation.toggleBnrMargin( id );
@@ -349,7 +345,7 @@
 
       setTimeout( function() {
         // clear current chat if hidden
-        sbAutomation.clearChat();
+        sbAutomation.clearChat( id );
       }, 1000);
     }
 
@@ -419,7 +415,9 @@
 
     if ( e.target.value && e.target.value != '' && e.keyCode == 13 ) {
 
-      sbAutomation.submitText(e.target.value);
+      var id = $(e.target).closest('.sb-notification-box').attr('id').split('-')[1];
+
+      sbAutomation.submitText(e.target.value, id);
 
       e.target.value = '';
 
@@ -442,22 +440,26 @@
 
   }
 
-  // Add chat text on click
+  // Add chat text on icon click
   sbAutomation.sendText = function(e) {
     e.stopImmediatePropagation();
-    var text = $('#' + sbAutomation.activeID + ' .sb-text-input').val();
+
+    var id = $(e.target).closest('.sb-notification-box').attr('id').split('-')[1];
+
+    var text = $('#sb-' + id + ' .sb-text-input').val();
+
     if ( text && text != '' ) {
-      sbAutomation.submitText(text);
-      $('#' + sbAutomation.activeID + ' .sb-text-input').val('').focus();
+      sbAutomation.submitText(text, id);
+      $('#sb-' + id + ' .sb-text-input').val('').focus();
     }
   }
 
   // User entered a message
-  sbAutomation.submitText = function(text) {
+  sbAutomation.submitText = function(text, id) {
 
     var fullMsg = window.localStorage.getItem('sb-full-msg');
 
-    $('#' + sbAutomation.activeID + ' .sb-box-rows').append('<div class="sb-row sb-visitor-row">' + text + '</div>');
+    $('#sb-' + id + ' .sb-box-rows').append('<div class="sb-row sb-visitor-row">' + text + '</div>');
 
     if( fullMsg ) {
       fullMsg += '\n' + text; 
@@ -468,25 +470,36 @@
     window.localStorage.setItem( 'sb-full-msg', fullMsg );
 
     setTimeout( function() {
-      sbAutomation.showEmailSubmit();
+      sbAutomation.showEmailSubmit( id );
     }, 5000 );
     
   }
 
   // Show email field
-  sbAutomation.showEmailSubmit = function() {
+  sbAutomation.showEmailSubmit = function( id ) {
 
-    var emailRow = $('#' + sbAutomation.activeID + ' .sb-email-row');
+    var emailRow = $('#sb-' + id + ' .sb-email-row');
+
+    var options = window.sbAutoVars[id];
 
     // don't show duplicates
     if( emailRow.hasClass('sb-show') )
       return;
 
+    // Setup localized vars
+    var textInput = document.querySelector('#sb-' + id + ' .sb-email-input');
+    
+    textInput.setAttribute('placeholder', options.placeholder );
+
+    $('.sb-away-msg').remove();
+    $('#sb-' + id + ' .sb-email-row').prepend( '<span class="sb-away-msg">' + options.optinMsg + '</span>' );
+
+    $('#sb-' + id ).addClass('has-optin');
+
     emailRow.removeClass('sb-hide').addClass('sb-show');
 
-    emailRow.prepend( '<span class="sb-away-msg">' + sbAutomation.activeOptions.optinMsg + '</span>' );
+    emailRow.prepend( '<span class="sb-away-msg">' + options.optinMsg + '</span>' );
 
-    $('#' + sbAutomation.activeID + ' .sb-email-input').focus();
   }
 
   // handle click of email submit btn
@@ -627,7 +640,7 @@
         console.log(msg);
 
         // reset to defaults
-        sbAutomation.clearChat();
+        sbAutomation.clearChat( id );
         sbAutomation.showConfirmation( id );
 
         sbAutomation.conversion( id );
@@ -638,14 +651,14 @@
       });
   }
 
-  sbAutomation.clearChat = function() {
+  sbAutomation.clearChat = function( id ) {
 
-    if( !$(sbAutomation.chatBox).hasClass('sb-hide') ) {
+    if( !$( '#sb-' + id + ' .sb-chat' ).hasClass('sb-hide') ) {
       window.localStorage.removeItem('sb-full-msg');
-      $('#' + sbAutomation.activeID + ' .sb-visitor-row, #' + sbAutomation.activeID + ' .sb-away-msg').remove();
+      $('#sb-' + id + ' .sb-visitor-row, #sb-' + id + ' .sb-away-msg').remove();
     }
 
-    sbAutomation.hide( sbAutomation.noteOptin );
+    sbAutomation.hide( $( '#sb-' + id + ' .sb-email-row' ) );
 
   }
 
@@ -705,6 +718,10 @@
     } else {
 
       $('#sb-' + id + ' .sb-first-row').html(msg);
+    }
+
+    if( options.showChat === '1' ) {
+      sbAutomation.clearChat( id );
     }
 
   }
