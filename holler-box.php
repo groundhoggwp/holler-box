@@ -3,7 +3,7 @@
  * Plugin Name:     Holler Box
  * Plugin URI:      http://hollerwp.com
  * Description:     Convert visitors to customers with personalized messaging.
- * Version:         0.3.1
+ * Version:         0.4
  * Author:          Scott Bolinger
  * Author URI:      http://hollerwp.com
  * Text Domain:     hollerbox
@@ -62,7 +62,7 @@ if( !class_exists( 'Holler_Box' ) ) {
          */
         private function setup_constants() {
             // Plugin version
-            define( 'Holler_Box_VER', '0.3.1' );
+            define( 'Holler_Box_VER', '0.4' );
 
             // Plugin path
             define( 'Holler_Box_DIR', plugin_dir_path( __FILE__ ) );

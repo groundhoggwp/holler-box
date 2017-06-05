@@ -4,7 +4,7 @@ Contributors: scottopolis
 Tags: popup, optin, mailchimp, wordpress popup
 Requires at least: 4.5
 Tested up to: 4.7.5
-Stable tag: 0.3
+Stable tag: 0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,8 +26,6 @@ Keep track of who has seen your messages and how well they are working, so you c
 
 Show a non-intrusive Intercom style notification box with your message. Announce a webinar, collect email optins, show your latest blog post, and lots more.
 
-[image]
-
 Choose where and when you show it, and to which visitors. For example, show your sale announcement only on the pricing page to returning visitors. Show your email optin only on your blog posts.
 
 **Header Banner** 
@@ -37,8 +35,6 @@ Show a header banner to announce a sale, keep track of how many people click on 
 **(Fake) Live Chat with Opt-in**
 
 Show a live chat box to collect customer questions and emails, without having to actually deal with the hassle of live chat! As soon as your visitor types a question, an email opt-in pops up so you can follow up with them at a convenient time.
-
-[image]
 
 **Polls and Forms**
 
@@ -84,9 +80,21 @@ Content can be pretty much anything, but keep your message short.
 
 == Screenshots ==
 
-1. Revenue dashboard
+1. Default notification box with link
 
-2. Revenue details
+2. Opt-in form
+
+3. (Fake) Live chat with email capture
+
+4. Purchase notification
+
+5. Hidden view
+
+6. Display settings
+
+7. Advanced settings
+
+8. CPT
 
 == Changelog ==
 

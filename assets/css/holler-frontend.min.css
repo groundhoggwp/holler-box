@@ -12,7 +12,7 @@
 .hwp-close .hwp-full-side,.hwp-show-full{display:none}.holler-box.hwp-full-side{top:0;bottom:0;transition:all .1s}.hwp-minimizing{transition:none}.holler-box.hwp-full-side .hwp-close .hwp-full-side,.holler-box.hwp-full-side .hwp-show-full{display:block}
 .holler-box.hwp-full-side .hwp-chat{position:absolute;bottom:10px;left:10px;right:10px}.admin-bar .holler-box.hwp-full-side{top:32px}.hwp-bottomright.hwp-full-side,.hwp-topright.hwp-full-side{right:0}
 .hwp-bottomleft.hwp-full-side,.hwp-topleft.hwp-full-side{left:0}.holler-box p{margin-bottom:5px}.hwp-box-rows{overflow:hidden}.hwp-row.hwp-first-row{clear:none}
-.hwp-chat{overflow:hidden;clear:both}.holler-box .avatar{border-radius:100px;margin-right:15px;float:left}.hwp-row{overflow:hidden;background:#fafafa;padding:5px 10px;border-radius:3px;margin-top:10px;clear:both}
+.hwp-chat{overflow:hidden;clear:both}.holler-box .avatar{border-radius:100px;margin-right:15px;float:left}.hwp-row{overflow:hidden;background:#fafafa;padding:5px 10px;border-radius:3px;margin-top:10px;clear:both;line-height:1.5}
 .hwp-visitor-row{text-align:right;float:right;background-color:#444;color:#fff}.hwp-away-msg{font-size:11px}.hwp-row.hwp-email-row,.hwp-row.hwp-text{padding:0;background-color:#fff;position:relative}
 .holler-box input[type="text"],.holler-box input[type="email"],.holler-box input#s{border:1px solid #1191cb;border-radius:3px 0 0 3px;height:40px;border:0;background-color:#eee;box-shadow:none;box-sizing:border-box;padding:8px;font-size:15px}
 .hwp-email-input{width:80%!important;float:left}.holler-box input#s{margin:10px 0;width:100%;background-position:right center}.hwp-text-input{border-radius:3px 0 0 3px;height:40px;border:0;background:#eee;box-shadow:none;box-sizing:border-box;width:100%}

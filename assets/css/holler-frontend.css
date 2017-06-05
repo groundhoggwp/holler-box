@@ -238,6 +238,7 @@
     border-radius: 3px;
     margin-top: 10px;
     clear: both;
+    line-height: 1.5;
 }
 
 .hwp-visitor-row {
@@ -249,6 +250,8 @@
 
 .hwp-away-msg {
 	font-size: 11px;
+	display: block;
+	clear: both;
 }
 
 .hwp-row.hwp-email-row, .hwp-row.hwp-text {

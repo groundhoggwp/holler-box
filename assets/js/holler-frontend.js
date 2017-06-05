@@ -493,7 +493,6 @@
     textInput.setAttribute('placeholder', options.placeholder );
 
     $('.hwp-away-msg').remove();
-    $('#hwp-' + id + ' .hwp-email-row').prepend( '<span class="hwp-away-msg">' + options.optinMsg + '</span>' );
 
     $('#hwp-' + id ).addClass('has-optin');
 
