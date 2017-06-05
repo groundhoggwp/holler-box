@@ -95,7 +95,8 @@
         holler.showNote( id );
 
         // Track that note was shown. Here because this loads once per page, showNote() loads on hide/show, too many times.
-        holler.countNoteShown(id);
+        if( holler.getCookie( 'hwp-' + id + '_hide' ) != 'true' )
+          holler.countNoteShown(id);
 
       }, delay * 1000 );
 

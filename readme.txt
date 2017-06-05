@@ -1,45 +1,86 @@
-=== Holler Box ===
+=== Holler Box - create perfectly timed messages with this popup alternative ===
 
 Contributors: scottopolis
-Tags: marketing
-Requires at least: 4.5s
-Tested up to: 4.7.2
-Stable tag: 0.1
+Tags: popup, optin, mailchimp, wordpress popup
+Requires at least: 4.5
+Tested up to: 4.7.5
+Stable tag: 0.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Better reports for Easy Digital Downloads, similar to Baremetrics.
+Convert more visitors to customers with perfectly timed messages.
 
 == Description ==
 
-Get the important metrics for your business, such as average revenue per customer, renewal rate, refund rate, and more. Support EDD Software Licensing add-on for renewal rates, and EDD Recurring Payments for subscription information.
+Show customizable marketing messages to your site visitors easily, with beautiful design. Convert website visitors, upsell customers, and get your message out to the right people at the right time.
 
-Included metrics:
+Easily announce a sale, webinar, new article, email opt-in, and lots more.
 
-* Net Revenue (Properly subtracts refunds)
-* Sales
-* Average revenue per customer
-* Estimated monthly revenue
-* Refunds
-* Discounts
-* Renewals, and renewal rate (if EDD Software Licensing is active)
-* Subscriptions (if EDD Recurring Payments is active)
-* Recurring revenue this period and next 30 days
-* Earnings by download
-* Earnings by gateway
-* New customers
+Choose between a notification box and a banner, add your message and customize. Use our smart filter system to show to the right visitor at the right time.
 
-Charts are displayed on the detail page along with other metrics.
+Keep track of who has seen your messages and how well they are working, so you can tweak and improve.
 
-To contribute or report an issue, please use the [EDD Metrics Github](https://github.com/scottopolis/edd-metrics)
+## What can you do with it?
 
-This plugin is inspired by (and basically a total copy of) [Baremetrics](https://baremetrics.com/). I would have just used Baremetrics instead of building a new plugin, except that Baremetrics is very specific to SaaS businesses, and doesn't really work for EDD.
+**Smart notification box**
+
+Show a non-intrusive Intercom style notification box with your message. Announce a webinar, collect email optins, show your latest blog post, and lots more.
+
+[image]
+
+Choose where and when you show it, and to which visitors. For example, show your sale announcement only on the pricing page to returning visitors. Show your email optin only on your blog posts.
+
+**Header Banner** 
+
+Show a header banner to announce a sale, keep track of how many people click on it. 
+
+**(Fake) Live Chat with Opt-in**
+
+Show a live chat box to collect customer questions and emails, without having to actually deal with the hassle of live chat! As soon as your visitor types a question, an email opt-in pops up so you can follow up with them at a convenient time.
+
+[image]
+
+**Polls and Forms**
+
+Embed anything into your Holler Box, including a feedback form or poll.
+
+**Design**
+
+Choose a notification box or a banner, customize
+
+**Analytics**
+
+See how your messages are performing. Track link clicks, message opens, and more.
+
+**Interactivity**
+
+Add a link, video, contact form, or simple opt-in form that integrates with major email providers like MailChimp and Convertkit.
 
 == Installation ==
 
-First, make sure Easy Digital Downloads is active. Next, install and activate this plugin on your WordPress site, then visit the "Metrics" menu under the "Downloads" left menu item.
+Install and activate this plugin.
 
-Change the date using the datepicker in the top right hand corner. Click "Revenue Details" to see charts and more metrics.
+Visit the Holler Box menu item, and add a new box. Give it a title (not displayed on the front end), and add your content.
+
+Content can be pretty much anything, but keep your message short.
+
+**Display**
+
+- Activate: Choose to activate this item on publish.
+- Position: the notification position, or banner
+- Choose your colors
+- Show email opt-in: default sends to your email address, or choose a provider or custom HTML form.
+- Show chat: show the (fake) live chat
+
+**Advanced Settings**
+
+- Pages: choose all pages, or enter page IDs, separated by comma. For example: 701,5,678
+- New or returning: show to only new visitors (since you activated the plugin), or returning visitors. Tracked with the hwp_visit cookie.
+- When should we show: after the page loads, show immediately, with a delay, or based on user scroll.
+- When should it disappear: if you want the notification to show briefly and then disappear automatically, enter a delay here.
+- How often show we show it: a visitor will be shown your message, then you can choose to continue showing it, or hide it based on number of days or user interaction. Interaction is either submitting an email, or clicking a link with a class of hwp-interaction.
+- Hide the button: the button appears when the notification is hidden, you can choose to not display the button. If the notification is hidden, the user will not be able to reopen it.
+- Gravatar email: enter an email associated with a Gravatar account, or leave blank to hide the avatar.
 
 == Screenshots ==
 
@@ -48,22 +89,5 @@ Change the date using the datepicker in the top right hand corner. Click "Revenu
 2. Revenue details
 
 == Changelog ==
-
-=0.6=
-
-* Add recurring revenue metrics
-* Change revenue total to net revenue, which accounts for refunds EDD does not track properly
-
-= 0.5.1 =
-
-* Fix previous year chart data
-
-= 0.5.0 =
-
-* Support for commissions
-* Fix PHP Warnings
-* Fix JS errors
-
-= 0.4.0 =
 
 * Initial release

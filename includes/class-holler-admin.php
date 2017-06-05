@@ -137,6 +137,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
         public function notification_columns( $columns ) {
             $date = $columns['date'];
             unset($columns['date']);
+            $columns["impressions"] = "Impressions";
             $columns["conversions"] = "Conversions";
             $columns["active"] = "Active";
             $columns['date'] = $date;
@@ -155,16 +156,19 @@ if( !class_exists( 'Holler_Admin' ) ) {
             $conversions = get_post_meta( $post_id, 'hwp_conversions', 1);
             $views = get_post_meta( $post_id, 'hwp_views', 1);
 
-            if( empty( $conversions ) || empty( $views ) ) {
-                $rate = '0%';
-            } else {
-                $rate = intval( $conversions ) / intval( $views );
-                $rate = number_format( $rate, 3 ) * 100 . '%';
-            }
+            // if( empty( $conversions ) || empty( $views ) ) {
+            //     $rate = '0%';
+            // } else {
+            //     $rate = intval( $conversions ) / intval( $views );
+            //     $rate = number_format( $rate, 3 ) * 100 . '%';
+            // }
 
             switch ( $column ) {
+                case 'impressions':
+                    echo $views;
+                    break;
                 case 'conversions':
-                    echo $rate;
+                    echo $conversions;
                     break;
                 case 'active':
                     echo '<label class="hwp-switch"><input data-id="' . $post_id . '" type="checkbox" value="1" ' . checked(1, get_post_meta( $post_id, 'hwp_active', true ), false) . ' /><div class="hwp-slider hwp-round"></div></label>';
@@ -279,8 +283,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <?php _e( 'Top right', 'hollerbox' ); ?>
                 <input type="radio" name="position" value="hwp-topleft" <?php checked( "hwp-topleft", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
                 <?php _e( 'Top left', 'hollerbox' ); ?>
-                <input type="radio" name="position" value="hwp-banner-top" <?php checked( "hwp-banner-top", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
-                <?php _e( 'Banner Top', 'hollerbox' ); ?>
+                <?php do_action('hwp_position_settings', $post->ID); ?>
             </p>
 
             <p>Button color</p>
@@ -401,11 +404,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
             </p>
             <hr>
             <p>
-                <input type="checkbox" name="expiration" value="1" <?php checked('1', get_post_meta( $post->ID, 'expiration', true ), true); ?>> Automatically deactivate on a certain date?<br>
-                <input type="text" placeholder="05/28/2018" value="<?php echo get_post_meta( $post->ID, 'hwp_until_date', true ); ?>" name="hwp_until_date" id="hwp-until-datepicker" class="hwp-datepicker" />
-            </p>
-            <hr>
-            <p>
                 <input type="checkbox" id="hide_btn" name="hide_btn" value="1" <?php checked(1, get_post_meta( $post->ID, 'hide_btn', true ), true); ?> />
                 <label for="hide_btn"><?php _e( 'Hide the floating button? (Appears when box is hidden.)', 'hollerbox' ); ?></label>
             </p>
@@ -414,6 +412,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
             <p>
                 <input type="text" class="widefat" name="avatar_email" size="20" value="<?php echo sanitize_email( get_post_meta( $post->ID, 'avatar_email', true ) ); ?>" /> 
             </p>
+
+            <?php do_action('hwp_advanced_settings', $post->ID ); ?>
 
         <?php }
 
