@@ -1,12 +1,12 @@
 <?php
 /**
- * Plugin Name:     SB Marketing Automation
- * Plugin URI:      http://scottbolinger.com
+ * Plugin Name:     Holler Box
+ * Plugin URI:      http://hollerwp.com
  * Description:     Convert visitors to customers with personalized messaging.
- * Version:         0.3
+ * Version:         0.3.1
  * Author:          Scott Bolinger
- * Author URI:      http://scottbolinger.com
- * Text Domain:     sb-automation
+ * Author URI:      http://hollerwp.com
+ * Text Domain:     hollerbox
  *
  * @author          Scott Bolinger
  * @copyright       Copyright (c) Scott Bolinger 2017
@@ -17,17 +17,17 @@
 // Exit if accessed directly
 if( !defined( 'ABSPATH' ) ) exit;
 
-if( !class_exists( 'SB_Automation' ) ) {
+if( !class_exists( 'Holler_Box' ) ) {
 
     /**
-     * Main SB_Automation class
+     * Main Holler_Box class
      *
      * @since       0.1.0
      */
-    class SB_Automation {
+    class Holler_Box {
 
         /**
-         * @var         SB_Automation $instance The one true SB_Automation
+         * @var         Holler_Box $instance The one true Holler_Box
          * @since       0.1.0
          */
         private static $instance;
@@ -38,11 +38,11 @@ if( !class_exists( 'SB_Automation' ) ) {
          *
          * @access      public
          * @since       0.1.0
-         * @return      object self::$instance The one true SB_Automation
+         * @return      object self::$instance The one true Holler_Box
          */
         public static function instance() {
             if( !self::$instance ) {
-                self::$instance = new SB_Automation();
+                self::$instance = new Holler_Box();
                 self::$instance->setup_constants();
                 self::$instance->includes();
                 self::$instance->load_textdomain();
@@ -62,13 +62,13 @@ if( !class_exists( 'SB_Automation' ) ) {
          */
         private function setup_constants() {
             // Plugin version
-            define( 'SB_Automation_VER', '0.3' );
+            define( 'Holler_Box_VER', '0.3.1' );
 
             // Plugin path
-            define( 'SB_Automation_DIR', plugin_dir_path( __FILE__ ) );
+            define( 'Holler_Box_DIR', plugin_dir_path( __FILE__ ) );
 
             // Plugin URL
-            define( 'SB_Automation_URL', plugin_dir_url( __FILE__ ) );
+            define( 'Holler_Box_URL', plugin_dir_url( __FILE__ ) );
         }
 
 
@@ -81,11 +81,11 @@ if( !class_exists( 'SB_Automation' ) ) {
          */
         private function includes() {
 
-            require_once SB_Automation_DIR . 'includes/class-sb-automation-functions.php';
-            require_once SB_Automation_DIR . 'includes/class-sb-automation-ajax.php';
+            require_once Holler_Box_DIR . 'includes/class-holler-functions.php';
+            require_once Holler_Box_DIR . 'includes/class-holler-ajax.php';
 
             if( is_admin() )
-                require_once SB_Automation_DIR . 'includes/class-sb-automation-admin.php';
+                require_once Holler_Box_DIR . 'includes/class-holler-admin.php';
             
         }
 
@@ -113,7 +113,7 @@ if( !class_exists( 'SB_Automation' ) ) {
          */
         public function load_textdomain() {
 
-            load_plugin_textdomain( 'sb-automation' );
+            load_plugin_textdomain( 'hollerbox' );
             
         }
 
@@ -129,10 +129,10 @@ if( !class_exists( 'SB_Automation' ) ) {
  * @return      \EDD_Metrics The one true EDD_Metrics
  *
  */
-function SB_Automation_load() {
-    return SB_Automation::instance();
+function holler_box_load() {
+    return Holler_Box::instance();
 }
-add_action( 'plugins_loaded', 'SB_Automation_load' );
+add_action( 'plugins_loaded', 'holler_box_load' );
 
 
 /**
@@ -144,7 +144,7 @@ add_action( 'plugins_loaded', 'SB_Automation_load' );
  * @since       0.1.0
  * @return      void
  */
-function SB_Automation_activation() {
+function holler_box_activation() {
     /* Activation functions here */
 }
-register_activation_hook( __FILE__, 'SB_Automation_activation' );
+register_activation_hook( __FILE__, 'holler_box_activation' );

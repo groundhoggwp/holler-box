@@ -1,4 +1,4 @@
-=== SB Automation ===
+=== Holler Box ===
 
 Contributors: scottopolis
 Tags: marketing

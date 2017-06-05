@@ -8,17 +8,17 @@
 // Exit if accessed directly
 if( !defined( 'ABSPATH' ) ) exit;
 
-if( !class_exists( 'SB_Automation_Functions' ) ) {
+if( !class_exists( 'Holler_Functions' ) ) {
 
     /**
-     * SB_Automation_Functions class
+     * Holler_Functions class
      *
      * @since       0.2.0
      */
-    class SB_Automation_Functions {
+    class Holler_Functions {
 
         /**
-         * @var         SB_Automation_Functions $instance The one true SB_Automation_Functions
+         * @var         Holler_Functions $instance The one true Holler_Functions
          * @since       0.2.0
          */
         private static $instance;
@@ -31,11 +31,11 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
          *
          * @access      public
          * @since       0.2.0
-         * @return      object self::$instance The one true SB_Automation_Functions
+         * @return      object self::$instance The one true Holler_Functions
          */
         public static function instance() {
             if( !self::$instance ) {
-                self::$instance = new SB_Automation_Functions();
+                self::$instance = new Holler_Functions();
                 self::$instance->hooks();
             }
 
@@ -55,7 +55,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             add_action('wp', array( $this, 'get_active_items' ) );
             add_action( 'wp_footer', array( $this, 'maybe_display_items' ) );
             add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
-            add_action( 'sb_email_form', array( $this, 'email_forms' ) );
+            add_action( 'hwp_email_form', array( $this, 'email_forms' ) );
 
         }
 
@@ -70,10 +70,10 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             // Use minified libraries if SCRIPT_DEBUG is turned off
             $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-            wp_enqueue_script( 'sb-automation-js', SB_Automation_URL . 'assets/js/sb-automation' . $suffix . '.js', array( 'jquery' ), SB_Automation_VER, true );
-            wp_enqueue_style( 'sb-automation-css', SB_Automation_URL . 'assets/css/sb-automation' . $suffix . '.css', null, SB_Automation_VER );
+            wp_enqueue_script( 'holler-js', Holler_Box_URL . 'assets/js/holler-frontend' . $suffix . '.js', array( 'jquery' ), Holler_Box_VER, true );
+            wp_enqueue_style( 'holler-css', Holler_Box_URL . 'assets/css/holler-frontend' . $suffix . '.css', null, Holler_Box_VER );
 
-            wp_localize_script( 'sb-automation-js', 'sbAutoVars', $this->get_localized_vars()
+            wp_localize_script( 'holler-js', 'hollerVars', $this->get_localized_vars()
             );
 
         }
@@ -90,7 +90,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
 
             $array['ajaxurl'] = admin_url( 'admin-ajax.php' );
 
-            $array['sbNonce'] = wp_create_nonce('sb-automation');
+            $array['hwpNonce'] = wp_create_nonce('holler-box');
 
             // @TODO: if( setting exists )
             // $array['lastSeen'] = 'none'; // in days. default is none
@@ -105,7 +105,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 $content_post = get_post($value);
                 $content = $content_post->post_content;
                 // adding the_content filter has crazy results, like CK forms
-                $content = apply_filters('sb_notification_content', $content, $value );
+                $content = apply_filters('hollerbox_content', $content, $value );
                 $content = do_shortcode( $content );
                 $content = apply_filters('the_content_more_link', $content);
                 $content = str_replace(']]>', ']]&gt;', $content);
@@ -115,7 +115,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                     'showEmail' => get_post_meta($value, 'show_optin', 1),
                     'showChat' => get_post_meta( $value, 'show_chat', 1 ),
                     'emailProvider' => get_post_meta( $value, 'email_provider', 1 ),
-                    'ckApi' => get_option( 'sb_ck_api_key' ),
+                    'ckApi' => get_option( 'hwp_ck_api_key' ),
                     'visitor' => get_post_meta($value, 'new_or_returning', 1),
                     'hideBtn' => get_post_meta($value, 'hide_btn', 1),
                     'optinMsg' => get_post_meta($value, 'opt_in_message', 1),
@@ -149,12 +149,12 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             foreach (self::$active as $key => $value) {
 
                 $should_expire = get_post_meta( $value, 'expiration', 1 );
-                $expiration = get_post_meta( $value, 'sb_until_date', 1 );
+                $expiration = get_post_meta( $value, 'hwp_until_date', 1 );
 
                 if( $should_expire === '1' && !empty( $expiration ) ) {
                     // check if we've passed expiration date
                     if( strtotime('now') >= strtotime( $expiration ) ) {
-                        delete_post_meta( $value, 'sb_active' );
+                        delete_post_meta( $value, 'hwp_active' );
                         continue;
                     }
                 }
@@ -186,7 +186,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
          */
         public function get_active_items() {
 
-            $args = array( 'post_type' => 'sb_notification' );
+            $args = array( 'post_type' => 'hollerbox' );
             // The Query
             $the_query = new WP_Query( $args );
 
@@ -196,7 +196,7 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 while ( $the_query->have_posts() ) {
                     $the_query->the_post();
                     $id = get_the_id();
-                    if( get_post_meta( $id, 'sb_active', 1 ) != '1' )
+                    if( get_post_meta( $id, 'hwp_active', 1 ) != '1' )
                         continue;
 
                     self::$active[] = strval( $id );
@@ -220,41 +220,41 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
             $avatar_email = get_post_meta($id, 'avatar_email', 1);
             ?>
             <style type="text/css">
-            #sb-<?php echo $id; ?>, #sb-<?php echo $id; ?> a, #sb-<?php echo $id; ?> i { color: <?php echo get_post_meta( $id, 'text_color', 1 ); ?>; }
+            #hwp-<?php echo $id; ?>, #hwp-<?php echo $id; ?> a, #hwp-<?php echo $id; ?> i { color: <?php echo get_post_meta( $id, 'text_color', 1 ); ?>; }
             </style>
 
-            <?php if( get_post_meta( $id, 'position', 1 ) != 'sb-banner-top' ) : ?>
-            <div id="sb-floating-btn" data-id="<?php echo $id; ?>" class="<?php echo get_post_meta( $id, 'position', 1 ); ?>"><i class="icon icon-chat"></i></div>
+            <?php if( get_post_meta( $id, 'position', 1 ) != 'holler-banner' ) : ?>
+            <div id="hwp-floating-btn" data-id="<?php echo $id; ?>" class="<?php echo get_post_meta( $id, 'position', 1 ); ?>"><i class="icon icon-chat"></i></div>
             <?php endif; ?>
 
-            <div id="sb-<?php echo $id; ?>" class="sb-notification-box sb-hide <?php echo get_post_meta( $id, 'position', 1 ); ?>">
+            <div id="hwp-<?php echo $id; ?>" class="holler-box hwp-hide <?php echo get_post_meta( $id, 'position', 1 ); ?>">
 
-                <div class="sb-notification-inside">
+                <div class="holler-inside">
                 
-                <div class="sb-close"><i class="icon icon-cancel"></i> <i class="icon icon-cancel sb-full-side"></i></div>
+                <div class="hwp-close"><i class="icon icon-cancel"></i> <i class="icon icon-cancel hwp-full-side"></i></div>
 
-                <?php do_action('sb_notification_above_content', $id); ?>
+                <?php do_action('hollerbox_above_content', $id); ?>
                 
-                <div class="sb-box-rows">
+                <div class="hwp-box-rows">
                         <?php if( !empty($avatar_email) ) echo get_avatar($avatar_email, 50 ); ?>
-                    <div class="sb-row sb-first-row"></div>
+                    <div class="hwp-row hwp-first-row"></div>
                 </div>
 
-                <div class="sb-row sb-note-optin sb-email-row sb-hide">
-                    <?php do_action('sb_email_form', $id); ?>
+                <div class="hwp-row hwp-note-optin hwp-email-row hwp-hide">
+                    <?php do_action('hwp_email_form', $id); ?>
                 </div>
                 
-                <div class="sb-chat sb-hide">
+                <div class="hwp-chat hwp-hide">
                     
-                    <div class="sb-row sb-text">
-                        <input type="text" class="sb-text-input" placeholder="Type your message" />
+                    <div class="hwp-row hwp-text">
+                        <input type="text" class="hwp-text-input" placeholder="Type your message" />
                         <i class="icon icon-mail"></i>
                     </div>
                 </div>
 
-                <?php do_action('sb_notification_below_content', $id); ?>
+                <?php do_action('hollerbox_below_content', $id); ?>
 
-                <!-- <span class="sb-powered-by"><a href="http://scottbolinger.com" target="_blank">Scottomator</a></span> -->
+                <!-- <span class="hwp-powered-by"><a href="http://hollerwp.com" target="_blank">Holler</a></span> -->
 
                 </div>
  
@@ -294,10 +294,10 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 ?>
 
                 <!-- Begin MailChimp Signup Form -->
-                <form action="<?php echo $url; ?>" method="get" name="sb-mc-form" class="sb-mc-form">
-                    <input type="email" value="" name="EMAIL" class="sb-email-input" id="mce-EMAIL">
-                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="sb_hp" tabindex="-1" value=""></div>
-                    <button class="sb-email-btn"><?php echo _e('Send', 'sb-automation' ); ?></button>
+                <form action="<?php echo $url; ?>" method="get" name="hwp-mc-form" class="hwp-mc-form">
+                    <input type="email" value="" name="EMAIL" class="hwp-email-input" id="mce-EMAIL">
+                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>
+                    <button class="hwp-email-btn"><?php echo _e('Send', 'hollerbox' ); ?></button>
                 </form>
                 <!--End mc_embed_signup-->
 
@@ -306,16 +306,16 @@ if( !class_exists( 'SB_Automation_Functions' ) ) {
                 if( $provider === 'ck' )
                     echo '<input type="hidden" class="ck-form-id" value="' . get_post_meta( $id, 'ck_id', 1 ) . '" />';
                 ?>
-                <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="sb_hp" tabindex="-1" value=""></div>
-                <input type="email" name="email" class="sb-email-input" placeholder="Enter email" autocomplete="on" autocapitalize="off" />
-                <button class="sb-email-btn"><?php echo _e('Send', 'sb-automation' ); ?></button>
+                <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>
+                <input type="email" name="email" class="hwp-email-input" placeholder="Enter email" autocomplete="on" autocapitalize="off" />
+                <button class="hwp-email-btn"><?php echo _e('Send', 'hollerbox' ); ?></button>
                 <?php
             }
         }
 
     }
 
-    $sb_automation_functions = new SB_Automation_Functions();
-    $sb_automation_functions->instance();
+    $holler_Functions = new Holler_Functions();
+    $holler_Functions->instance();
 
 } // end class_exists check
