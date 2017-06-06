@@ -105,6 +105,12 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 update_option( 'hwp_ck_api_key', sanitize_text_field( $_POST['hwp_ck_api_key'] ) );
             }
 
+            if( isset( $_POST['hwp_powered_by'] ) ) {
+                update_option( 'hwp_powered_by', sanitize_text_field( $_POST['hwp_powered_by'] ) );
+            } elseif( !empty( $_POST ) && empty( $_POST['hwp_powered_by'] )  ) {
+                delete_option( 'hwp_powered_by' );
+            }
+
             ?>
             <div id="holler-wrap" class="wrap">          
 
@@ -117,6 +123,13 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <p><?php _e('Enter your Convertkit API key, it can be found on your <a href="https://app.convertkit.com/account/edit#account_info" target="_blank">account info page.</a>', 'hollerbox'); ?></p>
                 
                 <input id="hwp_ck_api_key" name="hwp_ck_api_key" value="<?php echo esc_html( get_option( 'hwp_ck_api_key' ) ); ?>" placeholder="Convertkit API key" type="text" size="50" />
+
+                <h3><?php _e('Miscellaneous', 'hollerbox'); ?></h3>
+
+                <p>
+                    <input type="checkbox" id="hwp_powered_by" name="hwp_powered_by" value="1" <?php checked('1', get_option( 'hwp_powered_by' ), true); ?> />
+                    <?php _e( 'Hide attribution links', 'hollerbox' ); ?>
+                </p>
 
             <?php submit_button(); ?>
 
