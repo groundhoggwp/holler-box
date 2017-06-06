@@ -317,10 +317,10 @@
 
 span.hwp-powered-by a {
     font-size: 10px;
-    float: right;
-    color: #777;
-    text-decoration: underline;
-    margin-top: 5px;
+    color: #bbb !important;
+    text-decoration: none;
+    position: relative;
+    top: 5px;
 }
 
 /*

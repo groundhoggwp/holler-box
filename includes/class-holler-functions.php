@@ -254,7 +254,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                 <?php do_action('hollerbox_below_content', $id); ?>
 
-                <!-- <span class="hwp-powered-by"><a href="http://hollerwp.com" target="_blank">Holler</a></span> -->
+                <span class="hwp-powered-by"><a href="http://hollerwp.com" target="_blank">Holler Box</a></span>
 
                 </div>
  

@@ -174,10 +174,8 @@
 
     var item = document.getElementById( 'hwp-' + id );
 
-    $('#hwp-' + id + ' .hwp-first-row').html( options.content );
-
     // visitor has hidden this item, don't show box
-    if( options.hideFirst === 'true' || holler.getCookie( 'hwp-' + id + '_hide' ) === 'true' ) {
+    if( holler.getCookie( 'hwp-' + id + '_hide' ) === 'true' ) {
 
       // hide box, show btn
       holler.transitionOut( item );
@@ -187,31 +185,28 @@
 
     } else {
 
-      // Show the box
+      // Show the box and what's in it
       holler.transitionIn( item );
+
+      // box content
+      $('#hwp-' + id + ' .hwp-first-row').html( options.content );
 
       if( options.hideBtn != '1' && options.position != 'holler-banner' )
         holler.transitionOut( holler.floatingBtn );
 
-    }
+      // Show email opt-in, but not if we have a chatbox (it gets shown after user input)
+      if( options.showEmail === "1" && options.showChat != "1" )
+        holler.showEmailSubmit( id );
 
-    // Show email opt-in, but not if we have a chatbox (it gets shown after user input)
-    if( options.showEmail === "1" && options.showChat != "1" ) {
-      
-      holler.showEmailSubmit( id );
+      // show the chatbox
+      if( options.showChat === '1' )
+        holler.transitionIn( document.querySelector( '#hwp-' + id + ' .hwp-chat' ) );
 
     }
 
     // Button should not be shown
     if( options.hideBtn === '1' )
       holler.hide( holler.floatingBtn );
-
-    // show the chatbox
-    if( options.showChat === '1' ) {
-
-      holler.transitionIn( document.querySelector( '#hwp-' + id + ' .hwp-chat' ) );
-
-    }
 
     if( options.position === 'holler-banner' && holler.getCookie( 'hwp-' + id + '_hide' ) != 'true' )
       holler.toggleBnrMargin( id );
@@ -343,11 +338,6 @@
       holler.setCookie( 'hwp-' + id + '_hide', 'true', -1 );
     } else {
       holler.setCookie( 'hwp-' + id + '_hide', 'true', 1 );
-
-      setTimeout( function() {
-        // clear current chat if hidden
-        holler.clearChat( id );
-      }, 1000);
     }
 
     holler.showNote( id );
@@ -478,6 +468,8 @@
 
   // Show email field
   holler.showEmailSubmit = function( id ) {
+
+    console.log('show email submit')
 
     var emailRow = $('#hwp-' + id + ' .hwp-email-row');
 
@@ -740,10 +732,10 @@
       data: params
       })
       .done(function(msg) {
-        console.log(msg);
+        //console.log(msg);
       })
       .fail(function(err) {
-        console.log(err);
+        //console.log(err);
       });
 
   }

@@ -5,7 +5,7 @@
  * Description:     Convert visitors to customers with personalized messaging.
  * Version:         0.4
  * Author:          Scott Bolinger
- * Author URI:      http://hollerwp.com
+ * Author URI:      http://scottbolinger.com
  * Text Domain:     hollerbox
  *
  * @author          Scott Bolinger
