@@ -105,6 +105,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 update_option( 'hwp_ck_api_key', sanitize_text_field( $_POST['hwp_ck_api_key'] ) );
             }
 
+            if( isset( $_POST['hwp_email_title'] ) ) {
+                update_option( 'hwp_email_title', sanitize_text_field( $_POST['hwp_email_title'] ) );
+            }
+
             if( isset( $_POST['hwp_powered_by'] ) ) {
                 update_option( 'hwp_powered_by', sanitize_text_field( $_POST['hwp_powered_by'] ) );
             } elseif( !empty( $_POST ) && empty( $_POST['hwp_powered_by'] )  ) {
@@ -118,9 +122,13 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             <form method="post" action="edit.php?post_type=hollerbox&page=hollerbox">
 
-                <h3><?php _e('Convertkit', 'hollerbox'); ?></h3>
+                <h3><?php _e('Email Settings', 'hollerbox'); ?></h3>
 
-                <p><?php _e('Enter your Convertkit API key, it can be found on your <a href="https://app.convertkit.com/account/edit#account_info" target="_blank">account info page.</a>', 'hollerbox'); ?></p>
+                <p><?php _e('Email title', 'hollerbox'); ?></p>
+                
+                <input id="hwp_email_title" name="hwp_email_title" value="<?php echo esc_html( get_option( 'hwp_email_title' ) ); ?>" placeholder="New Holler Box Message" type="text" size="50" />
+
+                <p><?php _e('If you are using Convertkit, entery your API key. It can be found on your <a href="https://app.convertkit.com/account/edit#account_info" target="_blank">account info page.</a>', 'hollerbox'); ?></p>
                 
                 <input id="hwp_ck_api_key" name="hwp_ck_api_key" value="<?php echo esc_html( get_option( 'hwp_ck_api_key' ) ); ?>" placeholder="Convertkit API key" type="text" size="50" />
 
@@ -492,6 +500,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 update_post_meta( $post->ID, 'hide_for_days', 1 );
                 update_post_meta( $post->ID, 'hwp_active', '1' );
                 update_post_meta( $post->ID, 'position', 'hwp-bottomright' );
+                update_post_meta( $post->ID, 'opt_in_placeholder', 'Enter your email' );
 
             }
 

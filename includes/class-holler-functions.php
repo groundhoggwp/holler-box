@@ -291,7 +291,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                 // add /post to url
                 $url = explode( '?', $url );
-                $url = $url[0] . 'post-json?' . $url[1];
+                $url = trailingslashit( $url[0] ) . 'post-json?' . $url[1];
 
                 ?>
 

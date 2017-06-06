@@ -85,11 +85,13 @@ if( !class_exists( 'Holler_Ajax' ) ) {
 
             $id = $_GET['id'];
 
+            $title = ( !empty( get_option( 'hwp_email_title' ) ) ? get_option( 'hwp_email_title' ) : "New Holler Box Message" );
+
             $sendto = get_post_meta( $id, 'opt_in_send_to', 1);
 
             $headers = array( 'Reply-To: <' . $email . '>' );
 
-            $success = wp_mail( $sendto, 'New Message', $msg, $headers );
+            $success = wp_mail( $sendto, $title, $msg, $headers );
 
             wp_send_json_success( 'Sent ' . $msg . ' from ' . $email . ' Success: ' . $success );
                 
