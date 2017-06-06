@@ -4,7 +4,7 @@ Contributors: scottopolis
 Tags: popup, optin, mailchimp, wordpress popup
 Requires at least: 4.5
 Tested up to: 4.7.5
-Stable tag: 0.4
+Stable tag: 0.4.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -98,5 +98,13 @@ Content can be pretty much anything, but keep your message short.
 8. CPT
 
 == Changelog ==
+
+= 0.4.1 =
+
+* Fix MailChimp url trailing slash
+* Email title setting
+* Various fixes
+
+= 0.4 = 
 
 * Initial release
