@@ -1,4 +1,4 @@
-=== Holler Box - create perfectly timed messages with this popup alternative ===
+=== Holler Box - Perfectly Timed, Non-Intrusive Popup Messages ===
 
 Contributors: scottopolis
 Tags: popup, optin, mailchimp, wordpress popup
@@ -8,7 +8,7 @@ Stable tag: 0.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Convert more visitors to customers with perfectly timed messages.
+Convert more visitors to customers with personalized popup messages.
 
 == Description ==
 
@@ -16,9 +16,11 @@ Show customizable marketing messages to your site visitors easily, with beautifu
 
 Easily announce a sale, webinar, new article, email opt-in, and lots more.
 
-Choose between a notification box and a banner, add your message and customize. Use our smart filter system to show to the right visitor at the right time.
+Use our smart filter system to show to the right visitor at the right time.
 
 Keep track of who has seen your messages and how well they are working, so you can tweak and improve.
+
+See live demos at the <a href="http://hollerwp.com/" target="_blank">Holler Box website</a>.
 
 ## What can you do with it?
 
@@ -30,7 +32,7 @@ Choose where and when you show it, and to which visitors. For example, show your
 
 **Header Banner** 
 
-Show a header banner to announce a sale, keep track of how many people click on it. 
+Show a header banner to announce a sale, keep track of how many people click on it. (Pro only)
 
 **(Fake) Live Chat with Opt-in**
 
@@ -40,13 +42,9 @@ Show a live chat box to collect customer questions and emails, without having to
 
 Embed anything into your Holler Box, including a feedback form or poll.
 
-**Design**
+**Impressions and Conversions**
 
-Choose a notification box or a banner, customize
-
-**Analytics**
-
-See how your messages are performing. Track link clicks, message opens, and more.
+See how your messages are performing. Track views and conversions (link clicks and message opens) so you can optimize and improve. 
 
 **Interactivity**
 
@@ -65,7 +63,10 @@ Content can be pretty much anything, but keep your message short.
 - Activate: Choose to activate this item on publish.
 - Position: the notification position, or banner
 - Choose your colors
-- Show email opt-in: default sends to your email address, or choose a provider or custom HTML form.
+- Show email opt-in: default sends to your email address, or choose a provider or custom HTML form. Details below.
+- Default: sends to the email address you enter in the settings.
+- MailChimp integration: enter your <a href="http://kb.mailchimp.com/lists/signup-forms/share-your-signup-form" target="_blank">full signup form url</a>. (Must not be the shortened url) 
+- Convertkit: visit Holler Box => Settings, enter <a href="https://app.convertkit.com/account/edit" target="_blank">your API key</a>. Choose Convertkit when creating your new Holler Box, then enter your form ID. Find your form ID by visiting your signup form, then copy the numbers in the url (or in the embed code).
 - Show chat: show the (fake) live chat
 
 **Advanced Settings**
