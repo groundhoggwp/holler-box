@@ -3,8 +3,8 @@
 Contributors: scottopolis
 Tags: popup, optin, mailchimp, wordpress popup
 Requires at least: 4.5
-Tested up to: 4.7.5
-Stable tag: 0.4.1
+Tested up to: 4.8
+Stable tag: 0.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -142,6 +142,10 @@ Make sure your email form does not have a required field that is not displayed. 
 8. CPT
 
 == Changelog ==
+
+= 0.5.0 =
+
+* BREAKING CHANGE: If using MailChimp, please visit Holler Box => Settings and add a MailChimp API key. Next, visit your Holler Box and change your MailChimp list URL to your list ID, then save.
 
 = 0.4.1 =
 

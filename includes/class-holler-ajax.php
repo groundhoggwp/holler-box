@@ -54,6 +54,9 @@ if( !class_exists( 'Holler_Ajax' ) ) {
             add_action( 'wp_ajax_nopriv_hwp_send_email', array( $this, 'hwp_send_email' ) );
             add_action( 'wp_ajax_hwp_send_email', array( $this, 'hwp_send_email' ) );
 
+            add_action( 'wp_ajax_nopriv_hwp_mc_subscribe', array( $this, 'hwp_mc_subscribe' ) );
+            add_action( 'wp_ajax_hwp_mc_subscribe', array( $this, 'hwp_mc_subscribe' ) );
+
             add_action( 'wp_ajax_nopriv_hwp_track_event', array( $this, 'hwp_track_event' ) );
             add_action( 'wp_ajax_hwp_track_event', array( $this, 'hwp_track_event' ) );
 
@@ -95,6 +98,66 @@ if( !class_exists( 'Holler_Ajax' ) ) {
 
             wp_send_json_success( 'Sent ' . $msg . ' from ' . $email . ' Success: ' . $success );
                 
+        }
+
+        /**
+         * Subscribe user via MailChimp API
+         * Help from https://www.codexworld.com/add-subscriber-to-list-mailchimp-api-php/
+         * 
+         *
+         * @since       0.1.0
+         * @return      void
+         */
+        public function hwp_mc_subscribe() {
+
+            if( empty( $_GET['nonce'] ) || !wp_verify_nonce( $_GET['nonce'], 'holler-box' ) ) {
+                wp_send_json_error('Verification failed.' );
+            }
+
+            $list_id = $_GET['list_id'];
+
+            $email = $_GET['email'];
+
+            // MailChimp API credentials
+            $api_key = get_option('hwp_mc_api_key');
+
+            if( empty( $list_id ) || empty( $api_key ) || empty( $email ) )
+                wp_send_json_error('Missing required field.');
+
+            $headers = array(
+                'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key ),
+                'Content-Type' => 'application/json'
+              );
+            
+            // MailChimp API URL
+            $member_id = md5(strtolower($email));
+            $data_center = substr($api_key,strpos($api_key,'-')+1);
+            $url = 'https://' . $data_center . '.api.mailchimp.com/3.0/lists/' . $list_id . '/members/' . $member_id;
+            
+            // member information
+            $body = json_encode( array(
+                'email_address' => $email,
+                'status'        => 'pending'
+                // 'merge_fields'  => [
+                //     'FNAME'     => $fname,
+                //     'LNAME'     => $lname
+                // ]
+            ) );
+
+            $response = wp_remote_post( $url, array(
+                'method' => 'PUT',
+                'timeout' => 15,
+                'headers' => $headers,
+                'body' => $body
+                )
+            );
+
+            if ( is_wp_error( $response ) ) {
+               $error_message = $response->get_error_message();
+               wp_send_json_error( $error_message );
+            } else {
+               wp_send_json_success( $response );
+            }
         }
 
         /**

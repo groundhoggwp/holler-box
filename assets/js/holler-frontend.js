@@ -528,7 +528,7 @@
       holler.ckSubscribe( email, id );
       return;
     } else if( window.hollerVars[id].emailProvider === 'mc' ) {
-      holler.mcSubscribe( id );
+      holler.mcSubscribe( email, id );
       return;
     }
 
@@ -576,47 +576,28 @@
 
   }
 
-  // Submit the form with an ajax/jsonp request.
-  // https://github.com/rydama/mailchimp-ajax-signup/blob/master/ajax-subscribe.html
-  // Based on http://stackoverflow.com/a/15120409/215821
-  holler.mcSubscribe = function( id ) {
+  // Submit to MailChimp
+  holler.mcSubscribe = function( email, id ) {
 
-    var form = $('#hwp-' + id + ' form.hwp-mc-form');
+    var listId = $('#hwp-' + id + ' .mc-list-id').val();
 
     $.ajax({
-        type: "GET",
-        url: form.attr("action"),
-        data: form.serialize(),
-        cache: false,
-        dataType: "jsonp",
-        jsonp: "c", // trigger MailChimp to return a JSONP response
-        contentType: "application/json; charset=utf-8",
-        error: function(error){
-            // According to jquery docs, this is never called for cross-domain JSONP requests
-            console.log(error)
-        },
-        success: function(data){
-            if (data.result != "success") {
+      method: "GET",
+      url: window.hollerVars.ajaxurl,
+      data: { email: email, list_id: listId, action: 'hwp_mc_subscribe', nonce: window.hollerVars.hwpNonce }
+      })
+      .done(function(msg) {
+        console.log(msg);
 
-                var message = data.msg || "Sorry. Unable to subscribe. Please try again later.";
-                if (data.msg && data.msg.indexOf("already subscribed") >= 0) {
-                    message = "You're already subscribed. Thank you.";
-                }
+        // reset to defaults
+        holler.showConfirmation( id );
+        $('#hwp-' + id + ' .hwp-email-row').hide();
+        holler.conversion( id );
 
-                $('#hwp-' + id + ' .hwp-email-row').prepend('<span id="hwp-err">' + message + '</span>');
-
-                setTimeout( function() {
-                  $('#hwp-err').remove();
-                }, 3000);
-
-            } else {
-              // reset to defaults
-              holler.showConfirmation( id );
-              $('#hwp-' + id + ' .hwp-email-row').hide();
-              holler.conversion( id );
-            }
-        }
-    });
+      })
+      .fail(function(err) {
+        console.log(err);
+      });
 
   }
 

@@ -278,39 +278,19 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $provider = get_post_meta( $id, 'email_provider', 1 );
 
+            $mc_list_id = get_post_meta( $id, 'mc_list_id', 1 );
+
             if( $provider === 'custom' ) {
 
                 echo get_post_meta( $id, 'custom_email_form', 1 );
 
-            } elseif( $provider === 'mc' ) {
-
-                $url = get_post_meta( $id, 'mc_url', 1 );
-
-                // parse url to get captcha name attribute
-                $parts = parse_url($url);
-                parse_str($parts['query'], $query);
-                $u = ( isset( $query['u'] ) ? $query['u'] : '' );
-                $list_id = ( isset( $query['amp;id'] ) ? $query['amp;id'] : '' );
-                $captcha_name = 'b_' . $u . '_' . $list_id;
-
-                // add /post to url
-                $url = explode( '?', $url );
-                $url = trailingslashit( $url[0] ) . 'post-json?' . $url[1];
-
-                ?>
-
-                <!-- Begin MailChimp Signup Form -->
-                <form action="<?php echo $url; ?>" method="get" name="hwp-mc-form" class="hwp-mc-form">
-                    <input type="email" value="" name="EMAIL" class="hwp-email-input" id="mce-EMAIL">
-                    <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>
-                    <button class="hwp-email-btn"><?php echo _e('Send', 'hollerbox' ); ?></button>
-                </form>
-                <!--End mc_embed_signup-->
-
-                <?php
             } else {
-                if( $provider === 'ck' )
+
+                if( $provider === 'ck' ) {
                     echo '<input type="hidden" class="ck-form-id" value="' . get_post_meta( $id, 'ck_id', 1 ) . '" />';
+                } elseif( $provider === 'mc' && !empty( $mc_list_id ) ) {
+                    echo '<input type="hidden" class="mc-list-id" value="' . get_post_meta( $id, 'mc_list_id', 1 ) . '" />';
+                }
                 ?>
                 <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>
                 <input type="email" name="email" class="hwp-email-input" placeholder="Enter email" autocomplete="on" autocapitalize="off" />

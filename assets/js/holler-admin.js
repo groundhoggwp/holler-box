@@ -89,7 +89,7 @@
     var checkedVal = $('input[name=email_provider]:checked').val();
     var itemTypeVal = $('input[name=item_type]:checked').val();
     var optin = $("#hwp-note-optin");
-    var mcUrl = $('#mc_url, .mc-description');
+    var mcUrl = $('#mc_list_id, .mc-description');
     var ckId = $('#ck_id');
 
     // Show optin in preview

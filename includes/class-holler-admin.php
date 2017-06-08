@@ -60,7 +60,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
             add_filter('manage_edit-hollerbox_columns', array( $this, 'notification_columns' ) );
             add_action( 'manage_hollerbox_posts_custom_column', array( $this, 'custom_columns' ), 10, 2 );
             add_action(  'transition_post_status',  array( $this, 'save_default_meta' ), 10, 3 );
-
         }
 
         /**
@@ -105,6 +104,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 update_option( 'hwp_ck_api_key', sanitize_text_field( $_POST['hwp_ck_api_key'] ) );
             }
 
+            if( isset( $_POST['hwp_mc_api_key'] ) ) {
+                update_option( 'hwp_mc_api_key', sanitize_text_field( $_POST['hwp_mc_api_key'] ) );
+            }
+
             if( isset( $_POST['hwp_email_title'] ) ) {
                 update_option( 'hwp_email_title', sanitize_text_field( $_POST['hwp_email_title'] ) );
             }
@@ -131,6 +134,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <p><?php _e('If you are using Convertkit, entery your API key. It can be found on your <a href="https://app.convertkit.com/account/edit#account_info" target="_blank">account info page.</a>', 'hollerbox'); ?></p>
                 
                 <input id="hwp_ck_api_key" name="hwp_ck_api_key" value="<?php echo esc_html( get_option( 'hwp_ck_api_key' ) ); ?>" placeholder="Convertkit API key" type="text" size="50" />
+
+                <p><?php _e('If you are using MailChimp, entery your API key. It can be found under Account -> Extras -> API Keys.', 'hollerbox'); ?></p>
+                
+                <input id="hwp_mc_api_key" name="hwp_mc_api_key" value="<?php echo esc_html( get_option( 'hwp_mc_api_key' ) ); ?>" placeholder="MailChimp API key" type="text" size="50" />
 
                 <h3><?php _e('Miscellaneous', 'hollerbox'); ?></h3>
 
@@ -327,7 +334,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <input type="radio" name="email_provider" value="ck" <?php checked("ck", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
                     <?php _e( 'Convertkit', 'hollerbox' ); ?><input id="ck_id" name="ck_id" value="<?php echo get_post_meta( $post->ID, 'ck_id', 1 ); ?>" placeholder="Convertkit list ID" type="text" /><br>
                     <input type="radio" name="email_provider" value="mc" <?php checked("mc", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
-                    <?php _e( 'MailChimp', 'hollerbox' ); ?><input id="mc_url" name="mc_url" placeholder="MailChimp list url" value="<?php echo get_post_meta( $post->ID, 'mc_url', 1 ); ?>" type="text" /> <span class="mc-description">Get your list url under Signup forms => General forms => Signup form URL. Do not use shortened url.</span><br>
+                    <?php _e( 'MailChimp', 'hollerbox' ); ?><input id="mc_list_id" name="mc_list_id" placeholder="MailChimp list ID" value="<?php echo get_post_meta( $post->ID, 'mc_list_id', 1 ); ?>" type="text" /> <span class="mc-description">Get your list ID under Lists => Settings => List name and defaults => List ID (on right side of screen)</span><br>
                     <input type="radio" name="email_provider" value="custom" <?php checked("custom", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
                     <?php _e( 'Custom', 'hollerbox' ); ?>
                     </p>
@@ -553,7 +560,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'email_provider',
                 'custom_email_form',
                 'ck_id',
-                'mc_url' );
+                'mc_list_id' );
 
             global $allowedposttags;
             $allowedposttags["iframe"] = array(
