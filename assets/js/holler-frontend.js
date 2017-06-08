@@ -581,6 +581,11 @@
 
     var listId = $('#hwp-' + id + ' .mc-list-id').val();
 
+    if( !listId ) {
+      alert("MailChimp list ID is missing.");
+      return;
+    }
+
     $.ajax({
       method: "GET",
       url: window.hollerVars.ajaxurl,

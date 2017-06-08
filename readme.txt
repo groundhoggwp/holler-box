@@ -87,21 +87,17 @@ Developers can contribute on Github https://github.com/scottopolis/holler-box
 
 Yes, if you have an SMTP plugin like Postman, Mailgun, or other mail plugin it will automatically use that to send mail.
 
-*How do I find my MailChimp form url?*
+*How do I setup MailChimp?*
 
-In your MailChimp account, go to Lists => Your List => Signup Forms => General Forms.
+First, add your API key under Holler Box => Settings.
 
-<img src="http://hollerwp.com/wp-content/uploads/2017/06/Screen-Shot-2017-06-06-at-1.29.42-PM-300x158.png" alt="" width="300" height="158" class="alignnone size-medium wp-image-74" />
+You can find your API key in your MailChimp account under Account => Extras => API Keys. Generate a new one if it doesn't exist.
 
-Copy the list url.
+Save your API key.
 
-<img src="http://hollerwp.com/wp-content/uploads/2017/06/Screen-Shot-2017-06-06-at-1.29.51-PM-300x95.png" alt="" width="300" height="95" class="alignnone size-medium wp-image-75" />
+Next, in your Holler Box, choose Mailchimp as the opt-in provider. Add your list ID. You can find this under Lists => Your List => Settings => List name and defaults. Look on the right side of the screen for List ID.
 
-Next, to un-shorten the link: Paste it into your web browser's address bar, and press enter. It will go to your signup form on the web, copy the address in your address bar now. The url should look like this:
-
-http://mycompany.us16.list-manage2.com/subscribe?u=d7sgadsg8d8f999asf9&id=590bg8f9d
-
-That is the url you will use in the MailChimp list setting.
+Copy/paste that into the MailChimp list ID field and save.
 
 <strong>How do I find my Convertkit form ID and API key?</strong>
 

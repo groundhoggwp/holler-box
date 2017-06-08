@@ -280,6 +280,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $mc_list_id = get_post_meta( $id, 'mc_list_id', 1 );
 
+            $mc_url = get_post_meta( $id, 'mc_url', 1 );
+
+            if( $mc_url && empty( $mc_list_id ) && is_user_logged_in() ) {
+                echo 'Site admin: please update your MailChimp settings.';
+            }
+
             if( $provider === 'custom' ) {
 
                 echo get_post_meta( $id, 'custom_email_form', 1 );
