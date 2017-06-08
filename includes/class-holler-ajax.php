@@ -88,7 +88,9 @@ if( !class_exists( 'Holler_Ajax' ) ) {
 
             $id = $_GET['id'];
 
-            $title = ( !empty( get_option( 'hwp_email_title' ) ) ? get_option( 'hwp_email_title' ) : "New Holler Box Message" );
+            $title = get_option( 'hwp_email_title' );
+
+            $title = ( !empty( $title ) ? $title : "New Holler Box Message" );
 
             $sendto = get_post_meta( $id, 'opt_in_send_to', 1);
 

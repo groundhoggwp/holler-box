@@ -494,10 +494,12 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 if( !empty( get_post_meta( $post->ID, 'item_type' ) ) )
                     return;
 
+                $avatar_email = get_option('admin_email');
+
                 // set some defaults
                 update_post_meta( $post->ID, 'show_on', 'all' );
                 update_post_meta( $post->ID, 'logged_in', 'all' );
-                update_post_meta( $post->ID, 'avatar_email', get_option('admin_email') );
+                update_post_meta( $post->ID, 'avatar_email', $avatar_email );
                 update_post_meta( $post->ID, 'display_when', 'delay' );
                 update_post_meta( $post->ID, 'scroll_delay', 1 );
                 update_post_meta( $post->ID, 'show_settings', 'always' );
