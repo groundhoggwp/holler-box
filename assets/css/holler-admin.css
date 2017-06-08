@@ -1,5 +1,13 @@
+.hwp-settings-group {
+	margin: 10px 0;
+}
+
 #show-certain-pages, #show-email-options, #hwp-until-datepicker, #custom-email-options, #default-email-options, #mc_url, #ck_id {
 	display: none;
+}
+
+.hwp-hidden-field {
+	margin-bottom: 10px;
 }
 
 .hwp-datepicker {

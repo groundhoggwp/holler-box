@@ -379,57 +379,60 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             <label><?php _e( 'What pages?', 'hollerbox' ); ?></label>
 
-            <p>
+            <div class="hwp-settings-group">
                 <input type="radio" name="show_on" value="all" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "all" ) echo 'checked="checked"'; ?>> All pages<br>
                 <input type="radio" name="show_on" value="limited" <?php if( is_array( get_post_meta( $post->ID, 'show_on', 1 ) ) ) echo 'checked="checked"'; ?>> Certain pages<br>
-                <div id="show-certain-pages">
+                <div id="show-certain-pages" class="hwp-hidden-field">
                 <p>Enter page/post IDs, separated by comma:</p>
                 <input placeholder="Example: 2,25,311" class="widefat" type="text" name="hwp_page_ids" id="hwp_page_ids" value="<?php echo esc_attr( get_post_meta( $post->ID, 'hwp_page_ids', true ) ); ?>" size="20" />
                 </div>
-            </p>
+
+                <?php do_action('hwp_page_settings', $post->ID ); ?>
+
+            </div>
 
             <hr>
 
             <label>Show to these visitors</label>
 
-            <p> 
+            <div class="hwp-settings-group"> 
                 <input type="radio" name="logged_in" value="logged_in" <?php checked('logged_in', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> Logged in only<br>
                 <input type="radio" name="logged_in" value="logged_out" <?php checked('logged_out', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> Logged out only<br>
                 <input type="radio" name="logged_in" value="all" <?php checked('all', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> All visitors<br>
-            </p>
+            </div>
             <hr>
             <p><label for="visitor"><?php _e( 'New or returning', 'hollerbox' ); ?></label></p>
-            <p>
+            <div class="hwp-settings-group">
                 <input type="radio" name="new_or_returning" value="new" <?php checked('new', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> New visitors only<br>
                 <input type="radio" name="new_or_returning" value="returning" <?php checked('returning', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> Returning visitors only<br>
                 <input type="radio" name="new_or_returning" value="all" <?php checked('all', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> All visitors<br>
-            </p>
+            </div>
             <hr>
             <p>
                 <label for="visitor"><?php _e( 'When should we show it?', 'hollerbox' ); ?></label>
             </p>
-            <p>
+            <div class="hwp-settings-group">
                 <input type="radio" name="display_when" value="immediately" <?php checked('immediately', get_post_meta( $post->ID, 'display_when', true ), true); ?>> Immediately<br>
                 <input type="radio" name="display_when" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'display_when', true ), true); ?>> Delay of <input type="number" class="hwp-number-input" id="scroll_delay" name="scroll_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'scroll_delay', true ) ); ?>" /> seconds<br>
                 <input type="radio" name="display_when" value="scroll" <?php checked('scroll', get_post_meta( $post->ID, 'display_when', true ), true); ?>> User scrolls halfway down the page
-            </p>
+            </div>
             <hr>
             <p>
                 <label for="hide_after"><?php _e( 'After it displays, when should it disappear?', 'hollerbox' ); ?></label>
             </p>
-            <p>
+            <div class="hwp-settings-group">
                 <input type="radio" name="hide_after" value="never" <?php checked('never', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> When user clicks hide<br>
                 <input type="radio" name="hide_after" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> Delay of <input type="number" class="hwp-number-input" id="hide_after_delay" name="hide_after_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_after_delay', true ) ); ?>" /> seconds<br>
-            </p>
+            </div>
             <hr>
             <p>
                 <label for="show_settings"><?php _e( 'How often should we show it to each visitor?', 'hollerbox' ); ?></label>
             </p>
-            <p>
+            <div class="hwp-settings-group">
                 <input type="radio" name="show_settings" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Every page load<br>
                 <input type="radio" name="show_settings" value="hide_for" <?php checked('hide_for', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Show, then hide for <input type="number" class="hwp-number-input" id="hide_for_days" name="hide_for_days" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_for_days', true ) ); ?>" /> days<br>
                 <input type="radio" name="show_settings" value="interacts" <?php checked('interacts', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> Hide after user interacts (clicks link or submits email)
-            </p>
+            </div>
             <hr>
             <p>
                 <input type="checkbox" id="hide_btn" name="hide_btn" value="1" <?php checked(1, get_post_meta( $post->ID, 'hide_btn', true ), true); ?> />
@@ -441,7 +444,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <input type="text" class="widefat" name="avatar_email" size="20" value="<?php echo sanitize_email( get_post_meta( $post->ID, 'avatar_email', true ) ); ?>" /> 
             </p>
 
-            <?php do_action('hwp_advanced_settings', $post->ID ); ?>
+            <?php do_action('hwp_advanced_settings_after', $post->ID ); ?>
 
         <?php }
 
@@ -563,6 +566,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'custom_email_form',
                 'ck_id',
                 'mc_list_id' );
+
+            $keys = apply_filters( 'hwp_settings_array', $keys );
 
             global $allowedposttags;
             $allowedposttags["iframe"] = array(

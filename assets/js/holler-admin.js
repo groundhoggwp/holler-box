@@ -55,11 +55,32 @@
 
   holler.toggleShowOn = function() {
 
-  	if( $('input[name=show_on]:checked').val() === 'limited' ) {
-  		$('#show-certain-pages').show();
-  	} else {
-  		$('#show-certain-pages').hide();
-  	}
+    var showOnVal = $('input[name=show_on]:checked').val();
+    var certainPages = $('#show-certain-pages');
+    var cats = $('#hwp-cats');
+    var tags = $('#hwp-tags');
+
+    switch( showOnVal ) {
+      case 'limited':
+        cats.hide();
+        tags.hide();
+        certainPages.show();
+        break;
+      case 'cats':
+        cats.show();
+        tags.hide();
+        certainPages.hide();
+        break;
+      case 'tags':
+        tags.show();
+        cats.hide();
+        certainPages.hide();
+        break;
+      default:
+        cats.hide();
+        tags.hide();
+        certainPages.hide();
+    }
 
   }
 
