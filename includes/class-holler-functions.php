@@ -231,7 +231,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                 <div class="holler-inside">
                 
-                <div class="hwp-close"><i class="icon icon-cancel"></i> <i class="icon icon-cancel hwp-full-side"></i></div>
+                <div class="hwp-close"><i class="icon icon-cancel"></i></div>
 
                 <?php do_action('hollerbox_above_content', $id); ?>
                 

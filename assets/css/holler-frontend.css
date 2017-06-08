@@ -171,43 +171,6 @@
 	float: right;
 }
 
-.hwp-close .hwp-full-side, .hwp-show-full {
-	display: none;
-}
-
-.holler-box.hwp-full-side {
-	top: 0;
-	bottom: 0;
-	transition: all .1s;
-}
-
-.hwp-minimizing {
-	transition: none;
-}
-
-.holler-box.hwp-full-side .hwp-close .hwp-full-side, .holler-box.hwp-full-side .hwp-show-full {
-	display: block;
-}
-
-.holler-box.hwp-full-side .hwp-chat {
-	position: absolute;
-	bottom: 10px;
-    left: 10px;
-    right: 10px;
-}
-
-.admin-bar .holler-box.hwp-full-side {
-	top: 32px;
-}
-
-.hwp-bottomright.hwp-full-side, .hwp-topright.hwp-full-side {
-	right: 0;
-}
-
-.hwp-bottomleft.hwp-full-side, .hwp-topleft.hwp-full-side {
-	left: 0;
-}
-
 .holler-box p {
 	margin-bottom: 5px;
 }

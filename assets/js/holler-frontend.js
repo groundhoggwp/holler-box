@@ -116,10 +116,8 @@
     .on('click', '.hwp-close', holler.hideItem )
     .on('click', '#hwp-floating-btn', holler.btnClick )
     .on('click', '.hwp-interaction', holler.interactionLink )
-    .on('click', '.hwp-full-side', holler.fullSide )
     .on('click', '.hwp-text i', holler.sendText )
     .on('click', '#hwp-' + id + ' .hwp-email-btn', holler.emailSubmitClick )
-    // .on('submit', '.holler-box form', holler.handleForms );
 
     $('.hwp-text-input').on('keypress', holler.submitChatTextOnEnter );
 
@@ -144,26 +142,6 @@
           holler.show['hwp-' + id] = true
         }
       }, 250) )
-
-  }
-
-  holler.fullSide = function(e) {
-
-    // prevents firing twice
-    e.stopImmediatePropagation();
-
-    var id = $(e.target).closest('.holler-box').attr('id');
-
-    var item = $( '#' + id );
-    
-    item.toggleClass('hwp-full-side');
-
-    item.toggleClass('hwp-minimizing', !item.hasClass('hwp-full-side') );
-    setTimeout( function() {
-      item.removeClass('hwp-minimizing');
-    }, 1000);
-
-    return false;
 
   }
 
@@ -469,8 +447,6 @@
   // Show email field
   holler.showEmailSubmit = function( id ) {
 
-    console.log('show email submit')
-
     var emailRow = $('#hwp-' + id + ' .hwp-email-row');
 
     var options = window.hollerVars[id];
@@ -555,7 +531,6 @@
       data: { email: email, api_key: options.ckApi }
       })
       .done(function(msg) {
-        console.log(msg);
 
         // reset to defaults
         holler.showConfirmation( id );
@@ -592,7 +567,6 @@
       data: { email: email, list_id: listId, action: 'hwp_mc_subscribe', nonce: window.hollerVars.hwpNonce }
       })
       .done(function(msg) {
-        console.log(msg);
 
         // reset to defaults
         holler.showConfirmation( id );
@@ -615,7 +589,6 @@
       data: { email: email, id: id, msg: msg, action: 'hwp_send_email', nonce: window.hollerVars.hwpNonce }
       })
       .done(function(msg) {
-        console.log(msg);
 
         // reset to defaults
         holler.clearChat( id );
@@ -661,26 +634,13 @@
       data: params
       })
       .done(function(msg) {
-        console.log(msg);
+        // console.log(msg);
       })
       .fail(function(err) {
         console.log(err);
       });
 
     holler.setCookie('hwp_' + id + '_int', 'true', 1 );
-
-  }
-
-  // not used
-  holler.handleForms = function(e) {
-
-    var id = $(e.target).closest('.holler-box').attr('id').split('-')[1];
-
-    setTimeout( function() {
-      holler.conversion(id);
-      $(e.target).closest('.hwp-email-row').hide();
-      holler.showConfirmation(id);
-    }, 1000);
 
   }
 
