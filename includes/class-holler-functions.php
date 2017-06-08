@@ -107,7 +107,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 // adding the_content filter has crazy results, like CK forms
                 $content = apply_filters('hollerbox_content', $content, $value );
                 $content = do_shortcode( $content );
-                $content = apply_filters('the_content_more_link', $content);
+                // $content = apply_filters('the_content_more_link', $content);
                 $content = str_replace(']]>', ']]&gt;', $content);
 
                 $array[$value] = array( 
@@ -254,7 +254,11 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                 <?php do_action('hollerbox_below_content', $id); ?>
 
-                <?php if( empty( get_option( 'hwp_powered_by' ) ) ) : ?>
+                <?php 
+
+                $powered_by = get_option( 'hwp_powered_by' );
+
+                if( empty( $powered_by ) ) : ?>
                     <span class="hwp-powered-by"><a href="http://hollerwp.com" target="_blank">Holler Box</a></span>
                 <?php endif; ?>
 
