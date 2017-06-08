@@ -236,7 +236,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 <?php do_action('hollerbox_above_content', $id); ?>
                 
                 <div class="hwp-box-rows">
-                        <?php if( !empty($avatar_email) ) echo get_avatar($avatar_email, 50 ); ?>
+                        <?php if( !empty($avatar_email) ) echo get_avatar( apply_filters( 'hwp_avatar_email', $avatar_email, $id), 50 ); ?>
                     <div class="hwp-row hwp-first-row"></div>
                 </div>
 
