@@ -1,16 +1,6 @@
-=== Holler Box - Smart, Stylish Popup Messages ===
+# Holler Box
 
-Contributors: scottopolis
-Tags: popup, optin, mailchimp, wordpress popup
-Requires at least: 4.5
-Tested up to: 4.7.5
-Stable tag: 0.4.1
-License: GPLv2 or later
-License URI: http://www.gnu.org/licenses/gpl-2.0.html
-
-Convert more visitors to customers with personalized popup messages.
-
-== Description ==
+Smart, Stylish Popup Messages for WordPress sites.
 
 Show customizable marketing messages to your site visitors easily, with beautiful design. Convert website visitors, upsell customers, and get your message out to the right people at the right time.
 
@@ -20,7 +10,7 @@ Use our smart filter system to show to the right visitor at the right time.
 
 Keep track of who has seen your messages and how well they are working, so you can tweak and improve.
 
-See live demos at the <a href="http://hollerwp.com/" target="_blank">Holler Box website</a>.
+See live demos at the [Holler Box website](http://hollerwp.com/)
 
 ## What can you do with it?
 
@@ -50,9 +40,9 @@ See how your messages are performing. Track views and conversions (link clicks a
 
 Add a link, video, contact form, or simple opt-in form that integrates with major email providers like MailChimp and Convertkit.
 
-== Installation ==
+## Installation
 
-Install and activate this plugin.
+Go to your WordPress admin, Plugins => Add New, and search for "Holler Box." Install and activate.
 
 Visit the Holler Box menu item, and add a new box. Give it a title (not displayed on the front end), and add your content.
 
@@ -81,7 +71,7 @@ Content can be pretty much anything, but keep your message short.
 
 Developers can contribute on Github https://github.com/scottopolis/holler-box
 
-== FAQ ==
+## FAQ
 
 *Does it use the wp_mail() function to send mail?* 
 
@@ -117,38 +107,8 @@ That number is the form ID, in this case it's 445667. Enter that number as the C
 
 *Emails are not sending*
 
-The wp_mail() function is unreliable on many hosts. Install <a href="https://wordpress.org/plugins/postman-smtp/" target="_blank">Postman</a> or another SMTP plugin to use a more reliable mail service.
+The wp_mail() function is unreliable on many hosts. Install [Postman](https://wordpress.org/plugins/postman-smtp/) or another SMTP plugin to use a more reliable mail service.
 
 *Email signups are not working* 
 
 Make sure your email form does not have a required field that is not displayed. For example, if you required first and last name, it will not work. Change your form to only require email, the rest of the fields optional. If you need extra fields, use the custom HTML form option.
-
-== Screenshots ==
-
-1. Default notification box with link
-
-2. Opt-in form
-
-3. (Fake) Live chat with email capture
-
-4. Purchase notification
-
-5. Hidden view
-
-6. Display settings
-
-7. Advanced settings
-
-8. CPT
-
-== Changelog ==
-
-= 0.4.1 =
-
-* Fix MailChimp url trailing slash
-* Email title setting
-* Various fixes
-
-= 0.4 = 
-
-* Initial release
