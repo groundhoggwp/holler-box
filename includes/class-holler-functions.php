@@ -146,6 +146,10 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             // do checks for page conditionals, logged in, etc here
 
+            $continue = false;
+            global $post;
+            $post_id = $post->ID;
+
             foreach (self::$active as $key => $value) {
 
                 $should_expire = get_post_meta( $value, 'expiration', 1 );
@@ -155,7 +159,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     // check if we've passed expiration date
                     if( strtotime('now') >= strtotime( $expiration ) ) {
                         delete_post_meta( $value, 'hwp_active' );
-                        continue;
+                        $continue = true;
                     }
                 }
 
@@ -164,13 +168,48 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                 // check logged in conditional
                 if( $logged_in && $logged_in_meta === 'logged_out' || !$logged_in && $logged_in_meta === 'logged_in' )
-                    continue;
+                    $continue = true;
 
                 $show_on = get_post_meta( $value, 'show_on', 1 );
                 $page_id = get_the_ID();
+                $show_on_tags = get_post_meta( $value, 'hwp_show_on_tags', 1 );
+                $show_on_cats = get_post_meta( $value, 'hwp_show_on_cats', 1 );
 
                 // if page conditionals set, only show on those pages
-                if( is_array( $show_on ) && !in_array( $page_id, $show_on ) )
+                if( $show_on === 'limited' && !in_array( $page_id, $show_on ) ) {
+                    $continue = true;
+                } elseif( $show_on === 'tags' && $show_on_tags ) {
+
+                    // explode tags and check current tag
+                    $posttags = wp_get_post_terms( $post_id, 'post_tag', array("fields" => "names") );
+                    $show_on_tags = explode(",", $show_on_tags);
+
+                    // is this post in the show_on_tags tag?
+                    $tag_intersect = array_intersect( $posttags, $show_on_tags );
+
+                    // if not, don't show here
+                    if( empty( $tag_intersect ) )
+                        $continue = true;
+
+                } elseif( $show_on === 'cats' && $show_on_cats ) {
+
+                    // explode cats and check current cat
+                    $postcats = wp_get_post_terms( $post_id, 'category', array("fields" => "names") );
+                    $show_on_cats = explode(",", $show_on_cats);
+
+                    // is this post in the show_on_cats category?
+                    $cat_intersect = array_intersect( $postcats, $show_on_cats );
+
+                    // if not, don't show here
+                    if( empty( $cat_intersect ) )
+                        $continue = true;
+
+                }
+
+                // if continue is true, that means we do not display this notification
+                $continue = apply_filters( 'hwp_display_notification', $continue, $value );
+
+                if( $continue === true )
                     continue;
 
                 $this->display_notification_box( $value );
