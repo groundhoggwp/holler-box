@@ -381,10 +381,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             <div class="hwp-settings-group">
                 <input type="radio" name="show_on" value="all" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "all" ) echo 'checked="checked"'; ?>> All pages<br>
-                <input type="radio" name="show_on" value="limited" <?php if( is_array( get_post_meta( $post->ID, 'show_on', 1 ) ) ) echo 'checked="checked"'; ?>> Certain pages<br>
+                <input type="radio" name="show_on" value="limited" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "limited" ) echo 'checked="checked"'; ?>> Certain pages<br>
                 <div id="show-certain-pages" class="hwp-hidden-field">
                 <p>Enter page/post IDs, separated by comma:</p>
-                <input placeholder="Example: 2,25,311" class="widefat" type="text" name="hwp_page_ids" id="hwp_page_ids" value="<?php echo esc_attr( get_post_meta( $post->ID, 'hwp_page_ids', true ) ); ?>" size="20" />
+                <input placeholder="Example: 2,25,311" class="widefat" type="text" name="hwp_show_on_ids" id="hwp_show_on_ids" value="<?php echo implode( get_post_meta( $post->ID, 'hwp_show_on_ids', true ), ',' ); ?>" size="20" />
                 </div>
 
                 <?php do_action('hwp_page_settings', $post->ID ); ?>
@@ -543,6 +543,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             $keys = array(
                 'show_optin', 
+                'show_on',
                 'show_chat',
                 'opt_in_message',
                 'opt_in_confirmation',
@@ -615,17 +616,15 @@ if( !class_exists( 'Holler_Admin' ) ) {
             }
 
             // keys that need special handling
-            if( empty( $_POST[ 'show_on' ] ) ) {
-                delete_post_meta( $post_id, 'show_on' );
-            } elseif( $_POST[ 'show_on' ] === 'limited' && !empty( $_POST[ 'hwp_page_ids' ] ) ) {
+            if( empty( $_POST[ 'hwp_show_on_ids' ] ) ) {
+                delete_post_meta( $post_id, 'hwp_show_on_ids' );
+            } elseif( !empty( $_POST[ 'hwp_show_on_ids' ] ) ) {
 
                 // sanitize, remove whitespace, explode into array
-                $sanitized = sanitize_text_field( $_POST[ 'hwp_page_ids' ] );
+                $sanitized = sanitize_text_field( $_POST[ 'hwp_show_on_ids' ] );
                 $sanitized = preg_replace('/\s+/', '', $sanitized);
-                update_post_meta( $post_id, 'show_on', explode( ',', $sanitized ) );
+                update_post_meta( $post_id, 'hwp_show_on_ids', explode( ',', $sanitized ) );
 
-            } else {
-                update_post_meta( $post_id, 'show_on', $_POST[ 'show_on' ] );
             }
 
             // notification expiration date

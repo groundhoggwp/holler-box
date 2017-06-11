@@ -145,8 +145,9 @@ if( !class_exists( 'Holler_Functions' ) ) {
         public function maybe_display_items() {
 
             // do checks for page conditionals, logged in, etc here
+            // if any of the checks are true, we show it
 
-            $continue = false;
+            $show_it = false;
             $post_id = get_the_ID();
 
             foreach (self::$active as $key => $value) {
@@ -158,7 +159,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     // check if we've passed expiration date
                     if( strtotime('now') >= strtotime( $expiration ) ) {
                         delete_post_meta( $value, 'hwp_active' );
-                        $continue = true;
+                        $show_it = true;
                     }
                 }
 
@@ -167,12 +168,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                 // check logged in conditional
                 if( $logged_in && $logged_in_meta === 'logged_out' || !$logged_in && $logged_in_meta === 'logged_in' )
-                    $continue = true;
+                    $show_it = true;
 
-                // if continue is true, that means we do not display this notification. $value is holler box id
-                $continue = apply_filters( 'hwp_display_notification', $continue, $value, $post_id  );
+                // if show_it is true, that means we do not display this notification. $value is holler box id
+                $show_it = apply_filters( 'hwp_display_notification', $show_it, $value, $post_id  );
 
-                if( $continue === true )
+                if( $show_it === false )
                     continue;
 
                 $this->display_notification_box( $value );
