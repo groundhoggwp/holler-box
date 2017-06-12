@@ -59,27 +59,28 @@
     var certainPages = $('#show-certain-pages');
     var cats = $('#hwp-cats');
     var tags = $('#hwp-tags');
+    var types = $('#hwp-types');
+
+    console.log(showOnVal)
 
     switch( showOnVal ) {
+      case 'all':
+        cats.hide();
+        tags.hide();
+        certainPages.hide();
+        types.hide();
+        break;
       case 'limited':
-        cats.hide();
-        tags.hide();
-        certainPages.show();
-        break;
-      case 'cats':
         cats.show();
-        tags.hide();
-        certainPages.hide();
-        break;
-      case 'tags':
         tags.show();
-        cats.hide();
-        certainPages.hide();
+        certainPages.show();
+        types.show();
         break;
       default:
         cats.hide();
         tags.hide();
         certainPages.hide();
+        types.hide();
     }
 
   }

@@ -375,7 +375,12 @@ if( !class_exists( 'Holler_Admin' ) ) {
          *
          * @since     0.1
          */
-        public function settings_meta_box_callback( $post ) { ?>
+        public function settings_meta_box_callback( $post ) { 
+
+            $ids = get_post_meta( $post->ID, 'hwp_show_on_ids', true );
+            if( is_array( $ids ) )
+                $ids = implode($ids, ',');
+            ?>
 
             <label><?php _e( 'What pages?', 'hollerbox' ); ?></label>
 
@@ -384,7 +389,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <input type="radio" name="show_on" value="limited" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "limited" ) echo 'checked="checked"'; ?>> Certain pages<br>
                 <div id="show-certain-pages" class="hwp-hidden-field">
                 <p>Enter page/post IDs, separated by comma:</p>
-                <input placeholder="Example: 2,25,311" class="widefat" type="text" name="hwp_show_on_ids" id="hwp_show_on_ids" value="<?php echo implode( get_post_meta( $post->ID, 'hwp_show_on_ids', true ), ',' ); ?>" size="20" />
+                <input placeholder="Example: 2,25,311" class="widefat" type="text" name="hwp_show_on_ids" id="hwp_show_on_ids" value="<?php echo $ids; ?>" size="20" />
                 </div>
 
                 <?php do_action('hwp_page_settings', $post->ID ); ?>
@@ -611,7 +616,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     delete_post_meta( $post_id, $value );
                     continue;
                 }
-                $sanitized = wp_kses( $_POST[ $value ], $allowedposttags);
+                $trimmed = trim( $_POST[ $value ] );
+                $sanitized = wp_kses( $trimmed, $allowedposttags);
                 update_post_meta( $post_id, $value, $sanitized );
             }
 
