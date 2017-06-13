@@ -145,11 +145,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             // do checks for page conditionals, logged in, etc here
             // if any of the checks are true, we show it
-
-            $show_it = false;
             $post_id = get_the_ID();
+            $logged_in = is_user_logged_in();
 
             foreach (self::$active as $key => $box_id) {
+
+                $show_it = false;
 
                 $should_expire = get_post_meta( $box_id, 'expiration', 1 );
                 $expiration = get_post_meta( $box_id, 'hwp_until_date', 1 );
@@ -162,14 +163,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     }
                 }
 
-                $logged_in = is_user_logged_in();
                 $logged_in_meta = get_post_meta( $box_id, 'logged_in', 1 );
 
                 // check logged in conditional
                 if( $logged_in && $logged_in_meta === 'logged_out' || !$logged_in && $logged_in_meta === 'logged_in' )
                     $show_it = true;
 
-                $page_id = get_the_ID();
                 $show_on = get_post_meta( $box_id, 'show_on', 1 );
 
                 $show_on_pages = get_post_meta( $box_id, 'show_on_pages', 1 );
@@ -177,8 +176,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 /* 
                  * this is deprecated since 0.5.1, handle backwards compat
                  */
-                if( is_array( $show_on ) && empty( $show_on_pages ) && !in_array( $page_id, $show_on ) ) {
-                    $show_it = false;
+                if( is_array( $show_on ) && in_array( $post_id, $show_on ) ) {
+                    $show_it = true;
                 }
                 /* end deprecated */
 
@@ -188,7 +187,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     // turn titles into array of ids
                     $arr = self::titles_to_ids( $show_on_pages );
                     
-                    if( in_array( $page_id, $arr ) )
+                    if( in_array( $post_id, $arr ) )
                         $show_it = true;
 
                 }
