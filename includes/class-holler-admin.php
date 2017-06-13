@@ -76,7 +76,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
             // Color picker: https://make.wordpress.org/core/2012/11/30/new-color-picker-in-wp-3-5/
             wp_enqueue_style( 'holler-admin', Holler_Box_URL . 'assets/css/holler-admin.css', array( 'wp-color-picker' ), Holler_Box_VER );
 
-            wp_enqueue_script( 'holler-admin', Holler_Box_URL . 'assets/js/holler-admin.js', array( 'wp-color-picker', 'jquery-ui-datepicker' ), Holler_Box_VER, true );
+            wp_enqueue_script( 'holler-admin', Holler_Box_URL . 'assets/js/holler-admin.js', array( 'wp-color-picker', 'jquery-ui-datepicker', 'suggest' ), Holler_Box_VER, true );
             
         }
 
@@ -145,6 +145,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <input type="checkbox" id="hwp_powered_by" name="hwp_powered_by" value="1" <?php checked('1', get_option( 'hwp_powered_by' ), true); ?> />
                     <?php _e( 'Hide attribution links', 'hollerbox' ); ?>
                 </p>
+
+                <?php do_action( 'hwp_settings_page' ); ?>
 
             <?php submit_button(); ?>
 
@@ -388,8 +390,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <input type="radio" name="show_on" value="all" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "all" ) echo 'checked="checked"'; ?>> All pages<br>
                 <input type="radio" name="show_on" value="limited" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "limited" ) echo 'checked="checked"'; ?>> Certain pages<br>
                 <div id="show-certain-pages" class="hwp-hidden-field">
-                <p>Enter page/post IDs, separated by comma:</p>
-                <input placeholder="Example: 2,25,311" class="widefat" type="text" name="hwp_show_on_ids" id="hwp_show_on_ids" value="<?php echo $ids; ?>" size="20" />
+                <p><?php  _e('Show on pages', 'hollerbox' ); ?></p>
+                <input placeholder="Start typing page title" class="widefat" type="text" name="show_on_pages" id="show_on_pages" value="<?php echo get_post_meta( $post->ID, 'show_on_pages', 1 ); ?>" size="20" />
                 </div>
 
                 <?php do_action('hwp_page_settings', $post->ID ); ?>
@@ -557,7 +559,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'button_color1',
                 'bg_color',
                 'text_color',
-                'hwp_page_ids',
+                'show_on_pages',
                 'logged_in',
                 'new_or_returning',
                 'avatar_email',
@@ -619,18 +621,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 $trimmed = trim( $_POST[ $value ] );
                 $sanitized = wp_kses( $trimmed, $allowedposttags);
                 update_post_meta( $post_id, $value, $sanitized );
-            }
-
-            // keys that need special handling
-            if( empty( $_POST[ 'hwp_show_on_ids' ] ) ) {
-                delete_post_meta( $post_id, 'hwp_show_on_ids' );
-            } elseif( !empty( $_POST[ 'hwp_show_on_ids' ] ) ) {
-
-                // sanitize, remove whitespace, explode into array
-                $sanitized = sanitize_text_field( $_POST[ 'hwp_show_on_ids' ] );
-                $sanitized = preg_replace('/\s+/', '', $sanitized);
-                update_post_meta( $post_id, 'hwp_show_on_ids', explode( ',', $sanitized ) );
-
             }
 
             // notification expiration date

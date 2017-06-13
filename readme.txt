@@ -1,16 +1,20 @@
 === Holler Box - Smart, Stylish Popup Messages ===
 
 Contributors: scottopolis
-Tags: popup, optin, mailchimp, wordpress popup
+Tags: popup, optin, mailchimp, pop up
 Requires at least: 4.5
 Tested up to: 4.8
-Stable tag: 0.5.0
+Stable tag: 0.5.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Convert more visitors to customers with personalized popup messages.
 
 == Description ==
+
+Holler Box is more than a WordPress popup plugin.
+
+It's a way for site owners to communicate with their visitors without turning them off with annoying in-your-face popups.
 
 Show customizable marketing messages to your site visitors easily, with beautiful design. Convert website visitors, upsell customers, and get your message out to the right people at the right time.
 
@@ -20,7 +24,7 @@ Use our smart filter system to show to the right visitor at the right time.
 
 Keep track of who has seen your messages and how well they are working, so you can tweak and improve.
 
-See live demos at the <a href="http://hollerwp.com/" target="_blank">Holler Box website</a>.
+See live demos and purchase the Pro version at the <a href="http://hollerwp.com/" target="_blank">Holler Box website</a>.
 
 ## What can you do with it?
 
@@ -30,13 +34,9 @@ Show a non-intrusive Intercom style notification box with your message. Announce
 
 Choose where and when you show it, and to which visitors. For example, show your sale announcement only on the pricing page to returning visitors. Show your email optin only on your blog posts.
 
-**Header Banner** 
-
-Show a header banner to announce a sale, keep track of how many people click on it. (Pro only)
-
 **(Fake) Live Chat with Opt-in**
 
-Show a live chat box to collect customer questions and emails, without having to actually deal with the hassle of live chat! As soon as your visitor types a question, an email opt-in pops up so you can follow up with them at a convenient time.
+If you like Drift, Intercom, or Show a live chat box to collect customer questions and emails, without having to actually deal with the hassle of live chat! As soon as your visitor types a question, an email opt-in pops up so you can follow up with them at a convenient time.
 
 **Polls and Forms**
 
@@ -49,6 +49,28 @@ See how your messages are performing. Track views and conversions (link clicks a
 **Interactivity**
 
 Add a link, video, contact form, or simple opt-in form that integrates with major email providers like MailChimp and Convertkit.
+
+## Holler Box Pro
+
+**Holler Banner**
+
+Holler Box Pro adds an option for a smart header banner with the same powerful user filtering. It works great when you have a limited time sale, or a very important announcement.
+
+**Expanded Option**
+
+Have more than just a quick message to show? The expanded option allows you to add a button that opens to a larger view with whatever content you want.
+
+**Set It and Forget It**
+
+The set it and forget it feature allows you to automatically deactivate your Holler Boxes on a certain date. If you are having a limited time sale, set your Holler Box to stop showing automatically when the sale ends.
+
+**Smarter Show-On Filters**
+
+The Pro version also includes more advanced show on filtering, so it’s easier to deploy your boxes only on certain site pages. For example, show your Holler Box on certain blog categories, tags, post types, and more.
+
+**Easy Digital Downloads and WooCommerce Sales Notifications**
+
+Easily show your site visitors a notification like: "Matt just purchased Holler Box Pro." This sales notification pulls the latest sale from EDD or WooCommerce.
 
 == Installation ==
 
@@ -79,7 +101,7 @@ Content can be pretty much anything, but keep your message short.
 - Hide the button: the button appears when the notification is hidden, you can choose to not display the button. If the notification is hidden, the user will not be able to reopen it.
 - Gravatar email: enter an email associated with a Gravatar account, or leave blank to hide the avatar.
 
-Developers can contribute on Github https://github.com/scottopolis/holler-box
+Developers can contribute on [Github](https://github.com/scottopolis/holler-box)
 
 == FAQ ==
 
@@ -138,6 +160,10 @@ Make sure your email form does not have a required field that is not displayed. 
 8. CPT
 
 == Changelog ==
+
+= 0.5.1 =
+
+* Fix possible conflict with Fontello
 
 = 0.5.0 =
 

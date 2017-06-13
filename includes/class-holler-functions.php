@@ -104,7 +104,6 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                 $content_post = get_post($value);
                 $content = $content_post->post_content;
-                // adding the_content filter has crazy results, like CK forms
                 $content = apply_filters('hollerbox_content', $content, $value );
                 $content = do_shortcode( $content );
                 // $content = apply_filters('the_content_more_link', $content);
@@ -150,33 +149,57 @@ if( !class_exists( 'Holler_Functions' ) ) {
             $show_it = false;
             $post_id = get_the_ID();
 
-            foreach (self::$active as $key => $value) {
+            foreach (self::$active as $key => $box_id) {
 
-                $should_expire = get_post_meta( $value, 'expiration', 1 );
-                $expiration = get_post_meta( $value, 'hwp_until_date', 1 );
+                $should_expire = get_post_meta( $box_id, 'expiration', 1 );
+                $expiration = get_post_meta( $box_id, 'hwp_until_date', 1 );
 
                 if( $should_expire === '1' && !empty( $expiration ) ) {
                     // check if we've passed expiration date
                     if( strtotime('now') >= strtotime( $expiration ) ) {
-                        delete_post_meta( $value, 'hwp_active' );
+                        delete_post_meta( $box_id, 'hwp_active' );
                         $show_it = true;
                     }
                 }
 
                 $logged_in = is_user_logged_in();
-                $logged_in_meta = get_post_meta( $value, 'logged_in', 1 );
+                $logged_in_meta = get_post_meta( $box_id, 'logged_in', 1 );
 
                 // check logged in conditional
                 if( $logged_in && $logged_in_meta === 'logged_out' || !$logged_in && $logged_in_meta === 'logged_in' )
                     $show_it = true;
 
-                // if show_it is true, that means we do not display this notification. $value is holler box id
-                $show_it = apply_filters( 'hwp_display_notification', $show_it, $value, $post_id  );
+                $page_id = get_the_ID();
+                $show_on = get_post_meta( $box_id, 'show_on', 1 );
+
+                $show_on_pages = get_post_meta( $box_id, 'show_on_pages', 1 );
+
+                /* 
+                 * this is deprecated since 0.5.1, handle backwards compat
+                 */
+                if( is_array( $show_on ) && empty( $show_on_pages ) && !in_array( $page_id, $show_on ) ) {
+                    $show_it = false;
+                }
+                /* end deprecated */
+
+                // check if we should show on current page by id
+                if( $show_on === 'limited' && !empty( $show_on_pages ) ) {
+
+                    // turn titles into array of ids
+                    $arr = self::titles_to_ids( $show_on_pages );
+                    
+                    if( in_array( $page_id, $arr ) )
+                        $show_it = true;
+
+                }
+
+                // if show_it is true, that means we do not display this notification. $box_id is holler box id
+                $show_it = apply_filters( 'hwp_display_notification', $show_it, $box_id, $post_id  );
 
                 if( $show_it === false )
                     continue;
 
-                $this->display_notification_box( $value );
+                $this->display_notification_box( $box_id );
             }
 
         }
@@ -306,6 +329,30 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 <button class="hwp-email-btn"><?php echo _e('Send', 'hollerbox' ); ?></button>
                 <?php
             }
+        }
+
+        /*
+         * Turn string of page titles into array of page IDs
+         */
+        public static function titles_to_ids( $string ) {
+
+            // explode into array
+            $arr = explode( ",", $string );
+
+            $newarr = array();
+
+            foreach ($arr as $key => $value) {
+                $title = trim( $value ); 
+                $page = get_page_by_title( $title );
+
+                // cant get id of front page or null
+                if( !$page || $page->post_name === 'front-page' ) continue;
+
+                $newarr[] = $page->ID;
+            }
+
+            return $newarr;
+
         }
 
     }

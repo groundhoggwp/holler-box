@@ -51,6 +51,8 @@
       $('input[name=display_when][value=delay]').prop('checked', 'checked'); 
     })
 
+    $('#show_on_pages').suggest( window.ajaxurl + "?action=hwp_ajax_page_search", {multiple:true, multipleSep: ","});
+
   }
 
   holler.toggleShowOn = function() {
