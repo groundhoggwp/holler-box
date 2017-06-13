@@ -115,7 +115,7 @@
     $('body')
     .on('click', '.hwp-close', holler.hideItem )
     .on('click', '#hwp-floating-btn', holler.btnClick )
-    .on('click', '.hwp-interaction', holler.interactionLink )
+    .on('click', '#hwp-' + id + ' a', holler.interactionLink )
     .on('click', '.hwp-text i', holler.sendText )
     .on('click', '#hwp-' + id + ' .hwp-email-btn', holler.emailSubmitClick )
 
@@ -332,7 +332,7 @@
 
     setTimeout( function() {
       $(item).removeClass('hwp-transition-in').addClass('hwp-show');
-    }, 100);
+    }, 300);
 
   }
 

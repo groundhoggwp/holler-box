@@ -378,17 +378,15 @@ if( !class_exists( 'Holler_Admin' ) ) {
          * @since     0.1
          */
         public function settings_meta_box_callback( $post ) { 
-
-            $ids = get_post_meta( $post->ID, 'hwp_show_on_ids', true );
-            if( is_array( $ids ) )
-                $ids = implode($ids, ',');
+            $show_on = get_post_meta( $post->ID, 'show_on', 1 );
             ?>
 
             <label><?php _e( 'What pages?', 'hollerbox' ); ?></label>
 
             <div class="hwp-settings-group">
-                <input type="radio" name="show_on" value="all" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "all" ) echo 'checked="checked"'; ?>> All pages<br>
-                <input type="radio" name="show_on" value="limited" <?php if( get_post_meta( $post->ID, 'show_on', 1 ) === "limited" ) echo 'checked="checked"'; ?>> Certain pages<br>
+                <?php if( is_array( $show_on ) ) echo 'We have updated this setting, please re-enter pages and save.'; ?>
+                <input type="radio" name="show_on" value="all" <?php if( $show_on === "all" ) echo 'checked="checked"'; ?>> All pages<br>
+                <input type="radio" name="show_on" value="limited" <?php if( $show_on === "limited" ) echo 'checked="checked"'; ?>> Certain pages<br>
                 <div id="show-certain-pages" class="hwp-hidden-field">
                 <p><?php  _e('Show on pages', 'hollerbox' ); ?></p>
                 <input placeholder="Start typing page title" class="widefat" type="text" name="show_on_pages" id="show_on_pages" value="<?php echo get_post_meta( $post->ID, 'show_on_pages', 1 ); ?>" size="20" />

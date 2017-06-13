@@ -167,7 +167,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                 // check logged in conditional
                 if( $logged_in && $logged_in_meta === 'logged_out' || !$logged_in && $logged_in_meta === 'logged_in' )
-                    $show_it = true;
+                    continue;
 
                 $show_on = get_post_meta( $box_id, 'show_on', 1 );
 
@@ -189,6 +189,10 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     
                     if( in_array( $post_id, $arr ) )
                         $show_it = true;
+
+                } elseif ( $show_on === 'all' ) {
+
+                    $show_it = true;
 
                 }
 
