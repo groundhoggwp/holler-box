@@ -62,8 +62,7 @@
     var cats = $('#hwp-cats');
     var tags = $('#hwp-tags');
     var types = $('#hwp-types');
-
-    console.log(showOnVal)
+    var exclude = $('#hwp-exclude');
 
     switch( showOnVal ) {
       case 'all':
@@ -71,18 +70,21 @@
         tags.hide();
         certainPages.hide();
         types.hide();
+        exclude.hide();
         break;
       case 'limited':
         cats.show();
         tags.show();
         certainPages.show();
         types.show();
+        exclude.show();
         break;
       default:
         cats.hide();
         tags.hide();
         certainPages.hide();
         types.hide();
+        exclude.hide();
     }
 
   }
