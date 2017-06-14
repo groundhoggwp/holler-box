@@ -42,7 +42,7 @@
   }
 
   // Check if we should display item
-  holler.doChecks = function( id ) {
+  holler.doChecks = function( id, forceShow ) {
 
     // If markup doesn't exist, bail
     var item = document.getElementById( 'hwp-' + id );
@@ -60,18 +60,14 @@
     if( vars.visitor === 'returning' && holler.newVisitor != false )
       return;
 
+    // hide after interacted with?
+    if( vars.showSettings === 'interacts' && holler.getCookie( 'hwp_' + id + '_int' ) != '' )
+      return;
+
     var shown = holler.getCookie( 'hwp_' + id + '_shown' );
 
     // only show once?
-    if( vars.showSettings === 'hide_for' && shown === 'true' ) {
-      return;
-    } else if( vars.showSettings === 'hide_for' && shown === '' ) {
-      var hideFor = ( vars.hideForDays ? parseInt( vars.hideForDays ) : 1 );
-      holler.setCookie( 'hwp_' + id + '_shown', 'true', hideFor );
-    }
-
-    // hide after interacted with?
-    if( vars.showSettings === 'interacts' && holler.getCookie( 'hwp_' + id + '_int' ) != '' )
+    if( vars.showSettings === 'hide_for' && shown === 'true' )
       return;
 
     // passes checks, show it
@@ -88,6 +84,9 @@
 
     // Delay showing item?
     if( vars.display_when != 'scroll' ) {
+
+      if( vars.display_when === 'exit' && !forceShow )
+        return;
 
       var delay = ( vars.display_when === 'delay' ? parseInt( vars.delay ) : 0 );
 
@@ -140,6 +139,10 @@
         if( (wintop/(docheight-winheight)) > scrolltrigger && !holler.show['hwp-' + id] ) {
           holler.showNote( id );
           holler.show['hwp-' + id] = true
+
+          // count the impression
+          if( holler.getCookie( 'hwp-' + id + '_hide' ) != 'true' )
+            holler.countNoteShown(id);
         }
       }, 250) )
 
@@ -201,11 +204,13 @@
   }
 
   // Set a cookie. https://www.w3schools.com/js/js_cookies.asp
-  holler.setCookie = function(cname, cvalue, exdays) {
+  holler.setCookie = function(cname, cvalue, exdays, path) {
       var d = new Date();
       d.setTime(d.getTime() + (exdays*24*60*60*1000));
       var expires = "expires="+ d.toUTCString();
-      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+      if( !path )
+        path = '/';
+      document.cookie = cname + "=" + cvalue + ";" + expires + ";path=" + path;
       return cvalue;
   }
 
@@ -668,6 +673,13 @@
 
   // Callback for tracking views
   holler.countNoteShown = function( id ) {
+
+    console.log('count shown ' + id)
+
+    var options = window.hollerVars[id];
+
+    var hideFor = ( options.hideForDays ? parseInt( options.hideForDays ) : 1 );
+    holler.setCookie( 'hwp_' + id + '_shown', 'true', hideFor );
 
     var params = { action: 'hwp_track_view', nonce: window.hollerVars.hwpNonce, id: id };
 

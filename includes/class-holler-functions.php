@@ -57,6 +57,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
             add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
             add_action( 'hwp_email_form', array( $this, 'email_forms' ) );
 
+            add_filter( 'hollerbox_classes', array( $this, 'add_hb_classes'), 10, 2 );
+
         }
 
         /**
@@ -196,7 +198,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                 }
 
-                // if show_it is true, that means we do not display this notification. $box_id is holler box id
+                // if show_it is true, that means we display this notification. $box_id is holler box id
                 $show_it = apply_filters( 'hwp_display_notification', $show_it, $box_id, $post_id  );
 
                 if( $show_it === false )
@@ -256,7 +258,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
             <div id="hwp-floating-btn" data-id="<?php echo $id; ?>" class="<?php echo get_post_meta( $id, 'position', 1 ); ?>"><i class="icon icon-chat"></i></div>
             <?php endif; ?>
 
-            <div id="hwp-<?php echo $id; ?>" class="holler-box hwp-hide <?php echo get_post_meta( $id, 'position', 1 ); ?>">
+            <div id="hwp-<?php echo $id; ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">
 
                 <div class="holler-inside">
                 
@@ -356,6 +358,14 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             return $newarr;
 
+        }
+
+        /*
+         * Add extra classes to hollerbox element
+         */
+        public static function add_hb_classes( $classes, $id ) {
+            $classes .= get_post_meta( $id, 'position', 1 );
+            return $classes;
         }
 
     }
