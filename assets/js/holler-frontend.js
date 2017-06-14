@@ -85,7 +85,8 @@
     // Delay showing item?
     if( vars.display_when != 'scroll' ) {
 
-      if( vars.display_when === 'exit' && !forceShow )
+      // don't show yet if using exit detect or link activation. Shows when we use the forceShow argument
+      if( vars.display_when === 'exit' && !forceShow || vars.display_when === 'link' && !forceShow )
         return;
 
       var delay = ( vars.display_when === 'delay' ? parseInt( vars.delay ) : 0 );
@@ -673,8 +674,6 @@
 
   // Callback for tracking views
   holler.countNoteShown = function( id ) {
-
-    console.log('count shown ' + id)
 
     var options = window.hollerVars[id];
 
