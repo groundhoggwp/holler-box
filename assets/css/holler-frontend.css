@@ -286,7 +286,7 @@
 
 span.hwp-powered-by a {
     font-size: 10px;
-    color: #bbb !important;
+    color: #bbb;
     text-decoration: none;
     position: relative;
     top: 5px;
