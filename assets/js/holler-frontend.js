@@ -115,13 +115,14 @@
     $('body')
     .on('click', '.hwp-close', holler.hideItem )
     .on('click', '#hwp-floating-btn', holler.btnClick )
-    .on('click', '#hwp-' + id + ' a', holler.interactionLink )
     .on('click', '.hwp-text i', holler.sendText )
     .on('click', '#hwp-' + id + ' .hwp-email-btn', holler.emailSubmitClick )
 
     $('.hwp-text-input').on('keypress', holler.submitChatTextOnEnter );
 
     $('#hwp-' + id + ' .hwp-email-input').on('keypress', holler.submitEmailOnEnter );
+
+    $('#hwp-' + id + ' a').on('click', holler.interactionLink )
 
   }
 
@@ -621,7 +622,6 @@
 
   // callback when interaction link clicked
   holler.interactionLink = function(e) {
-    e.stopImmediatePropagation();
 
     var id = $(e.target).closest('.holler-box').attr('id').split('-')[1];
 

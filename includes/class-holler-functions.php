@@ -251,7 +251,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
             $avatar_email = get_post_meta($id, 'avatar_email', 1);
             ?>
             <style type="text/css">
-            #hwp-<?php echo $id; ?>, #hwp-<?php echo $id; ?> a, #hwp-<?php echo $id; ?> i, #hwp-<?php echo $id; ?> .holler-inside { color: <?php echo get_post_meta( $id, 'text_color', 1 ) !important; ?>; }
+            #hwp-<?php echo $id; ?>, #hwp-<?php echo $id; ?> a, #hwp-<?php echo $id; ?> i, #hwp-<?php echo $id; ?> .holler-inside { color: <?php echo get_post_meta( $id, 'text_color', 1 ); !important ?>; }
             </style>
 
             <?php if( get_post_meta( $id, 'position', 1 ) != 'holler-banner' ) : ?>

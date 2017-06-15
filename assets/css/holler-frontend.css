@@ -310,15 +310,6 @@ span.hwp-powered-by a {
 		-ms-transform: translateX(0px) translateY(0px);
 		transform: translateX(0px) translateY(0px);
 	}
-
-	.holler-banner .hwp-row, .holler-banner.has-optin .hwp-box-rows {
-		float: none;
-		width: 100%;
-	}
-
-	.holler-banner .hwp-email-row {
-		margin-top: 10px;
-	}
 }
 
 @font-face {
