@@ -384,7 +384,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
             <label><?php _e( 'What pages?', 'hollerbox' ); ?></label>
 
             <div class="hwp-settings-group">
-                <?php if( is_array( $show_on ) ) echo 'We have updated this setting, please re-enter pages and save.'; ?>
+                <?php if( is_array( $show_on ) ) echo '<p>We have updated this setting, please re-enter pages and save.</p>'; ?>
                 <input type="radio" name="show_on" value="all" <?php if( $show_on === "all" ) echo 'checked="checked"'; ?>> All pages<br>
                 <input type="radio" name="show_on" value="limited" <?php if( $show_on === "limited" ) echo 'checked="checked"'; ?>> Certain pages<br>
                 <div id="show-certain-pages" class="hwp-hidden-field">

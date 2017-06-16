@@ -4,7 +4,7 @@ Contributors: scottopolis
 Tags: popup, optin, mailchimp, pop up
 Requires at least: 4.5
 Tested up to: 4.8
-Stable tag: 0.5.1
+Stable tag: 0.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -160,6 +160,13 @@ Make sure your email form does not have a required field that is not displayed. 
 8. CPT
 
 == Changelog ==
+
+= 0.6.0 =
+
+* Change display logic for better future compatibility
+* Add auto-complete to certain pages field
+* Add more hooks and filters
+* Compatibility with Pro features like banner, exit detection, link activation, taxonomy and post type filters, and more
 
 = 0.5.1 =
 
