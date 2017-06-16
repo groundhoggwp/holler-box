@@ -193,6 +193,7 @@
 
     if( options.position === 'holler-banner' && holler.getCookie( 'hwp-' + id + '_hide' ) != 'true' )
       holler.toggleBnrMargin( id );
+    
 
     // Should we hide it
     if( options.hide_after === 'delay' ) {
@@ -248,11 +249,12 @@
   // Add top-margin to body when banner is present
   holler.toggleBnrMargin = function( id, hide ) {
 
-    if( hide && hide === true ) {
-      $('body').css('margin-top', '');
-    } else {
+    // reset
+    $('body').css('padding-top', '');
+
+    if( !hide ) {
       var height = $('#hwp-' + id).outerHeight();
-      $('body').css('margin-top', height);
+      $('body').css('padding-top', height);
     }
     
   }
@@ -661,6 +663,8 @@
 
       $('#hwp-' + id + ' .hwp-box-rows').addClass('hwp-full-width').html(msg);
 
+      holler.toggleBnrMargin( id );
+
     } else {
 
       $('#hwp-' + id + ' .hwp-first-row').html(msg);
@@ -697,7 +701,9 @@
 
   }
 
-  holler.init();
+  $(window).load(function(){
+    holler.init();
+  })
 
   window.hollerbox = holler;
 
