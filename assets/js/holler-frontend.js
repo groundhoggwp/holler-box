@@ -515,6 +515,9 @@
     } else if( window.hollerVars[id].emailProvider === 'mc' ) {
       holler.mcSubscribe( email, id );
       return;
+    } else if( window.hollerVars[id].emailProvider === 'mailpoet' ) {
+      holler.mpSubscribe( email, id );
+      return;
     }
 
     // send default message to server
@@ -576,6 +579,37 @@
       data: { email: email, list_id: listId, action: 'hwp_mc_subscribe', nonce: window.hollerVars.hwpNonce }
       })
       .done(function(msg) {
+
+        // reset to defaults
+        holler.showConfirmation( id );
+        $('#hwp-' + id + ' .hwp-email-row').hide();
+        holler.conversion( id );
+
+      })
+      .fail(function(err) {
+        console.log(err);
+      });
+
+  }
+
+  // Submit to MailPoet
+  holler.mpSubscribe = function( email, id ) {
+
+    var listId = $('#hwp-' + id + ' .mailpoet-list-id').val();
+
+    if( !listId ) {
+      alert("List ID is missing.");
+      return;
+    }
+
+    $.ajax({
+      method: "GET",
+      url: window.hollerVars.ajaxurl,
+      data: { email: email, list_id: listId, action: 'hwp_mailpoet_subscribe', nonce: window.hollerVars.hwpNonce }
+      })
+      .done(function(msg) {
+
+        console.log(msg)
 
         // reset to defaults
         holler.showConfirmation( id );

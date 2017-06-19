@@ -4,7 +4,7 @@ Contributors: scottopolis
 Tags: popup, optin, mailchimp, pop up
 Requires at least: 4.5
 Tested up to: 4.8
-Stable tag: 0.6.0
+Stable tag: 0.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -131,6 +131,10 @@ https://app.convertkit.com/landing_pages/445667/edit
 
 That number is the form ID, in this case it's 445667. Enter that number as the Convertkit form ID.
 
+*How do I setup MailPoet?*
+
+Install MailPoet, version 3 or later. Create a new Holler Box, and select MailPoet as the email provider. Choose your list and save, new subscribers will be added to this.
+
 **Troubleshooting**
 
 *Emails are not sending*
@@ -160,6 +164,10 @@ Make sure your email form does not have a required field that is not displayed. 
 8. CPT
 
 == Changelog ==
+
+= 0.7.0 =
+
+* MailPoet Integration
 
 = 0.6.0 =
 

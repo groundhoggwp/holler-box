@@ -327,6 +327,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     echo '<input type="hidden" class="ck-form-id" value="' . get_post_meta( $id, 'ck_id', 1 ) . '" />';
                 } elseif( $provider === 'mc' && !empty( $mc_list_id ) ) {
                     echo '<input type="hidden" class="mc-list-id" value="' . get_post_meta( $id, 'mc_list_id', 1 ) . '" />';
+                } elseif( $provider === 'mailpoet' ) {
+                    echo '<input type="hidden" class="mailpoet-list-id" value="' . get_post_meta( $id, 'mailpoet_list_id', 1 ) . '" />';
                 }
                 ?>
                 <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>

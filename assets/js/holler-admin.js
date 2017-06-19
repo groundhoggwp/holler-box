@@ -117,6 +117,7 @@
     var optin = $("#hwp-note-optin");
     var mcUrl = $('#mc_list_id, .mc-description');
     var ckId = $('#ck_id');
+    var mailpoet = $('#mailpoet_list_id, .mp-description');
 
     // Show optin in preview
     if( itemTypeVal === 'optin' ) {
@@ -131,21 +132,31 @@
       custom.hide();
       ckId.hide();
       mcUrl.hide();
+      mailpoet.hide();
     } else if( checkedVal === 'custom' ) {
       custom.show();
       defaultDiv.hide();
       ckId.hide();
       mcUrl.hide();
+      mailpoet.hide();
     } else if( checkedVal === 'mc' ) {
       mcUrl.show();
       ckId.hide();
       custom.hide();
       defaultDiv.hide();
+      mailpoet.hide();
     } else if( checkedVal === 'ck' ) {
       ckId.show();
       mcUrl.hide();
       custom.hide();
       defaultDiv.hide();
+      mailpoet.hide();
+    } else if( checkedVal === 'mailpoet' ) {
+      mailpoet.show();
+      mcUrl.hide();
+      custom.hide();
+      defaultDiv.hide();
+      ckId.hide();
     }
 
   }

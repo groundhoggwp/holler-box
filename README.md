@@ -103,6 +103,10 @@ https://app.convertkit.com/landing_pages/445667/edit
 
 That number is the form ID, in this case it's 445667. Enter that number as the Convertkit form ID.
 
+*How do I setup MailPoet?*
+
+Install MailPoet, version 3 or later. Create a new Holler Box, and select MailPoet as the email provider. Choose your list and save, new subscribers will be added to this.
+
 **Troubleshooting**
 
 *Emails are not sending*

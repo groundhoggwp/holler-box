@@ -2,7 +2,7 @@
 	margin: 10px 0;
 }
 
-#show-certain-pages, #show-email-options, #hwp-until-datepicker, #custom-email-options, #default-email-options, #mc_url, #ck_id {
+#show-certain-pages, #show-email-options, #hwp-until-datepicker, #custom-email-options, #default-email-options, #mc_url, #ck_id, #mailpoet_list_id {
 	display: none;
 }
 

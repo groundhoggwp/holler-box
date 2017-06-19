@@ -57,6 +57,9 @@ if( !class_exists( 'Holler_Ajax' ) ) {
             add_action( 'wp_ajax_nopriv_hwp_mc_subscribe', array( $this, 'hwp_mc_subscribe' ) );
             add_action( 'wp_ajax_hwp_mc_subscribe', array( $this, 'hwp_mc_subscribe' ) );
 
+            add_action( 'wp_ajax_nopriv_hwp_mailpoet_subscribe', array( $this, 'mailpoet_subscribe' ) );
+            add_action( 'wp_ajax_hwp_mailpoet_subscribe', array( $this, 'mailpoet_subscribe' ) );
+
             add_action( 'wp_ajax_nopriv_hwp_track_event', array( $this, 'hwp_track_event' ) );
             add_action( 'wp_ajax_hwp_track_event', array( $this, 'hwp_track_event' ) );
 
@@ -162,6 +165,40 @@ if( !class_exists( 'Holler_Ajax' ) ) {
             } else {
                wp_send_json_success( $response );
             }
+        }
+
+        /**
+         * Subscribe user via MailPoet API
+         * http://beta.docs.mailpoet.com/article/195-add-subscribers-through-your-own-form-or-plugin
+         * 
+         *
+         * @since       0.6.0
+         * @return      void
+         */
+        public function mailpoet_subscribe() {
+
+            if( empty( $_GET['nonce'] ) || !wp_verify_nonce( $_GET['nonce'], 'holler-box' ) ) {
+                wp_send_json_error('Verification failed.' );
+            }
+
+            $list = $_GET['list_id'];
+
+            $subscriber = array(
+                'email' => sanitize_text_field( $_GET['email'] )
+                );
+
+            if( empty( $subscriber ) )
+                wp_send_json_error('Missing required field.');
+            
+            // Subscribe via MailPoet 3 API
+            try {
+              $subscriber = \MailPoet\API\API::MP('v1')->addSubscriber($subscriber, array( $list ) );
+            } catch(Exception $exception) {
+              wp_send_json_error( $exception->getMessage() ); 
+            }
+
+            wp_send_json_success( $subscriber );
+
         }
 
         /**

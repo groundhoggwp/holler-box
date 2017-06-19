@@ -333,10 +333,38 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <p>
                     <input type="radio" name="email_provider" value="default" <?php checked("default", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
                     <?php _e( 'Default', 'hollerbox' ); ?><br>
+
                     <input type="radio" name="email_provider" value="ck" <?php checked("ck", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
                     <?php _e( 'Convertkit', 'hollerbox' ); ?><input id="ck_id" name="ck_id" value="<?php echo get_post_meta( $post->ID, 'ck_id', 1 ); ?>" placeholder="Convertkit list ID" type="text" /><br>
+
                     <input type="radio" name="email_provider" value="mc" <?php checked("mc", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
                     <?php _e( 'MailChimp', 'hollerbox' ); ?><input id="mc_list_id" name="mc_list_id" placeholder="MailChimp list ID" value="<?php echo get_post_meta( $post->ID, 'mc_list_id', 1 ); ?>" type="text" /> <span class="mc-description">Get your list ID under Lists => Settings => List name and defaults => List ID (on right side of screen)</span><br>
+
+                    <input type="radio" name="email_provider" value="mailpoet" <?php checked("mailpoet", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
+                    <?php _e( 'MailPoet', 'hollerbox' ); ?>
+                    <select name="mailpoet_list_id" id="mailpoet_list_id">
+                    <?php 
+
+                    $subscription_lists = \MailPoet\API\API::MP('v1')->getLists();
+
+                    if( !empty( $subscription_lists ) ) :
+
+                        foreach ($subscription_lists as $list) {
+                            echo '<option value="' . $list['id'] . '"' . selected( get_post_meta( $post->ID, 'mailpoet_list_id', 1 ), $list['id'] ) . '">';
+                            echo $list['name'];
+                            echo '</option>';
+                        };
+
+                    else:
+
+                        echo 'Please add a MailPoet List.';
+
+                    endif;
+
+                    ?>
+                    </select>
+                    <br>
+
                     <input type="radio" name="email_provider" value="custom" <?php checked("custom", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
                     <?php _e( 'Custom', 'hollerbox' ); ?>
                     </p>
@@ -576,7 +604,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'email_provider',
                 'custom_email_form',
                 'ck_id',
-                'mc_list_id' );
+                'mc_list_id',
+                'mailpoet_list_id' );
 
             $keys = apply_filters( 'hwp_settings_array', $keys );
 
