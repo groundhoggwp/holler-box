@@ -93,7 +93,7 @@ Content can be pretty much anything, but keep your message short.
 
 **Advanced Settings**
 
-- Pages: choose all pages, or enter page IDs, separated by comma. For example: 701,5,678
+- Pages: choose all pages, or select certain pages and begin typing a page title. It will automatically populate a drop down list, simply click the page title or enter page titles comma separated like this: Home, Features, Pricing
 - New or returning: show to only new visitors (since you activated the plugin), or returning visitors. Tracked with the hwp_visit cookie.
 - When should we show: after the page loads, show immediately, with a delay, or based on user scroll.
 - When should it disappear: if you want the notification to show briefly and then disappear automatically, enter a delay here.

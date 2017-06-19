@@ -214,6 +214,7 @@
 	float: right;
 	background-color: #444;
 	color: #fff;
+	max-width: 100%;
 }
 
 .hwp-away-msg {
@@ -259,6 +260,7 @@
     box-shadow: none;
 	box-sizing: border-box;
 	width: 100%;
+	padding-right: 35px !important;
 }
 
 .hwp-text i {
