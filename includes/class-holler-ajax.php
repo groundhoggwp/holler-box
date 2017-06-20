@@ -181,6 +181,9 @@ if( !class_exists( 'Holler_Ajax' ) ) {
                 wp_send_json_error('Verification failed.' );
             }
 
+            if( !class_exists('\MailPoet\API\API') )
+                wp_send_json_error('Please install and activate the MailPoet plugin.' );
+
             $list = $_GET['list_id'];
 
             $subscriber = array(

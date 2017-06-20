@@ -344,22 +344,25 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <?php _e( 'MailPoet', 'hollerbox' ); ?>
                     <select name="mailpoet_list_id" id="mailpoet_list_id">
                     <?php 
+                    if( class_exists('\MailPoet\API\API') ) {
+                        
+                        $subscription_lists = \MailPoet\API\API::MP('v1')->getLists();
 
-                    $subscription_lists = \MailPoet\API\API::MP('v1')->getLists();
+                        if( !empty( $subscription_lists ) ) :
 
-                    if( !empty( $subscription_lists ) ) :
+                            foreach ($subscription_lists as $list) {
+                                echo '<option value="' . $list['id'] . '"' . selected( get_post_meta( $post->ID, 'mailpoet_list_id', 1 ), $list['id'] ) . '">';
+                                echo $list['name'];
+                                echo '</option>';
+                            };
 
-                        foreach ($subscription_lists as $list) {
-                            echo '<option value="' . $list['id'] . '"' . selected( get_post_meta( $post->ID, 'mailpoet_list_id', 1 ), $list['id'] ) . '">';
-                            echo $list['name'];
-                            echo '</option>';
-                        };
+                        else:
 
-                    else:
+                            echo 'Please add a MailPoet List.';
 
-                        echo 'Please add a MailPoet List.';
+                        endif;
 
-                    endif;
+                    }
 
                     ?>
                     </select>
