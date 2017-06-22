@@ -217,7 +217,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          */
         public function get_active_items() {
 
-            $args = array( 'post_type' => 'hollerbox' );
+            $args = array( 'post_type' => 'holler-box' );
             // The Query
             $the_query = new WP_Query( $args );
 
@@ -251,7 +251,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
             $avatar_email = get_post_meta($id, 'avatar_email', 1);
             ?>
             <style type="text/css">
-            #hwp-<?php echo $id; ?>, #hwp-<?php echo $id; ?> a, #hwp-<?php echo $id; ?> i, #hwp-<?php echo $id; ?> .holler-inside { color: <?php echo get_post_meta( $id, 'text_color', 1 ); !important ?>; }
+            #hwp-<?php echo $id; ?>, #hwp-<?php echo $id; ?> a, #hwp-<?php echo $id; ?> i, #hwp-<?php echo $id; ?> .holler-inside { color: <?php echo get_post_meta( $id, 'text_color', 1 ); ?> !important; }
             </style>
 
             <?php if( get_post_meta( $id, 'position', 1 ) != 'holler-banner' ) : ?>
@@ -278,7 +278,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 <div class="hwp-chat hwp-hide">
                     
                     <div class="hwp-row hwp-text">
-                        <input type="text" class="hwp-text-input" placeholder="Type your message" />
+                        <input type="text" class="hwp-text-input" placeholder="<?php _e( 'Type your message', 'holler-box' ); ?>" />
                         <i class="icon icon-mail"></i>
                     </div>
                 </div>
@@ -332,8 +332,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 }
                 ?>
                 <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>
-                <input type="email" name="email" class="hwp-email-input" placeholder="Enter email" autocomplete="on" autocapitalize="off" />
-                <button class="hwp-email-btn"><?php echo _e('Send', 'hollerbox' ); ?></button>
+                <input type="email" name="email" class="hwp-email-input" placeholder="<?php _e( 'Enter email', 'holler-box' ); ?>" autocomplete="on" autocapitalize="off" />
+                <button class="hwp-email-btn"><?php _e('Send', 'holler-box' ); ?></button>
                 <?php
             }
         }

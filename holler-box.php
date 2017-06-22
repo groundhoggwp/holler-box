@@ -6,7 +6,7 @@
  * Version:         0.7.0
  * Author:          Scott Bolinger
  * Author URI:      http://scottbolinger.com
- * Text Domain:     hollerbox
+ * Text Domain:     holler-box
  *
  * @author          Scott Bolinger
  * @copyright       Copyright (c) Scott Bolinger 2017
@@ -113,7 +113,7 @@ if( !class_exists( 'Holler_Box' ) ) {
          */
         public function load_textdomain() {
 
-            load_plugin_textdomain( 'hollerbox' );
+            load_plugin_textdomain( 'holler-box' );
             
         }
 
@@ -132,7 +132,7 @@ if( !class_exists( 'Holler_Box' ) ) {
 function holler_box_load() {
     return Holler_Box::instance();
 }
-add_action( 'plugins_loaded', 'holler_box_load' );
+add_action( 'plugins_loaded', 'holler_box_load', Holler_Box_DIR );
 
 
 /**
