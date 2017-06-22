@@ -236,7 +236,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'show_in_menu'      => true,
                 'show_in_rest'      => false,
                 'query_var'         => true,
-                // 'rewrite'           => array( 'slug' => 'holler-box' ),
+                // 'rewrite'           => array( 'slug' => 'hollerbox' ),
                 'capability_type'   => 'post',
                 'has_archive'       => true,
                 'hierarchical'      => true,
@@ -247,7 +247,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'register_meta_box_cb' => array( $this, 'notification_meta_boxes' )
             );
 
-            register_post_type( 'holler-box', $args );
+            register_post_type( 'hollerbox', $args );
         }
 
         /**
@@ -261,7 +261,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'display_meta_box',
                 __( 'Display', 'holler-box' ),
                 array( $this, 'display_meta_box_callback' ),
-                'holler-box',
+                'hollerbox',
                 'normal',
                 'high'
             );
@@ -270,7 +270,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'settings_meta_box',
                 __( 'Advanced Settings', 'holler-box' ),
                 array( $this, 'settings_meta_box_callback' ),
-                'holler-box',
+                'hollerbox',
                 'normal',
                 'high'
             );
@@ -339,13 +339,15 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                     <input type="radio" name="email_provider" value="mc" <?php checked("mc", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
                     <?php _e( 'MailChimp', 'holler-box' ); ?><input id="mc_list_id" name="mc_list_id" placeholder="MailChimp list ID" value="<?php echo get_post_meta( $post->ID, 'mc_list_id', 1 ); ?>" type="text" /> <span class="mc-description"><?php _e( 'Get your list ID under Lists => Settings => List name and defaults => List ID (on right side of screen)', 'holler-box' ); ?></span><br>
+                    
+                    <?php if( class_exists('\MailPoet\API\API') ) : ?>
 
-                    <input type="radio" name="email_provider" value="mailpoet" <?php checked("mailpoet", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
-                    <?php _e( 'MailPoet', 'holler-box' ); ?>
-                    <select name="mailpoet_list_id" id="mailpoet_list_id">
-                    <?php 
-                    if( class_exists('\MailPoet\API\API') ) {
-                        
+                        <input type="radio" name="email_provider" value="mailpoet" <?php checked("mailpoet", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
+                        <?php _e( 'MailPoet', 'holler-box' ); ?>
+                        <select name="mailpoet_list_id" id="mailpoet_list_id">
+                    
+                        <?php
+
                         $subscription_lists = \MailPoet\API\API::MP('v1')->getLists();
 
                         if( !empty( $subscription_lists ) ) :
@@ -362,11 +364,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                         endif;
 
-                    }
-
-                    ?>
-                    </select>
-                    <br>
+                        ?>
+                        </select>
+                        <br>
+                    <?php endif; ?>
 
                     <input type="radio" name="email_provider" value="custom" <?php checked("custom", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
                     <?php _e( 'Custom', 'holler-box' ); ?>

@@ -1,4 +1,4 @@
-=== Holler Box - Smart, Stylish Popup Messages ===
+=== Holler Box - The Smart WordPress Popup Plugin ===
 
 Contributors: scottopolis
 Tags: popup, optin, mailchimp, pop up
@@ -8,21 +8,23 @@ Stable tag: 0.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Convert more visitors to customers with personalized popup messages.
+Lightweight, stylish, and effective.
 
 == Description ==
 
-Holler Box is more than a WordPress popup plugin.
+Nobody likes in-your-face popups, but we still have important messages we need our visitors to see.
 
-It's a way for site owners to communicate with their visitors without turning them off with annoying in-your-face popups.
+How can we communicate these messages effectively, without being annoying?
 
-Show customizable marketing messages to your site visitors easily, with beautiful design. Convert website visitors, upsell customers, and get your message out to the right people at the right time.
+Holler Box is a small, non-intrusive message box that doesn’t interrupt your visitors. It shows them the right message at the right time, without getting in their face.
 
-Easily announce a sale, webinar, new article, email opt-in, and lots more.
+Collect more email leads, get more sales during a promotion, or get the word out about your event. Use our smart filter system to choose where and when to show it, for example only on your blog posts to new visitors.
 
-Use our smart filter system to show to the right visitor at the right time.
+Other tools are over overly-complex, and take too long to setup a simple message. Holler Box is lightweight and easy to use, you can add a new message to your site in under 30 seconds.
 
-Keep track of who has seen your messages and how well they are working, so you can tweak and improve.
+Keep track of who has seen your messages and how well they are working, so you can tweak and improve. Add any WordPress content such as shortcodes and media, right in the comfort of your wp-admin.
+
+It’s time to get smart about how we display our popups, start communicating better with Holler Box!
 
 See live demos and purchase the Pro version at the <a href="http://hollerwp.com/" target="_blank">Holler Box website</a>.
 
@@ -71,6 +73,8 @@ The Pro version also includes more advanced show on filtering, so it’s easier 
 **Easy Digital Downloads and WooCommerce Sales Notifications**
 
 Easily show your site visitors a notification like: "Matt just purchased Holler Box Pro." This sales notification pulls the latest sale from EDD or WooCommerce.
+
+<a href="http://hollerwp.com/" target="_blank">Get Pro</a>.
 
 == Installation ==
 

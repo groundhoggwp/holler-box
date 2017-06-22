@@ -132,7 +132,7 @@ if( !class_exists( 'Holler_Box' ) ) {
 function holler_box_load() {
     return Holler_Box::instance();
 }
-add_action( 'plugins_loaded', 'holler_box_load', Holler_Box_DIR );
+add_action( 'plugins_loaded', 'holler_box_load' );
 
 
 /**
