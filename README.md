@@ -1,14 +1,18 @@
 # Holler Box
 
-Smart, Stylish Popup Messages for WordPress sites.
+Nobody likes in-your-face popups, but we still have important messages we need our visitors to see.
 
-Show customizable marketing messages to your site visitors easily, with beautiful design. Convert website visitors, upsell customers, and get your message out to the right people at the right time.
+How can we communicate these messages effectively, without being annoying?
 
-Easily announce a sale, webinar, new article, email opt-in, and lots more.
+Holler Box is a small, non-intrusive message box that doesn’t interrupt your visitors. It shows them the right message at the right time, without getting in their face.
 
-Use our smart filter system to show to the right visitor at the right time.
+Collect more email leads, get more sales during a promotion, or get the word out about your event. Use our smart filter system to choose where and when to show it, for example only on your blog posts to new visitors.
 
-Keep track of who has seen your messages and how well they are working, so you can tweak and improve.
+Other tools are over overly-complex, and take too long to setup a simple message. Holler Box is lightweight and easy to use, you can add a new message to your site in under 30 seconds.
+
+Keep track of who has seen your messages and how well they are working, so you can tweak and improve. Add any WordPress content such as shortcodes and media, right in the comfort of your wp-admin.
+
+It’s time to get smart about how we display our popups, start communicating better with Holler Box!
 
 See live demos at the [Holler Box website](http://hollerwp.com/)
 

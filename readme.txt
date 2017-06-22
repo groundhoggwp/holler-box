@@ -171,7 +171,8 @@ Make sure your email form does not have a required field that is not displayed. 
 
 = 0.7.0 =
 
-* MailPoet Integration
+* MailPoet 3 Integration
+* Translation updates
 
 = 0.6.0 =
 
