@@ -217,7 +217,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          */
         public function get_active_items() {
 
-            $args = array( 'post_type' => 'holler-box' );
+            $args = array( 'post_type' => 'hollerbox' );
             // The Query
             $the_query = new WP_Query( $args );
 

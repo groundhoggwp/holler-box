@@ -531,7 +531,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
          */
         public function save_default_meta( $new_status, $old_status, $post ) {
             
-            if ( $old_status === 'new' && $new_status === 'auto-draft' && $post->post_type === 'holler-box' ) {
+            if ( $old_status === 'new' && $new_status === 'auto-draft' && $post->post_type === 'hollerbox' ) {
 
                 $item_type = get_post_meta( $post->ID, 'item_type' );
 
