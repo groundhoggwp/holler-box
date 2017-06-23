@@ -659,6 +659,10 @@
   // callback when interaction link clicked
   holler.interactionLink = function(e) {
 
+    // don't count attribution clicks as conversions
+    if( e.target.href === 'http://hollerwp.com/' ) 
+      return;
+
     var id = $(e.target).closest('.holler-box').attr('id').split('-')[1];
 
     holler.conversion( id );
