@@ -295,6 +295,23 @@ span.hwp-powered-by a {
     float: right;
 }
 
+.holler-box a.hwp-button {
+    display: inline-block;
+    clear: both;
+    background: #1191cb;
+    color: #fff;
+    font-size: 16px;
+    margin: 10px 0;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+    padding: 5px 15px;
+    line-height: 1.5;
+    text-decoration: none;
+    width: 100%;
+    text-align: center;
+}
+
 /*
  * Media Queries
  */

@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Holler Box
  * Plugin URI:      http://hollerwp.com
- * Description:     Convert visitors to customers with personalized messaging.
+ * Description:     The smart WordPress popup plugin. Lightweight, stylish, and effective.
  * Version:         0.7.0
  * Author:          Scott Bolinger
  * Author URI:      http://scottbolinger.com
