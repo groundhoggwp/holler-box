@@ -27,6 +27,30 @@ span.mc-description {
 	clear: both;
 }
 
+#hwp-upgrade-box {
+	float: right;
+	width: 350px;
+	max-width: 30%;
+	clear: right;
+	overflow: hidden;
+	padding: 15px;
+}
+
+#hwp-upgrade-box .hwp-content {
+	padding: 0 15px 10px 15px;
+}
+
+/*a.button-hwp {
+	background: #e8ac0a;
+	padding: 8px 15px;
+	border-radius: 3px;
+	text-decoration: none;
+	color: #fff;
+	width: auto;
+	display: block;
+	font-size: 18px;
+}*/
+
 /* For preview */
 
 #hwp-notification-box {
@@ -284,4 +308,12 @@ input.hwp-number-input {
 	border: 1px solid #e5e5e5;
     padding: 15px;
     margin: 10px 0;
+}
+
+@media (max-width: 782px) {
+	#hwp-upgrade-box {
+		float: none;
+		max-width: 100%;
+		margin-bottom: 15px;
+	}
 }

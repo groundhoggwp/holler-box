@@ -88,7 +88,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
          */
         public function settings_page() {
 
-            add_submenu_page( 'edit.php?post_type=hollerbox', 'Holler Box Settings', 'Settings', 'manage_options', 'holler-box', array( $this, 'render_settings') );
+            add_submenu_page( 'edit.php?post_type=hollerbox', 'Holler Box Settings', 'Settings', 'manage_options', 'hollerbox', array( $this, 'render_settings') );
             
         }
 
@@ -118,10 +118,34 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 delete_option( 'hwp_powered_by' );
             }
 
+            $license_key = get_option( 'hwp_pro_edd_license' );
+
             ?>
             <div id="holler-wrap" class="wrap">          
 
             <h2><?php _e('Settings', 'holler-box'); ?></h2>
+
+            <?php if( !$license_key ) : ?>
+
+                <div id="hwp-upgrade-box" class="widgets-holder-wrap">
+                    
+                    <div class="hwp-content">
+                        <h2>Get Holler Box Pro!</h2>
+                        <ul>
+                        <li>More display settings like taxonomy and post type</li>
+                        <li>Header banner option</li>
+                        <li>Bigger popout option</li>
+                        <li>EDD and WooCommerce integration</li>
+                        <li>Exit detection, link activation</li>
+                        <li>Priority support</li>
+                        <li>Lots more...</li>
+                        </ul>
+                        <a href="https://hollerwp.com/pro?utm_source=wp_admin&utm_campaign=hwp_settings" class="button button-primary">View features &amp; pricing</a>
+                    </div>
+                    
+                </div>
+
+            <?php endif; ?>
 
             <form method="post" action="edit.php?post_type=hollerbox&page=hollerbox">
 
@@ -485,6 +509,13 @@ if( !class_exists( 'Holler_Admin' ) ) {
             </p>
 
             <?php do_action('hwp_advanced_settings_after', $post->ID ); ?>
+
+            <?php 
+                $license_key = get_option( 'hwp_pro_edd_license' );
+                if( !$license_key ) {
+                    echo '<p>Get more powerful display and customization settings in <strong><a href="https://hollerwp.com/pro?utm_source=wp_admin&utm_campaign=below_settings">Holler Box Pro</a></strong></p>';
+                }
+            ?>
 
         <?php }
 
