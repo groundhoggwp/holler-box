@@ -64,6 +64,13 @@
     if( vars.showSettings === 'interacts' && holler.getCookie( 'hwp_' + id + '_int' ) != '' )
       return;
 
+    // if on mobile, show button first
+    if( window.hollerVars.isMobile === "1" && vars.position != 'holler-banner' ) {
+      holler.setCookie( 'hwp-' + id + '_hide', 'true', 1 );
+      // have to count impression here, otherwise it won't be counted because it's hidden
+      holler.countNoteShown(id);
+    }
+
     var shown = holler.getCookie( 'hwp_' + id + '_shown' );
 
     // only show once?
@@ -74,6 +81,7 @@
 
     holler.floatingBtn = document.getElementById('hwp-floating-btn');
 
+    // add click listeners and such
     holler.noteListeners( id );
 
     if( vars.bgColor )

@@ -99,6 +99,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $array['expires'] = '999'; // how long we should show this in num days
 
+            $array['isMobile'] = wp_is_mobile();
+
             // active notification IDs
             $array['active'] = self::$active;
 
