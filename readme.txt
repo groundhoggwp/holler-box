@@ -91,7 +91,7 @@ Content can be pretty much anything, but keep your message short.
 - Choose your colors
 - Show email opt-in: default sends to your email address, or choose a provider or custom HTML form. Details below.
 - Default: sends to the email address you enter in the settings.
-- MailChimp integration: enter your <a href="http://kb.mailchimp.com/lists/signup-forms/share-your-signup-form" target="_blank">full signup form url</a>. (Must not be the shortened url) 
+- MailChimp integration: add your API key in the settings, then your list ID (Get your list ID in your MailChimp account under Lists => Settings => List name and defaults => List ID on right side of screen) 
 - Convertkit: visit Holler Box => Settings, enter <a href="https://app.convertkit.com/account/edit" target="_blank">your API key</a>. Choose Convertkit when creating your new Holler Box, then enter your form ID. Find your form ID by visiting your signup form, then copy the numbers in the url (or in the embed code).
 - Show chat: show the (fake) live chat
 
