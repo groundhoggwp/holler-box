@@ -30,7 +30,7 @@ if( !class_exists( 'Holler_Ajax' ) ) {
          *
          * @access      public
          * @since       0.2.0
-         * @return      object self::$instance The one true Holler_Ajax
+         * @return      self self::$instance The one true Holler_Ajax
          */
         public static function instance() {
             if( !self::$instance ) {

@@ -52,7 +52,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          */
         private function hooks() {
 
-            add_action('wp', array( $this, 'get_active_items' ) );
+            add_action( 'wp', array( $this, 'get_active_items' ) );
             add_action( 'wp_footer', array( $this, 'maybe_display_items' ) );
             add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
             add_action( 'hwp_email_form', array( $this, 'email_forms' ) );
@@ -84,7 +84,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * Return localized vars from settings
          *
          * @since       0.1.0
-         * @return      array()
+         * @return      array
          */
         public function get_localized_vars() {
 
@@ -143,7 +143,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * Show the box
          *
          * @since       0.1.0
-         * @return      HTML
+         * @return      string
          */
         public function maybe_display_items() {
 
@@ -215,7 +215,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * Loop through items, store active items in self::$active[] for later use
          *
          * @since       0.1.0
-         * @return      HTML
+         * @return      void
          */
         public function get_active_items() {
 
@@ -246,7 +246,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * Output notification markup
          *
          * @since       0.1.0
-         * @return      HTML
+         * @param       int $id
+         * @return      string
          */
         public function display_notification_box( $id ) {
 
@@ -305,7 +306,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * Handle different email provider forms
          *
          * @since       0.1.0
-         * @return      array()
+         * @param       int $id
+         * @return      array
          */
         public function email_forms( $id ) {
 
@@ -340,8 +342,11 @@ if( !class_exists( 'Holler_Functions' ) ) {
             }
         }
 
-        /*
+        /**
          * Turn string of page titles into array of page IDs
+         *
+         * @param string $string
+         * @return array
          */
         public static function titles_to_ids( $string ) {
 
@@ -364,8 +369,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
         }
 
-        /*
+        /**
          * Add extra classes to hollerbox element
+         *
+         * @param string $classes
+         * @param int $id
+         * @return string
          */
         public static function add_hb_classes( $classes, $id ) {
             $classes .= get_post_meta( $id, 'position', 1 );
