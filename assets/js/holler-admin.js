@@ -16,7 +16,7 @@
 
   	$('.hwp-colors').wpColorPicker();
 
-    $('#settings_meta_box').addClass('closed');
+    $('#settings_meta_box, #popout_meta_box').addClass('closed');
     
   }
 
@@ -45,6 +45,7 @@
     .on('change', '.hwp-switch input', holler.toggleSwitch )
   	.on('change', 'input[name=expiration]', holler.toggleDatepicker )
   	.on('change', 'input[name=show_on]', holler.toggleShowOn )
+    .on('change', 'input[name=position]', holler.togglePosition )
     .on('change', 'input[name=email_provider]', holler.toggleEmailForm )
   	.on('keyup', '#content', holler.updatePreviewContent )
     .on('focus', 'input#scroll_delay', function() {
@@ -87,6 +88,20 @@
         exclude.hide();
     }
 
+  }
+
+  // hide n/a settings when using banner
+  holler.togglePosition = function() {
+
+    var val = $('input[name=position]:checked').val();
+
+    switch( val ) {
+      case 'holler-banner':
+        $('#popout_meta_box, #show_chat').hide();
+        break;
+      default:
+        $('#popout_meta_box, #show_chat').show();
+    }
   }
 
   // New item selected, update preview and settings display
