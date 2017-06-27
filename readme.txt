@@ -171,6 +171,12 @@ Make sure your email form does not have a required field that is not displayed. 
 
 == Changelog ==
 
+= 0.8.0 =
+
+* Fix settings page permissions error
+* Hide first for mobile
+* Updates for Pro
+
 = 0.7.0 =
 
 * MailPoet 3 Integration
