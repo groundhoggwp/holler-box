@@ -253,14 +253,14 @@ if( !class_exists( 'Holler_Functions' ) ) {
             $avatar_email = get_post_meta($id, 'avatar_email', 1);
             ?>
             <style type="text/css">
-            #hwp-<?php echo $id; ?>, #hwp-<?php echo $id; ?> a, #hwp-<?php echo $id; ?> i, #hwp-<?php echo $id; ?> .holler-inside { color: <?php echo get_post_meta( $id, 'text_color', 1 ); ?> !important; }
+            #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
             </style>
 
             <?php if( get_post_meta( $id, 'position', 1 ) != 'holler-banner' ) : ?>
-            <div id="hwp-floating-btn" data-id="<?php echo $id; ?>" class="<?php echo get_post_meta( $id, 'position', 1 ); ?>"><i class="icon icon-chat"></i></div>
+            <div id="hwp-floating-btn" data-id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( get_post_meta( $id, 'position', 1 ) ); ?>"><i class="icon icon-chat"></i></div>
             <?php endif; ?>
 
-            <div id="hwp-<?php echo $id; ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">
+            <div id="hwp-<?php echo esc_attr( $id ); ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">
 
                 <div class="holler-inside">
                 
@@ -326,11 +326,11 @@ if( !class_exists( 'Holler_Functions' ) ) {
             } else {
 
                 if( $provider === 'ck' ) {
-                    echo '<input type="hidden" class="ck-form-id" value="' . get_post_meta( $id, 'ck_id', 1 ) . '" />';
+                    echo '<input type="hidden" class="ck-form-id" value="' . esc_attr( get_post_meta( $id, 'ck_id', 1 ) ) . '" />';
                 } elseif( $provider === 'mc' && !empty( $mc_list_id ) ) {
-                    echo '<input type="hidden" class="mc-list-id" value="' . get_post_meta( $id, 'mc_list_id', 1 ) . '" />';
+                    echo '<input type="hidden" class="mc-list-id" value="' . esc_attr( get_post_meta( $id, 'mc_list_id', 1 ) ) . '" />';
                 } elseif( $provider === 'mailpoet' ) {
-                    echo '<input type="hidden" class="mailpoet-list-id" value="' . get_post_meta( $id, 'mailpoet_list_id', 1 ) . '" />';
+                    echo '<input type="hidden" class="mailpoet-list-id" value="' . esc_attr( get_post_meta( $id, 'mailpoet_list_id', 1 ) ) . '" />';
                 }
                 ?>
                 <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>
