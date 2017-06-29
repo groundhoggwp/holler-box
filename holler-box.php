@@ -38,7 +38,7 @@ if( !class_exists( 'Holler_Box' ) ) {
          *
          * @access      public
          * @since       0.1.0
-         * @return      object self::$instance The one true Holler_Box
+         * @return      self The one true Holler_Box
          */
         public static function instance() {
             if( !self::$instance ) {
@@ -126,7 +126,7 @@ if( !class_exists( 'Holler_Box' ) ) {
  * instance to functions everywhere
  *
  * @since       0.1.0
- * @return      \EDD_Metrics The one true EDD_Metrics
+ * @return      \Holler_Box The one true Holler_Box
  *
  */
 function holler_box_load() {
