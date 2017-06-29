@@ -30,7 +30,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
          *
          * @access      public
          * @since       0.2.0
-         * @return      object self::$instance The one true Holler_Admin
+         * @return      self self::$instance The one true Holler_Admin
          */
         public static function instance() {
             if( !self::$instance ) {
@@ -57,9 +57,9 @@ if( !class_exists( 'Holler_Admin' ) ) {
             add_action( 'init', array( $this, 'register_cpt' ) );
             add_action( 'save_post', array( $this, 'save_settings' ), 10, 2 );
             add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
-            add_filter('manage_edit-hollerbox_columns', array( $this, 'notification_columns' ) );
+            add_filter( 'manage_edit-hollerbox_columns', array( $this, 'notification_columns' ) );
             add_action( 'manage_hollerbox_posts_custom_column', array( $this, 'custom_columns' ), 10, 2 );
-            add_action(  'transition_post_status',  array( $this, 'save_default_meta' ), 10, 3 );
+            add_action( 'transition_post_status',  array( $this, 'save_default_meta' ), 10, 3 );
         }
 
         /**
@@ -186,7 +186,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
          *
          * @access      public
          * @since       0.1
-         * @return      void
+         * @param       array $columns
+         * @return      array
          */
         public function notification_columns( $columns ) {
             $date = $columns['date'];
@@ -203,6 +204,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
          *
          * @access      public
          * @since       0.1
+         * @param       string $column
+         * @param       int $post_id
          * @return      void
          */
         public function custom_columns( $column, $post_id ) {
@@ -313,6 +316,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
          * Display appearance meta box
          *
          * @since     0.1
+         * @param     WP_Post $post
          */
         public function display_meta_box_callback( $post ) {
 
@@ -432,8 +436,9 @@ if( !class_exists( 'Holler_Admin' ) ) {
          * Display settings meta box
          *
          * @since     0.1
+         * @param       WP_Post $post
          */
-        public function settings_meta_box_callback( $post ) { 
+        public function settings_meta_box_callback( $post ) {
             $show_on = get_post_meta( $post->ID, 'show_on', 1 );
             ?>
 
@@ -523,6 +528,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
          * Display preview
          *
          * @since     0.1
+         * @param       WP_Post $post
          */
         public function preview_meta_box_callback( $post ) { ?>
 
@@ -537,7 +543,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                 <div id="hwp-note-optin" class="hwp-row hwp-email-row">
                     <input type="email" name="email" id="hwp-email-input" placeholder="Enter email" autocomplete="on" autocapitalize="off" />
-                    <button class="hwp-email-btn" id="hwp-submit-email"><?php echo _e('Send', 'holler-box' ); ?></button>
+                    <button class="hwp-email-btn" id="hwp-submit-email"><?php _e('Send', 'holler-box' ); ?></button>
                 </div>
                 
                 <div id="hwp-chat" class="hwp-hide">
@@ -559,6 +565,9 @@ if( !class_exists( 'Holler_Admin' ) ) {
          * Save meta box defaults when new post is created
          *
          * @since     0.1
+         * @param     string $new_status
+         * @param     string $old_status
+         * @param     WP_Post $post
          */
         public function save_default_meta( $new_status, $old_status, $post ) {
             
@@ -595,6 +604,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
          * Save meta box settings
          *
          * @since     0.1
+         * @param     int $post_id
+         * @return    void
          */
         public function save_settings( $post_id ) {
 

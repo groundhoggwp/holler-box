@@ -52,7 +52,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          */
         private function hooks() {
 
-            add_action('wp', array( $this, 'get_active_items' ) );
+            add_action( 'wp', array( $this, 'get_active_items' ) );
             add_action( 'wp_footer', array( $this, 'maybe_display_items' ) );
             add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
             add_action( 'hwp_email_form', array( $this, 'email_forms' ) );
@@ -84,7 +84,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * Return localized vars from settings
          *
          * @since       0.1.0
-         * @return      array()
+         * @return      array
          */
         public function get_localized_vars() {
 
@@ -143,7 +143,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * Show the box
          *
          * @since       0.1.0
-         * @return      HTML
+         * @return      string
          */
         public function maybe_display_items() {
 
@@ -215,7 +215,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * Loop through items, store active items in self::$active[] for later use
          *
          * @since       0.1.0
-         * @return      HTML
+         * @return      void
          */
         public function get_active_items() {
 
@@ -246,21 +246,22 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * Output notification markup
          *
          * @since       0.1.0
-         * @return      HTML
+         * @param       int $id
+         * @return      string
          */
         public function display_notification_box( $id ) {
 
             $avatar_email = get_post_meta($id, 'avatar_email', 1);
             ?>
             <style type="text/css">
-            #hwp-<?php echo $id; ?>, #hwp-<?php echo $id; ?> a, #hwp-<?php echo $id; ?> i, #hwp-<?php echo $id; ?> .holler-inside { color: <?php echo get_post_meta( $id, 'text_color', 1 ); ?> !important; }
+            #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
             </style>
 
             <?php if( get_post_meta( $id, 'position', 1 ) != 'holler-banner' ) : ?>
-            <div id="hwp-floating-btn" data-id="<?php echo $id; ?>" class="<?php echo get_post_meta( $id, 'position', 1 ); ?>"><i class="icon icon-chat"></i></div>
+            <div id="hwp-floating-btn" data-id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( get_post_meta( $id, 'position', 1 ) ); ?>"><i class="icon icon-chat"></i></div>
             <?php endif; ?>
 
-            <div id="hwp-<?php echo $id; ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">
+            <div id="hwp-<?php echo esc_attr( $id ); ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">
 
                 <div class="holler-inside">
                 
@@ -305,7 +306,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * Handle different email provider forms
          *
          * @since       0.1.0
-         * @return      array()
+         * @param       int $id
+         * @return      array
          */
         public function email_forms( $id ) {
 
@@ -326,11 +328,11 @@ if( !class_exists( 'Holler_Functions' ) ) {
             } else {
 
                 if( $provider === 'ck' ) {
-                    echo '<input type="hidden" class="ck-form-id" value="' . get_post_meta( $id, 'ck_id', 1 ) . '" />';
+                    echo '<input type="hidden" class="ck-form-id" value="' . esc_attr( get_post_meta( $id, 'ck_id', 1 ) ) . '" />';
                 } elseif( $provider === 'mc' && !empty( $mc_list_id ) ) {
-                    echo '<input type="hidden" class="mc-list-id" value="' . get_post_meta( $id, 'mc_list_id', 1 ) . '" />';
+                    echo '<input type="hidden" class="mc-list-id" value="' . esc_attr( get_post_meta( $id, 'mc_list_id', 1 ) ) . '" />';
                 } elseif( $provider === 'mailpoet' ) {
-                    echo '<input type="hidden" class="mailpoet-list-id" value="' . get_post_meta( $id, 'mailpoet_list_id', 1 ) . '" />';
+                    echo '<input type="hidden" class="mailpoet-list-id" value="' . esc_attr( get_post_meta( $id, 'mailpoet_list_id', 1 ) ) . '" />';
                 }
                 ?>
                 <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>
@@ -340,8 +342,11 @@ if( !class_exists( 'Holler_Functions' ) ) {
             }
         }
 
-        /*
+        /**
          * Turn string of page titles into array of page IDs
+         *
+         * @param string $string
+         * @return array
          */
         public static function titles_to_ids( $string ) {
 
@@ -364,8 +369,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
         }
 
-        /*
+        /**
          * Add extra classes to hollerbox element
+         *
+         * @param string $classes
+         * @param int $id
+         * @return string
          */
         public static function add_hb_classes( $classes, $id ) {
             $classes .= get_post_meta( $id, 'position', 1 );
