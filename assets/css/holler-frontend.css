@@ -336,7 +336,7 @@ span.hwp-powered-by a {
 }
 */
  
- [class^="icon-"]:before, [class*=" icon-"]:before {
+.holler-box [class^="icon-"]:before, .holler-box [class*=" icon-"]:before, #hwp-floating-btn [class^="icon-"]:before, #hwp-floating-btn [class*=" icon-"]:before {
   font-family: "hwpfontello";
   font-style: normal;
   font-weight: normal;
