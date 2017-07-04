@@ -1,14 +1,14 @@
 === Holler Box - The Smart WordPress Popup Plugin ===
 
 Contributors: scottopolis
-Tags: popup, optin, mailchimp, pop up
+Tags: popup, optin, lead generation, marketing, email opt-in
 Requires at least: 4.5
 Tested up to: 4.8
-Stable tag: 0.8.0
+Stable tag: 0.8.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Lightweight, stylish, and effective.
+A lightweight, highly effective lead generation popup.
 
 == Description ==
 
@@ -16,7 +16,7 @@ Nobody likes in-your-face popups, but we still have important messages we need o
 
 How can we communicate these messages effectively, without being annoying?
 
-https://www.youtube.com/watch?v=VKGkah5mBrg
+[youtube  https://www.youtube.com/watch?v=VKGkah5mBrg]
 
 Holler Box is a small, non-intrusive message box that doesn’t interrupt your visitors. It shows them the right message at the right time, without getting in their face.
 
@@ -139,7 +139,7 @@ That number is the form ID, in this case it's 445667. Enter that number as the C
 
 *How do I setup MailPoet?*
 
-Install MailPoet, version 3 or later. Create a new Holler Box, and select MailPoet as the email provider. Choose your list and save, new subscribers will be added to this.
+Install MailPoet, version 3 or later. Create a new Holler Box, and select MailPoet as the email provider. Choose your list and save, new subscribers will be added to this list.
 
 **Troubleshooting**
 
@@ -170,6 +170,12 @@ Make sure your email form does not have a required field that is not displayed. 
 8. CPT
 
 == Changelog ==
+
+= 0.8.1 =
+
+* Fix for FontAwesome conflicts
+* PHP docs cleanup props @thefrosty
+* Escape some values props @jacobarriola
 
 = 0.8.0 =
 
