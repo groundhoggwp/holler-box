@@ -81,9 +81,6 @@
 
     holler.floatingBtn = document.getElementById('hwp-floating-btn');
 
-    // add click listeners and such
-    holler.noteListeners( id );
-
     if( vars.bgColor )
       item.style.backgroundColor = vars.bgColor;
 
@@ -724,6 +721,9 @@
 
   // Callback for tracking views
   holler.countNoteShown = function( id ) {
+
+    // add click listeners and such. Doing it here because it's most reliable way of knowing when note is actually shown on page.
+    holler.noteListeners( id );
 
     var options = window.hollerVars[id];
 
