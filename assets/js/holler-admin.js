@@ -125,6 +125,7 @@
   // Handle display of different email options
   holler.toggleEmailForm = function() {
 
+    var sendTo = $('#send-to-option');
     var defaultDiv = $('#default-email-options');
     var custom = $('#custom-email-options');
     var checkedVal = $('input[name=email_provider]:checked').val();
@@ -143,6 +144,7 @@
     }
 
     if( checkedVal === 'default' ) {
+      sendTo.show();
       defaultDiv.show();
       custom.hide();
       ckId.hide();
@@ -151,26 +153,30 @@
     } else if( checkedVal === 'custom' ) {
       custom.show();
       defaultDiv.hide();
+      sendTo.hide();
       ckId.hide();
       mcUrl.hide();
       mailpoet.hide();
     } else if( checkedVal === 'mc' ) {
       mcUrl.show();
+      defaultDiv.show();
       ckId.hide();
       custom.hide();
-      defaultDiv.hide();
+      sendTo.hide();
       mailpoet.hide();
     } else if( checkedVal === 'ck' ) {
       ckId.show();
+      defaultDiv.show();
       mcUrl.hide();
       custom.hide();
-      defaultDiv.hide();
+      sendTo.hide();
       mailpoet.hide();
     } else if( checkedVal === 'mailpoet' ) {
       mailpoet.show();
+      defaultDiv.show();
       mcUrl.hide();
       custom.hide();
-      defaultDiv.hide();
+      sendTo.hide();
       ckId.hide();
     }
 

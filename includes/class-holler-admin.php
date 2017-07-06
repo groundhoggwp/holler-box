@@ -401,14 +401,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <?php _e( 'Custom', 'holler-box' ); ?>
                     </p>
 
-                    <div id="default-email-options">
-
-                        <label for="opt_in_message"><?php _e( 'Message', 'holler-box' ); ?></label>
-                        <input class="widefat" type="text" name="opt_in_message" id="opt_in_message" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
-
-                        <label for="opt_in_placeholder"><?php _e( 'Placeholder', 'holler-box' ); ?></label>
-                        <input class="widefat" type="text" name="opt_in_placeholder" id="opt_in_placeholder" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_placeholder', true ) ); ?>" size="20" />
-
+                    
+                    <div id="send-to-option">
                         <label for="opt_in_send_to"><?php _e( 'Send to email', 'holler-box' ); ?></label>
                         <input class="widefat" type="email" name="opt_in_send_to" id="opt_in_send_to" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_send_to', true ) ); ?>" size="20" />
 
@@ -419,8 +413,18 @@ if( !class_exists( 'Holler_Admin' ) ) {
                         <textarea class="hwp-textarea" name="custom_email_form" id="custom_email_form"><?php echo esc_html( get_post_meta( $post->ID, 'custom_email_form', true ) ); ?></textarea>
                     </div>
 
-                    <label for="opt_in_confirmation"><?php _e( 'Confirmation Message', 'holler-box' ); ?></label>
-                    <input class="widefat" type="text" name="opt_in_confirmation" id="opt_in_confirmation" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_confirmation', true ) ); ?>" size="20" />
+                    <div id="default-email-options">
+
+                        <label for="opt_in_message"><?php _e( 'Small text above email field', 'holler-box' ); ?></label>
+                        <input class="widefat" type="text" name="opt_in_message" id="opt_in_message" placeholder="We don't spam or share your information." value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
+
+                        <label for="opt_in_placeholder"><?php _e( 'Placeholder', 'holler-box' ); ?></label>
+                        <input class="widefat" type="text" name="opt_in_placeholder" id="opt_in_placeholder" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_placeholder', true ) ); ?>" size="20" />
+
+                        <label for="opt_in_confirmation"><?php _e( 'Confirmation Message', 'holler-box' ); ?></label>
+                        <input class="widefat" type="text" name="opt_in_confirmation" id="opt_in_confirmation" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_confirmation', true ) ); ?>" size="20" />
+
+                    </div>
 
                 </div>
             </p>
