@@ -238,6 +238,7 @@
     box-shadow: none;
 	box-sizing: border-box;
 	padding: 8px;
+	margin: 0;
     font-size: 15px;
 }
 
