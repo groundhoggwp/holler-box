@@ -1,18 +1,54 @@
 # Holler Box
 
-Nobody likes in-your-face popups, but we still have important messages we need our visitors to see.
+Holler Box is a popup and banner plugin that gives eCommerce store owners everything they need to collect leads and generate more sales.
 
-How can we communicate these messages effectively, without being annoying?
+It's lightweight and easy-to-use, not like other overly complex tools.
 
-Holler Box is a small, non-intrusive message box that doesn’t interrupt your visitors. It shows them the right message at the right time, without getting in their face.
+https://www.youtube.com/watch?v=VKGkah5mBrg
 
-Collect more email leads, get more sales during a promotion, or get the word out about your event. Use our smart filter system to choose where and when to show it, for example only on your blog posts to new visitors.
+Holler Box works like this:
 
-Other tools are over overly-complex, and take too long to setup a simple message. Holler Box is lightweight and easy to use, you can add a new message to your site in under 30 seconds.
+### 1. Increase Your Email Opt-ins
 
-Keep track of who has seen your messages and how well they are working, so you can tweak and improve. Add any WordPress content such as shortcodes and media, right in the comfort of your wp-admin.
+Step one is to collect more leads at the top of your funnel, so you can follow up with customers and potentially convert them into customers.
 
-It’s time to get smart about how we display our popups, start communicating better with Holler Box!
+Holler Box allows you to create email optin forms easily, choose where and when to display them, and integrate with your email provider. Using the Holler Box smart display filters, you can show your opt-in in the right place at the right time, to increase your conversion rates and eventually get more sales.
+
+Use Holler Box to announce a webinar, a live event, or get traffic to a new article. It's flexible so you can get your message across.
+
+### 2. Increase Sales
+
+Holler Box Pro has a couple of ways to increase your sales.
+
+**Announce Promotions with the Holler Banner (pro only)**
+
+When you are running a sale or promotion on your store, you want the right people to know about it to get as many sales as possible. Use the Holler Banner to show your promotion or discount code in a header banner on your site, and automatically deactivate it when the promotion ends.
+
+Using the Holler Box smart display filters, you can choose to show the promotion only to logged out visitors, not to any logged in customers.
+
+**Social Proof (pro only)**
+
+Social proof is a big part of converting a potential sale. If are using WooCommerce or Easy Digital Downloads, now you can show your customers that other people are buying with the Holler Box Sales Notification add-on.
+
+It displays the name and package purchased by your latest customer to anyone who visits your site. Choose where and when to show it, for example only once per visitor per day.
+
+Watch your conversion rates skyrocket with this amazing social proof!
+
+### 3. Gather Feedback
+
+An important part of any eCommerce store is gathering feedback from site visitors.
+
+Using the expanded pop-out option (pro only), you can ask for feedback using an embedded Gravity Form. This allows you to tweak and optimize your site based on real input from your potential customers.
+
+### Conversion data and more
+
+Get conversion data right in your admin to see how well your messages are working, so you can tweak and improve. 
+
+Add any WordPress content such as shortcodes and media, and feel secure knowing you own your own data. No 3rd party services are displaying your popups with Holler Box.
+
+The best part about Holler Box is that it is effective with being annoying. It shows your audience the right message at the right time, without turning people off.
+
+Start collecting more leads and getting more sales with Holler Box Pro today.
 
 See live demos at the [Holler Box website](http://hollerwp.com/)
 
