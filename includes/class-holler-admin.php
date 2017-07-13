@@ -130,20 +130,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <div id="hwp-upgrade-box" class="widgets-holder-wrap">
                     
                     <div class="hwp-content">
-                        <h2>Get Holler Box Pro!</h2>
-                        <ul>
-                        <li>More display settings like taxonomy and post type</li>
-                        <li>Header banner option</li>
-                        <li>Bigger popout option</li>
-                        <li>EDD and WooCommerce integration</li>
-                        <li>Exit detection, link activation</li>
-                        <li>Priority support</li>
-                        <li>Lots more...</li>
-                        </ul>
-                        <a href="https://hollerwp.com/pro?utm_source=wp_admin&utm_campaign=hwp_settings" class="button button-primary">View features &amp; pricing</a>
-                        <hr>
-                        
-                        <h4>Subscribe for Special Offers</h4>
+
+                        <h2>Get More Conversions</h2>
+                        <span class="big-icon-right dashicons dashicons-chart-line"></span> 
+                        <p>Click subscribe below to get free tips and tricks on how to convert more site visitors into customers. No spam, unsubscribe at any time.</p>
                         <!-- Begin MailChimp Signup Form -->
                         <div id="hwp_embed_signup">
                         <form action="//hollerwp.us16.list-manage.com/subscribe/post?u=d9d0193288fd8270922c02b01&amp;id=590bf0a85f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
@@ -156,6 +146,20 @@ if( !class_exists( 'Holler_Admin' ) ) {
                             </div>
                         </form>
                         </div>
+
+                        <hr>
+
+                        <h3>Get Holler Box Pro!</h3>
+                        <ul>
+                        <li>More display settings like taxonomy and post type</li>
+                        <li>Header banner option</li>
+                        <li>Bigger popout option</li>
+                        <li>EDD and WooCommerce integration</li>
+                        <li>Exit detection, link activation</li>
+                        <li>Priority support</li>
+                        <li>Lots more...</li>
+                        </ul>
+                        <a href="https://hollerwp.com/pro?utm_source=wp_admin&utm_campaign=hwp_settings" class="button button-primary">View features &amp; pricing</a>
 
                     </div>
                     

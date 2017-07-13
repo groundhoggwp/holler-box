@@ -205,6 +205,12 @@ Make sure your email form does not have a required field that is not displayed. 
 
 == Changelog ==
 
+= 0.8.2 =
+
+* Fix input margin CSS
+* Fix conversion tracking bug
+* Settings page updates
+
 = 0.8.1 =
 
 * Fix for FontAwesome conflicts

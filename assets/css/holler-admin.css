@@ -1,5 +1,6 @@
-#holler-wrap h3 {
-	display: inline-block;
+#holler-wrap .form-table {
+	clear: none;
+	width: auto;
 }
 
 .hwp-settings-group {
@@ -46,6 +47,15 @@ span.mc-description {
 
 #hwp-upgrade-box hr {
 	margin: 15px 0;
+}
+
+.big-icon-right {
+	float: right;
+    font-size: 60px;
+    width: 60px;
+    height: 60px;
+    margin-left: 20px;
+    color: green;
 }
 
 /*a.button-hwp {
@@ -322,6 +332,7 @@ input.hwp-number-input {
 	#hwp-upgrade-box {
 		float: none;
 		max-width: 100%;
+		width: auto;
 		margin-bottom: 15px;
 	}
 }
