@@ -245,6 +245,7 @@
 .hwp-email-input {
 	width: 80% !important;
 	float: left;
+	margin: 0 !important;
 }
 
 .holler-box input#s {
