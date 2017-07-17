@@ -108,6 +108,12 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 update_option( 'hwp_mc_api_key', sanitize_text_field( $_POST['hwp_mc_api_key'] ) );
             }
 
+            if( isset( $_POST['hwp_mc_status'] ) ) {
+                update_option( 'hwp_mc_status', sanitize_text_field( $_POST['hwp_mc_status'] ) );
+            } elseif( !empty( $_POST ) && empty( $_POST['hwp_mc_status'] )  ) {
+                delete_option( 'hwp_mc_status' );
+            }
+
             if( isset( $_POST['hwp_email_title'] ) ) {
                 update_option( 'hwp_email_title', sanitize_text_field( $_POST['hwp_email_title'] ) );
             }
@@ -182,6 +188,11 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <p><?php _e('If you are using MailChimp, entery your API key. It can be found under Account -> Extras -> API Keys.', 'holler-box'); ?></p>
                 
                 <input id="hwp_mc_api_key" name="hwp_mc_api_key" value="<?php echo esc_html( get_option( 'hwp_mc_api_key' ) ); ?>" placeholder="MailChimp API key" type="text" size="50" /><br/>
+
+                <p>
+                    <input type="checkbox" id="hwp_mc_status" name="hwp_mc_status" value="1" <?php checked('1', get_option( 'hwp_mc_status' ), true); ?> />
+                    <?php _e( 'Disable MailChimp double-opt in? Check to subscribe users to your list without confirmation. If checked, MailChimp will not send a final welcome email.', 'holler-box' ); ?>
+                </p>
 
                 <h3><?php _e('Miscellaneous', 'holler-box'); ?></h3>
 

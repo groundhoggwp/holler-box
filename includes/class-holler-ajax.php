@@ -128,6 +128,11 @@ if( !class_exists( 'Holler_Ajax' ) ) {
             // MailChimp API credentials
             $api_key = get_option('hwp_mc_api_key');
 
+            // Double opt-in = 'pending'
+            // no double opt = 'subscribed'
+            // 'subscribed' doesn't send final welcome email
+            $status = ( get_option('hwp_mc_status') === '1' ? 'subscribed' : 'pending' );
+
             if( empty( $list_id ) || empty( $api_key ) || empty( $email ) )
                 wp_send_json_error('Missing required field.');
 
@@ -144,7 +149,7 @@ if( !class_exists( 'Holler_Ajax' ) ) {
             // member information
             $body = json_encode( array(
                 'email_address' => $email,
-                'status'        => 'pending'
+                'status'        => $status
                 // 'merge_fields'  => [
                 //     'FNAME'     => $fname,
                 //     'LNAME'     => $lname
