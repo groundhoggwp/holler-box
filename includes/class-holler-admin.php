@@ -452,7 +452,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                                 echo '<select name="mc_list_id">';
 
                                 foreach ($lists as $list) {
-                                    echo '<option value="' . $list['id'] . '"' . selected( get_post_meta( $post->ID, 'mc_list_id', 1 ), $list['id'] ) . '">';
+                                    echo '<option value="' . $list["id"] . '"' . selected( get_post_meta( $post->ID, "mc_list_id", 1 ), $list["id"] ) . '>';
                                     echo $list['name'];
                                     echo '</option>';
                                 }
@@ -464,6 +464,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                                 echo '<p style="color:red">There was a problem getting your lists. Please check your MailChimp API key in the Holler Box settings.</p>';
 
                             endif;
+
+                            do_action( 'hwp_mc_settings', $post->ID );
 
                             ?>
 

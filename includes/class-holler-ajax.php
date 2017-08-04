@@ -57,6 +57,9 @@ if( !class_exists( 'Holler_Ajax' ) ) {
             add_action( 'wp_ajax_nopriv_hwp_mc_subscribe', array( $this, 'hwp_mc_subscribe' ) );
             add_action( 'wp_ajax_hwp_mc_subscribe', array( $this, 'hwp_mc_subscribe' ) );
 
+            add_action( 'wp_ajax_hwp_get_mc_groups', array( $this, 'hwp_get_mc_groups' ) );
+            add_action( 'wp_ajax_hwp_get_mc_group_interests', array( $this, 'hwp_get_mc_group_interests' ) );
+
             add_action( 'wp_ajax_nopriv_hwp_mailpoet_subscribe', array( $this, 'mailpoet_subscribe' ) );
             add_action( 'wp_ajax_hwp_mailpoet_subscribe', array( $this, 'mailpoet_subscribe' ) );
 
@@ -170,6 +173,93 @@ if( !class_exists( 'Holler_Ajax' ) ) {
             } else {
                wp_send_json_success( $response );
             }
+        }
+
+        /**
+         * Get MailChimp groups (pro only)
+         * 
+         *
+         * @since       0.8.3
+         * @return      void
+         */
+        public function hwp_get_mc_groups() {
+
+            if( empty( $_GET['nonce'] ) || !wp_verify_nonce( $_GET['nonce'], 'class-holler-admin.php' ) ) {
+                wp_send_json_error('Verification failed.' );
+            }
+
+            // MailChimp API credentials
+            $api_key = get_option('hwp_mc_api_key');
+            $list_id = $_GET['list_id'];
+
+            // MailChimp API URL
+            $data_center = substr($api_key,strpos($api_key,'-')+1);
+            $url = 'https://' . $data_center . '.api.mailchimp.com/3.0/lists/' . $list_id . '/interest-categories';
+
+            $headers = array(
+                'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key ),
+                'Content-Type' => 'application/json'
+              );
+
+            $response = wp_remote_get( $url, array(
+                'timeout' => 15,
+                'body' => null,
+                'headers' => $headers,
+                )
+            );
+
+            if ( is_wp_error( $response ) ) {
+               $error_message = $response->get_error_message();
+               wp_send_json_error( $error_message );
+            } else {
+                $api_response = wp_remote_retrieve_body( $response );
+                wp_send_json_success( $api_response );
+            }
+
+        }
+
+        /**
+         * Get MailChimp groups (pro only)
+         * 
+         *
+         * @since       0.8.3
+         * @return      void
+         */
+        public function hwp_get_mc_group_interests() {
+
+            if( empty( $_GET['nonce'] ) || !wp_verify_nonce( $_GET['nonce'], 'class-holler-admin.php' ) ) {
+                wp_send_json_error('Verification failed.' );
+            }
+
+            // MailChimp API credentials
+            $api_key = get_option('hwp_mc_api_key');
+            $list_id = $_GET['list_id'];
+            $group_id = $_GET['group_id'];
+
+            // MailChimp API URL
+            $data_center = substr($api_key,strpos($api_key,'-')+1);
+            $url = 'https://' . $data_center . '.api.mailchimp.com/3.0/lists/' . $list_id . '/interest-categories/' . $group_id . '/interests';
+
+            $headers = array(
+                'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key ),
+                'Content-Type' => 'application/json'
+              );
+
+            $response = wp_remote_get( $url, array(
+                'timeout' => 15,
+                'body' => null,
+                'headers' => $headers,
+                )
+            );
+
+            if ( is_wp_error( $response ) ) {
+               $error_message = $response->get_error_message();
+               wp_send_json_error( $error_message );
+            } else {
+                $api_response = wp_remote_retrieve_body( $response );
+                wp_send_json_success( $api_response );
+            }
+
         }
 
         /**
