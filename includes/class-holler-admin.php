@@ -441,16 +441,39 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     </p>
                     
                     <p id="mailchimp-fields">
-                        <?php _e( 'MailChimp List ID, <a href=
-                        "http://hollerbox.helpscoutdocs.com/article/5-mailchimp-integration" target="_blank">click for help.</a> *required', 'holler-box' ); ?>
-                        <input id="mc_list_id" name="mc_list_id" class="widefat" placeholder="MailChimp list ID" value="<?php echo get_post_meta( $post->ID, 'mc_list_id', 1 ); ?>" type="text" />
+                        <?php _e( 'MailChimp List *required', 'holler-box' ); ?>
+
+                            <?php
+
+                            $lists = self::get_mc_lists(); 
+
+                            if( is_array($lists) && !empty( $lists ) ) :
+
+                                echo '<select name="mc_list_id">';
+
+                                foreach ($lists as $list) {
+                                    echo '<option value="' . $list['id'] . '"' . selected( get_post_meta( $post->ID, 'mc_list_id', 1 ), $list['id'] ) . '">';
+                                    echo $list['name'];
+                                    echo '</option>';
+                                }
+
+                                echo '</select>';
+
+                            else:
+
+                                echo '<p style="color:red">There was a problem getting your lists. Please check your MailChimp API key in the Holler Box settings.</p>';
+
+                            endif;
+
+                            ?>
+
                     </p>
                     
                     <?php if( class_exists('\MailPoet\API\API') ) : ?>
 
                         <div id="mailpoet-fields">
 
-                        <p><?php _e( 'MailPoet List *required', 'holler-box' ); ?></p>
+                        <?php _e( 'MailPoet List *required', 'holler-box' ); ?>
 
                         <select name="mailpoet_list_id" id="mailpoet_list_id">
                     
@@ -522,6 +545,51 @@ if( !class_exists( 'Holler_Admin' ) ) {
             </p>
 
         <?php }
+
+        /**
+         * Get MailChimp lists
+         * 
+         *
+         * @since       0.8.3
+         * @return      void
+         */
+        public function get_mc_lists() {
+
+            // MailChimp API credentials
+            $api_key = get_option('hwp_mc_api_key');
+
+            if( empty( $api_key) )
+                return 'Please add your MailChimp API key in the Holler Box settings.';
+
+            // MailChimp API URL
+            $data_center = substr($api_key,strpos($api_key,'-')+1);
+            $url = 'https://' . $data_center . '.api.mailchimp.com/3.0/lists/';
+
+            $headers = array(
+                'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key ),
+                'Content-Type' => 'application/json'
+              );
+
+            $response = wp_remote_get( $url, array(
+                'timeout' => 10,
+                'body' => null,
+                'headers' => $headers,
+                )
+            );
+
+            if ( is_wp_error( $response ) ) {
+               $error_message = $response->get_error_message();
+               return $error_message;
+            } else {
+                $api_response = json_decode( wp_remote_retrieve_body( $response ), true );
+                if( array_key_exists( 'lists', $api_response ) ) {
+                    return $api_response['lists'];
+                } else {
+                    return $api_response;
+                }
+            }
+
+        }
 
         /**
          * Display settings meta box
