@@ -81,8 +81,10 @@
 
     holler.floatingBtn = document.getElementById('hwp-floating-btn');
 
-    if( vars.bgColor )
+    if( vars.bgColor ) {
       item.style.backgroundColor = vars.bgColor;
+      $('#' + 'hwp-' + id + ' .hwp-first-row' ).css('background-color', vars.bgColor );
+    }
 
     if( vars.btnColor1 )
       $('#' + 'hwp-' + id + ' .hwp-email-btn, #hwp-floating-btn' ).css('background-color', vars.btnColor1 );
@@ -571,6 +573,8 @@
 
     var listId = $('#hwp-' + id + ' .mc-list-id').val();
 
+    var groupId = $('#hwp-' + id + ' .mc-group-id').val();
+
     if( !listId ) {
       alert("MailChimp list ID is missing.");
       return;
@@ -579,7 +583,7 @@
     $.ajax({
       method: "GET",
       url: window.hollerVars.ajaxurl,
-      data: { email: email, list_id: listId, action: 'hwp_mc_subscribe', nonce: window.hollerVars.hwpNonce }
+      data: { email: email, list_id: listId, action: 'hwp_mc_subscribe', group_id: groupId, nonce: window.hollerVars.hwpNonce }
       })
       .done(function(msg) {
 

@@ -355,34 +355,47 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             <?php wp_nonce_field( basename( __FILE__ ), 'hollerbox_meta_box_nonce' ); ?>
 
-            <p>
-                <input type="checkbox" id="hwp_active" name="hwp_active" value="1" <?php checked(1, get_post_meta( $post->ID, 'hwp_active', true ), true); ?> />
-                <label for="hwp_active"><?php _e( 'Activate? Check to show this box.', 'holler-box' ); ?></label>
-            </p>
+            <p><?php _e( 'Activate? Box will not show if inactive.', 'holler-box' ); ?></p>
+
+            <label class="hwp-switch"><input id="hwp_active" name="hwp_active" data-id="<?php echo $post->ID; ?>" type="checkbox" value="1" <?php checked("1", get_post_meta( $post->ID, 'hwp_active', true ) ); ?> /><div class="hwp-slider hwp-round"></div></label>  
 
             <p>
                 <label for="position"><?php _e( 'Position' ); ?></label>
             </p>
             <p>
-                <input type="radio" name="position" value="hwp-bottomright" <?php checked( "hwp-bottomright", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
-                <?php _e( 'Bottom right', 'holler-box' ); ?>
-                <input type="radio" name="position" value="hwp-bottomleft" <?php checked( "hwp-bottomleft", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
-                <?php _e( 'Bottom left', 'holler-box' ); ?>
-                <input type="radio" name="position" value="hwp-topright" <?php checked( "hwp-topright", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
-                <?php _e( 'Top right', 'holler-box' ); ?>
-                <input type="radio" name="position" value="hwp-topleft" <?php checked( "hwp-topleft", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
-                <?php _e( 'Top left', 'holler-box' ); ?>
+                <label class="hwp-radio-withimage">
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/bottom-right-icon.png'; ?>" class="hwp-radio-image" />
+                    <input type="radio" name="position" value="hwp-bottomright" <?php checked( "hwp-bottomright", get_post_meta( $post->ID, 'position', true ) ); ?> />
+                </label>
+
+                <label class="hwp-radio-withimage">
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/bottom-left-icon.png'; ?>" class="hwp-radio-image" />
+                    <input type="radio" name="position" value="hwp-bottomleft" <?php checked( "hwp-bottomleft", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
+                </label>
+
+                <label class="hwp-radio-withimage">
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/top-right-icon.png'; ?>" class="hwp-radio-image" />
+                    <input type="radio" name="position" value="hwp-topright" <?php checked( "hwp-topright", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
+                </label>
+
+                <label class="hwp-radio-withimage">
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/top-left-icon.png'; ?>" class="hwp-radio-image" />
+                    <input type="radio" name="position" value="hwp-topleft" <?php checked( "hwp-topleft", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
+                </label>
+
                 <?php do_action('hwp_position_settings', $post->ID); ?>
             </p>
-
+            
             <p><?php _e( 'Button color', 'holler-box' ); ?></p>
             <input type="text" name="button_color1" value="<?php echo esc_html( get_post_meta( $post->ID, 'button_color1', true ) ); ?>" class="hwp-colors" data-default-color="#1191cb" />
             
             <p><?php _e( 'Background color', 'holler-box' ); ?></p>
             <input type="text" name="bg_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'bg_color', true ) ); ?>" class="hwp-colors" data-default-color="#ffffff" />
-
+            
             <p><?php _e( 'Text color', 'holler-box' ); ?></p>
             <input type="text" name="text_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'text_color', true ) ); ?>" class="hwp-colors" data-default-color="#333333" />
+
+            <br style="clear:both" />
 
             <p>
                 <input type="checkbox" id="show_optin" name="show_optin" value="1" <?php checked('1', get_post_meta( $post->ID, 'show_optin', true ), true); ?> />
@@ -553,7 +566,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
             <?php 
                 $license_key = get_option( 'hwp_pro_edd_license' );
                 if( !$license_key ) {
-                    echo '<p>Get more powerful display and customization settings in <strong><a href="https://hollerwp.com/pro?utm_source=wp_admin&utm_campaign=below_settings">Holler Box Pro</a></strong></p>';
+                    echo '<p>Get more powerful display and customization settings in <strong><a href="https://hollerwp.com/pro?utm_source=wp_admin&utm_medium=link&utm_campaign=below_settings">Holler Box Pro</a></strong></p>';
                 }
             ?>
 
