@@ -406,20 +406,52 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <?php _e( 'Show email opt-in', 'holler-box' ); ?>
                 <div id="show-email-options">
 
-                    <p>
-                    <input type="radio" name="email_provider" value="default" <?php checked("default", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
-                    <?php _e( 'Default', 'holler-box' ); ?><br>
+                    <select name="email_provider">
 
-                    <input type="radio" name="email_provider" value="ck" <?php checked("ck", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
-                    <?php _e( 'Convertkit', 'holler-box' ); ?><input id="ck_id" name="ck_id" value="<?php echo get_post_meta( $post->ID, 'ck_id', 1 ); ?>" placeholder="Convertkit list ID" type="text" /><br>
+                        <option value="default" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "default"); ?> >
+                            <?php _e( 'Send to email address', 'holler-box' ); ?>
+                        </option>
 
-                    <input type="radio" name="email_provider" value="mc" <?php checked("mc", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
-                    <?php _e( 'MailChimp', 'holler-box' ); ?><input id="mc_list_id" name="mc_list_id" placeholder="MailChimp list ID" value="<?php echo get_post_meta( $post->ID, 'mc_list_id', 1 ); ?>" type="text" /> <span class="mc-description"><?php _e( 'Get your list ID under Lists => Settings => List name and defaults => List ID (on right side of screen)', 'holler-box' ); ?></span><br>
+                        <option value="ck" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "ck"); ?> >
+                            <?php _e( 'Convertkit', 'holler-box' ); ?>
+                        </option>
+
+                        <option value="mc" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "mc"); ?> >
+                            <?php _e( 'MailChimp', 'holler-box' ); ?>
+                        </option>
+
+                        <?php if( class_exists('\MailPoet\API\API') ) : ?>
+
+                        <option value="mailpoet" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "mailpoet"); ?> >
+                            <?php _e( 'MailPoet', 'holler-box' ); ?>
+                        </option>
+
+                        <?php endif; ?>
+
+                        <option value="custom" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "custom"); ?> >
+                            <?php _e( 'Custom', 'holler-box' ); ?>
+                        </option>
+
+                    </select>
+
+                    <p id="convertkit-fields">
+                        <?php _e( 'Convertkit List ID, <a href=
+                        "http://hollerbox.helpscoutdocs.com/article/6-convertkit-integration" target="_blank">click for help.</a> *required', 'holler-box' ); ?>
+                        <input id="ck_id" name="ck_id" class="widefat" value="<?php echo get_post_meta( $post->ID, 'ck_id', 1 ); ?>" placeholder="Convertkit list ID" type="text" />
+                    </p>
+                    
+                    <p id="mailchimp-fields">
+                        <?php _e( 'MailChimp List ID, <a href=
+                        "http://hollerbox.helpscoutdocs.com/article/5-mailchimp-integration" target="_blank">click for help.</a> *required', 'holler-box' ); ?>
+                        <input id="mc_list_id" name="mc_list_id" class="widefat" placeholder="MailChimp list ID" value="<?php echo get_post_meta( $post->ID, 'mc_list_id', 1 ); ?>" type="text" />
+                    </p>
                     
                     <?php if( class_exists('\MailPoet\API\API') ) : ?>
 
-                        <input type="radio" name="email_provider" value="mailpoet" <?php checked("mailpoet", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
-                        <?php _e( 'MailPoet', 'holler-box' ); ?>
+                        <div id="mailpoet-fields">
+
+                        <p><?php _e( 'MailPoet List *required', 'holler-box' ); ?></p>
+
                         <select name="mailpoet_list_id" id="mailpoet_list_id">
                     
                         <?php
@@ -442,35 +474,42 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                         ?>
                         </select>
-                        <br>
-                    <?php endif; ?>
 
-                    <input type="radio" name="email_provider" value="custom" <?php checked("custom", get_post_meta( $post->ID, 'email_provider', true ), true); ?> />
-                    <?php _e( 'Custom', 'holler-box' ); ?>
-                    </p>
+                        </div>
+
+                    <?php endif; ?>
 
                     
                     <div id="send-to-option">
-                        <label for="opt_in_send_to"><?php _e( 'Send to email', 'holler-box' ); ?></label>
-                        <input class="widefat" type="email" name="opt_in_send_to" id="opt_in_send_to" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_send_to', true ) ); ?>" size="20" />
-
+                        <p>
+                            <label for="opt_in_send_to"><?php _e( 'Send to email *required', 'holler-box' ); ?></label>
+                            <input class="widefat" type="email" name="opt_in_send_to" id="opt_in_send_to" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_send_to', true ) ); ?>" size="20" />
+                        </p>
                     </div>
 
                     <div id="custom-email-options">
-                        <label for="custom_email_form"><?php _e( 'Insert HTML form code here', 'holler-box' ); ?></label>
-                        <textarea class="hwp-textarea" name="custom_email_form" id="custom_email_form"><?php echo esc_html( get_post_meta( $post->ID, 'custom_email_form', true ) ); ?></textarea>
+                        <p>
+                            <label for="custom_email_form"><?php _e( 'Insert HTML form code here', 'holler-box' ); ?></label>
+                            <textarea class="hwp-textarea" name="custom_email_form" id="custom_email_form"><?php echo esc_html( get_post_meta( $post->ID, 'custom_email_form', true ) ); ?></textarea>
+                        </p>
                     </div>
 
                     <div id="default-email-options">
 
-                        <label for="opt_in_message"><?php _e( 'Small text above email field', 'holler-box' ); ?></label>
-                        <input class="widefat" type="text" name="opt_in_message" id="opt_in_message" placeholder="We don't spam or share your information." value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
+                        <p>
+                            <label for="opt_in_message"><?php _e( 'Small text above email field', 'holler-box' ); ?></label>
+                            <input class="widefat" type="text" name="opt_in_message" id="opt_in_message" placeholder="We don't spam or share your information." value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_message', true ) ); ?>" size="20" />
+                        </p>
 
-                        <label for="opt_in_placeholder"><?php _e( 'Placeholder', 'holler-box' ); ?></label>
-                        <input class="widefat" type="text" name="opt_in_placeholder" id="opt_in_placeholder" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_placeholder', true ) ); ?>" size="20" />
+                        <p>
+                            <label for="opt_in_placeholder"><?php _e( 'Placeholder', 'holler-box' ); ?></label>
+                            <input class="widefat" type="text" name="opt_in_placeholder" id="opt_in_placeholder" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_placeholder', true ) ); ?>" size="20" />
+                        </p>
 
-                        <label for="opt_in_confirmation"><?php _e( 'Confirmation Message', 'holler-box' ); ?></label>
-                        <input class="widefat" type="text" name="opt_in_confirmation" id="opt_in_confirmation" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_confirmation', true ) ); ?>" size="20" />
+                        <p>
+                            <label for="opt_in_confirmation"><?php _e( 'Confirmation Message', 'holler-box' ); ?></label>
+                            <input class="widefat" type="text" name="opt_in_confirmation" id="opt_in_confirmation" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_confirmation', true ) ); ?>" size="20" />
+                        </p>
 
                     </div>
 

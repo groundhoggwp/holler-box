@@ -27,7 +27,7 @@
 	margin: 10px 0;
 }
 
-#show-certain-pages, #show-email-options, #hwp-until-datepicker, #custom-email-options, #default-email-options, #mc_list_id, #mc_url, #ck_id, #mailpoet_list_id {
+#show-certain-pages, #show-email-options, #hwp-until-datepicker, #custom-email-options, #default-email-options, #mailchimp-fields, #convertkit-fields, #mailpoet-fields {
 	display: none;
 }
 
@@ -366,6 +366,13 @@ input.hwp-number-input {
 	margin: 5px auto;
 	width: 50px;
 	height: 50px;
+}
+
+.post-type-hollerbox .postbox select {
+	display: block;
+	min-width: 250px;
+	clear: both;
+	margin-bottom: 5px;
 }
 
 @media (max-width: 782px) {

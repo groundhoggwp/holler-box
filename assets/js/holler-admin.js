@@ -46,7 +46,7 @@
   	.on('change', 'input[name=expiration]', holler.toggleDatepicker )
   	.on('change', 'input[name=show_on]', holler.toggleShowOn )
     .on('change', 'input[name=position]', holler.togglePosition )
-    .on('change', 'input[name=email_provider]', holler.toggleEmailForm )
+    .on('change', 'select[name=email_provider]', holler.toggleEmailForm )
   	.on('keyup', '#content', holler.updatePreviewContent )
     .on('focus', 'input#scroll_delay', function() {
       $('input[name=display_when][value=delay]').prop('checked', 'checked'); 
@@ -111,11 +111,11 @@
 
     if( $('input[name=show_optin]').is(':checked') ) {
 
-      optin.show();
+      optin.fadeIn();
 
     } else {
 
-      optin.hide();
+      optin.fadeOut(200);
 
     }
 
@@ -128,56 +128,56 @@
     var sendTo = $('#send-to-option');
     var defaultDiv = $('#default-email-options');
     var custom = $('#custom-email-options');
-    var checkedVal = $('input[name=email_provider]:checked').val();
+    var checkedVal = $('select[name=email_provider]').val();
     var itemTypeVal = $('input[name=item_type]:checked').val();
     var optin = $("#hwp-note-optin");
-    var mcUrl = $('#mc_list_id, .mc-description');
-    var ckId = $('#ck_id');
-    var mailpoet = $('#mailpoet_list_id, .mp-description');
+    var mcFields = $('#mailchimp-fields');
+    var ckFields = $('#convertkit-fields');
+    var mailpoet = $('#mailpoet-fields');
 
     // Show optin in preview
     if( itemTypeVal === 'optin' ) {
 
-      optin.show();
-      $('#show-email-options').show();
+      optin.fadeIn();
+      $('#show-email-options').fadeIn();
 
     }
 
     if( checkedVal === 'default' ) {
-      sendTo.show();
-      defaultDiv.show();
+      sendTo.fadeIn();
+      defaultDiv.fadeIn();
       custom.hide();
-      ckId.hide();
-      mcUrl.hide();
+      ckFields.hide();
+      mcFields.hide();
       mailpoet.hide();
     } else if( checkedVal === 'custom' ) {
-      custom.show();
+      custom.fadeIn();
       defaultDiv.hide();
       sendTo.hide();
-      ckId.hide();
-      mcUrl.hide();
+      ckFields.hide();
+      mcFields.hide();
       mailpoet.hide();
     } else if( checkedVal === 'mc' ) {
-      mcUrl.show();
-      defaultDiv.show();
-      ckId.hide();
+      mcFields.fadeIn();
+      defaultDiv.fadeIn();
+      ckFields.hide();
       custom.hide();
       sendTo.hide();
       mailpoet.hide();
     } else if( checkedVal === 'ck' ) {
-      ckId.show();
-      defaultDiv.show();
-      mcUrl.hide();
+      ckFields.fadeIn();
+      defaultDiv.fadeIn();
+      mcFields.hide();
       custom.hide();
       sendTo.hide();
       mailpoet.hide();
     } else if( checkedVal === 'mailpoet' ) {
-      mailpoet.show();
-      defaultDiv.show();
-      mcUrl.hide();
+      mailpoet.fadeIn();
+      defaultDiv.fadeIn();
+      mcFields.hide();
       custom.hide();
       sendTo.hide();
-      ckId.hide();
+      ckFields.hide();
     }
 
   }
