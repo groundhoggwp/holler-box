@@ -225,6 +225,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
             unset($columns['date']);
             $columns["impressions"] = "Impressions";
             $columns["conversions"] = "Conversions";
+            $columns["rate"] = "Percent";
             $columns["active"] = "Active";
             $columns['date'] = $date;
             return $columns;
@@ -244,12 +245,12 @@ if( !class_exists( 'Holler_Admin' ) ) {
             $conversions = get_post_meta( $post_id, 'hwp_conversions', 1);
             $views = get_post_meta( $post_id, 'hwp_views', 1);
 
-            // if( empty( $conversions ) || empty( $views ) ) {
-            //     $rate = '0%';
-            // } else {
-            //     $rate = intval( $conversions ) / intval( $views );
-            //     $rate = number_format( $rate, 3 ) * 100 . '%';
-            // }
+            if( empty( $conversions ) || empty( $views ) ) {
+                $rate = '0%';
+            } else {
+                $rate = intval( $conversions ) / intval( $views );
+                $rate = number_format( $rate, 3 ) * 100 . '%';
+            }
 
             switch ( $column ) {
                 case 'impressions':
@@ -257,6 +258,9 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     break;
                 case 'conversions':
                     echo $conversions;
+                    break;
+                case 'rate':
+                    echo $rate;
                     break;
                 case 'active':
                     echo '<label class="hwp-switch"><input data-id="' . $post_id . '" type="checkbox" value="1" ' . checked(1, get_post_meta( $post_id, 'hwp_active', true ), false) . ' /><div class="hwp-slider hwp-round"></div></label>';
