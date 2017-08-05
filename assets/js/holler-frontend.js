@@ -573,7 +573,7 @@
 
     var listId = $('#hwp-' + id + ' .mc-list-id').val();
 
-    var groupId = $('#hwp-' + id + ' .mc-group-id').val();
+    var interestId = $('#hwp-' + id + ' .mc-interest-id').val();
 
     if( !listId ) {
       alert("MailChimp list ID is missing.");
@@ -583,7 +583,7 @@
     $.ajax({
       method: "GET",
       url: window.hollerVars.ajaxurl,
-      data: { email: email, list_id: listId, action: 'hwp_mc_subscribe', group_id: groupId, nonce: window.hollerVars.hwpNonce }
+      data: { email: email, list_id: listId, action: 'hwp_mc_subscribe', interest_id: interestId, nonce: window.hollerVars.hwpNonce }
       })
       .done(function(msg) {
 

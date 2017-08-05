@@ -126,6 +126,8 @@ if( !class_exists( 'Holler_Ajax' ) ) {
 
             $list_id = $_GET['list_id'];
 
+            $interest_id = $_GET['interest_id'];
+
             $email = $_GET['email'];
 
             // MailChimp API credentials
@@ -150,20 +152,24 @@ if( !class_exists( 'Holler_Ajax' ) ) {
             $url = 'https://' . $data_center . '.api.mailchimp.com/3.0/lists/' . $list_id . '/members/' . $member_id;
             
             // member information
-            $body = json_encode( array(
+            $body = array(
                 'email_address' => $email,
                 'status'        => $status
                 // 'merge_fields'  => [
                 //     'FNAME'     => $fname,
                 //     'LNAME'     => $lname
                 // ]
-            ) );
+            );
+
+            if( !empty( $interest_id ) ) {
+                $body['interests'] = array( $interest_id => true );
+            }
 
             $response = wp_remote_post( $url, array(
                 'method' => 'PUT',
                 'timeout' => 15,
                 'headers' => $headers,
-                'body' => $body
+                'body' => json_encode( $body )
                 )
             );
 
