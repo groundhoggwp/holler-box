@@ -198,28 +198,37 @@ if( !class_exists( 'Holler_Ajax' ) ) {
             $api_key = get_option('hwp_mc_api_key');
             $list_id = $_GET['list_id'];
 
-            // MailChimp API URL
-            $data_center = substr($api_key,strpos($api_key,'-')+1);
-            $url = 'https://' . $data_center . '.api.mailchimp.com/3.0/lists/' . $list_id . '/interest-categories';
+            $transient = get_transient( $list_id );
 
-            $headers = array(
-                'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key ),
-                'Content-Type' => 'application/json'
-              );
+            if( false === $transient ) {
 
-            $response = wp_remote_get( $url, array(
-                'timeout' => 15,
-                'body' => null,
-                'headers' => $headers,
-                )
-            );
+                // MailChimp API URL
+                $data_center = substr($api_key,strpos($api_key,'-')+1);
+                $url = 'https://' . $data_center . '.api.mailchimp.com/3.0/lists/' . $list_id . '/interest-categories';
 
-            if ( is_wp_error( $response ) ) {
-               $error_message = $response->get_error_message();
-               wp_send_json_error( $error_message );
+                $headers = array(
+                    'Authorization' => 'Basic ' . base64_encode( 'user:' . $api_key ),
+                    'Content-Type' => 'application/json'
+                  );
+
+                $response = wp_remote_get( $url, array(
+                    'timeout' => 15,
+                    'body' => null,
+                    'headers' => $headers,
+                    )
+                );
+
+                if ( is_wp_error( $response ) ) {
+                   $error_message = $response->get_error_message();
+                   wp_send_json_error( $error_message );
+                } else {
+                    $api_response = wp_remote_retrieve_body( $response );
+                    set_transient( $list_id, $api_response, 15 * MINUTE_IN_SECONDS );
+                    wp_send_json_success( $api_response );
+                }
+
             } else {
-                $api_response = wp_remote_retrieve_body( $response );
-                wp_send_json_success( $api_response );
+                wp_send_json_success( $transient );
             }
 
         }
