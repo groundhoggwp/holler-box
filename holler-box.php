@@ -3,7 +3,7 @@
  * Plugin Name:     Holler Box
  * Plugin URI:      http://hollerwp.com
  * Description:     The smart WordPress popup plugin. Lightweight, stylish, and effective.
- * Version:         0.8.2
+ * Version:         0.9.0
  * Author:          Scott Bolinger
  * Author URI:      http://scottbolinger.com
  * Text Domain:     holler-box
@@ -62,7 +62,7 @@ if( !class_exists( 'Holler_Box' ) ) {
          */
         private function setup_constants() {
             // Plugin version
-            define( 'Holler_Box_VER', '0.8.2' );
+            define( 'Holler_Box_VER', '0.9.0' );
 
             // Plugin path
             define( 'Holler_Box_DIR', plugin_dir_path( __FILE__ ) );
