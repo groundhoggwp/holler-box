@@ -436,11 +436,11 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                     <p id="convertkit-fields">
                         <?php _e( 'Convertkit List ID, <a href=
-                        "http://hollerbox.helpscoutdocs.com/article/6-convertkit-integration" target="_blank">click for help.</a> *required', 'holler-box' ); ?>
+                        "http://hollerbox.helpscoutdocs.com/article/6-convertkit-integration" target="_blank">click for help.</a> <em>*required</em>', 'holler-box' ); ?>
                         <input id="ck_id" name="ck_id" class="widefat" value="<?php echo get_post_meta( $post->ID, 'ck_id', 1 ); ?>" placeholder="Convertkit list ID" type="text" />
                     </p>
                     
-                    <p id="mailchimp-fields">
+                    <div id="mailchimp-fields">
                         <?php _e( 'MailChimp List *required', 'holler-box' ); ?>
 
                             <?php
@@ -469,13 +469,13 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                             ?>
 
-                    </p>
+                    </div>
                     
                     <?php if( class_exists('\MailPoet\API\API') ) : ?>
 
                         <div id="mailpoet-fields">
 
-                        <?php _e( 'MailPoet List *required', 'holler-box' ); ?>
+                        <?php _e( 'MailPoet List <em>*required</em>', 'holler-box' ); ?>
 
                         <select name="mailpoet_list_id" id="mailpoet_list_id">
                     
@@ -507,7 +507,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     
                     <div id="send-to-option">
                         <p>
-                            <label for="opt_in_send_to"><?php _e( 'Send to email *required', 'holler-box' ); ?></label>
+                            <label for="opt_in_send_to"><?php _e( 'Send to email <em>*required</em>', 'holler-box' ); ?></label>
                             <input class="widefat" type="email" name="opt_in_send_to" id="opt_in_send_to" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_send_to', true ) ); ?>" size="20" />
                         </p>
                     </div>
@@ -851,11 +851,14 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             // sanitize data
             foreach ($keys as $key => $value) {
+
                 if( empty( $_POST[ $value ] ) ) {
                     delete_post_meta( $post_id, $value );
                     continue;
                 }
-                $trimmed = trim( $_POST[ $value ] );
+                if( is_string( $_POST[ $value ] ) )
+                    $trimmed = trim( $_POST[ $value ] );
+
                 $sanitized = wp_kses( $trimmed, $allowedposttags);
                 update_post_meta( $post_id, $value, $sanitized );
             }
@@ -873,6 +876,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
             } else {
                 update_post_meta( $post_id, 'expiration', $_POST[ 'expiration' ] );
             }
+
+            do_action( 'hwp_custom_settings_save', $post_id );
             
         }
 

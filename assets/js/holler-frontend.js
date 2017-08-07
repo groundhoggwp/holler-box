@@ -573,7 +573,9 @@
 
     var listId = $('#hwp-' + id + ' .mc-list-id').val();
 
-    var interestId = $('#hwp-' + id + ' .mc-interest-id').val();
+    var interestIds = $('#hwp-' + id + ' .mc-interests').val();
+    if( interestIds )
+      interestIds = JSON.parse( interestIds );
 
     if( !listId ) {
       alert("MailChimp list ID is missing.");
@@ -583,9 +585,11 @@
     $.ajax({
       method: "GET",
       url: window.hollerVars.ajaxurl,
-      data: { email: email, list_id: listId, action: 'hwp_mc_subscribe', interest_id: interestId, nonce: window.hollerVars.hwpNonce }
+      data: { email: email, list_id: listId, action: 'hwp_mc_subscribe', interests: interestIds, nonce: window.hollerVars.hwpNonce }
       })
       .done(function(msg) {
+
+        console.log(msg)
 
         // reset to defaults
         holler.showConfirmation( id );
