@@ -177,7 +177,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                 <h3><?php _e('Email Settings', 'holler-box'); ?></h3>
 
-                <p><?php _e('Email title', 'holler-box'); ?></p>
+                <p><?php _e('Email title <em>(only used with "send to email" setting)</em>', 'holler-box'); ?></p>
                 
                 <input id="hwp_email_title" name="hwp_email_title" value="<?php echo esc_html( get_option( 'hwp_email_title' ) ); ?>" placeholder="New Holler Box Message" type="text" size="50" />
 
