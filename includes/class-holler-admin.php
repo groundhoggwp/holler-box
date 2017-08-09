@@ -465,6 +465,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                             endif;
 
+                            echo apply_filters( 'hwp_mc_upsell', '<p>Want MailChimp groups and interests? <a href="https://hollerwp.com/pro?utm_source=mc_upsell&utm_medium=link&utm_campaign=below_settings">Get Holler Box Pro.</a></p>' );
+
                             do_action( 'hwp_mc_settings', $post->ID );
 
                             ?>
@@ -574,7 +576,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             $response = wp_remote_get( $url, array(
                 'timeout' => 10,
-                'body' => null,
+                'body' => array( 'count' => 20 ),
                 'headers' => $headers,
                 )
             );
