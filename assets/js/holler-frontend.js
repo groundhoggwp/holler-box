@@ -79,15 +79,13 @@
 
     // passes checks, show it
 
-    holler.floatingBtn = document.getElementById('hwp-floating-btn');
-
     if( vars.bgColor ) {
       item.style.backgroundColor = vars.bgColor;
       $('#' + 'hwp-' + id + ' .hwp-first-row' ).css('background-color', vars.bgColor );
     }
 
     if( vars.btnColor1 )
-      $('#' + 'hwp-' + id + ' .hwp-email-btn, #hwp-floating-btn' ).css('background-color', vars.btnColor1 );
+      $('#' + 'hwp-' + id + ' .hwp-email-btn, .hwp-btn-' + id ).css('background-color', vars.btnColor1 );
 
     // Delay showing item?
     if( vars.display_when != 'scroll' ) {
@@ -120,7 +118,7 @@
 
     $('body')
     .on('click', '.hwp-close', holler.hideItem )
-    .on('click', '#hwp-floating-btn', holler.btnClick )
+    .on('click', '.hwp-floating-btn', holler.btnClick )
     .on('click', '.hwp-text i', holler.sendText )
     .on('click', '#hwp-' + id + ' .hwp-email-btn', holler.emailSubmitClick )
 
@@ -168,8 +166,10 @@
       // hide box, show btn
       holler.transitionOut( item );
 
-      if( options.hideBtn != '1' && options.position != 'holler-banner' )
-        holler.transitionIn( holler.floatingBtn );
+      if( options.hideBtn != '1' && options.position != 'holler-banner' ) {
+        console.log( $( '.hwp-btn-' + id ) )
+        holler.transitionIn( $( '.hwp-btn-' + id ) );
+      }
 
     } else {
 
@@ -180,7 +180,7 @@
       $('#hwp-' + id + ' .hwp-first-row').html( options.content );
 
       if( options.hideBtn != '1' && options.position != 'holler-banner' )
-        holler.transitionOut( holler.floatingBtn );
+        holler.transitionOut( $( '.hwp-btn-' + id ) );
 
       // Show email opt-in, but not if we have a chatbox (it gets shown after user input)
       if( options.showEmail === "1" && options.showChat != "1" )
@@ -194,7 +194,7 @@
 
     // Button should not be shown
     if( options.hideBtn === '1' )
-      holler.hide( holler.floatingBtn );
+      holler.hide( $( '.hwp-btn-' + id ) );
 
     if( options.position === 'holler-banner' && holler.getCookie( 'hwp-' + id + '_hide' ) != 'true' )
       holler.toggleBnrMargin( id );
@@ -338,7 +338,7 @@
 
   holler.transitionIn = function(item) {
 
-    item.style.display = 'block';
+    $(item).css('display','block');
 
     setTimeout( function() {
       $(item).addClass('hwp-transition-in').removeClass('hwp-hide');

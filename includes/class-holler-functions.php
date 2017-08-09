@@ -258,7 +258,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
             </style>
 
             <?php if( get_post_meta( $id, 'position', 1 ) != 'holler-banner' ) : ?>
-            <div id="hwp-floating-btn" data-id="<?php echo esc_attr( $id ); ?>" class="<?php echo esc_attr( get_post_meta( $id, 'position', 1 ) ); ?>"><i class="icon icon-chat"></i></div>
+            <div data-id="<?php echo esc_attr( $id ); ?>" class="hwp-floating-btn hwp-btn-<?php echo esc_attr( $id ); ?> <?php echo esc_attr( get_post_meta( $id, 'position', 1 ) ); ?>"><i class="icon icon-chat"></i></div>
             <?php endif; ?>
 
             <div id="hwp-<?php echo esc_attr( $id ); ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">

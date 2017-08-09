@@ -28,7 +28,7 @@
 	margin: 0;
 }
 
-#hwp-floating-btn {
+.hwp-floating-btn {
 	opacity: 0;
 	position: fixed;
 	z-index: 99998;
@@ -44,7 +44,7 @@
 	text-align: center;
 }
 
-#hwp-floating-btn i {
+.hwp-floating-btn i {
     font-size: 24px;
     line-height: 40px;
     position: relative;
@@ -72,22 +72,22 @@
 	box-sizing: border-box;
 }
 
-#hwp-floating-btn.hwp-bottomright, .holler-box.hwp-bottomright {
+.hwp-floating-btn.hwp-bottomright, .holler-box.hwp-bottomright {
 	right: 25px;
 	bottom: 25px;
 }
 
-#hwp-floating-btn.hwp-bottomleft, .holler-box.hwp-bottomleft {
+.hwp-floating-btn.hwp-bottomleft, .holler-box.hwp-bottomleft {
 	left: 25px;
 	bottom: 25px;
 }
 
-#hwp-floating-btn.hwp-topright, .holler-box.hwp-topright {
+.hwp-floating-btn.hwp-topright, .holler-box.hwp-topright {
 	right: 25px;
 	top: 25px;
 }
 
-#hwp-floating-btn.hwp-topleft, .holler-box.hwp-topleft {
+.hwp-floating-btn.hwp-topleft, .holler-box.hwp-topleft {
 	left: 25px;
 	top: 25px;
 }
@@ -338,7 +338,7 @@ span.hwp-powered-by a {
 }
 */
  
-.holler-box [class^="icon-"]:before, .holler-box [class*=" icon-"]:before, #hwp-floating-btn [class^="icon-"]:before, #hwp-floating-btn [class*=" icon-"]:before {
+.holler-box [class^="icon-"]:before, .holler-box [class*=" icon-"]:before, .hwp-floating-btn [class^="icon-"]:before, .hwp-floating-btn [class*=" icon-"]:before {
   font-family: "hwpfontello";
   font-style: normal;
   font-weight: normal;
