@@ -297,6 +297,12 @@ span.hwp-powered-by a {
     float: right;
 }
 
+img.hwp-loading {
+    display: block;
+    margin: 10px auto;
+    clear: both;
+}
+
 /*
  * Media Queries
  */

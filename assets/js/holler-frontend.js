@@ -542,6 +542,8 @@
     var formId = $('#hwp-' + id + ' .ck-form-id').val();
     var apiUrl = 'https://api.convertkit.com/v3/forms/' + formId + '/subscribe';
 
+    holler.showSpinner( id );
+
     $.ajax({
       method: "POST",
       url: apiUrl,
@@ -556,6 +558,8 @@
 
       })
       .fail(function(err) {
+
+        holler.hideSpinner();
 
         $('#hwp-' + id + ' .hwp-email-row').prepend('<span id="hwp-err">There seems to be a problem, can you try again?</span>');
 
@@ -582,14 +586,14 @@
       return;
     }
 
+    holler.showSpinner( id );
+
     $.ajax({
       method: "GET",
       url: window.hollerVars.ajaxurl,
       data: { email: email, list_id: listId, action: 'hwp_mc_subscribe', interests: interestIds, nonce: window.hollerVars.hwpNonce }
       })
       .done(function(msg) {
-
-        console.log(msg)
 
         // reset to defaults
         holler.showConfirmation( id );
@@ -599,6 +603,7 @@
       })
       .fail(function(err) {
         console.log(err);
+        holler.hideSpinner();
       });
 
   }
@@ -612,6 +617,8 @@
       alert("List ID is missing.");
       return;
     }
+
+    holler.showSpinner( id );
 
     $.ajax({
       method: "GET",
@@ -630,12 +637,15 @@
       })
       .fail(function(err) {
         console.log(err);
+        holler.hideSpinner();
       });
 
   }
 
   // Send email along with chat message to server
   holler.sendMsg = function( email, msg, id ) {
+
+    holler.showSpinner( id );
 
     $.ajax({
       method: "GET",
@@ -653,6 +663,7 @@
       })
       .fail(function(err) {
         console.log(err);
+        holler.hideSpinner();
       });
   }
 
@@ -704,6 +715,8 @@
   // show confirmation message after email submitted
   holler.showConfirmation = function( id ) {
 
+    holler.hideSpinner();
+
     var options = window.hollerVars[id];
 
     var msg = ( options.confirmMsg != '' ? options.confirmMsg : "Thanks!" );
@@ -751,6 +764,16 @@
         //console.log(err);
       });
 
+  }
+
+  holler.showSpinner = function( id ) {
+
+    $( '#hwp-' + id + ' .hwp-email-row' ).html( '<img src="' + window.hollerVars.pluginUrl + 'assets/img/loading.gif" class="hwp-loading" />');
+
+  }
+
+  holler.hideSpinner = function() {
+    $('img.hwp-loading').remove();
   }
 
   $(window).load(function(){

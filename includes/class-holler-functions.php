@@ -92,6 +92,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $array['ajaxurl'] = admin_url( 'admin-ajax.php' );
 
+            $array['pluginUrl'] = Holler_Box_URL;
+
             $array['hwpNonce'] = wp_create_nonce('holler-box');
 
             // @TODO: if( setting exists )

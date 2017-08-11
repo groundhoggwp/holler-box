@@ -465,7 +465,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                             endif;
 
-                            echo apply_filters( 'hwp_mc_upsell', '<p>Want MailChimp groups and interests? <a href="https://hollerwp.com/pro?utm_source=mc_upsell&utm_medium=link&utm_campaign=below_settings">Get Holler Box Pro.</a></p>' );
+                            echo apply_filters( 'hwp_mc_upsell', '<small>Want MailChimp groups and interests? <a href="https://hollerwp.com/pro?utm_source=mc_upsell&utm_medium=link&utm_campaign=below_settings">Get Holler Box Pro.</a></small>' );
 
                             do_action( 'hwp_mc_settings', $post->ID );
 
