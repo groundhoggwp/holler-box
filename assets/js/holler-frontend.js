@@ -96,6 +96,10 @@
 
       var delay = ( vars.display_when === 'delay' ? parseInt( vars.delay ) : 0 );
 
+      // remove cookie so popup shows properly
+      if( vars.type === 'hwp-popup' && vars.showSettings === 'always' )
+        holler.setCookie( 'hwp-' + id + '_hide', '', -1 )
+
       setTimeout( function() {
         holler.showNote( id );
 
@@ -160,14 +164,13 @@
 
     var item = document.getElementById( 'hwp-' + id );
 
-    // visitor has hidden this item, don't show box
+    // visitor has hidden this item, don't show box unless it's a popup
     if( holler.getCookie( 'hwp-' + id + '_hide' ) === 'true' ) {
 
       // hide box, show btn
       holler.transitionOut( item );
 
       if( options.hideBtn != '1' && options.position != 'holler-banner' ) {
-        console.log( $( '.hwp-btn-' + id ) )
         holler.transitionIn( $( '.hwp-btn-' + id ) );
       }
 

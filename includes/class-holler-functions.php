@@ -116,6 +116,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 $content = str_replace(']]>', ']]&gt;', $content);
 
                 $array[$value] = array( 
+                    'type' => get_post_meta( $value, 'hwp_type', 1 ),
                     'content' => $content,
                     'showEmail' => get_post_meta($value, 'show_optin', 1),
                     'showChat' => get_post_meta( $value, 'show_chat', 1 ),
@@ -380,7 +381,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * @return string
          */
         public static function add_hb_classes( $classes, $id ) {
+            $type = get_post_meta( $id, 'hwp_type', 1 );
             $classes .= get_post_meta( $id, 'position', 1 );
+            
+            if( $type === 'hwp-popup' )
+                $classes .= get_post_meta( $id, 'hwp_type', 1 );
+
             return $classes;
         }
 

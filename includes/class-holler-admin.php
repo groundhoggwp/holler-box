@@ -361,34 +361,41 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             <p><?php _e( 'Activate? Box will not show if inactive.', 'holler-box' ); ?></p>
 
-            <label class="hwp-switch"><input id="hwp_active" name="hwp_active" data-id="<?php echo $post->ID; ?>" type="checkbox" value="1" <?php checked("1", get_post_meta( $post->ID, 'hwp_active', true ) ); ?> /><div class="hwp-slider hwp-round"></div></label>  
+            <label class="hwp-switch"><input id="hwp_active" name="hwp_active" data-id="<?php echo $post->ID; ?>" type="checkbox" value="1" <?php checked("1", get_post_meta( $post->ID, 'hwp_active', true ) ); ?> /><div class="hwp-slider hwp-round"></div></label> 
 
-            <p>
-                <label for="position"><?php _e( 'Position' ); ?></label>
-            </p>
+            <h4>
+                <label for="type"><?php _e( 'Choose a Holler Box Type' ); ?></label>
+            </h4>
             <p>
                 <label class="hwp-radio-withimage">
+                    <span class="text">Notification Box</span>
                     <img src="<?php echo Holler_Box_URL . '/assets/img/bottom-right-icon.png'; ?>" class="hwp-radio-image" />
-                    <input type="radio" name="position" value="hwp-bottomright" <?php checked( "hwp-bottomright", get_post_meta( $post->ID, 'position', true ) ); ?> />
+                    <input type="radio" name="hwp_type" value="notification" <?php checked( "notification", get_post_meta( $post->ID, 'hwp_type', true ) ); ?> />
                 </label>
 
-                <label class="hwp-radio-withimage">
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/bottom-left-icon.png'; ?>" class="hwp-radio-image" />
-                    <input type="radio" name="position" value="hwp-bottomleft" <?php checked( "hwp-bottomleft", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
-                </label>
+                <?php do_action('hwp_type_settings', $post->ID); ?>
+            </p>
 
-                <label class="hwp-radio-withimage">
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/top-right-icon.png'; ?>" class="hwp-radio-image" />
-                    <input type="radio" name="position" value="hwp-topright" <?php checked( "hwp-topright", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
-                </label>
+            <div class="hwp-section" id="position-settings">
 
-                <label class="hwp-radio-withimage">
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/top-left-icon.png'; ?>" class="hwp-radio-image" />
-                    <input type="radio" name="position" value="hwp-topleft" <?php checked( "hwp-topleft", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
-                </label>
+                <h4>
+                    <label for="position"><?php _e( 'Position' ); ?></label>
+                </h4>
+
+                <input type="radio" name="position" value="hwp-bottomright" <?php checked( "hwp-bottomright", get_post_meta( $post->ID, 'position', true ) ); ?> />
+                <label>Bottom Right</label>
+
+                <input type="radio" name="position" value="hwp-bottomleft" <?php checked( "hwp-bottomleft", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
+                <label>Bottom Left</label>
+
+                <input type="radio" name="position" value="hwp-topright" <?php checked( "hwp-topright", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
+                <label>Top Right</label>
+
+                <input type="radio" name="position" value="hwp-topleft" <?php checked( "hwp-topleft", get_post_meta( $post->ID, 'position', 1 ) ); ?> />
+                <label>Top Left</label>
 
                 <?php do_action('hwp_position_settings', $post->ID); ?>
-            </p>
+            </div>
             
             <p><?php _e( 'Button color', 'holler-box' ); ?></p>
             <input type="text" name="button_color1" value="<?php echo esc_html( get_post_meta( $post->ID, 'button_color1', true ) ); ?>" class="hwp-colors" data-default-color="#1191cb" />
@@ -756,6 +763,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 update_post_meta( $post->ID, 'hide_after_delay', 3 );
                 update_post_meta( $post->ID, 'hide_for_days', 1 );
                 update_post_meta( $post->ID, 'hwp_active', '1' );
+                update_post_meta( $post->ID, 'hwp_type', 'notification' );
                 update_post_meta( $post->ID, 'position', 'hwp-bottomright' );
                 update_post_meta( $post->ID, 'opt_in_placeholder', 'Enter your email' );
 
@@ -814,7 +822,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'custom_email_form',
                 'ck_id',
                 'mc_list_id',
-                'mailpoet_list_id' );
+                'mailpoet_list_id',
+                'hwp_type' );
 
             $keys = apply_filters( 'hwp_settings_array', $keys );
 

@@ -6,6 +6,7 @@
 
   	holler.listeners();
   	holler.toggleShowOn();
+    holler.toggleTypes();
   	holler.toggleDatepicker();
   	holler.emailCheckbox();
     holler.toggleEmailForm();
@@ -45,7 +46,7 @@
     .on('change', '.hwp-switch input', holler.toggleSwitch )
   	.on('change', 'input[name=expiration]', holler.toggleDatepicker )
   	.on('change', 'input[name=show_on]', holler.toggleShowOn )
-    .on('change', 'input[name=position]', holler.togglePosition )
+    .on('change', 'input[name=hwp_type]', holler.toggleTypes )
     .on('change', 'select[name=email_provider]', holler.toggleEmailForm )
   	.on('keyup', '#content', holler.updatePreviewContent )
     .on('focus', 'input#scroll_delay', function() {
@@ -91,16 +92,36 @@
   }
 
   // hide n/a settings when using banner
-  holler.togglePosition = function() {
+  holler.toggleTypes = function() {
 
-    var val = $('input[name=position]:checked').val();
+    var val = $('input[name=hwp_type]:checked').val();
+    var pos = $('#position-settings');
+    var popChat = $('#popout_meta_box, #show_chat');
+    var hideBtn = $('#hide_btn, label[for=hide_btn]');
+    var popMeta = $('#popout_meta_box');
 
     switch( val ) {
       case 'holler-banner':
-        $('#popout_meta_box, #show_chat').hide();
+        popChat.hide();
+        hideBtn.fadeIn();
+        popMeta.hide();
+        pos.hide();
+        break;
+      case 'hwp-popup':
+        hideBtn.hide();
+        popChat.fadeIn();
+        popMeta.hide();
+        pos.hide();
+        break;
+      case 'popout':
+        popMeta.fadeIn();
+        pos.fadeIn();
         break;
       default:
-        $('#popout_meta_box, #show_chat').show();
+        popChat.fadeIn();
+        hideBtn.fadeIn();
+        pos.fadeIn();
+        popMeta.hide();
     }
   }
 
