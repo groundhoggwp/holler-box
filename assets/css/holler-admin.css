@@ -357,7 +357,8 @@ input.hwp-number-input {
     overflow: hidden;
     display: inline-block;
     margin-right: 15px;
-    padding: 20px;
+    padding: 10px 0;
+    width: 135px;
 }
 
 .hwp-radio-withimage input[type=radio] {
