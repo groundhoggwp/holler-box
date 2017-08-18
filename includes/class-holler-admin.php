@@ -405,6 +405,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                 <?php do_action('hwp_position_settings', $post->ID); ?>
             </div>
+
+            <?php do_action('hwp_after_position_settings', $post->ID); ?>
             
             <p><?php _e( 'Button color', 'holler-box' ); ?></p>
             <input type="text" name="button_color1" value="<?php echo esc_html( get_post_meta( $post->ID, 'button_color1', true ) ); ?>" class="hwp-colors" data-default-color="#1191cb" />
@@ -417,7 +419,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             <br style="clear:both" />
 
-            <p>
+            <p id="show-optin">
                 <input type="checkbox" id="show_optin" name="show_optin" value="1" <?php checked('1', get_post_meta( $post->ID, 'show_optin', true ), true); ?> />
                 <?php _e( 'Show email opt-in', 'holler-box' ); ?>
                 <div id="show-email-options">
