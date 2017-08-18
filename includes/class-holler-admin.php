@@ -339,14 +339,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'high'
             );
 
-            // add_meta_box(
-            //     'preview_meta_box',
-            //     __( 'Preview', 'holler-box' ),
-            //     array( $this, 'preview_meta_box_callback' ),
-            //     'holler-box',
-            //     'side'
-            // );
-
         }
 
         public function type_upsell( $post ) {
@@ -708,43 +700,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     echo '<p>Get more powerful display and customization settings in <strong><a href="https://hollerwp.com/pro?utm_source=wp_admin&utm_medium=link&utm_campaign=below_settings">Holler Box Pro</a></strong></p>';
                 }
             ?>
-
-        <?php }
-
-        /**
-         * Display preview
-         *
-         * @since     0.1
-         * @param       WP_Post $post
-         */
-        public function preview_meta_box_callback( $post ) { ?>
-
-            <!-- <div id="hwp-floating-btn"><i class="icon icon-chat"></i></div> -->
-
-            <div id="hwp-notification-box">
-                
-                <div class="hwp-box-rows">
-                        <img alt="" src="<?php echo plugins_url( 'assets/img/mystery-man.png', dirname(__FILE__) ); ?>" class="avatar avatar-50 photo" height="50" width="50">
-                    <div class="hwp-row" id="hwp-first-row"></div>
-                </div>
-
-                <div id="hwp-note-optin" class="hwp-row hwp-email-row">
-                    <input type="email" name="email" id="hwp-email-input" placeholder="Enter email" autocomplete="on" autocapitalize="off" />
-                    <button class="hwp-email-btn" id="hwp-submit-email"><?php _e('Send', 'holler-box' ); ?></button>
-                </div>
-                
-                <div id="hwp-chat" class="hwp-hide">
-                    
-                    <div class="hwp-row hwp-text">
-                        <input type="text" id="hwp-text-input" placeholder="Type your message" />
-                        <i id="hwp-submit-text" class="icon icon-mail"></i>
-                    </div>
-                </div>
-
-                <span id="hwp-powered-by"><a href="http://scottbolinger.com" target="_blank">Scottomator</a></span>
-                <div class="hwp-close"><i class="icon icon-cancel"></i></div>
- 
-            </div>
 
         <?php }
 
