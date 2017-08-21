@@ -419,6 +419,12 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 </label>
 
                 <label class="hwp-radio-withimage">
+                    <span class="text">Popup</span>
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/popup-icon.png'; ?>" class="hwp-radio-image" />
+                    <input type="radio" name="hwp_type" value="hwp-popup" <?php checked( "hwp-popup", get_post_meta( $post->ID, 'hwp_type', 1 ) ); ?> />
+                </label>
+
+                <label class="hwp-radio-withimage">
                     <span class="text">Faux Chat</span>
                     <img src="<?php echo Holler_Box_URL . '/assets/img/chat-icon.png'; ?>" class="hwp-radio-image" />
                     <input type="radio" name="hwp_type" value="chat" <?php checked( "chat", get_post_meta( $post->ID, 'hwp_type', true ) ); ?> />
@@ -449,6 +455,28 @@ if( !class_exists( 'Holler_Admin' ) ) {
             </div>
 
             <?php do_action('hwp_after_position_settings', $post->ID); ?>
+
+            <div class="hwp-section" id="popup-templates">
+
+                <h4>
+                    <label for="position"><?php _e( 'Choose a Template' ); ?></label>
+                </h4>
+
+                <label class="hwp-radio-withimage">
+                    <span class="text">Default</span>
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/chat-icon.png'; ?>" class="hwp-radio-image" />
+                    <input type="radio" name="hwp_template" value="default" <?php checked( "default", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
+                </label>
+
+                <label class="hwp-radio-withimage">
+                    <span class="text">Two</span>
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/chat-icon.png'; ?>" class="hwp-radio-image" />
+                    <input type="radio" name="hwp_template" value="two" <?php checked( "two", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
+                </label>
+
+                <?php do_action('hwp_popup_templates', $post->ID); ?>
+
+            </div>
             
             <p><?php _e( 'Button color', 'holler-box' ); ?></p>
             <input type="text" name="button_color1" value="<?php echo esc_html( get_post_meta( $post->ID, 'button_color1', true ) ); ?>" class="hwp-colors" data-default-color="#1191cb" />
@@ -902,6 +930,11 @@ if( !class_exists( 'Holler_Admin' ) ) {
             } else {
                 update_post_meta( $post_id, 'expiration', $_POST[ 'expiration' ] );
             }
+
+            // Check for type. If it's popup, delete the avatar.
+            $type = get_post_meta( $post_id, 'hwp_type', 1 );
+            if( $type === 'hwp-popup' )
+                delete_post_meta( $post_id, 'avatar_email' );
 
             do_action( 'hwp_custom_settings_save', $post_id );
             

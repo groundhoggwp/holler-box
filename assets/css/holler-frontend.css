@@ -303,6 +303,22 @@ img.hwp-loading {
     clear: both;
 }
 
+/*** Popup ***/
+
+.hwp-floating-btn.hwp-popup {
+	display: none;
+}
+
+.holler-box.hwp-popup {
+	left: 10%;
+	right: 10%;
+	width: auto;
+	max-width: 800px;
+	max-height: 400px;
+	top: 30%;
+	margin: auto;
+}
+
 /*
  * Media Queries
  */
@@ -319,6 +335,16 @@ img.hwp-loading {
 		-o-transform: translateX(0px) translateY(0px);
 		-ms-transform: translateX(0px) translateY(0px);
 		transform: translateX(0px) translateY(0px);
+	}
+}
+
+@media (max-width: 400px) {
+	.holler-box.hwp-popup {
+		left: 0%;
+		right: 0%;
+		width: 100%;
+		bottom: 0;
+		top: auto;
 	}
 }
 

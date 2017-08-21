@@ -381,11 +381,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * @return string
          */
         public static function add_hb_classes( $classes, $id ) {
-            $type = get_post_meta( $id, 'hwp_type', 1 );
-            $classes .= get_post_meta( $id, 'position', 1 );
             
+            $classes .= get_post_meta( $id, 'position', 1 );
+
+            $type = get_post_meta( $id, 'hwp_type', 1 );
             if( $type === 'hwp-popup' )
-                $classes .= get_post_meta( $id, 'hwp_type', 1 );
+                $classes .= ' ' . $type;
 
             return $classes;
         }

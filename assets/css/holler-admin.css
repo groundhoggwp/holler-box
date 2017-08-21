@@ -27,7 +27,7 @@
 	margin: 10px 0;
 }
 
-#show-certain-pages, #show-email-options, #hwp-until-datepicker, #custom-email-options, #default-email-options, #mailchimp-fields, #convertkit-fields, #mailpoet-fields {
+#show-certain-pages, #show-email-options, #hwp-until-datepicker, #custom-email-options, #default-email-options, #mailchimp-fields, #convertkit-fields, #mailpoet-fields, #popup-templates {
 	display: none;
 }
 
