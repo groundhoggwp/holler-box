@@ -61,6 +61,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
             add_action( 'manage_hollerbox_posts_custom_column', array( $this, 'custom_columns' ), 10, 2 );
             add_action( 'transition_post_status',  array( $this, 'save_default_meta' ), 10, 3 );
 
+            add_filter( 'plugin_action_links_holler-box/holler-box.php', array( $this, 'hwp_plugin_links' ) );
+
             add_action( 'hwp_type_settings', array( $this, 'type_upsell' ) );
         }
 
@@ -167,7 +169,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                         <li>Priority support</li>
                         <li>Lots more...</li>
                         </ul>
-                        <a href="https://hollerwp.com/pro?utm_source=wp_admin&utm_campaign=hwp_settings" class="button button-primary">View features &amp; pricing</a>
+                        <a href="https://hollerwp.com/pro?utm_source=settings_page&utm_medium=link&utm_campaign=hwp_settings" class="button button-primary">View features &amp; pricing</a>
 
                     </div>
                     
@@ -350,7 +352,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
             ?>
             <label class="hwp-radio-withimage">
                 <span class="text">More Types</span>
-                <a href="https://hollerwp.com/pro?utm_source=type_settings&utm_medium=link&utm_campaign=below_settings" target="_blank" style="color:#999"><img src="<?php echo Holler_Box_URL . '/assets/img/bottom-right-icon.png'; ?>" class="hwp-radio-image" /></a>
+                <a href="https://hollerwp.com/pro?utm_source=type_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999"><img src="<?php echo Holler_Box_URL . '/assets/img/bottom-right-icon.png'; ?>" class="hwp-radio-image" /></a>
                 <input type="radio" name="hwp_type" value="more" disabled="disabled" />
             </label>
             <?php
@@ -491,7 +493,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                             endif;
 
-                            echo apply_filters( 'hwp_mc_upsell', '<small>Want MailChimp groups and interests? <a href="https://hollerwp.com/pro?utm_source=mc_upsell&utm_medium=link&utm_campaign=below_settings" target="_blank">Get Holler Box Pro.</a></small>' );
+                            echo apply_filters( 'hwp_mc_upsell', '<small>Want MailChimp groups and interests? <a href="https://hollerwp.com/pro?utm_source=mc_upsell&utm_medium=link&utm_campaign=hwp_settings" target="_blank">Get Holler Box Pro.</a></small>' );
 
                             do_action( 'hwp_mc_settings', $post->ID );
 
@@ -707,7 +709,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
             <?php 
                 $license_key = get_option( 'hwp_pro_edd_license' );
                 if( !$license_key ) {
-                    echo '<p>Get more powerful display and customization settings in <strong><a href="https://hollerwp.com/pro?utm_source=wp_admin&utm_medium=link&utm_campaign=below_settings">Holler Box Pro</a></strong></p>';
+                    echo '<p>Get more powerful display and customization settings in <strong><a href="https://hollerwp.com/pro?utm_source=after_settings&utm_medium=link&utm_campaign=hwp_settings">Holler Box Pro</a></strong></p>';
                 }
             ?>
 
@@ -871,6 +873,19 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             do_action( 'hwp_custom_settings_save', $post_id );
             
+        }
+
+        /**
+         * Add upgrade link to plugin row
+         *
+         * @since     0.9.1
+         * @return    void
+         */
+        public function hwp_plugin_links( $links ) {
+
+            $links[] = '<a href="https://hollerwp.com/pro?utm_source=plugin_row&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="font-weight:bold;color:green;">Upgrade</a>';
+            return $links;
+
         }
 
     }
