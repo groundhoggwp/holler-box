@@ -119,7 +119,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     'type' => get_post_meta( $value, 'hwp_type', 1 ),
                     'content' => $content,
                     'showEmail' => get_post_meta($value, 'show_optin', 1),
-                    'showChat' => get_post_meta( $value, 'show_chat', 1 ),
+                    'showChat' => ( get_post_meta( $value, 'hwp_type', 1 ) === 'chat' ? '1' : '' ),
                     'emailProvider' => get_post_meta( $value, 'email_provider', 1 ),
                     'ckApi' => get_option( 'hwp_ck_api_key' ),
                     'visitor' => get_post_meta($value, 'new_or_returning', 1),

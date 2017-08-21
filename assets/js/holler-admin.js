@@ -100,6 +100,7 @@
     var hideBtn = $('#hide_btn, label[for=hide_btn]');
     var popMeta = $('#popout_meta_box');
     var showOptin = $('#show-optin');
+    var avatar = $('.avatar-email');
 
     switch( val ) {
       case 'holler-banner':
@@ -108,6 +109,7 @@
         popMeta.hide();
         pos.hide();
         showOptin.fadeIn();
+        avatar.hide();
         break;
       case 'hwp-popup':
         hideBtn.hide();
@@ -115,16 +117,19 @@
         popMeta.hide();
         pos.hide();
         showOptin.fadeIn();
+        avatar.hide();
         break;
       case 'popout':
         popMeta.fadeIn();
         pos.fadeIn();
         showOptin.fadeIn();
+        avatar.fadeIn();
         break;
       case 'fomo':
         popMeta.hide();
         popChat.hide();
         showOptin.hide();
+        avatar.hide();
         break;
       default:
         popChat.fadeIn();
@@ -132,6 +137,7 @@
         pos.fadeIn();
         popMeta.hide();
         showOptin.fadeIn();
+        avatar.fadeIn();
     }
   }
 

@@ -364,13 +364,15 @@ if( !class_exists( 'Holler_Admin' ) ) {
          */
         public function display_meta_box_callback( $post ) {
 
+            // backwards compatibility. Remove after a few months.
+            if( get_post_meta( $post->ID, 'show_chat', true ) === '1' ) {
+                update_post_meta( $post->ID, 'hwp_type', 'chat' );
+                delete_post_meta( $post->ID, 'show_chat' );
+            }
+
             ?>
 
             <?php wp_nonce_field( basename( __FILE__ ), 'hollerbox_meta_box_nonce' ); ?>
-
-            <p><?php _e( 'Activate? Box will not show if inactive.', 'holler-box' ); ?></p>
-
-            <label class="hwp-switch"><input id="hwp_active" name="hwp_active" data-id="<?php echo $post->ID; ?>" type="checkbox" value="1" <?php checked("1", get_post_meta( $post->ID, 'hwp_active', true ) ); ?> /><div class="hwp-slider hwp-round"></div></label> 
 
             <h4>
                 <label for="type"><?php _e( 'Choose a Holler Box Type' ); ?></label>
@@ -380,6 +382,12 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <span class="text">Notification Box</span>
                     <img src="<?php echo Holler_Box_URL . '/assets/img/bottom-right-icon.png'; ?>" class="hwp-radio-image" />
                     <input type="radio" name="hwp_type" value="notification" <?php checked( "notification", get_post_meta( $post->ID, 'hwp_type', true ) ); ?> />
+                </label>
+
+                <label class="hwp-radio-withimage">
+                    <span class="text">Faux Chat</span>
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/chat-icon.png'; ?>" class="hwp-radio-image" />
+                    <input type="radio" name="hwp_type" value="chat" <?php checked( "chat", get_post_meta( $post->ID, 'hwp_type', true ) ); ?> />
                 </label>
 
                 <?php do_action('hwp_type_settings', $post->ID); ?>
@@ -561,11 +569,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 </div>
             </p>
 
-            <p>
-                <input type="checkbox" id="show_chat" name="show_chat" value="1" <?php checked('1', get_post_meta( $post->ID, 'show_chat', true ), true); ?> />
-                <?php _e( 'Show chat', 'holler-box' ); ?>
-            </p>
-
         <?php }
 
         /**
@@ -688,11 +691,16 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <input type="checkbox" id="hide_btn" name="hide_btn" value="1" <?php checked(1, get_post_meta( $post->ID, 'hide_btn', true ), true); ?> />
                 <label for="hide_btn"><?php _e( 'Hide the floating button? (Appears when box is hidden.)', 'holler-box' ); ?></label>
             </p>
-            <hr>
-            <p><label for="avatar_email"><?php _e( 'Gravatar Email', 'holler-box' ); ?></label></p>
-            <p>
-                <input type="text" class="widefat" name="avatar_email" size="20" value="<?php echo sanitize_email( get_post_meta( $post->ID, 'avatar_email', true ) ); ?>" /> 
-            </p>
+            
+            <div class="avatar-email">
+
+                <hr>
+
+                <p><label for="avatar_email"><?php _e( 'Gravatar Email', 'holler-box' ); ?></label></p>
+                <p>
+                    <input type="text" class="widefat" name="avatar_email" size="20" value="<?php echo sanitize_email( get_post_meta( $post->ID, 'avatar_email', true ) ); ?>" /> 
+                </p>
+            </div>
 
             <?php do_action('hwp_advanced_settings_after', $post->ID ); ?>
 
@@ -787,7 +795,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'hide_for_days',
                 'hide_after',
                 'hide_after_delay',
-                'hwp_active',
                 'display_when',
                 'scroll_delay',
                 'position',
