@@ -305,8 +305,22 @@ img.hwp-loading {
 
 /*** Popup ***/
 
+.hwp-backdrop {
+	position: fixed;
+	z-index: 99997;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba( 0,0,0,.8 );
+}
+
 .hwp-floating-btn.hwp-popup {
 	display: none;
+}
+
+.hwp-popup .holler-inside {
+	padding: 20px;
 }
 
 .holler-box.hwp-popup {
@@ -315,8 +329,31 @@ img.hwp-loading {
 	width: auto;
 	max-width: 800px;
 	max-height: 400px;
-	top: 30%;
+	top: 0;
 	margin: auto;
+	text-align: center;
+}
+
+.hwp-popup .hwp-row {
+	background-color: transparent;
+	padding: 0;
+}
+
+.hwp-popup .hwp-email-btn {
+	width: 100%;
+	float: none;
+	border-radius: 3px;
+	margin-top: 10px;
+}
+
+.hwp-popup .hwp-email-input {
+	width: 100% !important;
+	float: none;
+	margin-bottom: 10px;
+}
+
+.holler-title {
+	text-align: center;
 }
 
 /*

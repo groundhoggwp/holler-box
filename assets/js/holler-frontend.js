@@ -125,6 +125,7 @@
     .on('click', '.hwp-floating-btn', holler.btnClick )
     .on('click', '.hwp-text i', holler.sendText )
     .on('click', '#hwp-' + id + ' .hwp-email-btn', holler.emailSubmitClick )
+    .on('click', '.hwp-backdrop', holler.bdClick )
 
     $('.hwp-text-input').on('keypress', holler.submitChatTextOnEnter );
 
@@ -163,6 +164,13 @@
     var options = window.hollerVars[id];
 
     var item = document.getElementById( 'hwp-' + id );
+
+    // show/hide backdrop for popups
+    if( options.type === 'hwp-popup' && $(item).hasClass('hwp-show') ) {
+      holler.transitionOut( $('#hwp-bd-' + id) );
+    } else if( options.type === 'hwp-popup' ) {
+      holler.transitionIn( $('#hwp-bd-' + id) );
+    }
 
     // visitor has hidden this item, don't show box unless it's a popup
     if( holler.getCookie( 'hwp-' + id + '_hide' ) === 'true' ) {
@@ -777,6 +785,16 @@
 
   holler.hideSpinner = function() {
     $('img.hwp-loading').remove();
+  }
+
+  holler.bdClick = function(e) {
+
+    e.stopImmediatePropagation();
+
+    var id = $(e.currentTarget).data('id');
+
+    holler.toggleHide( id );
+
   }
 
   $(window).load(function(){

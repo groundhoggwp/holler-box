@@ -462,16 +462,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <label for="position"><?php _e( 'Choose a Template' ); ?></label>
                 </h4>
 
-                <label class="hwp-radio-withimage">
+                <label class="hwp-radio-withimage popup-template">
                     <span class="text">Default</span>
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/chat-icon.png'; ?>" class="hwp-radio-image" />
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-1.png'; ?>" class="hwp-template-image" />
                     <input type="radio" name="hwp_template" value="default" <?php checked( "default", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
-                </label>
-
-                <label class="hwp-radio-withimage">
-                    <span class="text">Two</span>
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/chat-icon.png'; ?>" class="hwp-radio-image" />
-                    <input type="radio" name="hwp_template" value="two" <?php checked( "two", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
                 </label>
 
                 <?php do_action('hwp_popup_templates', $post->ID); ?>

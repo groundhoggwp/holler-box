@@ -374,6 +374,19 @@ input.hwp-number-input {
 	height: 50px;
 }
 
+.hwp-radio-withimage.popup-template {
+	width: auto;
+	padding: 0;
+	margin-bottom: 15px;
+}
+
+.hwp-template-image {
+	display: block;
+	margin: 5px auto;
+	width: 300px;
+	height: auto;
+}
+
 .post-type-hollerbox .postbox select {
 	display: block;
 	min-width: 250px;
