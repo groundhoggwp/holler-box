@@ -64,6 +64,44 @@ if( !class_exists( 'Holler_Admin' ) ) {
             add_filter( 'plugin_action_links_holler-box/holler-box.php', array( $this, 'hwp_plugin_links' ) );
 
             add_action( 'hwp_type_settings', array( $this, 'type_upsell' ) );
+
+            add_action( 'admin_init', array( $this, 'update_meta' ) );
+        }
+
+        /**
+         * Perform meta upgrades when plugin is updated
+         *
+         * @access      public
+         * @since       1.0.0
+         * @return      void
+         */
+        public function update_meta() {
+
+            // stop doing this after 1.0.1
+            if( Holler_Box_VER > '1.0.1' )
+                return;
+
+            // The Query
+            $the_query = new WP_Query( array( 'post_type' => 'hollerbox' ) );
+
+            // The Loop
+            if ( $the_query->have_posts() ) {
+                while ( $the_query->have_posts() ) {
+                    $the_query->the_post();
+
+                    $id = get_the_ID();
+
+                    // update chat meta
+                    if( get_post_meta( $id, 'show_chat', true ) === '1' ) {
+                        update_post_meta( $id, 'hwp_type', 'chat' );
+                        delete_post_meta( $id, 'show_chat' );
+                    }
+
+                }
+                /* Restore original Post Data */
+                wp_reset_postdata();
+            }
+
         }
 
         /**
@@ -365,12 +403,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
          * @param     WP_Post $post
          */
         public function display_meta_box_callback( $post ) {
-
-            // backwards compatibility. Remove after a few months.
-            if( get_post_meta( $post->ID, 'show_chat', true ) === '1' ) {
-                update_post_meta( $post->ID, 'hwp_type', 'chat' );
-                delete_post_meta( $post->ID, 'show_chat' );
-            }
 
             ?>
 

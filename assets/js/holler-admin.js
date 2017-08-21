@@ -16,8 +16,6 @@
   	});
 
   	$('.hwp-colors').wpColorPicker();
-
-    $('#settings_meta_box, #popout_meta_box').addClass('closed');
     
   }
 
