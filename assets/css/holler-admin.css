@@ -27,7 +27,7 @@
 	margin: 10px 0;
 }
 
-#show-certain-pages, #show-email-options, #hwp-until-datepicker, #custom-email-options, #default-email-options, #mailchimp-fields, #convertkit-fields, #mailpoet-fields, #popup-templates {
+#show-certain-pages, #show-email-options, #hwp-until-datepicker, #custom-email-options, #default-email-options, #mailchimp-fields, #convertkit-fields, #mailpoet-fields, #popup-templates, #popup-options {
 	display: none;
 }
 
@@ -350,6 +350,11 @@ input.hwp-number-input {
 
 .hwp-section {
 	padding-bottom: 15px;
+	border-bottom: 1px solid #eee;
+}
+
+.hwp-section.noborder {
+	border-bottom: none;
 }
 
 .hwp-radio-withimage {
@@ -383,7 +388,7 @@ input.hwp-number-input {
 .hwp-template-image {
 	display: block;
 	margin: 5px auto;
-	width: 300px;
+	width: 275px;
 	height: auto;
 }
 

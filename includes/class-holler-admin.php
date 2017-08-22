@@ -465,27 +465,55 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <label class="hwp-radio-withimage popup-template">
                     <span class="text">Default</span>
                     <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-1.png'; ?>" class="hwp-template-image" />
-                    <input type="radio" name="hwp_template" value="default" <?php checked( "default", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
+                    <input type="radio" name="hwp_template" value="hwp-template-1" <?php checked( "hwp-template-1", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
+                </label>
+
+                <label class="hwp-radio-withimage popup-template">
+                    <span class="text">Two</span>
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-2.png'; ?>" class="hwp-template-image" />
+                    <input type="radio" name="hwp_template" value="hwp-template-2" <?php checked( "hwp-template-2", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
                 </label>
 
                 <?php do_action('hwp_popup_templates', $post->ID); ?>
 
             </div>
-            
-            <p><?php _e( 'Button color', 'holler-box' ); ?></p>
-            <input type="text" name="button_color1" value="<?php echo esc_html( get_post_meta( $post->ID, 'button_color1', true ) ); ?>" class="hwp-colors" data-default-color="#1191cb" />
-            
-            <p><?php _e( 'Background color', 'holler-box' ); ?></p>
-            <input type="text" name="bg_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'bg_color', true ) ); ?>" class="hwp-colors" data-default-color="#ffffff" />
-            
-            <p><?php _e( 'Text color', 'holler-box' ); ?></p>
-            <input type="text" name="text_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'text_color', true ) ); ?>" class="hwp-colors" data-default-color="#333333" />
 
-            <br style="clear:both" />
+            <div class="hwp-section" id="popup-options">
 
-            <p id="show-optin">
+                <h4>
+                    <label for="position"><?php _e( 'Popup Options' ); ?></label>
+                </h4>
+                
+                <p>
+                    <?php _e( 'Name Field Placeholder', 'holler-box' ); ?>
+                    <input id="name_placeholder" name="name_placeholder" class="widefat" value="<?php echo get_post_meta( $post->ID, 'name_placeholder', 1 ); ?>" placeholder="Name" type="text" />
+                </p>
+
+                <input type="checkbox" id="dont_show_name" name="dont_show_name" value="1" <?php checked('1', get_post_meta( $post->ID, 'dont_show_name', true ), true); ?> />
+                <?php _e( 'Don\'t show name field', 'holler-box' ); ?>
+
+            </div>
+
+            <div class="hwp-section" id="box-colors">
+            
+                <p><?php _e( 'Send button color', 'holler-box' ); ?></p>
+                <input type="text" name="button_color1" value="<?php echo esc_html( get_post_meta( $post->ID, 'button_color1', true ) ); ?>" class="hwp-colors" data-default-color="#1191cb" />
+                
+                <p><?php _e( 'Box background color', 'holler-box' ); ?></p>
+                <input type="text" name="bg_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'bg_color', true ) ); ?>" class="hwp-colors" data-default-color="#ffffff" />
+                
+                <p><?php _e( 'Box text color', 'holler-box' ); ?></p>
+                <input type="text" name="text_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'text_color', true ) ); ?>" class="hwp-colors" data-default-color="#333333" />
+
+            </div>
+
+            <div class="hwp-section noborder" id="show-optin">
+
+                <p>
                 <input type="checkbox" id="show_optin" name="show_optin" value="1" <?php checked('1', get_post_meta( $post->ID, 'show_optin', true ), true); ?> />
                 <?php _e( 'Show email opt-in', 'holler-box' ); ?>
+                </p>
+
                 <div id="show-email-options">
 
                     <select name="email_provider">
@@ -623,7 +651,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     </div>
 
                 </div>
-            </p>
+
+            </div>
 
         <?php }
 
@@ -682,90 +711,118 @@ if( !class_exists( 'Holler_Admin' ) ) {
             $show_on = get_post_meta( $post->ID, 'show_on', 1 );
             ?>
 
-            <label><?php _e( 'What pages?', 'holler-box' ); ?></label>
+            <div class="hwp-section">
 
-            <div class="hwp-settings-group">
-                <?php if( is_array( $show_on ) ) echo '<p>We have updated this setting, please re-enter pages and save.</p>'; ?>
-                <input type="radio" name="show_on" value="all" <?php if( $show_on === "all" ) echo 'checked="checked"'; ?>> All pages<br>
-                <input type="radio" name="show_on" value="limited" <?php if( $show_on === "limited" ) echo 'checked="checked"'; ?>> Certain pages<br>
-                <div id="show-certain-pages" class="hwp-hidden-field">
-                <p><?php  _e('Show on pages', 'holler-box' ); ?></p>
-                <input placeholder="Start typing page title" class="widefat" type="text" name="show_on_pages" id="show_on_pages" value="<?php echo get_post_meta( $post->ID, 'show_on_pages', 1 ); ?>" size="20" />
+                <p><label><?php _e( 'What pages?', 'holler-box' ); ?></label></p>
+
+                <div class="hwp-settings-group">
+                    <?php if( is_array( $show_on ) ) echo '<p>We have updated this setting, please re-enter pages and save.</p>'; ?>
+                    <input type="radio" name="show_on" value="all" <?php if( $show_on === "all" ) echo 'checked="checked"'; ?>> All pages<br>
+                    <input type="radio" name="show_on" value="limited" <?php if( $show_on === "limited" ) echo 'checked="checked"'; ?>> Certain pages<br>
+                    <div id="show-certain-pages" class="hwp-hidden-field">
+                    <p><?php  _e('Show on pages', 'holler-box' ); ?></p>
+                    <input placeholder="Start typing page title" class="widefat" type="text" name="show_on_pages" id="show_on_pages" value="<?php echo get_post_meta( $post->ID, 'show_on_pages', 1 ); ?>" size="20" />
+                    </div>
+
+                    <?php do_action('hwp_page_settings', $post->ID ); ?>
+
                 </div>
 
-                <?php do_action('hwp_page_settings', $post->ID ); ?>
-
             </div>
 
-            <hr>
+            <div class="hwp-section">
 
-            <label><?php _e( 'Show to these visitors', 'holler-box' ); ?></label>
+                <p><label><?php _e( 'Show to these visitors', 'holler-box' ); ?></label></p>
 
-            <div class="hwp-settings-group"> 
-                <input type="radio" name="logged_in" value="logged_in" <?php checked('logged_in', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> <?php _e( 'Logged in only', 'holler-box' ); ?><br>
-                <input type="radio" name="logged_in" value="logged_out" <?php checked('logged_out', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> <?php _e( 'Logged out only', 'holler-box' ); ?><br>
-                <input type="radio" name="logged_in" value="all" <?php checked('all', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> <?php _e( 'All visitors', 'holler-box' ); ?><br>
+                <div class="hwp-settings-group"> 
+                    <input type="radio" name="logged_in" value="logged_in" <?php checked('logged_in', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> <?php _e( 'Logged in only', 'holler-box' ); ?><br>
+                    <input type="radio" name="logged_in" value="logged_out" <?php checked('logged_out', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> <?php _e( 'Logged out only', 'holler-box' ); ?><br>
+                    <input type="radio" name="logged_in" value="all" <?php checked('all', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> <?php _e( 'All visitors', 'holler-box' ); ?><br>
+                </div>
             </div>
-            <hr>
-            <p><label for="visitor"><?php _e( 'New or returning', 'holler-box' ); ?></label></p>
-            <div class="hwp-settings-group">
-                <input type="radio" name="new_or_returning" value="new" <?php checked('new', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> <?php _e( 'New visitors only', 'holler-box' ); ?><br>
-                <input type="radio" name="new_or_returning" value="returning" <?php checked('returning', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> <?php _e( 'Returning visitors only', 'holler-box' ); ?><br>
-                <input type="radio" name="new_or_returning" value="all" <?php checked('all', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> <?php _e( 'All visitors', 'holler-box' ); ?><br>
-            </div>
-            <hr>
-            <p>
-                <label for="visitor"><?php _e( 'When should we show it?', 'holler-box' ); ?></label>
-            </p>
-            <div class="hwp-settings-group">
-                <input type="radio" name="display_when" value="immediately" <?php checked('immediately', get_post_meta( $post->ID, 'display_when', true ), true); ?>> <?php _e( 'Immediately', 'holler-box' ); ?><br>
-                <input type="radio" name="display_when" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'display_when', true ), true); ?>> <?php _e( 'Delay of', 'holler-box' ); ?> <input type="number" class="hwp-number-input" id="scroll_delay" name="scroll_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'scroll_delay', true ) ); ?>" /> <?php _e( 'seconds', 'holler-box' ); ?><br>
-                <input type="radio" name="display_when" value="scroll" <?php checked('scroll', get_post_meta( $post->ID, 'display_when', true ), true); ?>> <?php _e( 'User scrolls halfway down the page', 'holler-box' ); ?> <br>
 
-                <?php do_action('hwp_display_when_settings', $post->ID ); ?>
+            <div class="hwp-section">
 
-            </div>
-            <hr>
-            <p>
-                <label for="hide_after"><?php _e( 'After it displays, when should it disappear?', 'holler-box' ); ?></label>
-            </p>
-            <div class="hwp-settings-group">
-                <input type="radio" name="hide_after" value="never" <?php checked('never', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> <?php _e( 'When user clicks hide', 'holler-box' ); ?><br>
-                <input type="radio" name="hide_after" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> <?php _e( 'Delay of', 'holler-box' ); ?> <input type="number" class="hwp-number-input" id="hide_after_delay" name="hide_after_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_after_delay', true ) ); ?>" /> <?php _e( 'seconds', 'holler-box' ); ?><br>
-            </div>
-            <hr>
-            <p>
-                <label for="show_settings"><?php _e( 'How often should we show it to each visitor?', 'holler-box' ); ?></label>
-            </p>
-            <div class="hwp-settings-group">
-                <input type="radio" name="show_settings" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> <?php _e( 'Every page load', 'holler-box' ); ?><br>
-                <input type="radio" name="show_settings" value="hide_for" <?php checked('hide_for', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> <?php _e( 'Show, then hide for', 'holler-box' ); ?> <input type="number" class="hwp-number-input" id="hide_for_days" name="hide_for_days" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_for_days', true ) ); ?>" /> <?php _e( 'days', 'holler-box' ); ?><br>
-                <input type="radio" name="show_settings" value="interacts" <?php checked('interacts', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> <?php _e( 'Hide after user interacts (clicks link or submits email)', 'holler-box' ); ?>
-            </div>
-            <hr>
-            <p>
-                <input type="checkbox" id="hide_btn" name="hide_btn" value="1" <?php checked(1, get_post_meta( $post->ID, 'hide_btn', true ), true); ?> />
-                <label for="hide_btn"><?php _e( 'Hide the floating button? (Appears when box is hidden.)', 'holler-box' ); ?></label>
-            </p>
-            
-            <div class="avatar-email">
+                <p><label for="visitor"><?php _e( 'New or returning', 'holler-box' ); ?></label></p>
 
-                <hr>
+                <div class="hwp-settings-group">
+                    <input type="radio" name="new_or_returning" value="new" <?php checked('new', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> <?php _e( 'New visitors only', 'holler-box' ); ?><br>
+                    <input type="radio" name="new_or_returning" value="returning" <?php checked('returning', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> <?php _e( 'Returning visitors only', 'holler-box' ); ?><br>
+                    <input type="radio" name="new_or_returning" value="all" <?php checked('all', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> <?php _e( 'All visitors', 'holler-box' ); ?><br>
+                </div>
+            </div>
 
-                <p><label for="avatar_email"><?php _e( 'Gravatar Email', 'holler-box' ); ?></label></p>
+            <div class="hwp-section">
+
                 <p>
-                    <input type="text" class="widefat" name="avatar_email" size="20" value="<?php echo sanitize_email( get_post_meta( $post->ID, 'avatar_email', true ) ); ?>" /> 
+                    <label for="visitor"><?php _e( 'When should we show it?', 'holler-box' ); ?></label>
                 </p>
+
+                <div class="hwp-settings-group">
+                    <input type="radio" name="display_when" value="immediately" <?php checked('immediately', get_post_meta( $post->ID, 'display_when', true ), true); ?>> <?php _e( 'Immediately', 'holler-box' ); ?><br>
+                    <input type="radio" name="display_when" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'display_when', true ), true); ?>> <?php _e( 'Delay of', 'holler-box' ); ?> <input type="number" class="hwp-number-input" id="scroll_delay" name="scroll_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'scroll_delay', true ) ); ?>" /> <?php _e( 'seconds', 'holler-box' ); ?><br>
+                    <input type="radio" name="display_when" value="scroll" <?php checked('scroll', get_post_meta( $post->ID, 'display_when', true ), true); ?>> <?php _e( 'User scrolls halfway down the page', 'holler-box' ); ?> <br>
+
+                    <?php do_action('hwp_display_when_settings', $post->ID ); ?>
+
+                </div>
             </div>
 
-            <?php do_action('hwp_advanced_settings_after', $post->ID ); ?>
+            <div class="hwp-section">
 
-            <?php 
-                $license_key = get_option( 'hwp_pro_edd_license' );
-                if( !$license_key ) {
-                    echo '<p>Get more powerful display and customization settings in <strong><a href="https://hollerwp.com/pro?utm_source=after_settings&utm_medium=link&utm_campaign=hwp_settings">Holler Box Pro</a></strong></p>';
-                }
-            ?>
+                <p>
+                    <label for="hide_after"><?php _e( 'After it displays, when should it disappear?', 'holler-box' ); ?></label>
+                </p>
+
+                <div class="hwp-settings-group">
+                    <input type="radio" name="hide_after" value="never" <?php checked('never', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> <?php _e( 'When user clicks hide', 'holler-box' ); ?><br>
+                    <input type="radio" name="hide_after" value="delay" <?php checked('delay', get_post_meta( $post->ID, 'hide_after', true ), true); ?>> <?php _e( 'Delay of', 'holler-box' ); ?> <input type="number" class="hwp-number-input" id="hide_after_delay" name="hide_after_delay" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_after_delay', true ) ); ?>" /> <?php _e( 'seconds', 'holler-box' ); ?><br>
+                </div>
+
+            </div>
+
+            <div class="hwp-section">
+
+                <p>
+                    <label for="show_settings"><?php _e( 'How often should we show it to each visitor?', 'holler-box' ); ?></label>
+                </p>
+
+                <div class="hwp-settings-group">
+                    <input type="radio" name="show_settings" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> <?php _e( 'Every page load', 'holler-box' ); ?><br>
+                    <input type="radio" name="show_settings" value="hide_for" <?php checked('hide_for', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> <?php _e( 'Show, then hide for', 'holler-box' ); ?> <input type="number" class="hwp-number-input" id="hide_for_days" name="hide_for_days" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_for_days', true ) ); ?>" /> <?php _e( 'days', 'holler-box' ); ?><br>
+                    <input type="radio" name="show_settings" value="interacts" <?php checked('interacts', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> <?php _e( 'Hide after user interacts (clicks link or submits email)', 'holler-box' ); ?>
+                </div>
+            </div>
+
+            <div class="hwp-section">
+
+                <p>
+                    <input type="checkbox" id="hide_btn" name="hide_btn" value="1" <?php checked(1, get_post_meta( $post->ID, 'hide_btn', true ), true); ?> />
+                    <label for="hide_btn"><?php _e( 'Hide the floating button? (Appears when box is hidden.)', 'holler-box' ); ?></label>
+                </p>
+
+            </div>
+
+            <div class="hwp-section noborder">
+                
+                <div class="avatar-email">
+
+                    <p><label for="avatar_email"><?php _e( 'Gravatar Email', 'holler-box' ); ?></label></p>
+
+                    <input type="text" class="widefat" name="avatar_email" size="20" value="<?php echo sanitize_email( get_post_meta( $post->ID, 'avatar_email', true ) ); ?>" /> 
+
+                </div>
+
+                <?php do_action('hwp_advanced_settings_after', $post->ID ); ?>
+
+                <?php 
+                    $license_key = get_option( 'hwp_pro_edd_license' );
+                    if( !$license_key ) {
+                        echo '<p>Get more powerful display and customization settings in <strong><a href="https://hollerwp.com/pro?utm_source=after_settings&utm_medium=link&utm_campaign=hwp_settings">Holler Box Pro</a></strong></p>';
+                    }
+                ?>
+
+            </div>
 
         <?php }
 
@@ -860,7 +917,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'ck_id',
                 'mc_list_id',
                 'mailpoet_list_id',
-                'hwp_type' );
+                'hwp_type',
+                'hwp_template',
+                'name_placeholder',
+                'dont_show_name' );
 
             $keys = apply_filters( 'hwp_settings_array', $keys );
 

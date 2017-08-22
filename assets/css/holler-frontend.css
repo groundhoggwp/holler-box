@@ -303,7 +303,9 @@ img.hwp-loading {
     clear: both;
 }
 
-/*** Popup ***/
+/*
+ * Popup
+ */
 
 .hwp-backdrop {
 	position: fixed;
@@ -312,7 +314,7 @@ img.hwp-loading {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	background-color: rgba( 0,0,0,.8 );
+	background-color: rgba( 0,0,0,.7 );
 }
 
 .hwp-floating-btn.hwp-popup {
@@ -324,14 +326,20 @@ img.hwp-loading {
 }
 
 .holler-box.hwp-popup {
-	left: 10%;
-	right: 10%;
-	width: auto;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%) scale(1.1);
+	-webkit-font-smoothing: antialiased;
+	width: 80%;
 	max-width: 800px;
 	max-height: 400px;
-	top: 0;
 	margin: auto;
 	text-align: center;
+}
+
+/* scale() fixes blurry text in chrome */
+.hwp-popup.hwp-hide {
+	transform: translate(-50%, -50%) scale(1);
 }
 
 .hwp-popup .hwp-row {
@@ -357,6 +365,49 @@ img.hwp-loading {
 }
 
 /*
+ * Styles for Popup Templates
+ */
+
+.hwp-template-2 .hwp-popup-image {
+	float: left;
+    display: block;
+    width: 28%;
+}
+
+.hwp-template-2 .holler-inside {
+	text-align: left;
+	float: right;
+    width: 70%;
+}
+
+.hwp-template-2 .holler-title {
+	text-align: left;
+}
+
+@media (max-width: 400px) {
+	.hwp-template-2 .hwp-popup-image {
+		float: none;
+		margin: 10px auto;
+		width: auto;
+	}
+
+	.hwp-template-2 .holler-inside {
+		float: none;
+		width: 100%;
+	}
+
+	.holler-box.hwp-popup {
+		left: 0;
+		right: 0;
+		width: 100%;
+		bottom: 0;
+		top: auto;
+		max-height: 80%;
+		transform: translate(0,0) scale(1);
+	}
+}
+
+/*
  * Media Queries
  */
 
@@ -372,16 +423,6 @@ img.hwp-loading {
 		-o-transform: translateX(0px) translateY(0px);
 		-ms-transform: translateX(0px) translateY(0px);
 		transform: translateX(0px) translateY(0px);
-	}
-}
-
-@media (max-width: 400px) {
-	.holler-box.hwp-popup {
-		left: 0%;
-		right: 0%;
-		width: 100%;
-		bottom: 0;
-		top: auto;
 	}
 }
 

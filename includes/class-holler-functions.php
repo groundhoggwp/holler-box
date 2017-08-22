@@ -319,15 +319,21 @@ if( !class_exists( 'Holler_Functions' ) ) {
          */
         public function display_popup( $id ) {
 
+            $template = get_post_meta( $id, 'hwp_template', true );
+
             ?>
 
             <style type="text/css">
-            #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
+            #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside, #hwp-<?php echo intval( $id ); ?> .holler-title { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
             </style>
 
             <div id="hwp-bd-<?php echo esc_attr( $id ); ?>" data-id="<?php echo esc_attr( $id ); ?>" class="hwp-backdrop hwp-hide"></div>
             
             <div id="hwp-<?php echo esc_attr( $id ); ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">
+
+                <?php if( $template != 'hwp-template-1' ) : ?>
+                    <img src="<?php echo Holler_Box_URL . 'assets/img/ebook-mockup-300.png'; ?>" class="hwp-popup-image" />
+                <?php endif; ?>
 
                 <div class="holler-inside">
                 
@@ -412,8 +418,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * @return      string
          */
         public function name_row( $id ) {
+
+            if( get_post_meta( $id, 'dont_show_name', 1 ) === '1' )
+                return;
+
             ?>
-            <input type="text" placeholder="Name" />
+            <input type="text" placeholder="<?php echo esc_attr( get_post_meta( $id, 'name_placeholder', 1 ) ); ?>" class="hwp-name" />
             <?php
         }
 
@@ -452,12 +462,14 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * @return string
          */
         public static function add_hb_classes( $classes, $id ) {
-            
-            $classes .= get_post_meta( $id, 'position', 1 );
 
             $type = get_post_meta( $id, 'hwp_type', 1 );
-            if( $type === 'hwp-popup' )
+            if( $type === 'hwp-popup' ) {
                 $classes .= ' ' . $type;
+                $classes .= ' ' . get_post_meta( $id, 'hwp_template', 1 );
+            } else {
+                $classes .= get_post_meta( $id, 'position', 1 );
+            }
 
             return $classes;
         }
