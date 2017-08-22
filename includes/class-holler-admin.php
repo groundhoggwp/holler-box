@@ -63,7 +63,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             add_filter( 'plugin_action_links_holler-box/holler-box.php', array( $this, 'hwp_plugin_links' ) );
 
-            add_action( 'hwp_type_settings', array( $this, 'type_upsell' ) );
+            add_action( 'hwp_popup_templates', array( $this, 'type_upsell' ) );
 
             add_action( 'admin_init', array( $this, 'update_meta' ) );
         }
@@ -381,18 +381,20 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
         }
 
-        public function type_upsell( $post ) {
+        /**
+         * Display upsell text if license is missing
+         *
+         * @since     1.0.0
+         * @param     WP_Post $post
+         */
+        public function type_upsell() {
 
             $license_key = get_option( 'hwp_pro_edd_license' );
             if( $license_key )
                 return;
 
             ?>
-            <label class="hwp-radio-withimage">
-                <span class="text">More Types</span>
-                <a href="https://hollerwp.com/pro?utm_source=type_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999"><img src="<?php echo Holler_Box_URL . '/assets/img/bottom-right-icon.png'; ?>" class="hwp-radio-image" /></a>
-                <input type="radio" name="hwp_type" value="more" disabled="disabled" />
-            </label>
+            <p style="clear:both;"><small><a href="https://hollerwp.com/pro?utm_source=template_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999">Get more templates in Pro</a></small></p>
             <?php
         }
 
@@ -469,7 +471,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 </label>
 
                 <label class="hwp-radio-withimage popup-template">
-                    <span class="text">Two</span>
+                    <span class="text">Image Left</span>
                     <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-2.png'; ?>" class="hwp-template-image" />
                     <input type="radio" name="hwp_template" value="hwp-template-2" <?php checked( "hwp-template-2", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
                 </label>
@@ -486,7 +488,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 
                 <p>
                     <?php _e( 'Name Field Placeholder', 'holler-box' ); ?>
-                    <input id="name_placeholder" name="name_placeholder" class="widefat" value="<?php echo get_post_meta( $post->ID, 'name_placeholder', 1 ); ?>" placeholder="Name" type="text" />
+                    <input id="name_placeholder" name="name_placeholder" class="widefat" value="<?php echo get_post_meta( $post->ID, 'name_placeholder', 1 ); ?>" placeholder="First Name" type="text" />
                 </p>
 
                 <input type="checkbox" id="dont_show_name" name="dont_show_name" value="1" <?php checked('1', get_post_meta( $post->ID, 'dont_show_name', true ), true); ?> />

@@ -125,7 +125,8 @@ if( !class_exists( 'Holler_Ajax' ) ) {
 
             $interests = $_GET['interests'];
 
-            $email = $_GET['email'];
+            $email = sanitize_text_field( $_GET['email'] );
+            $name = sanitize_text_field( $_GET['name'] );
 
             // MailChimp API credentials
             $api_key = get_option('hwp_mc_api_key');
@@ -152,11 +153,14 @@ if( !class_exists( 'Holler_Ajax' ) ) {
             $body = array(
                 'email_address' => $email,
                 'status'        => $status
-                // 'merge_fields'  => [
-                //     'FNAME'     => $fname,
-                //     'LNAME'     => $lname
-                // ]
             );
+
+            if( !empty( $name ) ) {
+                $body['merge_fields']  = [
+                    'FNAME'     => $name,
+                    //'LNAME'     => $lname
+                ];
+            }
 
             // Interests are groups => groups. Need to convert "true" string to boolean for MC api
             if( !empty( $interests ) ) {
@@ -200,6 +204,7 @@ if( !class_exists( 'Holler_Ajax' ) ) {
                 wp_send_json_error('Please install and activate the MailPoet plugin.' );
 
             $list = $_GET['list_id'];
+            $name = sanitize_text_field( $_GET['name'] );
 
             $subscriber = array(
                 'email' => sanitize_text_field( $_GET['email'] )
@@ -207,6 +212,9 @@ if( !class_exists( 'Holler_Ajax' ) ) {
 
             if( empty( $subscriber ) )
                 wp_send_json_error('Missing required field.');
+
+            if( !empty( $name ) )
+                $subscriber['first_name'] = $name;
             
             // Subscribe via MailPoet 3 API
             try {

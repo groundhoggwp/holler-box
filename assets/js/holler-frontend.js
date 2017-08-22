@@ -553,12 +553,14 @@
     var formId = $('#hwp-' + id + ' .ck-form-id').val();
     var apiUrl = 'https://api.convertkit.com/v3/forms/' + formId + '/subscribe';
 
+    var name = $('#hwp-' + id + ' .hwp-name').val();
+
     holler.showSpinner( id );
 
     $.ajax({
       method: "POST",
       url: apiUrl,
-      data: { email: email, api_key: options.ckApi }
+      data: { email: email, api_key: options.ckApi, first_name: name }
       })
       .done(function(msg) {
 
@@ -587,6 +589,7 @@
   holler.mcSubscribe = function( email, id ) {
 
     var listId = $('#hwp-' + id + ' .mc-list-id').val();
+    var name = $('#hwp-' + id + ' .hwp-name').val();
 
     var interestIds = $('#hwp-' + id + ' .mc-interests').val();
     if( interestIds )
@@ -602,7 +605,7 @@
     $.ajax({
       method: "GET",
       url: window.hollerVars.ajaxurl,
-      data: { email: email, list_id: listId, action: 'hwp_mc_subscribe', interests: interestIds, nonce: window.hollerVars.hwpNonce }
+      data: { email: email, list_id: listId, action: 'hwp_mc_subscribe', interests: interestIds, nonce: window.hollerVars.hwpNonce, name: name }
       })
       .done(function(msg) {
 
@@ -629,12 +632,14 @@
       return;
     }
 
+    var name = $('#hwp-' + id + ' .hwp-name').val();
+
     holler.showSpinner( id );
 
     $.ajax({
       method: "GET",
       url: window.hollerVars.ajaxurl,
-      data: { email: email, list_id: listId, action: 'hwp_mailpoet_subscribe', nonce: window.hollerVars.hwpNonce }
+      data: { email: email, list_id: listId, action: 'hwp_mailpoet_subscribe', nonce: window.hollerVars.hwpNonce, name: name }
       })
       .done(function(msg) {
 
@@ -741,6 +746,7 @@
     } else {
 
       $('#hwp-' + id + ' .hwp-first-row').html(msg);
+
     }
 
     if( options.showChat === '1' ) {
@@ -780,6 +786,7 @@
   holler.showSpinner = function( id ) {
 
     $( '#hwp-' + id + ' .hwp-email-row' ).html( '<img src="' + window.hollerVars.pluginUrl + 'assets/img/loading.gif" class="hwp-loading" />');
+    $('#hwp-' + id + ' .hwp-name-row').hide();
 
   }
 
