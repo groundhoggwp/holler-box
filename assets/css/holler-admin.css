@@ -399,6 +399,15 @@ input.hwp-number-input {
 	margin-bottom: 5px;
 }
 
+.hwp-popup-image {
+	display: block;
+	clear: both;
+	height: auto;
+	width: auto;
+	margin-bottom: 15px;
+	max-width: 150px;
+}
+
 @media (max-width: 782px) {
 	#hwp-upgrade-box {
 		float: none;

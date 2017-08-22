@@ -319,7 +319,9 @@ if( !class_exists( 'Holler_Functions' ) ) {
          */
         public function display_popup( $id ) {
 
-            $template = get_post_meta( $id, 'hwp_template', true );
+            $img_url = get_post_meta( $id, 'popup_image', 1 );
+            $template = get_post_meta( $id, 'hwp_template', 1 );
+            $img = ( !empty( $img_url ) ? $img_url : Holler_Box_URL . 'assets/img/ebook-mockup-300.png' );
 
             ?>
 
@@ -331,37 +333,43 @@ if( !class_exists( 'Holler_Functions' ) ) {
             
             <div id="hwp-<?php echo esc_attr( $id ); ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">
 
-                <?php if( $template != 'hwp-template-1' ) : ?>
-                    <img src="<?php echo Holler_Box_URL . 'assets/img/ebook-mockup-300.png'; ?>" class="hwp-popup-image" />
-                <?php endif; ?>
+                <div class="hwp-popup-inside">
 
-                <div class="holler-inside">
-                
-                <div class="hwp-close"><i class="icon icon-cancel"></i></div>
+                    <?php if( $template != 'hwp-template-1' ) : ?>
+                        <div class="hwp-img-wrap">
+                            <img src="<?php echo $img; ?>" class="hwp-popup-image" />
+                        </div>
+                    <?php endif; ?>
 
-                <h2 class="holler-title"><?php echo get_the_title( $id ); ?></h2>
+                    <div class="holler-inside">
+                    
+                    <div class="hwp-close"><i class="icon icon-cancel"></i></div>
 
-                <?php do_action('hollerbox_above_content', $id); ?>
+                    <h2 class="holler-title"><?php echo get_the_title( $id ); ?></h2>
 
-                <div class="hwp-row hwp-first-row"></div>
+                    <?php do_action('hollerbox_above_content', $id); ?>
 
-                <div class="hwp-row hwp-name-row">
-                    <?php self::name_row( $id ); ?>
-                </div>
+                    <div class="hwp-row hwp-first-row"></div>
 
-                <div class="hwp-row hwp-note-optin hwp-email-row hwp-hide">
-                    <?php do_action('hwp_email_form', $id); ?>
-                </div>
+                    <div class="hwp-row hwp-name-row">
+                        <?php self::name_row( $id ); ?>
+                    </div>
 
-                <?php do_action('hollerbox_below_content', $id); ?>
+                    <div class="hwp-row hwp-note-optin hwp-email-row hwp-hide">
+                        <?php do_action('hwp_email_form', $id); ?>
+                    </div>
 
-                <?php 
+                    <?php do_action('hollerbox_below_content', $id); ?>
 
-                $powered_by = get_option( 'hwp_powered_by' );
+                    <?php 
 
-                if( empty( $powered_by ) ) : ?>
-                    <span class="hwp-powered-by"><a href="http://hollerwp.com" target="_blank">Holler Box</a></span>
-                <?php endif; ?>
+                    $powered_by = get_option( 'hwp_powered_by' );
+
+                    if( empty( $powered_by ) ) : ?>
+                        <span class="hwp-powered-by"><a href="http://hollerwp.com" target="_blank">Holler Box</a></span>
+                    <?php endif; ?>
+
+                    </div>
 
                 </div>
  

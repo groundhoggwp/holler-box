@@ -321,7 +321,13 @@ img.hwp-loading {
 	display: none;
 }
 
+.hwp-popup-inside {
+	display: flex;
+	align-items: stretch;
+}
+
 .hwp-popup .holler-inside {
+	width: 100%;
 	padding: 20px;
 }
 
@@ -368,10 +374,12 @@ img.hwp-loading {
  * Styles for Popup Templates
  */
 
-.hwp-template-2 .hwp-popup-image {
+.hwp-template-2 .hwp-img-wrap {
 	float: left;
-    display: block;
     width: 28%;
+    display: flex;
+	align-items: center;
+	justify-content: center;
 }
 
 .hwp-template-2 .holler-inside {
@@ -385,7 +393,12 @@ img.hwp-loading {
 }
 
 @media (max-width: 400px) {
-	.hwp-template-2 .hwp-popup-image {
+
+	.hwp-popup-inside {
+		display: block;
+	}
+
+	.hwp-template-2 .hwp-img-wrap {
 		float: none;
 		margin: 10px auto;
 		width: auto;

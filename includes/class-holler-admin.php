@@ -487,12 +487,13 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 </h4>
                 
                 <p>
-                    <?php _e( 'Name Field Placeholder', 'holler-box' ); ?>
-                    <input id="name_placeholder" name="name_placeholder" class="widefat" value="<?php echo get_post_meta( $post->ID, 'name_placeholder', 1 ); ?>" placeholder="First Name" type="text" />
+                    <?php _e( 'Upload a Custom Image', 'holler-box' ); ?>
                 </p>
+                
+                <img src="<?php echo get_post_meta( $post->ID, 'popup_image', 1 ); ?>" class="hwp-popup-image" />
 
-                <input type="checkbox" id="dont_show_name" name="dont_show_name" value="1" <?php checked('1', get_post_meta( $post->ID, 'dont_show_name', true ), true); ?> />
-                <?php _e( 'Don\'t show name field', 'holler-box' ); ?>
+                <input id="hwp-image-url" size="50" type="text" name="popup_image" value="<?php echo get_post_meta( $post->ID, 'popup_image', 1 ); ?>" />
+                <input id="hwp-upload-btn" type="button" class="button" value="Upload Image" />
 
             </div>
 
@@ -634,6 +635,16 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     </div>
 
                     <div id="default-email-options">
+
+                        <p>
+                            <?php _e( 'Name Field Placeholder', 'holler-box' ); ?>
+                            <input id="name_placeholder" name="name_placeholder" class="widefat" value="<?php echo get_post_meta( $post->ID, 'name_placeholder', 1 ); ?>" placeholder="First Name" type="text" />
+                        </p>
+
+                        <p>
+                            <input type="checkbox" id="dont_show_name" name="dont_show_name" value="1" <?php checked('1', get_post_meta( $post->ID, 'dont_show_name', true ), true); ?> />
+                            <?php _e( 'Don\'t show name field', 'holler-box' ); ?>
+                        </p>
 
                         <p>
                             <label for="opt_in_message"><?php _e( 'Small text above email field', 'holler-box' ); ?></label>
@@ -922,7 +933,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'hwp_type',
                 'hwp_template',
                 'name_placeholder',
-                'dont_show_name' );
+                'dont_show_name',
+                'popup_image' );
 
             $keys = apply_filters( 'hwp_settings_array', $keys );
 
