@@ -427,7 +427,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          */
         public function name_row( $id ) {
 
-            if( get_post_meta( $id, 'dont_show_name', 1 ) === '1' )
+            if( get_post_meta( $id, 'dont_show_name', 1 ) === '1' || get_post_meta( $id, 'hwp_type', 1 ) != 'hwp-popup' )
                 return;
 
             ?>

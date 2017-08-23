@@ -636,6 +636,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                     <div id="default-email-options">
 
+                        <div id="hwp-name-fields">
+
                         <p>
                             <?php _e( 'Name Field Placeholder', 'holler-box' ); ?>
                             <input id="name_placeholder" name="name_placeholder" class="widefat" value="<?php echo get_post_meta( $post->ID, 'name_placeholder', 1 ); ?>" placeholder="First Name" type="text" />
@@ -643,8 +645,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                         <p>
                             <input type="checkbox" id="dont_show_name" name="dont_show_name" value="1" <?php checked('1', get_post_meta( $post->ID, 'dont_show_name', true ), true); ?> />
-                            <?php _e( 'Don\'t show name field', 'holler-box' ); ?>
+                            <?php _e( 'Don\'t show first name field', 'holler-box' ); ?>
                         </p>
+
+                        </div>
 
                         <p>
                             <label for="opt_in_message"><?php _e( 'Small text above email field', 'holler-box' ); ?></label>
@@ -874,6 +878,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 update_post_meta( $post->ID, 'hwp_type', 'notification' );
                 update_post_meta( $post->ID, 'position', 'hwp-bottomright' );
                 update_post_meta( $post->ID, 'opt_in_placeholder', 'Enter your email' );
+                update_post_meta( $post->ID, 'name_placeholder', 'First name' );
 
             }
 

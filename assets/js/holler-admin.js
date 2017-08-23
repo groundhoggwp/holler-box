@@ -102,6 +102,7 @@
     var avatar = $('.avatar-email');
     var templates = $('#popup-templates');
     var pOptions = $('#popup-options');
+    var name = $('#hwp-name-fields');
 
     switch( val ) {
       case 'holler-banner':
@@ -113,9 +114,11 @@
         avatar.hide();
         templates.hide();
         pOptions.hide();
+        name.hide();
         break;
       case 'hwp-popup':
         templates.fadeIn();
+        name.fadeIn();
         hideBtn.hide();
         popChat.fadeIn();
         popMeta.hide();
@@ -131,6 +134,7 @@
         avatar.fadeIn();
         templates.hide();
         pOptions.hide();
+        name.hide();
         break;
       case 'fomo':
         popMeta.hide();
@@ -139,6 +143,7 @@
         avatar.hide();
         templates.hide();
         pOptions.hide();
+        name.hide();
         break;
       default:
         popChat.fadeIn();
@@ -149,6 +154,7 @@
         avatar.fadeIn();
         templates.hide();
         pOptions.hide();
+        name.hide();
     }
   }
 
@@ -258,7 +264,7 @@
       data: params
       })
       .done(function(msg) {
-        console.log(msg);
+        // console.log(msg);
       })
       .fail(function(err) {
         console.log(err);
