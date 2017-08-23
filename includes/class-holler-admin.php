@@ -465,7 +465,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 </h4>
 
                 <label class="hwp-radio-withimage popup-template">
-                    <span class="text">Default</span>
+                    <span class="text">Standard</span>
                     <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-1.png'; ?>" class="hwp-template-image" />
                     <input type="radio" name="hwp_template" value="hwp-template-1" <?php checked( "hwp-template-1", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
                 </label>
@@ -474,6 +474,12 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <span class="text">Image Left</span>
                     <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-2.png'; ?>" class="hwp-template-image" />
                     <input type="radio" name="hwp_template" value="hwp-template-2" <?php checked( "hwp-template-2", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
+                </label>
+
+                <label class="hwp-radio-withimage popup-template">
+                    <span class="text">Above/Below</span>
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-3.png'; ?>" class="hwp-template-image" />
+                    <input type="radio" name="hwp_template" value="hwp-template-3" <?php checked( "hwp-template-3", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
                 </label>
 
                 <?php do_action('hwp_popup_templates', $post->ID); ?>

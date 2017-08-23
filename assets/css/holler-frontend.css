@@ -28,6 +28,10 @@
 	margin: 0;
 }
 
+.holler-box ul, .holler-box ol {
+	margin: 10px 0;
+}
+
 .hwp-floating-btn {
 	opacity: 0;
 	position: fixed;
@@ -242,10 +246,14 @@
     font-size: 15px;
 }
 
-.hwp-email-input {
-	width: 80% !important;
+.holler-box .hwp-email-input {
+	width: 80%;
 	float: left;
-	margin: 0 !important;
+	margin: 0;
+}
+
+.holler-box input.hwp-name {
+	margin-bottom: 10px;
 }
 
 .holler-box input#s {
@@ -317,6 +325,10 @@ img.hwp-loading {
 	background-color: rgba( 0,0,0,.7 );
 }
 
+input.hwp-name {
+	margin-bottom: 10px;
+}
+
 .hwp-floating-btn.hwp-popup {
 	display: none;
 }
@@ -338,9 +350,9 @@ img.hwp-loading {
 	-webkit-font-smoothing: antialiased;
 	width: 80%;
 	max-width: 800px;
-	max-height: 400px;
 	margin: auto;
 	text-align: center;
+	overflow: auto;
 }
 
 /* scale() fixes blurry text in chrome */
@@ -360,7 +372,7 @@ img.hwp-loading {
 	margin-top: 10px;
 }
 
-.hwp-popup .hwp-email-input {
+.hwp-template-2 .hwp-email-input, .hwp-template-1 .hwp-email-input {
 	width: 100% !important;
 	float: none;
 	margin-bottom: 10px;
@@ -373,6 +385,17 @@ img.hwp-loading {
 /*
  * Styles for Popup Templates
  */
+
+ .hwp-popup ul {
+	list-style: none;
+	margin-left: 0;
+}
+
+ .hwp-popup ul li:before {
+	content: '✓';
+	color: green;
+	margin-right: 5px;
+}
 
 .hwp-template-2 .hwp-img-wrap {
 	float: left;
@@ -390,6 +413,57 @@ img.hwp-loading {
 
 .hwp-template-2 .holler-title {
 	text-align: left;
+}
+
+/** above/below **/
+
+.holler-box.hwp-template-3 {
+	overflow: visible;
+	text-align: left;
+}
+
+.hwp-template-3 .hwp-img-wrap {
+	float: right;
+    width: 35%;
+    position: relative;
+    top: -80px;
+    margin-bottom: -75px;
+    margin-left: 15px;
+}
+
+.hwp-template-3 .holler-title {
+	text-align: left;
+}
+
+.hwp-template-3 input.hwp-name, .hwp-template-3 input.hwp-email-input {
+	width: 36%;
+	float: left;
+}
+
+.hwp-template-3 input.hwp-email-input, .hwp-template-3 input.hwp-name {
+	margin-right: 2%
+}
+
+.hwp-template-3 .hwp-email-btn {
+	width: 24%;
+	float: left;
+	margin-top: 0;
+}
+
+.hwp-template-3 input.hwp-email-input.no-name {
+	width: 74%;
+}
+
+@media (max-width: 950px) {
+	.holler-box.hwp-template-3 {
+		max-width: 500px;
+	}
+
+	.hwp-template-3 .hwp-img-wrap {
+		float: none;
+		margin-left: auto;
+		margin-right: auto;
+	}
 }
 
 @media (max-width: 400px) {
@@ -417,6 +491,13 @@ img.hwp-loading {
 		top: auto;
 		max-height: 80%;
 		transform: translate(0,0) scale(1);
+	}
+
+	.hwp-template-3 input.hwp-email-input, .hwp-template-3 .hwp-email-btn, .hwp-template-3 input.hwp-name, .hwp-template-3 input.hwp-email-input.no-name {
+		float: none;
+		width: 100%;
+		margin-bottom: 10px;
+		margin-left: 0;
 	}
 }
 

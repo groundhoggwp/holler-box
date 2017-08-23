@@ -333,48 +333,67 @@ if( !class_exists( 'Holler_Functions' ) ) {
             
             <div id="hwp-<?php echo esc_attr( $id ); ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">
 
-                <div class="hwp-popup-inside">
-
-                    <?php if( $template != 'hwp-template-1' ) : ?>
-                        <div class="hwp-img-wrap">
-                            <img src="<?php echo $img; ?>" class="hwp-popup-image" />
-                        </div>
-                    <?php endif; ?>
-
-                    <div class="holler-inside">
-                    
-                    <div class="hwp-close"><i class="icon icon-cancel"></i></div>
-
-                    <h2 class="holler-title"><?php echo get_the_title( $id ); ?></h2>
-
-                    <?php do_action('hollerbox_above_content', $id); ?>
-
-                    <div class="hwp-row hwp-first-row"></div>
-
-                    <div class="hwp-row hwp-name-row">
-                        <?php self::name_row( $id ); ?>
-                    </div>
-
-                    <div class="hwp-row hwp-note-optin hwp-email-row hwp-hide">
-                        <?php do_action('hwp_email_form', $id); ?>
-                    </div>
-
-                    <?php do_action('hollerbox_below_content', $id); ?>
-
-                    <?php 
-
-                    $powered_by = get_option( 'hwp_powered_by' );
-
-                    if( empty( $powered_by ) ) : ?>
-                        <span class="hwp-powered-by"><a href="http://hollerwp.com" target="_blank">Holler Box</a></span>
-                    <?php endif; ?>
-
-                    </div>
-
-                </div>
+            <?php self::get_popup_template( $template, $id, $img ); ?>
  
             </div>
             <?php
+        }
+
+        /**
+         * Returns the desired template markup
+         *
+         * @since       1.0.0
+         * @param       int $id
+         * @return      string
+         */
+        public function get_popup_template( $template, $id, $img ) {
+
+            ?>
+
+            <div class="hwp-popup-inside">
+
+                <?php if( $template === 'hwp-template-2' ) : ?>
+                    <div class="hwp-img-wrap">
+                        <img src="<?php echo $img; ?>" class="hwp-popup-image" />
+                    </div>
+                <?php endif; ?>
+
+                <div class="holler-inside">
+                
+                <div class="hwp-close"><i class="icon icon-cancel"></i></div>
+
+                <?php if( $template === 'hwp-template-3' ) : ?>
+                    <div class="hwp-img-wrap">
+                        <img src="<?php echo $img; ?>" class="hwp-popup-image" />
+                    </div>
+                <?php endif; ?>
+
+                <h2 class="holler-title"><?php echo get_the_title( $id ); ?></h2>
+
+                <?php do_action('hollerbox_above_content', $id); ?>
+
+                <div class="hwp-row hwp-first-row"></div>
+
+                <div class="hwp-row hwp-note-optin hwp-email-row hwp-hide">
+                    <?php do_action('hwp_email_form', $id); ?>
+                </div>
+
+                <?php do_action('hollerbox_below_content', $id); ?>
+
+                <?php 
+
+                $powered_by = get_option( 'hwp_powered_by' );
+
+                if( empty( $powered_by ) ) : ?>
+                    <span class="hwp-powered-by"><a href="http://hollerwp.com" target="_blank">Holler Box</a></span>
+                <?php endif; ?>
+
+                </div>
+
+            </div>
+
+            <?php
+
         }
 
         /**
@@ -412,7 +431,10 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 }
                 ?>
                 <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>
-                <input type="email" name="email" class="hwp-email-input" placeholder="<?php _e( 'Enter email', 'holler-box' ); ?>" autocomplete="on" autocapitalize="off" />
+                
+                <?php self::name_row( $id ); ?>
+
+                <input type="email" name="email" class="hwp-email-input <?php if( get_post_meta( $id, 'dont_show_name', 1 ) === '1' ) echo 'no-name'; ?>" placeholder="<?php _e( 'Enter email', 'holler-box' ); ?>" autocomplete="on" autocapitalize="off" />
                 <button class="hwp-email-btn"><?php _e('Send', 'holler-box' ); ?></button>
                 <?php
             }
