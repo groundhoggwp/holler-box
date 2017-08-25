@@ -397,7 +397,7 @@ input.hwp-name {
 	margin-right: 5px;
 }
 
-.hwp-template-2 .hwp-img-wrap {
+.hwp-template-2 .hwp-img-wrap, .hwp-template-4 .hwp-img-wrap {
 	float: left;
     width: 28%;
     display: flex;

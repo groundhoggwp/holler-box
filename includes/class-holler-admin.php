@@ -63,7 +63,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             add_filter( 'plugin_action_links_holler-box/holler-box.php', array( $this, 'hwp_plugin_links' ) );
 
-            add_action( 'hwp_popup_templates', array( $this, 'type_upsell' ) );
+            add_action( 'hwp_popup_templates', array( $this, 'type_upsell' ), 99 );
 
             add_action( 'admin_init', array( $this, 'update_meta' ) );
         }
@@ -394,7 +394,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 return;
 
             ?>
-            <p style="clear:both;"><small><a href="https://hollerwp.com/pro?utm_source=template_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999">Get more templates in Pro</a></small></p>
+            <p style="clear:both;"><small><a href="https://hollerwp.com/pro?utm_source=template_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999">Get more templates in the Pro Power Pack</a></small></p>
             <?php
         }
 

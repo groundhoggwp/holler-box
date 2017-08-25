@@ -514,6 +514,10 @@
     if( !email )
       return;
 
+    var name = $('#hwp-' + id + ' .hwp-name').val();
+
+    var title = $('#hwp-' + id + ' .holler-title').text();
+
     // validate email
     if( email.indexOf('@') === -1 || email.indexOf('.') === -1 ) {
       alert('Something is wrong with your email, please try again.')
@@ -540,7 +544,7 @@
     // concatenate messages together
     var fullMsg = window.localStorage.getItem('hwp-full-msg');
 
-    holler.sendMsg( email, fullMsg, id );
+    holler.sendMsg( email, name, fullMsg, id, title );
 
   }
 
@@ -659,14 +663,14 @@
   }
 
   // Send email along with chat message to server
-  holler.sendMsg = function( email, msg, id ) {
+  holler.sendMsg = function( email, name, msg, id, title ) {
 
     holler.showSpinner( id );
 
     $.ajax({
       method: "GET",
       url: window.hollerVars.ajaxurl,
-      data: { email: email, id: id, msg: msg, action: 'hwp_send_email', nonce: window.hollerVars.hwpNonce }
+      data: { email: email, name: name, id: id, msg: msg, action: 'hwp_send_email', nonce: window.hollerVars.hwpNonce, title: title }
       })
       .done(function(msg) {
 

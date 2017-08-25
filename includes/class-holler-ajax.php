@@ -87,15 +87,27 @@ if( !class_exists( 'Holler_Ajax' ) ) {
             if( empty( $_GET['id'] ) || empty( $_GET['email'] ) )
                 wp_send_json_error('Missing required field.' );
 
-            $msg = $_GET['msg'];
+            $msg = $_GET['msg'] . "\n";
 
             $email = $_GET['email'];
+
+            $name = $_GET['name'];
+
+            $title = $_GET['title'];
+
+            if( !empty( $title ) )
+                $msg .=  "\nForm: " . $title;
+
+            $msg .= "\nEmail: " . $email;
+
+            if( !empty( $name ) )
+                $msg .=  "\nName: " . $name;
 
             $id = $_GET['id'];
 
             $title = get_option( 'hwp_email_title' );
 
-            $title = ( !empty( $title ) ? $title : "New Holler Box Message" );
+            $title = ( !empty( $title ) ? $title : "New Holler Box Submission" );
 
             $sendto = get_post_meta( $id, 'opt_in_send_to', 1);
 

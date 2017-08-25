@@ -327,6 +327,10 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             <style type="text/css">
             #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside, #hwp-<?php echo intval( $id ); ?> .holler-title { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
+            #hwp-<?php echo intval( $id ); ?>.hwp-template-4 { border-top-color: <?php echo esc_html( get_post_meta( $id, 'button_color1', 1 ) ); ?>; }
+            <?php if( $template === 'hwp-template-5' ) : ?>
+            #hwp-<?php echo intval( $id ); ?>.hwp-template-5 { background: url( <?php echo '"' . esc_url( $img ) . '"'; ?> ) no-repeat center; background-size: cover; }
+            <?php endif; ?>
             </style>
 
             <div id="hwp-bd-<?php echo esc_attr( $id ); ?>" data-id="<?php echo esc_attr( $id ); ?>" class="hwp-backdrop hwp-hide"></div>
@@ -373,6 +377,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 <?php do_action('hollerbox_above_content', $id); ?>
 
                 <div class="hwp-row hwp-first-row"></div>
+
+                <?php if( $template === 'hwp-template-4' ) : ?>
+                    <div class="hwp-img-wrap">
+                        <img src="<?php echo $img; ?>" class="hwp-popup-image" />
+                    </div>
+                <?php endif; ?>
 
                 <div class="hwp-row hwp-note-optin hwp-email-row hwp-hide">
                     <?php do_action('hwp_email_form', $id); ?>
