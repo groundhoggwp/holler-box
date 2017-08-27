@@ -379,6 +379,11 @@ input.hwp-number-input {
 	height: 50px;
 }
 
+/* Hide deprecated setting on update */
+#position-settings .hwp-radio-withimage {
+	display: none;
+}
+
 .hwp-radio-withimage.popup-template {
 	width: auto;
 	padding: 0;

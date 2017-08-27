@@ -394,7 +394,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 return;
 
             ?>
-            <p style="clear:both;"><small><a href="https://hollerwp.com/pro?utm_source=template_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999">Get more templates in the Pro Power Pack</a></small></p>
+            <p style="clear:both;"><small><a href="https://hollerwp.com/pro?utm_source=template_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999">Get more templates in Pro</a></small></p>
             <?php
         }
 
@@ -671,6 +671,11 @@ if( !class_exists( 'Holler_Admin' ) ) {
                             <input class="widefat" type="text" name="opt_in_confirmation" id="opt_in_confirmation" value="<?php echo esc_attr( get_post_meta( $post->ID, 'opt_in_confirmation', true ) ); ?>" size="20" />
                         </p>
 
+                        <p>
+                            <label for="submit_text"><?php _e( 'Submit Button Text', 'holler-box' ); ?></label>
+                            <input class="widefat" type="text" name="submit_text" id="submit_text" value="<?php echo esc_attr( get_post_meta( $post->ID, 'submit_text', true ) ); ?>" size="20" placeholder="Send" />
+                        </p>
+
                     </div>
 
                 </div>
@@ -945,7 +950,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'hwp_template',
                 'name_placeholder',
                 'dont_show_name',
-                'popup_image' );
+                'popup_image',
+                'submit_text' );
 
             $keys = apply_filters( 'hwp_settings_array', $keys );
 

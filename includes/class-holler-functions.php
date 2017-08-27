@@ -322,6 +322,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
             $img_url = get_post_meta( $id, 'popup_image', 1 );
             $template = get_post_meta( $id, 'hwp_template', 1 );
             $img = ( !empty( $img_url ) ? $img_url : Holler_Box_URL . 'assets/img/ebook-mockup-300.png' );
+            $bg_color = esc_html( get_post_meta( $id, 'bg_color', 1 ) );
 
             ?>
 
@@ -330,6 +331,9 @@ if( !class_exists( 'Holler_Functions' ) ) {
             #hwp-<?php echo intval( $id ); ?>.hwp-template-4 { border-top-color: <?php echo esc_html( get_post_meta( $id, 'button_color1', 1 ) ); ?>; }
             <?php if( $template === 'hwp-template-5' ) : ?>
             #hwp-<?php echo intval( $id ); ?>.hwp-template-5 { background: url( <?php echo '"' . esc_url( $img ) . '"'; ?> ) no-repeat center; background-size: cover; }
+            <?php endif; ?>
+            <?php if( $template === 'hwp-template-6' && $bg_color ) : ?>
+            #hwp-<?php echo intval( $id ); ?>.hwp-template-6 .hwp-email-row:before { border-color: <?php echo $bg_color; ?> transparent transparent transparent; }
             <?php endif; ?>
             </style>
 
@@ -421,6 +425,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $mc_url = get_post_meta( $id, 'mc_url', 1 );
 
+            $btn_text = ( !empty( get_post_meta( $id, 'submit_text', 1 ) ) ? get_post_meta( $id, 'submit_text', 1 ) : 'Send' );
+
             if( $mc_url && empty( $mc_list_id ) && is_user_logged_in() ) {
                 echo 'Site admin: please update your MailChimp settings.';
             }
@@ -445,7 +451,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 <?php self::name_row( $id ); ?>
 
                 <input type="email" name="email" class="hwp-email-input <?php if( get_post_meta( $id, 'dont_show_name', 1 ) === '1' ) echo 'no-name'; ?>" placeholder="<?php _e( 'Enter email', 'holler-box' ); ?>" autocomplete="on" autocapitalize="off" />
-                <button class="hwp-email-btn"><?php _e('Send', 'holler-box' ); ?></button>
+                <button class="hwp-email-btn"><?php echo $btn_text; ?></button>
                 <?php
             }
         }
