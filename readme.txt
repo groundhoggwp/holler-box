@@ -1,10 +1,10 @@
-=== Holler Box - The Smart WordPress Popup Plugin ===
+=== Holler Box - WordPress Popup Plugin for eCommerce ===
 
 Contributors: scottopolis
 Tags: popup, optin, lead generation, marketing, email opt-in, woocommerce, easy digital downloads
 Requires at least: 4.5
-Tested up to: 4.8
-Stable tag: 0.9.1
+Tested up to: 4.8.1
+Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -16,9 +16,21 @@ Holler Box is a popup and banner plugin that gives eCommerce store owners everyt
 
 It's lightweight and easy-to-use, not like other overly complex tools.
 
-[youtube  https://www.youtube.com/watch?v=VKGkah5mBrg]
+### Included for free
 
-Holler Box works like this:
+- Add unlimited popups
+- Choose between subtle notification bubble or lightbox popup
+- Integrate with MailChimp, Convertkit, MailPoet, or a custom form
+- Limit to certain pages
+- Time delay
+- Scroll triggers
+- Show to logged in/out and new or returning visitors
+- Choose between 3 customizable popup template designs
+- Use shortcodes and WordPress content in your popups
+- Conversion rate analytics
+- Bonus! Faux chat email capture
+
+## Why Holler Box?
 
 ### 1. Increase Your Email Opt-ins
 
@@ -38,7 +50,7 @@ When you are running a sale or promotion on your store, you want the right peopl
 
 Using the Holler Box smart display filters, you can choose to show the promotion only to logged out visitors, not to any logged in customers.
 
-**Social Proof (pro only)**
+**FOMO popups (pro only)**
 
 Social proof is a big part of converting a potential sale. If are using WooCommerce or Easy Digital Downloads, now you can show your customers that other people are buying with the Holler Box Sales Notification add-on.
 
@@ -66,6 +78,10 @@ See live demos and purchase the Pro version at the <a href="http://hollerwp.com/
 
 ## What can you do with it?
 
+**Popups**
+
+Show popups to collect more email subscribers. Choose from the free templates, or get Pro for more options.
+
 **Smart notification box**
 
 Show a non-intrusive Intercom style notification box with your message. Announce a webinar, collect email optins, show your latest blog post, and lots more.
@@ -90,6 +106,39 @@ Add a link, video, contact form, or simple opt-in form that integrates with majo
 
 ## Holler Box Pro
 
+Here's a short list of features available only in Pro:
+
+- Content upgrades
+- More popup designs
+- Exit detection
+- Name field for opt-ins
+- Advanced targeting filters
+- Scheduling
+- FOMO popups
+- Header banner
+- Support and updates
+- Lots more...
+
+Read more about what's in Pro.
+
+**Content Upgrades**
+
+Content upgrades are a proven technique to get more email subscribers.
+
+The way it works is by adding a link in one of your blog posts that opens a popup with a free bonus.
+
+Holler Box Pro makes it easy to add content upgrades. All you need to do is select “content upgrade” in the settings and paste the shortcode into any post or page.
+
+**More Popup Templates**
+
+Get even more popup templates for your store in Pro. Choose from a variety of templates to get the look you want, and get new ones as they come out.
+
+**Easy Digital Downloads and WooCommerce Sales Notifications**
+
+Easily show your site visitors a notification like: "Matt just purchased Holler Box Pro." This sales notification pulls the latest sale from EDD or WooCommerce.
+
+Also known as FOMO popups, these can increase your conversion rate by showing social proof.
+
 **Holler Banner**
 
 Holler Box Pro adds an option for a smart header banner with the same powerful user filtering. It works great when you have a limited time sale, or a very important announcement.
@@ -106,11 +155,7 @@ The set it and forget it feature allows you to automatically deactivate your Hol
 
 The Pro version also includes more advanced show on filtering, so it’s easier to deploy your boxes only on certain site pages. For example, show your Holler Box on certain blog categories, tags, post types, and more.
 
-**Easy Digital Downloads and WooCommerce Sales Notifications**
-
-Easily show your site visitors a notification like: "Matt just purchased Holler Box Pro." This sales notification pulls the latest sale from EDD or WooCommerce.
-
-<a href="http://hollerwp.com/" target="_blank">Get Pro</a>.
+<a href="http://hollerwp.com/pro" target="_blank">Get more features with Pro</a>.
 
 == Installation ==
 
@@ -204,6 +249,16 @@ Make sure your email form does not have a required field that is not displayed. 
 8. CPT
 
 == Changelog ==
+
+= 1.0.0 =
+
+This is a major update, everything is backwards compatible but you may need to re-save some settings if you make any changes to your Holler Boxes.
+
+* Lightbox popups with templates!
+* Holler Box types: notification box, popup, FOMO, chat, and more
+* CPT UI settings updates
+* Support for Pro features: name field, content upgrades, fomo updates
+* Bug fixes and tweaks
 
 = 0.9.1 =
 
