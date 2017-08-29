@@ -148,7 +148,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * @since       0.1.0
          * @return      string
          */
-        public function maybe_display_items() {
+        public function maybe_display_items() { 
 
             // do checks for page conditionals, logged in, etc here
             // if any of the checks are true, we show it
@@ -227,7 +227,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
          */
         public function get_active_items() {
 
-            $args = array( 'post_type' => 'hollerbox' );
+            $args = array( 'post_type' => 'hollerbox', 'posts_per_page'=> -1 );
             // The Query
             $the_query = new WP_Query( $args );
 
@@ -237,6 +237,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 while ( $the_query->have_posts() ) {
                     $the_query->the_post();
                     $id = get_the_id();
+
                     if( get_post_meta( $id, 'hwp_active', 1 ) != '1' )
                         continue;
 
@@ -265,7 +266,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
             #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
             </style>
 
-            <?php if( get_post_meta( $id, 'position', 1 ) != 'holler-banner' ) : ?>
+            <?php if( get_post_meta( $id, 'hwp_type', 1 ) != 'holler-banner' ) : ?>
             <div data-id="<?php echo esc_attr( $id ); ?>" class="hwp-floating-btn hwp-btn-<?php echo esc_attr( $id ); ?> <?php echo esc_attr( get_post_meta( $id, 'position', 1 ) ); ?>"><i class="icon icon-chat"></i></div>
             <?php endif; ?>
 
@@ -513,6 +514,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
             if( $type === 'hwp-popup' ) {
                 $classes .= ' ' . $type;
                 $classes .= ' ' . get_post_meta( $id, 'hwp_template', 1 );
+            } elseif( $type === 'holler-banner' ) {
+                $classes .= $type;
             } else {
                 $classes .= get_post_meta( $id, 'position', 1 );
             }

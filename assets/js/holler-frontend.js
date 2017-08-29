@@ -65,7 +65,7 @@
       return;
 
     // if on mobile, show button first
-    if( window.hollerVars.isMobile === "1" && vars.position != 'holler-banner' ) {
+    if( window.hollerVars.isMobile === "1" && vars.type != 'holler-banner' ) {
       holler.setCookie( 'hwp-' + id + '_hide', 'true', 1 );
       // have to count impression here, otherwise it won't be counted because it's hidden
       holler.countNoteShown(id);
@@ -178,7 +178,7 @@
       // hide box, show btn
       holler.transitionOut( item );
 
-      if( options.hideBtn != '1' && options.position != 'holler-banner' ) {
+      if( options.hideBtn != '1' && options.type != 'holler-banner' ) {
         holler.transitionIn( $( '.hwp-btn-' + id ) );
       }
 
@@ -190,7 +190,7 @@
       // box content
       $('#hwp-' + id + ' .hwp-first-row').html( options.content );
 
-      if( options.hideBtn != '1' && options.position != 'holler-banner' )
+      if( options.hideBtn != '1' && options.type != 'holler-banner' )
         holler.transitionOut( $( '.hwp-btn-' + id ) );
 
       // Show email opt-in, but not if we have a chatbox (it gets shown after user input)
@@ -207,7 +207,7 @@
     if( options.hideBtn === '1' )
       holler.hide( $( '.hwp-btn-' + id ) );
 
-    if( options.position === 'holler-banner' && holler.getCookie( 'hwp-' + id + '_hide' ) != 'true' )
+    if( options.type === 'holler-banner' && holler.getCookie( 'hwp-' + id + '_hide' ) != 'true' )
       holler.toggleBnrMargin( id );
     
 
@@ -741,7 +741,7 @@
 
     var msg = ( options.confirmMsg != '' ? options.confirmMsg : "Thanks!" );
 
-    if( options.position === 'holler-banner' ) {
+    if( options.type === 'holler-banner' ) {
 
       $('#hwp-' + id + ' .hwp-box-rows').addClass('hwp-full-width').html(msg);
 
