@@ -32,6 +32,20 @@ It's lightweight and easy-to-use, not like other overly complex tools.
 
 ## Why Holler Box?
 
+Holler Box is:
+
+- Lightweight
+- Easy to Use
+- Beautifully designed
+
+Other popup solutions are:
+
+- Overly complex
+- Expensive
+- Not aesthetically pleasing
+
+Here's how you can use Holler Box to get more leads and sales:
+
 ### 1. Increase Your Email Opt-ins
 
 Step one is to collect more leads at the top of your funnel, so you can follow up with customers and potentially convert them into customers.
