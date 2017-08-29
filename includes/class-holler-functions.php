@@ -209,8 +209,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 if( $show_it === false )
                     continue;
 
-                if( get_post_meta( $box_id, 'hwp_type', 1 ) === 'hwp-popup' ) {
+                $type = get_post_meta( $box_id, 'hwp_type', 1 );
+
+                if( $type === 'hwp-popup' ) {
                     $this->display_popup( $box_id );
+                } elseif ( $type === 'footer-bar' ) {
+                    $this->display_footer_bar( $box_id );
                 } else {
                     $this->display_notification_box( $box_id );
                 }
@@ -412,6 +416,58 @@ if( !class_exists( 'Holler_Functions' ) ) {
         }
 
         /**
+         * Output footer bar markup
+         *
+         * @since       1.0.1
+         * @param       int $id
+         * @return      string
+         */
+        public function display_footer_bar( $id ) {
+
+            $img_url = get_post_meta( $id, 'popup_image', 1 );
+            $img = ( !empty( $img_url ) ? $img_url : Holler_Box_URL . 'assets/img/ebook-mockup-cropped.png' );
+            $bg_color = esc_html( get_post_meta( $id, 'bg_color', 1 ) );
+
+            ?>
+
+            <style type="text/css">
+            #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside, #hwp-<?php echo intval( $id ); ?> .holler-title { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
+            #hwp-<?php echo intval( $id ); ?>.hwp-template-4 { border-top-color: <?php echo esc_html( get_post_meta( $id, 'button_color1', 1 ) ); ?>; }
+            </style>
+            
+            <div id="hwp-<?php echo esc_attr( $id ); ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">                
+
+                <div class="holler-inside">
+
+                    <div class="hwp-img-wrap">
+                        <img src="<?php echo $img; ?>" class="hwp-popup-image" />
+                    </div>
+                
+                    <div class="hwp-close"><i class="icon icon-cancel"></i></div>
+
+                    <div class="hwp-content-wrap">
+
+                        <?php do_action('hollerbox_above_content', $id); ?>
+
+                        <h2 class="holler-title"><?php echo get_the_title( $id ); ?></h2>
+
+                        <div class="hwp-row hwp-first-row"></div>
+
+                    </div>
+
+                    <div class="hwp-row hwp-note-optin hwp-email-row hwp-hide">
+                        <?php do_action('hwp_email_form', $id); ?>
+                    </div>
+
+                    <?php do_action('hollerbox_below_content', $id); ?>
+
+                </div>
+ 
+            </div>
+            <?php
+        }
+
+        /**
          * Handle different email provider forms
          *
          * @since       0.1.0
@@ -514,7 +570,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
             if( $type === 'hwp-popup' ) {
                 $classes .= ' ' . $type;
                 $classes .= ' ' . get_post_meta( $id, 'hwp_template', 1 );
-            } elseif( $type === 'holler-banner' ) {
+            } elseif( $type === 'holler-banner' || $type === 'footer-bar' ) {
                 $classes .= $type;
             } else {
                 $classes .= get_post_meta( $id, 'position', 1 );

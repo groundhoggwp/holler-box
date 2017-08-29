@@ -116,6 +116,17 @@
         pOptions.hide();
         name.hide();
         break;
+      case 'footer-bar':
+        popChat.hide();
+        hideBtn.fadeIn();
+        popMeta.hide();
+        pos.hide();
+        showOptin.fadeIn();
+        avatar.hide();
+        templates.hide();
+        pOptions.show();
+        name.hide();
+        break;
       case 'hwp-popup':
         templates.fadeIn();
         name.fadeIn();
