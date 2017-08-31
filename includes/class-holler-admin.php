@@ -514,9 +514,11 @@ if( !class_exists( 'Holler_Admin' ) ) {
             </div>
 
             <div class="hwp-section" id="box-colors">
-            
-                <p><?php _e( 'Send button color', 'holler-box' ); ?></p>
-                <input type="text" name="button_color1" value="<?php echo esc_html( get_post_meta( $post->ID, 'button_color1', true ) ); ?>" class="hwp-colors" data-default-color="#1191cb" />
+                
+                <div id="send-btn-color">
+                    <p><?php _e( 'Send button color', 'holler-box' ); ?></p>
+                    <input type="text" name="button_color1" value="<?php echo esc_html( get_post_meta( $post->ID, 'button_color1', true ) ); ?>" class="hwp-colors" data-default-color="#1191cb" />
+                </div>
                 
                 <p><?php _e( 'Box background color', 'holler-box' ); ?></p>
                 <input type="text" name="bg_color" value="<?php echo esc_html( get_post_meta( $post->ID, 'bg_color', true ) ); ?>" class="hwp-colors" data-default-color="#ffffff" />
