@@ -66,6 +66,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
             add_action( 'hwp_popup_templates', array( $this, 'type_upsell' ), 99 );
 
             add_action( 'admin_init', array( $this, 'update_meta' ) );
+
         }
 
         /**
@@ -270,6 +271,15 @@ if( !class_exists( 'Holler_Admin' ) ) {
             $columns["rate"] = "Percent";
             $columns["active"] = "Active";
             $columns['date'] = $date;
+
+            // remove wp seo columns
+            unset( $columns['wpseo-score'] );
+            unset( $columns['wpseo-title'] );
+            unset( $columns['wpseo-metadesc'] );
+            unset( $columns['wpseo-focuskw'] );
+            unset( $columns['wpseo-score-readability'] );
+            unset( $columns['wpseo-links'] );
+
             return $columns;
         }
 

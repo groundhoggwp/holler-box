@@ -107,7 +107,7 @@
     switch( val ) {
       case 'holler-banner':
         popChat.hide();
-        hideBtn.fadeIn();
+        hideBtn.hide();
         popMeta.hide();
         pos.hide();
         showOptin.fadeIn();
@@ -118,7 +118,7 @@
         break;
       case 'footer-bar':
         popChat.hide();
-        hideBtn.fadeIn();
+        hideBtn.hide();
         popMeta.hide();
         pos.hide();
         showOptin.fadeIn();
