@@ -19,6 +19,7 @@ It's lightweight and easy-to-use, not like other overly complex tools.
 ### Included for free
 
 - Add unlimited popups
+- Exit-intent popups
 - Choose between subtle notification bubble or lightbox popup
 - Integrate with MailChimp, Convertkit, MailPoet, or a custom form
 - Limit to certain pages
@@ -124,7 +125,6 @@ Here's a short list of features available only in Pro:
 
 - Content upgrades
 - More popup designs
-- Exit detection
 - Name field for opt-ins
 - Advanced targeting filters
 - Scheduling
