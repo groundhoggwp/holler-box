@@ -492,6 +492,12 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <input type="radio" name="hwp_template" value="hwp-template-3" <?php checked( "hwp-template-3", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
                 </label>
 
+                <label class="hwp-radio-withimage popup-template">
+                    <span class="text">Progress Bar</span>
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-progress.png'; ?>" class="hwp-template-image" />
+                    <input type="radio" name="hwp_template" value="hwp-template-progress" <?php checked( "hwp-template-progress", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
+                </label>
+
                 <?php do_action('hwp_popup_templates', $post->ID); ?>
 
             </div>

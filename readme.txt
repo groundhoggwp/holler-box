@@ -4,7 +4,7 @@ Contributors: scottopolis
 Tags: popup, optin, lead generation, marketing, email opt-in, woocommerce, easy digital downloads
 Requires at least: 4.5
 Tested up to: 4.8.1
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -125,7 +125,6 @@ Here's a short list of features available only in Pro:
 
 - Content upgrades
 - More popup designs
-- Name field for opt-ins
 - Advanced targeting filters
 - Scheduling
 - FOMO popups
@@ -204,6 +203,10 @@ Developers can contribute on [Github](https://github.com/scottopolis/holler-box)
 
 == FAQ ==
 
+*Are there any limitations?*
+
+No, you can create unlimited forms using all of the features described on this page. The <a href="http://hollerwp.com/pro" target="_blank">Pro version</a> offers optional extended functionality.
+
 *Does it use the wp_mail() function to send mail?* 
 
 Yes, if you have an SMTP plugin like Postman, Mailgun, or other mail plugin it will automatically use that to send mail.
@@ -246,23 +249,28 @@ Make sure your email form does not have a required field that is not displayed. 
 
 == Screenshots ==
 
-1. Default notification box with link
+1. Notification box
 
-2. Opt-in form
+2. Popup
 
 3. (Fake) Live chat with email capture
 
-4. Purchase notification
+4. Purchase notification (Pro)
 
-5. Hidden view
+5. Settings 1
 
-6. Display settings
+6. Settings 2
 
-7. Advanced settings
-
-8. CPT
+7. Conversion Analytics
 
 == Changelog ==
+
+= 1.0.2 =
+
+* Exit-intent is now included in the free version! Look under advanced settings.
+* New progress bar popup template
+* Support for Pro footer bar
+* New screenshots
 
 = 1.0.1 =
 
