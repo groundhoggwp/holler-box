@@ -350,6 +350,7 @@ input.hwp-name {
 	-webkit-font-smoothing: antialiased;
 	width: 80%;
 	max-width: 800px;
+	max-height: 80%;
 	margin: auto;
 	text-align: center;
 	overflow: auto;

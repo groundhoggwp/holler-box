@@ -475,6 +475,12 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 </h4>
 
                 <label class="hwp-radio-withimage popup-template">
+                    <span class="text">Custom (Displays editor content)</span>
+                    <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-0.png'; ?>" class="hwp-template-image" />
+                    <input type="radio" name="hwp_template" value="hwp-template-0" <?php checked( "hwp-template-0", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
+                </label>
+
+                <label class="hwp-radio-withimage popup-template">
                     <span class="text">Standard</span>
                     <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-1.png'; ?>" class="hwp-template-image" />
                     <input type="radio" name="hwp_template" value="hwp-template-1" <?php checked( "hwp-template-1", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
