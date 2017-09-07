@@ -187,9 +187,6 @@
       // Show the box and what's in it
       holler.transitionIn( item );
 
-      // box content
-      $('#hwp-' + id + ' .hwp-first-row').html( options.content );
-
       if( options.hideBtn != '1' && options.type != 'holler-banner' )
         holler.transitionOut( $( '.hwp-btn-' + id ) );
 

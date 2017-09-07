@@ -265,8 +265,10 @@ Make sure your email form does not have a required field that is not displayed. 
 
 == Changelog ==
 
-= 1.0.2 =
+= 1.1.0 =
 
+* Major compatibility improvement: box content is now displayed with PHP to make it easier to display forms and other shortcodes.
+* Ninja Forms compatibility
 * Exit-intent is now included in the free version! Look under advanced settings.
 * New progress bar popup template
 * Support for Pro footer bar

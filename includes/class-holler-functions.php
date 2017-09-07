@@ -108,18 +108,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             foreach (self::$active as $key => $value) {
 
-                $content_post = get_post($value);
-                $content = $content_post->post_content;
-                $content = apply_filters('hollerbox_content', $content, $value );
-                $content = do_shortcode( $content );
-                // $content = apply_filters('the_content_more_link', $content);
-                $content = str_replace(']]>', ']]&gt;', $content);
-
+                $type = get_post_meta( $value, 'hwp_type', 1 );
+                
                 $array[$value] = array( 
-                    'type' => get_post_meta( $value, 'hwp_type', 1 ),
-                    'content' => $content,
+                    'type' => $type,
                     'showEmail' => get_post_meta($value, 'show_optin', 1),
-                    'showChat' => ( get_post_meta( $value, 'hwp_type', 1 ) === 'chat' ? '1' : '' ),
+                    'showChat' => ( $type === 'chat' ? '1' : '' ),
                     'emailProvider' => get_post_meta( $value, 'email_provider', 1 ),
                     'ckApi' => get_option( 'hwp_ck_api_key' ),
                     'visitor' => get_post_meta($value, 'new_or_returning', 1),
@@ -137,6 +131,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     'btnColor1' => get_post_meta($value, 'button_color1', 1),
                     'position' => get_post_meta($value, 'position', 1)
                 );
+
             }
 
             return $array;
@@ -265,12 +260,13 @@ if( !class_exists( 'Holler_Functions' ) ) {
         public function display_notification_box( $id ) {
 
             $avatar_email = get_post_meta($id, 'avatar_email', 1);
+            $type = get_post_meta( $id, 'hwp_type', 1 );
             ?>
             <style type="text/css">
             #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
             </style>
 
-            <?php if( get_post_meta( $id, 'hwp_type', 1 ) != 'holler-banner' ) : ?>
+            <?php if( $type != 'holler-banner' ) : ?>
             <div data-id="<?php echo esc_attr( $id ); ?>" class="hwp-floating-btn hwp-btn-<?php echo esc_attr( $id ); ?> <?php echo esc_attr( get_post_meta( $id, 'position', 1 ) ); ?>"><i class="icon icon-chat"></i></div>
             <?php endif; ?>
 
@@ -278,14 +274,21 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                 <div class="holler-inside">
                 
-                <div class="hwp-close"><i class="icon icon-cancel"></i></div>
+                    <div class="hwp-close"><i class="icon icon-cancel"></i></div>
 
-                <?php do_action('hollerbox_above_content', $id); ?>
-                
-                <div class="hwp-box-rows">
+                    <?php do_action('hollerbox_above_content', $id); ?>
+
+                    <div class="hwp-box-rows">
+
                         <?php if( !empty($avatar_email) ) echo get_avatar( apply_filters( 'hwp_avatar_email', $avatar_email, $id), 50 ); ?>
-                    <div class="hwp-row hwp-first-row"></div>
-                </div>
+                        
+                        <div class="hwp-row hwp-first-row">
+
+                            <?php echo self::get_box_content( $id ); ?>
+
+                        </div>
+
+                    </div>
 
                 <div class="hwp-row hwp-note-optin hwp-email-row hwp-hide">
                     <?php do_action('hwp_email_form', $id); ?>
@@ -393,7 +396,11 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                 <?php do_action('hollerbox_above_content', $id); ?>
 
-                <div class="hwp-row hwp-first-row"></div>
+                <div class="hwp-row hwp-first-row">
+
+                    <?php echo self::get_box_content( $id ); ?>
+
+                </div>
 
                 <?php if( $template === 'hwp-template-4' ) : ?>
                     <div class="hwp-img-wrap">
@@ -459,7 +466,11 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                         <h2 class="holler-title"><?php echo get_the_title( $id ); ?></h2>
 
-                        <div class="hwp-row hwp-first-row"></div>
+                        <div class="hwp-row hwp-first-row">
+
+                            <?php echo self::get_box_content( $id ); ?>
+
+                        </div>
 
                     </div>
 
@@ -473,6 +484,23 @@ if( !class_exists( 'Holler_Functions' ) ) {
  
             </div>
             <?php
+        }
+
+        /**
+         * Display box content
+         * Content was added dynamically with Javscript prior to 1.1.0, now it's echoed with PHP to maximize compatibility.
+         *
+         * @since       1.1.0
+         * @param       int $id
+         * @return      string
+         */
+        public static function get_box_content( $id ) {
+
+            $post_content = get_post($id);
+            $content = $post_content->post_content;
+            $content = apply_filters('hollerbox_content', $content, $id );
+            return do_shortcode( $content );
+
         }
 
         /**
