@@ -184,8 +184,12 @@
 
     } else {
 
-      // Show the box and what's in it
-      holler.transitionIn( item );
+      if( options.type === 'fomo' ) {
+        holler.fomoContent( id, item );
+      } else {
+        // Show the box and what's in it
+        holler.transitionIn( item );
+      }
 
       if( options.hideBtn != '1' && options.type != 'holler-banner' )
         holler.transitionOut( $( '.hwp-btn-' + id ) );
@@ -802,6 +806,32 @@
     var id = $(e.currentTarget).data('id');
 
     holler.toggleHide( id );
+
+  }
+
+  holler.fomoContent = function( id, item ) {
+
+    var params = { action: 'hwp_fomo_ajax', nonce: window.hollerVars.hwpNonce };
+
+    // store interaction data
+    $.ajax({
+      method: "GET",
+      url: window.hollerVars.ajaxurl,
+      data: params
+      })
+      .done(function(data) {
+        // console.log(data);
+
+        // box content
+        $('#hwp-' + id + ' .hwp-first-row').html( data.data );
+
+        // Show the box and what's in it
+        holler.transitionIn( item );
+
+      })
+      .fail(function(err) {
+        console.log(err);
+      });
 
   }
 

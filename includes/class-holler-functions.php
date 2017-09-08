@@ -604,13 +604,13 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $type = get_post_meta( $id, 'hwp_type', 1 );
             if( $type === 'hwp-popup' ) {
-                $classes .= ' ' . $type;
+                
                 $classes .= ' ' . get_post_meta( $id, 'hwp_template', 1 );
-            } elseif( $type === 'holler-banner' || $type === 'footer-bar' ) {
-                $classes .= $type;
             } else {
                 $classes .= get_post_meta( $id, 'position', 1 );
             }
+
+            $classes .= ' ' . $type;
 
             return $classes;
         }
