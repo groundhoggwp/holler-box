@@ -29,7 +29,17 @@ It's lightweight and easy-to-use, not like other overly complex tools.
 - Choose between 3 customizable popup template designs
 - Use shortcodes and WordPress content in your popups
 - Conversion rate analytics
+- Add forms and shortcodes to your popups
 - Bonus! Faux chat email capture
+
+### Supported Plugin Integrations
+
+Most plugins that use shortcodes will work. For example:
+
+- Membership plugins like Restrict Content Pro, Paid Memberships Pro, etc.
+- Forms plugins like Ninja Forms, Gravity Forms, WPForms, Contact Form 7, etc.
+- eCommerce buy buttons
+- Most plugins
 
 ## Why Holler Box?
 
@@ -270,7 +280,7 @@ Make sure your email form does not have a required field that is not displayed. 
 * Major compatibility improvement: box content is now displayed with PHP to make it easier to display forms and other shortcodes.
 * Ninja Forms compatibility
 * Exit-intent is now included in the free version! Look under advanced settings.
-* New progress bar popup template
+* New progress bar popup template and custom template
 * Support for Pro footer bar
 * New screenshots
 
