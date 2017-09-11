@@ -811,7 +811,19 @@
 
   holler.fomoContent = function( id, item ) {
 
-    var params = { action: 'hwp_fomo_ajax', nonce: window.hollerVars.hwpNonce };
+    var int;
+
+    int = holler.getCookie( 'hwp_fomo' );
+
+    if( int ) {
+      int = parseInt( int ) + 1;
+    } else {
+      int = 1;
+    }
+
+    console.log( 'int ' + int );
+
+    var params = { action: 'hwp_fomo_ajax', nonce: window.hollerVars.hwpNonce, int: int };
 
     // store interaction data
     $.ajax({
@@ -827,6 +839,8 @@
 
         // Show the box and what's in it
         holler.transitionIn( item );
+
+        holler.setCookie( 'hwp_fomo', int, 1 );
 
       })
       .fail(function(err) {
