@@ -604,9 +604,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $type = get_post_meta( $id, 'hwp_type', 1 );
             if( $type === 'hwp-popup' ) {
-                
                 $classes .= ' ' . get_post_meta( $id, 'hwp_template', 1 );
-            } else {
+            } else if( $type != 'holler-banner' ) {
                 $classes .= get_post_meta( $id, 'position', 1 );
             }
 
