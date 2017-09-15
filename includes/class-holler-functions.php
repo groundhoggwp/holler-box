@@ -349,6 +349,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
             <style type="text/css">
             #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside, #hwp-<?php echo intval( $id ); ?> .holler-title { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
             #hwp-<?php echo intval( $id ); ?>.hwp-template-4 { border-top-color: <?php echo esc_html( get_post_meta( $id, 'button_color1', 1 ) ); ?>; }
+            #hwp-<?php echo intval( $id ); ?> { background-color: <?php echo $bg_color; ?> }
             #hwp-<?php echo intval( $id ); ?> .hwp-progress > span { background-color: <?php echo esc_html( get_post_meta( $id, 'button_color1', 1 ) ); ?> }
             <?php if( $template === 'hwp-template-5' ) : ?>
             #hwp-<?php echo intval( $id ); ?>.hwp-template-5 { background: url( <?php echo '"' . esc_url( $img ) . '"'; ?> ) no-repeat center; background-size: cover; }
