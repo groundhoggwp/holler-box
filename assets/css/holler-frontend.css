@@ -376,7 +376,7 @@ input.hwp-name {
 	margin-top: 10px;
 }
 
-.hwp-template-2 .hwp-email-input, .hwp-template-1 .hwp-email-input, .hwp-template-progress .hwp-email-input {
+.hwp-template-2 .hwp-email-input, .hwp-template-1 .hwp-email-input, .hwp-template-progress .hwp-email-input, .hwp-template-0 .hwp-email-input {
 	width: 100% !important;
 	float: none;
 	margin-bottom: 10px;
@@ -384,6 +384,35 @@ input.hwp-name {
 
 .holler-title {
 	text-align: center;
+}
+
+/*
+ * Special styles
+ */
+
+.holler-box .ninja-kss .list-radio-wrap .nf-field-element li {
+	padding: 6px 12px !important;
+    display: block;
+    overflow: hidden;
+    background: #444;
+    border-radius: 20px;
+    margin-bottom: 5px !important;
+}
+
+.holler-box .ninja-kss input[type=button] {
+	width: 100%;
+}
+
+.holler-box .ninja-kss .nf-field-container {
+	margin-bottom: 6px;
+}
+
+.holler-box .ninja-kss .listradio-wrap .nf-field-element label:after {
+	bottom: 3px;
+}
+
+.holler-box .ninja-kss .listradio-wrap .nf-field-element label.nf-checked-label:before {
+	bottom: 7px;
 }
 
 /*

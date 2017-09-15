@@ -4,7 +4,7 @@ Contributors: scottopolis
 Tags: popup, optin, lead generation, marketing, email opt-in, woocommerce, easy digital downloads
 Requires at least: 4.5
 Tested up to: 4.8.1
-Stable tag: 1.1.1
+Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -274,6 +274,10 @@ Make sure your email form does not have a required field that is not displayed. 
 7. Conversion Analytics
 
 == Changelog ==
+
+= 1.2.0 =
+
+* New: Preview boxes before publishing by clicking "Preview"
 
 = 1.1.1 =
 

@@ -8,13 +8,6 @@
     holler.newVisitor = false;
 
     holler.checkForPreview();
-
-    // determine if new or returning visitor
-    holler.checkCookie();
-
-    // if we have active items, loop through them
-    if( window.hollerVars.active )
-      holler.doActive( window.hollerVars.active );
     
   }
 
@@ -25,9 +18,21 @@
     if( urlParams.has('hwp_preview') ) {
 
       var id = urlParams.get('hwp_preview');
-      console.log( 'has preview ' + id )
+
       holler.showNote( id );
+
+      return;
+
     }
+
+    // No preview, continue...
+    // determine if new or returning visitor
+    holler.checkCookie();
+
+    // if we have active items, loop through them
+    if( window.hollerVars.active )
+      holler.doActive( window.hollerVars.active );
+
   }
 
   // determine if new or returning visitor
