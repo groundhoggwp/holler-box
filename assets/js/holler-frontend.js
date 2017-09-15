@@ -7,6 +7,8 @@
     // set defaults
     holler.newVisitor = false;
 
+    holler.checkForPreview();
+
     // determine if new or returning visitor
     holler.checkCookie();
 
@@ -14,6 +16,18 @@
     if( window.hollerVars.active )
       holler.doActive( window.hollerVars.active );
     
+  }
+
+  // if using the ?hwp_preview=ID query string, show it no matter what
+  holler.checkForPreview = function() {
+    var urlParams = new URLSearchParams(window.location.search);
+
+    if( urlParams.has('hwp_preview') ) {
+
+      var id = urlParams.get('hwp_preview');
+      console.log( 'has preview ' + id )
+      holler.showNote( id );
+    }
   }
 
   // determine if new or returning visitor

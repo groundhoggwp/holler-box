@@ -67,6 +67,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             add_action( 'admin_init', array( $this, 'update_meta' ) );
 
+            add_action( 'post_submitbox_minor_actions', array( $this, 'preview_link' ) );
+
+            add_filter('page_row_actions', array( $this, 'row_actions' ), 10, 2 );
+
         }
 
         /**
@@ -406,6 +410,40 @@ if( !class_exists( 'Holler_Admin' ) ) {
             ?>
             <p style="clear:both;"><small><a href="https://hollerwp.com/pro?utm_source=template_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999">Get more templates in Pro</a></small></p>
             <?php
+        }
+
+        /**
+         * Add preview link to submit box
+         *
+         */
+        public function preview_link( $post ) {
+
+            $status = $post->post_status;
+            $type = $post->post_type;
+
+            if( $type != 'hollerbox' )
+                return;
+
+            if( $status === 'draft' || $status === 'publish' ) {
+                echo '<a href="' . home_url() . '?hwp_preview=' . $post->ID . '" target="_blank" class="button">Preview Box</a>';
+            }
+
+        }
+
+        /**
+         * Add preview link to row actions
+         *
+         */
+        public function row_actions( $actions, $post ) {
+
+            if ( $post->post_type === "hollerbox" ) {
+
+                $actions['hwp_preview'] = '<a href="' . home_url() . '?hwp_preview=' . $post->ID . '" target="_blank">Preview</a>';
+
+            }
+
+            return $actions;
+
         }
 
         /**

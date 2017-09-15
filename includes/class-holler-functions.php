@@ -59,6 +59,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             add_filter( 'hollerbox_classes', array( $this, 'add_hb_classes'), 10, 2 );
 
+            add_action( 'init', array( $this, 'preview_box' ) );
+
         }
 
         /**
@@ -204,16 +206,26 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 if( $show_it === false )
                     continue;
 
-                $type = get_post_meta( $box_id, 'hwp_type', 1 );
-
-                if( $type === 'hwp-popup' ) {
-                    $this->display_popup( $box_id );
-                } elseif ( $type === 'footer-bar' ) {
-                    $this->display_footer_bar( $box_id );
-                } else {
-                    $this->display_notification_box( $box_id );
-                }
+                self::$instance->show_box_types( $box_id );
                 
+            }
+
+        }
+
+        /**
+         * Show box based on what type it is
+         *
+         */
+        public function show_box_types( $box_id ) {
+
+            $type = get_post_meta( $box_id, 'hwp_type', 1 );
+
+            if( $type === 'hwp-popup' ) {
+                $this->display_popup( $box_id );
+            } elseif ( $type === 'footer-bar' ) {
+                $this->display_footer_bar( $box_id );
+            } else {
+                $this->display_notification_box( $box_id );
             }
 
         }
@@ -612,6 +624,28 @@ if( !class_exists( 'Holler_Functions' ) ) {
             $classes .= ' ' . $type;
 
             return $classes;
+        }
+
+        /**
+         * Preview box on front end
+         *
+         */
+        public static function preview_box() {
+
+            if( isset( $_GET['hwp_preview'] ) ) {
+
+                $box_id = $_GET['hwp_preview'];
+
+            } else {
+
+                return;
+
+            }
+
+            self::$active[] = $box_id;
+
+            self::$instance->show_box_types( $box_id );
+
         }
 
     }
