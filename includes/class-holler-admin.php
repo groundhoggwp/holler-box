@@ -426,19 +426,19 @@ if( !class_exists( 'Holler_Admin' ) ) {
             <p>
                 <label class="hwp-radio-withimage">
                     <span class="text">Notification Box</span>
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/bottom-right-icon.png'; ?>" class="hwp-radio-image" />
+                    <img src="<?php echo Holler_Box_URL . 'assets/img/bottom-right-icon.png'; ?>" class="hwp-radio-image" />
                     <input type="radio" name="hwp_type" value="notification" <?php checked( "notification", get_post_meta( $post->ID, 'hwp_type', true ) ); ?> />
                 </label>
 
                 <label class="hwp-radio-withimage">
                     <span class="text">Popup</span>
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/popup-icon.png'; ?>" class="hwp-radio-image" />
+                    <img src="<?php echo Holler_Box_URL . 'assets/img/popup-icon.png'; ?>" class="hwp-radio-image" />
                     <input type="radio" name="hwp_type" value="hwp-popup" <?php checked( "hwp-popup", get_post_meta( $post->ID, 'hwp_type', 1 ) ); ?> />
                 </label>
 
                 <label class="hwp-radio-withimage">
                     <span class="text">Faux Chat</span>
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/chat-icon.png'; ?>" class="hwp-radio-image" />
+                    <img src="<?php echo Holler_Box_URL . 'assets/img/chat-icon.png'; ?>" class="hwp-radio-image" />
                     <input type="radio" name="hwp_type" value="chat" <?php checked( "chat", get_post_meta( $post->ID, 'hwp_type', true ) ); ?> />
                 </label>
 
@@ -476,31 +476,31 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                 <label class="hwp-radio-withimage popup-template">
                     <span class="text">Custom (Displays editor content)</span>
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-0.png'; ?>" class="hwp-template-image" />
+                    <img src="<?php echo Holler_Box_URL . 'assets/img/popup-template-0.png'; ?>" class="hwp-template-image" />
                     <input type="radio" name="hwp_template" value="hwp-template-0" <?php checked( "hwp-template-0", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
                 </label>
 
                 <label class="hwp-radio-withimage popup-template">
                     <span class="text">Standard</span>
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-1.png'; ?>" class="hwp-template-image" />
+                    <img src="<?php echo Holler_Box_URL . 'assets/img/popup-template-1.png'; ?>" class="hwp-template-image" />
                     <input type="radio" name="hwp_template" value="hwp-template-1" <?php checked( "hwp-template-1", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
                 </label>
 
                 <label class="hwp-radio-withimage popup-template">
                     <span class="text">Image Left</span>
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-2.png'; ?>" class="hwp-template-image" />
+                    <img src="<?php echo Holler_Box_URL . 'assets/img/popup-template-2.png'; ?>" class="hwp-template-image" />
                     <input type="radio" name="hwp_template" value="hwp-template-2" <?php checked( "hwp-template-2", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
                 </label>
 
                 <label class="hwp-radio-withimage popup-template">
                     <span class="text">Above/Below</span>
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-3.png'; ?>" class="hwp-template-image" />
+                    <img src="<?php echo Holler_Box_URL . 'assets/img/popup-template-3.png'; ?>" class="hwp-template-image" />
                     <input type="radio" name="hwp_template" value="hwp-template-3" <?php checked( "hwp-template-3", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
                 </label>
 
                 <label class="hwp-radio-withimage popup-template">
                     <span class="text">Progress Bar</span>
-                    <img src="<?php echo Holler_Box_URL . '/assets/img/popup-template-progress.png'; ?>" class="hwp-template-image" />
+                    <img src="<?php echo Holler_Box_URL . 'assets/img/popup-template-progress.png'; ?>" class="hwp-template-image" />
                     <input type="radio" name="hwp_template" value="hwp-template-progress" <?php checked( "hwp-template-progress", get_post_meta( $post->ID, 'hwp_template', true ) ); ?> />
                 </label>
 
