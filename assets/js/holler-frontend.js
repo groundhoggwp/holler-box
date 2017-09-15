@@ -21,6 +21,8 @@
 
       holler.showNote( id );
 
+      holler.noteListeners( id );
+
       return;
 
     }
