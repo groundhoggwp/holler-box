@@ -98,14 +98,6 @@
 
     // passes checks, show it
 
-    if( vars.bgColor ) {
-      item.style.backgroundColor = vars.bgColor;
-      $('#' + 'hwp-' + id + ' .hwp-first-row' ).css('background-color', vars.bgColor );
-    }
-
-    if( vars.btnColor1 )
-      $('#' + 'hwp-' + id + ' .hwp-email-btn, .hwp-btn-' + id ).css('background-color', vars.btnColor1 );
-
     // Delay showing item?
     if( vars.display_when != 'scroll' ) {
 

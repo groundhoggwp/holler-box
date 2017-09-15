@@ -273,9 +273,13 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $avatar_email = get_post_meta($id, 'avatar_email', 1);
             $type = get_post_meta( $id, 'hwp_type', 1 );
+            $bg_color = esc_html( get_post_meta( $id, 'bg_color', 1 ) );
+            $btn_color = esc_html( get_post_meta( $id, 'button_color1', 1 ) );
             ?>
             <style type="text/css">
             #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
+            #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> .hwp-first-row { background-color: <?php echo $bg_color; ?> }
+            #hwp-<?php echo intval( $id ); ?> .hwp-email-btn { background-color: <?php echo $btn_color; ?>; }
             </style>
 
             <?php if( $type != 'holler-banner' ) : ?>
@@ -349,8 +353,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
             <style type="text/css">
             #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside, #hwp-<?php echo intval( $id ); ?> .holler-title { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
             #hwp-<?php echo intval( $id ); ?>.hwp-template-4 { border-top-color: <?php echo esc_html( get_post_meta( $id, 'button_color1', 1 ) ); ?>; }
-            #hwp-<?php echo intval( $id ); ?> { background-color: <?php echo $bg_color; ?> }
-            #hwp-<?php echo intval( $id ); ?> .hwp-progress > span { background-color: <?php echo esc_html( get_post_meta( $id, 'button_color1', 1 ) ); ?> }
+            #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> .hwp-first-row { background-color: <?php echo $bg_color; ?> }
+            #hwp-<?php echo intval( $id ); ?> .hwp-email-btn, #hwp-<?php echo intval( $id ); ?> .hwp-progress > span, #hwp-<?php echo intval( $id ); ?> .hwp-email-btn { background-color: <?php echo esc_html( get_post_meta( $id, 'button_color1', 1 ) ); ?> }
             <?php if( $template === 'hwp-template-5' ) : ?>
             #hwp-<?php echo intval( $id ); ?>.hwp-template-5 { background: url( <?php echo '"' . esc_url( $img ) . '"'; ?> ) no-repeat center; background-size: cover; }
             <?php endif; ?>
@@ -455,12 +459,14 @@ if( !class_exists( 'Holler_Functions' ) ) {
             $img_url = get_post_meta( $id, 'popup_image', 1 );
             $img = ( !empty( $img_url ) ? $img_url : Holler_Box_URL . 'assets/img/ebook-mockup-cropped.png' );
             $bg_color = esc_html( get_post_meta( $id, 'bg_color', 1 ) );
-
+            $btn_color = esc_html( get_post_meta( $id, 'button_color1', 1 ) );
             ?>
 
             <style type="text/css">
             #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside, #hwp-<?php echo intval( $id ); ?> .holler-title { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
-            #hwp-<?php echo intval( $id ); ?>.hwp-template-4 { border-top-color: <?php echo esc_html( get_post_meta( $id, 'button_color1', 1 ) ); ?>; }
+            #hwp-<?php echo intval( $id ); ?>.hwp-template-4 { border-top-color: <?php echo $btn_color; ?>; }
+            #hwp-<?php echo intval( $id ); ?> .hwp-email-btn { background-color: <?php echo $btn_color; ?>; }
+            #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> .hwp-first-row { background-color: <?php echo $bg_color; ?> }
             </style>
             
             <div id="hwp-<?php echo esc_attr( $id ); ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">                
