@@ -628,6 +628,11 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 $classes .= get_post_meta( $id, 'position', 1 );
             }
 
+            $display_when = get_post_meta( $id, 'display_when', 1 );
+            if( $display_when === 'exit' ) {
+                $classes .= ' hwp-show-on-exit';
+            }
+
             $classes .= ' ' . $type;
 
             return $classes;

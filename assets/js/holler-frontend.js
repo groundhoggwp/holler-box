@@ -100,6 +100,15 @@
 
     // passes checks, show it
 
+    if( vars.display_when === 'exit' ) {
+
+      // add exit listener
+      $('body').on( 'mouseleave', holler.debounce( function() {
+        holler.mouseExit();
+      }, 1000) );
+
+    }
+
     // Delay showing item?
     if( vars.display_when != 'scroll' ) {
 
@@ -138,7 +147,7 @@
     .on('click', '.hwp-floating-btn', holler.btnClick )
     .on('click', '.hwp-text i', holler.sendText )
     .on('click', '#hwp-' + id + ' .hwp-email-btn', holler.emailSubmitClick )
-    .on('click', '.hwp-backdrop', holler.bdClick )
+    .on('click', '.hwp-backdrop', holler.bdClick );
 
     $('.hwp-text-input').on('keypress', holler.submitChatTextOnEnter );
 
@@ -819,6 +828,26 @@
     var id = $(e.currentTarget).data('id');
 
     holler.toggleHide( id );
+
+  }
+
+  // detect mouse leave and show a box
+  holler.mouseExit = function(e) {
+
+    var el = $('.holler-box.hwp-show-on-exit')[0];
+
+    if( !el )
+      return;
+
+    if( $(el).hasClass('hwp-show') )
+      return;
+    
+    var id = el.id.split('-')[1];
+
+    // clear any hide cookies so it always shows when link is clicked
+    holler.setCookie( 'hwp-' + id + '_hide', '', -1 );
+
+    holler.doChecks( id, true );
 
   }
 
