@@ -85,12 +85,9 @@
     if( vars.showSettings === 'interacts' && holler.getCookie( 'hwp_' + id + '_int' ) != '' )
       return;
 
-    // if on mobile, show button first
-    if( window.hollerVars.isMobile === "1" && vars.type != 'holler-banner' ) {
-      holler.setCookie( 'hwp-' + id + '_hide', 'true', 1 );
-      // have to count impression here, otherwise it won't be counted because it's hidden
-      holler.countNoteShown(id);
-    }
+    // maybe hide if on mobile
+    if( window.hollerVars.isMobile === "1" && vars.hide_mobile === "1" )
+      return;
 
     var shown = holler.getCookie( 'hwp_' + id + '_shown' );
 

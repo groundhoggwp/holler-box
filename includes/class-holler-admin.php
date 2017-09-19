@@ -888,6 +888,11 @@ if( !class_exists( 'Holler_Admin' ) ) {
             <div class="hwp-section">
 
                 <p>
+                    <input type="checkbox" id="hide_mobile" name="hide_mobile" value="1" <?php checked(1, get_post_meta( $post->ID, 'hide_mobile', true ), true); ?> />
+                    <label for="hide_mobile"><?php _e( 'Hide on mobile?', 'holler-box' ); ?></label>
+                </p>
+
+                <p>
                     <input type="checkbox" id="hide_btn" name="hide_btn" value="1" <?php checked(1, get_post_meta( $post->ID, 'hide_btn', true ), true); ?> />
                     <label for="hide_btn"><?php _e( 'Hide the floating button? (Appears when box is hidden.)', 'holler-box' ); ?></label>
                 </p>
@@ -948,6 +953,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 update_post_meta( $post->ID, 'hide_after', 'never' );
                 update_post_meta( $post->ID, 'hide_after_delay', 3 );
                 update_post_meta( $post->ID, 'hide_for_days', 1 );
+                update_post_meta( $post->ID, 'hide_mobile', 1 );
                 update_post_meta( $post->ID, 'hwp_active', '1' );
                 update_post_meta( $post->ID, 'hwp_type', 'notification' );
                 update_post_meta( $post->ID, 'position', 'hwp-bottomright' );
@@ -1003,6 +1009,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'display_when',
                 'scroll_delay',
                 'position',
+                'hide_mobile',
                 'hide_btn',
                 'email_provider',
                 'custom_email_form',
