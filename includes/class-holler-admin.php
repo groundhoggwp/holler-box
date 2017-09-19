@@ -825,9 +825,9 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <p><label><?php _e( 'Show to these visitors', 'holler-box' ); ?></label></p>
 
                 <div class="hwp-settings-group"> 
+                    <input type="radio" name="logged_in" value="all" <?php checked('all', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> <?php _e( 'All visitors', 'holler-box' ); ?><br>
                     <input type="radio" name="logged_in" value="logged_in" <?php checked('logged_in', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> <?php _e( 'Logged in only', 'holler-box' ); ?><br>
                     <input type="radio" name="logged_in" value="logged_out" <?php checked('logged_out', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> <?php _e( 'Logged out only', 'holler-box' ); ?><br>
-                    <input type="radio" name="logged_in" value="all" <?php checked('all', get_post_meta( $post->ID, 'logged_in', true ), true); ?>> <?php _e( 'All visitors', 'holler-box' ); ?><br>
                 </div>
             </div>
 
@@ -836,9 +836,9 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <p><label for="visitor"><?php _e( 'New or returning', 'holler-box' ); ?></label></p>
 
                 <div class="hwp-settings-group">
+                    <input type="radio" name="new_or_returning" value="all" <?php checked('all', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> <?php _e( 'All visitors', 'holler-box' ); ?><br>
                     <input type="radio" name="new_or_returning" value="new" <?php checked('new', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> <?php _e( 'New visitors only', 'holler-box' ); ?><br>
                     <input type="radio" name="new_or_returning" value="returning" <?php checked('returning', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> <?php _e( 'Returning visitors only', 'holler-box' ); ?><br>
-                    <input type="radio" name="new_or_returning" value="all" <?php checked('all', get_post_meta( $post->ID, 'new_or_returning', true ), true); ?>> <?php _e( 'All visitors', 'holler-box' ); ?><br>
                 </div>
             </div>
 
@@ -888,9 +888,18 @@ if( !class_exists( 'Holler_Admin' ) ) {
             <div class="hwp-section">
 
                 <p>
-                    <input type="checkbox" id="hide_mobile" name="hide_mobile" value="1" <?php checked(1, get_post_meta( $post->ID, 'hide_mobile', true ), true); ?> />
-                    <label for="hide_mobile"><?php _e( 'Hide on mobile?', 'holler-box' ); ?></label>
+                    <label for="hide_after"><?php _e( 'Show on Devices', 'holler-box' ); ?></label>
                 </p>
+
+                <div class="hwp-settings-group">
+                    <input type="radio" name="hwp_devices" value="all" <?php checked('all', get_post_meta( $post->ID, 'hwp_devices', true ), true); ?>> <?php _e( 'All devices', 'holler-box' ); ?><br>
+                    <input type="radio" name="hwp_devices" value="desktop_only" <?php checked('desktop_only', get_post_meta( $post->ID, 'hwp_devices', true ), true); ?>> <?php _e( 'Desktop only', 'holler-box' ); ?><br>
+                    <input type="radio" name="hwp_devices" value="mobile_only" <?php checked('mobile_only', get_post_meta( $post->ID, 'hwp_devices', true ), true); ?>> <?php _e( 'Mobile only', 'holler-box' ); ?><br>
+                </div>
+
+            </div>
+
+            <div class="hwp-section">
 
                 <p>
                     <input type="checkbox" id="hide_btn" name="hide_btn" value="1" <?php checked(1, get_post_meta( $post->ID, 'hide_btn', true ), true); ?> />
@@ -953,7 +962,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 update_post_meta( $post->ID, 'hide_after', 'never' );
                 update_post_meta( $post->ID, 'hide_after_delay', 3 );
                 update_post_meta( $post->ID, 'hide_for_days', 1 );
-                update_post_meta( $post->ID, 'hide_mobile', 1 );
+                update_post_meta( $post->ID, 'hwp_devices', 'all' );
                 update_post_meta( $post->ID, 'hwp_active', '1' );
                 update_post_meta( $post->ID, 'hwp_type', 'notification' );
                 update_post_meta( $post->ID, 'position', 'hwp-bottomright' );
@@ -1009,7 +1018,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'display_when',
                 'scroll_delay',
                 'position',
-                'hide_mobile',
+                'hwp_devices',
                 'hide_btn',
                 'email_provider',
                 'custom_email_form',

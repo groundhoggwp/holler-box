@@ -129,7 +129,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     'hideForDays' => get_post_meta($value, 'hide_for_days', 1),
                     'hide_after' => get_post_meta($value, 'hide_after', 1),
                     'hide_after_delay' => get_post_meta($value, 'hide_after_delay', 1),
-                    'hide_mobile' => get_post_meta($value, 'hide_mobile', 1),
+                    'devices' => get_post_meta($value, 'hwp_devices', 1),
                     'bgColor' => get_post_meta($value, 'bg_color', 1),
                     'btnColor1' => get_post_meta($value, 'button_color1', 1),
                     'position' => get_post_meta($value, 'position', 1)

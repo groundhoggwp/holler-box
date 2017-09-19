@@ -85,9 +85,12 @@
     if( vars.showSettings === 'interacts' && holler.getCookie( 'hwp_' + id + '_int' ) != '' )
       return;
 
-    // maybe hide if on mobile
-    if( window.hollerVars.isMobile === "1" && vars.hide_mobile === "1" )
+    // maybe hide on certain devices
+    if( window.hollerVars.isMobile === "" && vars.devices === "mobile_only" ) {
       return;
+    } else if( window.hollerVars.isMobile === "1" && vars.devices === "desktop_only" ) {
+      return;
+    }
 
     var shown = holler.getCookie( 'hwp_' + id + '_shown' );
 
