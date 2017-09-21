@@ -792,7 +792,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
         }
 
         /**
-         * Display settings meta box
+         * Advanced settings meta box
          *
          * @since     0.1
          * @param       WP_Post $post

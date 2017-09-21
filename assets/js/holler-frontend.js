@@ -863,9 +863,7 @@
       int = 1;
     }
 
-    console.log( 'int ' + int );
-
-    var params = { action: 'hwp_fomo_ajax', nonce: window.hollerVars.hwpNonce, int: int };
+    var params = { action: 'hwp_fomo_ajax', nonce: window.hollerVars.hwpNonce, int: int, id: id };
 
     // store interaction data
     $.ajax({
