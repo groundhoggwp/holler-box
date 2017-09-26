@@ -279,6 +279,7 @@ Make sure your email form does not have a required field that is not displayed. 
 
 * Feature: Preview boxes before publishing by clicking "Preview"
 * Feature: Choose devices setting: mobile, desktop, or both
+* FOMO popup updates and new integrations
 * Bug fixes 
 
 = 1.1.1 =
