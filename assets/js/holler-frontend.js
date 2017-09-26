@@ -880,6 +880,9 @@
         // Show the box and what's in it
         holler.transitionIn( item );
 
+        if( parseInt( int ) > 10 )
+          int = 1;
+        
         holler.setCookie( 'hwp_fomo', int, 1 );
 
       })
