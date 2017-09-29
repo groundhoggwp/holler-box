@@ -8,13 +8,31 @@ Stable tag: 1.2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Collect more leads and get more sales for your WooCommerce or EDD store.
+Sales and lead generation popups for eCommerce stores and membership sites.
 
 == Description ==
 
 Holler Box is a popup and banner plugin that gives eCommerce store owners everything they need to collect leads and generate more sales.
 
-It's lightweight and easy-to-use, not like other overly complex tools.
+Using WooCommerce, Easy Digital Downloads, GiveWP, or a membership plugin? Holler Box is for you.
+
+Our popups are focused on shops that want to grow their email list, and convert more visitors into customers.
+
+**Webinar and Event Announcements**
+
+Announce an event to your visitors in a subtle popup, with a link to register for the event.
+
+**Promote discounts and sales**
+
+Get the most out of your discount or promotion by announcing it in a banner or popup.
+
+**Grow your email list**
+
+Choose from a variety of popup types and templates to get more leads. Integrate with your favorite email provider.
+
+**Integrate With Your Membership Plugin**
+
+Holler Box integrates with your favorite membership plugin to show announcements to members, hide content based on level, and more.
 
 ### Included for free
 
@@ -36,26 +54,14 @@ It's lightweight and easy-to-use, not like other overly complex tools.
 
 Most plugins that use shortcodes will work. For example:
 
-- Membership plugins like Restrict Content Pro, Paid Memberships Pro, etc.
+- Membership plugins like Restrict Content Pro, Paid Memberships Pro, MemberPress, and more
 - Forms plugins like Ninja Forms, Gravity Forms, WPForms, Contact Form 7, etc.
 - eCommerce buy buttons
 - Most plugins
 
 ## Why Holler Box?
 
-Holler Box is:
-
-- Lightweight
-- Easy to Use
-- Beautifully designed
-
-Other popup solutions are:
-
-- Overly complex
-- Expensive
-- Not aesthetically pleasing
-
-Here's how you can use Holler Box to get more leads and sales:
+Holler Box is the only popup plugin focused on eCommerce and membership sites. Here's how you can use Holler Box to get more leads and sales:
 
 ### 1. Increase Your Email Opt-ins
 
@@ -75,7 +81,7 @@ When you are running a sale or promotion on your store, you want the right peopl
 
 Using the Holler Box smart display filters, you can choose to show the promotion only to logged out visitors, not to any logged in customers.
 
-**FOMO popups (pro only)**
+**<a href="https://hollerwp.com/downloads/wordpress-fomo-popups/" target="_blank">WordPress FOMO popups</a> (pro only)**
 
 Social proof is a big part of converting a potential sale. If are using WooCommerce or Easy Digital Downloads, now you can show your customers that other people are buying with the Holler Box Sales Notification add-on.
 
@@ -156,9 +162,9 @@ Holler Box Pro makes it easy to add content upgrades. All you need to do is sele
 
 Get even more popup templates for your store in Pro. Choose from a variety of templates to get the look you want, and get new ones as they come out.
 
-**Easy Digital Downloads and WooCommerce Sales Notifications**
+**FOMO Sales Notifications**
 
-Easily show your site visitors a notification like: "Matt just purchased Holler Box Pro." This sales notification pulls the latest sale from EDD or WooCommerce.
+Easily show your site visitors a notification like: "Matt just purchased Holler Box Pro." This sales notification pulls the latest sale from Easy Digital Downloads, WooCommerce, MemberPress, GiveWP, Paid Memberships Pro, and more.
 
 Also known as FOMO popups, these can increase your conversion rate by showing social proof.
 

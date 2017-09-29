@@ -376,7 +376,7 @@ input.hwp-name {
 	margin-top: 10px;
 }
 
-.hwp-template-2 .hwp-email-input, .hwp-template-1 .hwp-email-input, .hwp-template-progress .hwp-email-input, .hwp-template-0 .hwp-email-input {
+.hwp-template-2 .hwp-email-input, .hwp-template-1 .hwp-email-input, .hwp-template-progress .hwp-email-input, .hwp-template-0 .hwp-email-input, .hwp-template-progress input.hwp-name {
 	width: 100% !important;
 	float: none;
 	margin-bottom: 10px;
