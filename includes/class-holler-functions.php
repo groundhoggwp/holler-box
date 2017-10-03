@@ -117,6 +117,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     'showEmail' => get_post_meta($value, 'show_optin', 1),
                     'showChat' => ( $type === 'chat' ? '1' : '' ),
                     'emailProvider' => get_post_meta( $value, 'email_provider', 1 ),
+                    'redirect' => get_post_meta( $value, 'hwp_redirect', 1 ),
                     'ckApi' => get_option( 'hwp_ck_api_key' ),
                     'visitor' => get_post_meta($value, 'new_or_returning', 1),
                     'hideBtn' => get_post_meta($value, 'hide_btn', 1),
@@ -283,7 +284,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
             #hwp-<?php echo intval( $id ); ?> .hwp-email-btn { background-color: <?php echo $btn_color; ?>; }
             </style>
 
-            <?php if( $type != 'holler-banner' ) : ?>
+            <?php if( $type != 'holler-banner' && $type != 'fomo' ) : ?>
             <div data-id="<?php echo esc_attr( $id ); ?>" class="hwp-floating-btn hwp-btn-<?php echo esc_attr( $id ); ?> <?php echo esc_attr( get_post_meta( $id, 'position', 1 ) ); ?>"><i class="icon icon-chat"></i></div>
             <?php endif; ?>
 

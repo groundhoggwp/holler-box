@@ -738,6 +738,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                             <input class="widefat" type="text" name="submit_text" id="submit_text" value="<?php echo esc_attr( get_post_meta( $post->ID, 'submit_text', true ) ); ?>" size="20" placeholder="Send" />
                         </p>
 
+                        <?php do_action( 'hwp_email_settings', $post->ID ); ?>
+
                     </div>
 
                 </div>
@@ -879,9 +881,9 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 </p>
 
                 <div class="hwp-settings-group">
+                    <input type="radio" name="show_settings" value="interacts" <?php checked('interacts', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> <?php _e( 'Hide after user interacts (Close or email submit)', 'holler-box' ); ?><br>
                     <input type="radio" name="show_settings" value="always" <?php checked('always', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> <?php _e( 'Every page load', 'holler-box' ); ?><br>
                     <input type="radio" name="show_settings" value="hide_for" <?php checked('hide_for', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> <?php _e( 'Show, then hide for', 'holler-box' ); ?> <input type="number" class="hwp-number-input" id="hide_for_days" name="hide_for_days" size="2" value="<?php echo intval( get_post_meta( $post->ID, 'hide_for_days', true ) ); ?>" /> <?php _e( 'days', 'holler-box' ); ?><br>
-                    <input type="radio" name="show_settings" value="interacts" <?php checked('interacts', get_post_meta( $post->ID, 'show_settings', true ), true); ?>> <?php _e( 'Hide after user interacts (clicks link or submits email)', 'holler-box' ); ?>
                 </div>
             </div>
 
@@ -957,7 +959,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 update_post_meta( $post->ID, 'avatar_email', $avatar_email );
                 update_post_meta( $post->ID, 'display_when', 'delay' );
                 update_post_meta( $post->ID, 'scroll_delay', 1 );
-                update_post_meta( $post->ID, 'show_settings', 'always' );
+                update_post_meta( $post->ID, 'show_settings', 'interacts' );
                 update_post_meta( $post->ID, 'new_or_returning', 'all' );
                 update_post_meta( $post->ID, 'hide_after', 'never' );
                 update_post_meta( $post->ID, 'hide_after_delay', 3 );

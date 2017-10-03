@@ -4,7 +4,7 @@ Contributors: scottopolis
 Tags: popup, optin, lead generation, marketing, email opt-in, woocommerce, easy digital downloads
 Requires at least: 4.5
 Tested up to: 4.8.1
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -280,6 +280,12 @@ Make sure your email form does not have a required field that is not displayed. 
 7. Conversion Analytics
 
 == Changelog ==
+
+= 1.2.0 =
+
+* Hide popup after user hides by default
+* Support for url redirect after submission (Pro)
+* Bug fixes 
 
 = 1.2.0 =
 

@@ -118,9 +118,18 @@
 
       var delay = ( vars.display_when === 'delay' ? parseInt( vars.delay ) : 0 );
 
-      // remove cookie so popup shows properly
-      if( vars.type === 'hwp-popup' && vars.showSettings === 'always' )
-        holler.setCookie( 'hwp-' + id + '_hide', '', -1 )
+      // should we show popup?
+      if( vars.type === 'hwp-popup' && vars.showSettings === 'always' ) {
+
+        // remove cookie so popup shows properly
+        holler.setCookie( 'hwp-' + id + '_hide', '', -1 );
+
+      } else if( vars.type === 'hwp-popup' && vars.showSettings === 'interacts' && holler.getCookie( 'hwp-' + id + '_hide' ) === 'true' ) {
+
+        // don't show popup if user has hidden
+        return;
+
+      }
 
       setTimeout( function() {
         holler.showNote( id );
@@ -745,7 +754,19 @@
       data: params
       })
       .done(function(msg) {
-        // console.log(msg);
+
+        var redirect = window.hollerVars[id].redirect;
+
+        if( redirect ) {
+
+          $('#hwp-' + id + ' .hwp-first-row').append( ' Redirecting... <img src="' + window.hollerVars.pluginUrl + 'assets/img/loading.gif" class="hwp-loading" />');
+
+          setTimeout( function() {
+            window.location.href = redirect;
+          }, 1000);
+
+        }
+
       })
       .fail(function(err) {
         console.log(err);
