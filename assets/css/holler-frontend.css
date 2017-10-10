@@ -32,6 +32,16 @@
 	margin: 10px 0;
 }
 
+.holler-box ul { 
+   list-style-type: disc; 
+   list-style-position: inside; 
+}
+
+.holler-box ol { 
+   list-style-type: decimal; 
+   list-style-position: inside; 
+}
+
 .hwp-floating-btn {
 	opacity: 0;
 	position: fixed;
@@ -357,6 +367,10 @@ input.hwp-name {
 	margin: auto;
 	text-align: center;
 	overflow: auto;
+}
+
+.hwp-popup .hwp-name, .hwp-popup .hwp-email-input {
+	width: 100%;
 }
 
 /* scale() fixes blurry text in chrome */
