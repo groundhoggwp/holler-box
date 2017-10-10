@@ -212,7 +212,6 @@
     var itemTypeVal = $('input[name=item_type]:checked').val();
     var optin = $("#hwp-note-optin");
     var mcFields = $('#mailchimp-fields');
-    var acFields = $('#ac-fields');
     var ckFields = $('#convertkit-fields');
     var mailpoet = $('#mailpoet-fields');
 
@@ -231,7 +230,6 @@
       ckFields.hide();
       mcFields.hide();
       mailpoet.hide();
-      acFields.hide();
     } else if( checkedVal === 'custom' ) {
       custom.fadeIn();
       defaultDiv.hide();
@@ -239,7 +237,6 @@
       ckFields.hide();
       mcFields.hide();
       mailpoet.hide();
-      acFields.hide();
     } else if( checkedVal === 'mc' ) {
       mcFields.fadeIn();
       defaultDiv.fadeIn();
@@ -247,7 +244,6 @@
       custom.hide();
       sendTo.hide();
       mailpoet.hide();
-      acFields.hide();
     } else if( checkedVal === 'ck' ) {
       ckFields.fadeIn();
       defaultDiv.fadeIn();
@@ -255,7 +251,6 @@
       custom.hide();
       sendTo.hide();
       mailpoet.hide();
-      acFields.hide();
     } else if( checkedVal === 'mailpoet' ) {
       mailpoet.fadeIn();
       defaultDiv.fadeIn();
@@ -263,15 +258,6 @@
       custom.hide();
       sendTo.hide();
       ckFields.hide();
-      acFields.hide();
-    } else if( checkedVal === 'ac' ) {
-      ckFields.hide();
-      defaultDiv.fadeIn();
-      mcFields.hide();
-      custom.hide();
-      sendTo.hide();
-      mailpoet.hide();
-      acFields.fadeIn();
     }
 
   }

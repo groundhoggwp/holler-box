@@ -57,9 +57,6 @@ if( !class_exists( 'Holler_Ajax' ) ) {
             add_action( 'wp_ajax_nopriv_hwp_mc_subscribe', array( $this, 'hwp_mc_subscribe' ) );
             add_action( 'wp_ajax_hwp_mc_subscribe', array( $this, 'hwp_mc_subscribe' ) );
 
-            add_action( 'wp_ajax_nopriv_hwp_ac_subscribe', array( $this, 'hwp_ac_subscribe' ) );
-            add_action( 'wp_ajax_hwp_ac_subscribe', array( $this, 'hwp_ac_subscribe' ) );
-
             add_action( 'wp_ajax_nopriv_hwp_mailpoet_subscribe', array( $this, 'mailpoet_subscribe' ) );
             add_action( 'wp_ajax_hwp_mailpoet_subscribe', array( $this, 'mailpoet_subscribe' ) );
 
@@ -187,66 +184,6 @@ if( !class_exists( 'Holler_Ajax' ) ) {
 
             $response = wp_remote_post( $url, array(
                 'method' => 'PUT',
-                'timeout' => 15,
-                'headers' => $headers,
-                'body' => json_encode( $body )
-                )
-            );
-
-            if ( is_wp_error( $response ) ) {
-               $error_message = $response->get_error_message();
-               wp_send_json_error( $error_message );
-            } else {
-               wp_send_json_success( $response );
-            }
-        }
-
-        /**
-         * Subscribe user via Active Campaign API (v3)
-         * 
-         *
-         * @since       0.1.0
-         * @return      void
-         */
-        public function hwp_ac_subscribe() {
-
-            if( empty( $_GET['nonce'] ) || !wp_verify_nonce( $_GET['nonce'], 'holler-box' ) ) {
-                wp_send_json_error('Verification failed.' );
-            }
-
-            $list_id = $_GET['list_id'];
-
-            $email = sanitize_text_field( $_GET['email'] );
-            $name = sanitize_text_field( $_GET['name'] );
-
-            // Active Campaign API credentials
-            $api_key = get_option('hwp_ac_api_key');
-            $api_url = get_option('hwp_ac_url') . '/api/3/contacts';
-
-            if( empty( $list_id ) || empty( $api_key ) || empty( $email ) )
-                wp_send_json_error('Missing required field.');
-
-            $headers = array(
-                'Api-Token' => $api_key,
-                'Content-Type' => 'application/json'
-              );
-            
-            // member information
-            $body = array(
-                'contact' => array(
-                    'email' => $email,
-                    'listid' => $list_id
-                )
-            );
-
-            if( !empty( $name ) ) {
-                $body['contact']  = array(
-                    'firstName' => $name
-                );
-            }
-
-            $response = wp_remote_post( $api_url, array(
-                'method' => 'POST',
                 'timeout' => 15,
                 'headers' => $headers,
                 'body' => json_encode( $body )

@@ -567,9 +567,6 @@
     } else if( window.hollerVars[id].emailProvider === 'mc' ) {
       holler.mcSubscribe( email, id );
       return;
-    } else if( window.hollerVars[id].emailProvider === 'ac' ) {
-      holler.acSubscribe( email, id );
-      return;
     } else if( window.hollerVars[id].emailProvider === 'mailpoet' ) {
       holler.mpSubscribe( email, id );
       return;
@@ -656,45 +653,6 @@
       })
       .fail(function(err) {
         console.log(err);
-        holler.hideSpinner();
-      });
-
-  }
-
-  // Submit to Active Campaign
-  holler.acSubscribe = function( email, id ) {
-
-    var listId = $('#hwp-' + id + ' .ac-list-id').val();
-    var name = $('#hwp-' + id + ' .hwp-name').val();
-
-    if( !listId ) {
-      alert("List ID is missing.");
-      return;
-    }
-
-    holler.showSpinner( id );
-
-    $.ajax({
-      method: "GET",
-      url: window.hollerVars.ajaxurl,
-      data: { email: email, list_id: listId, action: 'hwp_ac_subscribe', nonce: window.hollerVars.hwpNonce, name: name }
-      })
-      .done(function(msg) {
-
-        if( msg.success == true ) {
-
-          // reset to defaults
-          holler.showConfirmation( id );
-          $('#hwp-' + id + ' .hwp-email-row').hide();
-          holler.conversion( id );
-
-        } else {
-          console.warn(msg)
-        }
-
-      })
-      .fail(function(err) {
-        console.warn(err);
         holler.hideSpinner();
       });
 

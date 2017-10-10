@@ -155,14 +155,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 update_option( 'hwp_mc_api_key', sanitize_text_field( $_POST['hwp_mc_api_key'] ) );
             }
 
-            if( isset( $_POST['hwp_ac_api_key'] ) ) {
-                update_option( 'hwp_ac_api_key', sanitize_text_field( $_POST['hwp_ac_api_key'] ) );
-            }
-
-            if( isset( $_POST['hwp_ac_url'] ) ) {
-                update_option( 'hwp_ac_url', sanitize_text_field( $_POST['hwp_ac_url'] ) );
-            }
-
             if( isset( $_POST['hwp_mc_status'] ) ) {
                 update_option( 'hwp_mc_status', sanitize_text_field( $_POST['hwp_mc_status'] ) );
             } elseif( !empty( $_POST ) && empty( $_POST['hwp_mc_status'] )  ) {
@@ -239,12 +231,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <p><?php _e('If you are using Convertkit, entery your API key. It can be found on your <a href="https://app.convertkit.com/account/edit#account_info" target="_blank">account info page.</a>', 'holler-box'); ?></p>
                 
                 <input id="hwp_ck_api_key" name="hwp_ck_api_key" value="<?php echo esc_html( get_option( 'hwp_ck_api_key' ) ); ?>" placeholder="Convertkit API key" type="text" size="50" />
-
-                <p><?php _e('If you are using Active Campaign, entery your url and API key. It can be found under My Settings -> Developer.', 'holler-box'); ?></p>
-                
-                <input id="hwp_ac_api_key" name="hwp_ac_api_key" value="<?php echo esc_html( get_option( 'hwp_ac_api_key' ) ); ?>" placeholder="Active Campaign API key" type="password" size="50" /><br/>
-
-                <input id="hwp_ac_url" name="hwp_ac_url" value="<?php echo esc_html( get_option( 'hwp_ac_url' ) ); ?>" placeholder="Active Campaign URL" type="text" size="50" /><br/>
 
                 <p><?php _e('If you are using MailChimp, entery your API key. It can be found under Account -> Extras -> API Keys.', 'holler-box'); ?></p>
                 
@@ -615,10 +601,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
                             <?php _e( 'MailChimp', 'holler-box' ); ?>
                         </option>
 
-                        <option value="ac" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "ac"); ?> >
-                            <?php _e( 'Active Campaign', 'holler-box' ); ?>
-                        </option>
-
                         <?php if( class_exists('\MailPoet\API\API') ) : ?>
 
                         <option value="mailpoet" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "mailpoet"); ?> >
@@ -667,35 +649,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
                             echo apply_filters( 'hwp_mc_upsell', '<small>Want MailChimp groups and interests? <a href="https://hollerwp.com/pro?utm_source=mc_upsell&utm_medium=link&utm_campaign=hwp_settings" target="_blank">Get Holler Box Pro.</a></small>' );
 
                             do_action( 'hwp_mc_settings', $post->ID );
-
-                            ?>
-
-                    </div>
-
-                    <div id="ac-fields">
-                        <?php _e( 'Active Campaign List *required', 'holler-box' ); ?>
-
-                            <?php
-
-                            $lists = self::get_ac_lists();
-
-                            if( is_array($lists) && !empty( $lists ) ) :
-
-                                echo '<select name="ac_list_id">';
-
-                                foreach ($lists as $list) {
-                                    echo '<option value="' . $list["id"] . '"' . selected( get_post_meta( $post->ID, "ac_list_id", 1 ), $list["id"] ) . '>';
-                                    echo $list['name'];
-                                    echo '</option>';
-                                }
-
-                                echo '</select>';
-
-                            else:
-
-                                echo '<p style="color:red">There was a problem getting your lists. Please check your Active Campaign API key in the Holler Box settings.</p>';
-
-                            endif;
 
                             ?>
 
@@ -804,11 +757,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
          */
         public function get_mc_lists() {
 
-            $transient = get_transient( 'hwp_mc_lists' );
-
-            if( $transient != false )
-                return $transient;
-
             // MailChimp API credentials
             $api_key = get_option('hwp_mc_api_key');
 
@@ -838,58 +786,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 $api_response = json_decode( wp_remote_retrieve_body( $response ), true );
                 if( array_key_exists( 'lists', $api_response ) ) {
                     return $api_response['lists'];
-
-                    set_transient( 'hwp_mc_lists', $api_response['lists'], HOUR_IN_SECONDS );
-
-                } else {
-                    return $api_response;
-                }
-            }
-
-        }
-
-        /**
-         * Get Active Campaign lists
-         * 
-         *
-         * @since       0.8.3
-         * @return      void
-         */
-        public function get_ac_lists() {
-
-            $transient = get_transient( 'hwp_ac_lists' );
-
-            if( $transient != false )
-                return $transient;
-
-            // Active Campaign API credentials
-            $api_key = get_option('hwp_ac_api_key');
-            $api_url = get_option('hwp_ac_url') . '/api/3/lists';
-
-            if( empty( $api_key) )
-                return 'Please add your Active Campaign API key in the Holler Box settings.';
-
-            $headers = array(
-                'Api-Token' => $api_key,
-                'Content-Type' => 'application/json'
-              );
-
-            $response = wp_remote_get( $api_url, array(
-                'timeout' => 10,
-                'headers' => $headers,
-                )
-            );
-
-            if ( is_wp_error( $response ) ) {
-               $error_message = $response->get_error_message();
-               return $error_message;
-            } else {
-                $api_response = json_decode( wp_remote_retrieve_body( $response ), true );
-
-                if( array_key_exists( 'lists', $api_response ) ) {
-                    return $api_response['lists'];
-
-                    set_transient( 'hwp_ac_lists', $api_response['lists'], HOUR_IN_SECONDS );
                 } else {
                     return $api_response;
                 }
@@ -1130,7 +1026,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'custom_email_form',
                 'ck_id',
                 'mc_list_id',
-                'ac_list_id',
                 'mailpoet_list_id',
                 'hwp_type',
                 'hwp_template',
