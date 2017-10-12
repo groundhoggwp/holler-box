@@ -281,7 +281,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
             <style type="text/css">
             #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> a, #hwp-<?php echo intval( $id ); ?> i, #hwp-<?php echo intval( $id ); ?> .holler-inside { color: <?php echo esc_html( get_post_meta( $id, 'text_color', 1 ) ); ?> !important; }
             #hwp-<?php echo intval( $id ); ?>, #hwp-<?php echo intval( $id ); ?> .hwp-row { background-color: <?php echo $bg_color; ?> }
-            #hwp-<?php echo intval( $id ); ?> .hwp-email-btn { background-color: <?php echo $btn_color; ?>; }
+            #hwp-<?php echo intval( $id ); ?> .hwp-email-btn, .hwp-floating-btn.hwp-btn-<?php echo intval( $id ); ?> { background-color: <?php echo $btn_color; ?>; }
             </style>
 
             <?php if( $type != 'holler-banner' && $type != 'fomo' ) : ?>
