@@ -187,7 +187,7 @@
   // New item selected, update preview and settings display
   holler.emailCheckbox = function() {
 
-    var optin = $("#show-email-options, #hwp-note-optin");
+    var optin = $("#show-email-options");
 
     if( $('input[name=show_optin]').is(':checked') ) {
 
@@ -210,7 +210,6 @@
     var custom = $('#custom-email-options');
     var checkedVal = $('select[name=email_provider]').val();
     var itemTypeVal = $('input[name=item_type]:checked').val();
-    var optin = $("#hwp-note-optin");
     var mcFields = $('#mailchimp-fields');
     var ckFields = $('#convertkit-fields');
     var mailpoet = $('#mailpoet-fields');
@@ -218,7 +217,6 @@
     // Show optin in preview
     if( itemTypeVal === 'optin' ) {
 
-      optin.fadeIn();
       $('#show-email-options').fadeIn();
 
     }

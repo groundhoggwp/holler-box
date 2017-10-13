@@ -658,6 +658,47 @@
 
   }
 
+  // Submit to Active Campaign
+  holler.acSubscribe = function( email, id ) {
+
+    var listId = $('#hwp-' + id + ' .ac-list-id').val();
+    var name = $('#hwp-' + id + ' .hwp-name').val();
+
+    if( !listId ) {
+      alert("List ID is missing.");
+      return;
+    }
+
+    holler.showSpinner( id );
+
+    $.ajax({
+      method: "GET",
+      url: window.hollerVars.ajaxurl,
+      data: { email: email, list_id: listId, action: 'hwp_ac_subscribe', nonce: window.hollerVars.hwpNonce, name: name }
+      })
+      .done(function(msg) {
+
+        if( msg.success == true ) {
+
+          // reset to defaults
+          holler.showConfirmation( id );
+          $('#hwp-' + id + ' .hwp-email-row').hide();
+          holler.conversion( id );
+
+        } else {
+          console.warn(msg)
+          $('#hwp-' + id + ' .hwp-first-row').html('<p>' + msg.data + '</p>');
+          holler.hideSpinner();
+        }
+
+      })
+      .fail(function(err) {
+        console.warn(err);
+        holler.hideSpinner();
+      });
+
+  }
+
   // Submit to MailPoet
   holler.mpSubscribe = function( email, id ) {
 
