@@ -567,6 +567,9 @@
     } else if( window.hollerVars[id].emailProvider === 'mc' ) {
       holler.mcSubscribe( email, id );
       return;
+    } else if( window.hollerVars[id].emailProvider === 'ac' ) {
+      holler.acSubscribe( email, id );
+      return;
     } else if( window.hollerVars[id].emailProvider === 'mailpoet' ) {
       holler.mpSubscribe( email, id );
       return;
