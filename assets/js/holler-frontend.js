@@ -678,6 +678,8 @@
       })
       .done(function(msg) {
 
+        console.log(msg)
+
         if( msg.success == true ) {
 
           // reset to defaults

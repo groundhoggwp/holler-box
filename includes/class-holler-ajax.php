@@ -74,8 +74,6 @@ if (!class_exists('Holler_Ajax')) {
 
             add_action('wp_ajax_hwp_ajax_page_search', array($this, 'page_search'));
 
-
-            //add_action('init', array($this, 'hwp_ac_subscribe'), -10);
         }
 
         /**
