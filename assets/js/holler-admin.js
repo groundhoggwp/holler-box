@@ -4,49 +4,49 @@
 
   holler.init = function() {
 
-  	holler.listeners();
-  	holler.toggleShowOn();
+    holler.listeners();
+    holler.toggleShowOn();
     holler.toggleTypes();
-  	holler.toggleDatepicker();
-  	holler.emailCheckbox();
+    holler.toggleDatepicker();
+    holler.emailCheckbox();
     holler.toggleEmailForm();
 
     $('.hwp-datepicker').datepicker({
-  		dateFormat : 'mm/dd/yy'
-  	});
+      dateFormat : 'mm/dd/yy'
+    });
 
-  	$('.hwp-colors').wpColorPicker();
+    $('.hwp-colors').wpColorPicker();
     
   }
 
   holler.listeners = function() {
 
-  	// Handle live preview update with visual editor
-  	$(document).on( 'tinymce-editor-init', function( event, editor ) {
+    // Handle live preview update with visual editor
+    $(document).on( 'tinymce-editor-init', function( event, editor ) {
 
-  		// Update preview on first page load
-  		holler.updatePreviewContent();
+      // Update preview on first page load
+      holler.updatePreviewContent();
 
-  		// add listener to visual editor for live updates
-  		window.tinymce.activeEditor.on( 'keyup', function(e) {
-  			holler.updatePreviewContent();
-  		})
+      // add listener to visual editor for live updates
+      window.tinymce.activeEditor.on( 'keyup', function(e) {
+        holler.updatePreviewContent();
+      })
 
-  	} );
+    } );
 
-  	// Updates preview if page loaded with HTML editor tab
-  	if( $('#wp-content-wrap').hasClass('html-active') ) {
-  		holler.updatePreviewContent();
-  	}
+    // Updates preview if page loaded with HTML editor tab
+    if( $('#wp-content-wrap').hasClass('html-active') ) {
+      holler.updatePreviewContent();
+    }
 
-  	$('body')
-  	.on('change', 'input[name=show_optin]', holler.emailCheckbox )
+    $('body')
+    .on('change', 'input[name=show_optin]', holler.emailCheckbox )
     .on('change', '.hwp-switch input', holler.toggleSwitch )
-  	.on('change', 'input[name=expiration]', holler.toggleDatepicker )
-  	.on('change', 'input[name=show_on]', holler.toggleShowOn )
+    .on('change', 'input[name=expiration]', holler.toggleDatepicker )
+    .on('change', 'input[name=show_on]', holler.toggleShowOn )
     .on('change', 'input[name=hwp_type]', holler.toggleTypes )
     .on('change', 'select[name=email_provider]', holler.toggleEmailForm )
-  	.on('keyup', '#content', holler.updatePreviewContent )
+    .on('keyup', '#content', holler.updatePreviewContent )
     .on('focus', 'input#scroll_delay', function() {
       $('input[name=display_when][value=delay]').prop('checked', 'checked'); 
     })
@@ -211,6 +211,7 @@
     var checkedVal = $('select[name=email_provider]').val();
     var itemTypeVal = $('input[name=item_type]:checked').val();
     var mcFields = $('#mailchimp-fields');
+    var acFields = $('#ac-fields');
     var ckFields = $('#convertkit-fields');
     var mailpoet = $('#mailpoet-fields');
 
@@ -228,6 +229,7 @@
       ckFields.hide();
       mcFields.hide();
       mailpoet.hide();
+      acFields.hide();
     } else if( checkedVal === 'custom' ) {
       custom.fadeIn();
       defaultDiv.hide();
@@ -235,6 +237,7 @@
       ckFields.hide();
       mcFields.hide();
       mailpoet.hide();
+      acFields.hide();
     } else if( checkedVal === 'mc' ) {
       mcFields.fadeIn();
       defaultDiv.fadeIn();
@@ -242,6 +245,7 @@
       custom.hide();
       sendTo.hide();
       mailpoet.hide();
+      acFields.hide();
     } else if( checkedVal === 'ck' ) {
       ckFields.fadeIn();
       defaultDiv.fadeIn();
@@ -249,6 +253,7 @@
       custom.hide();
       sendTo.hide();
       mailpoet.hide();
+      acFields.hide();
     } else if( checkedVal === 'mailpoet' ) {
       mailpoet.fadeIn();
       defaultDiv.fadeIn();
@@ -256,6 +261,15 @@
       custom.hide();
       sendTo.hide();
       ckFields.hide();
+      acFields.hide();
+    } else if( checkedVal === 'ac' ) {
+      ckFields.hide();
+      defaultDiv.fadeIn();
+      mcFields.hide();
+      custom.hide();
+      sendTo.hide();
+      mailpoet.hide();
+      acFields.fadeIn();
     }
 
   }
@@ -298,29 +312,29 @@
 
   holler.toggleDatepicker = function() {
 
-  	if( $('input[name=expiration]').is(':checked') ) {
-  		$('#hwp-until-datepicker').show();
-  	} else {
-  		$('#hwp-until-datepicker').hide();
-  	}
+    if( $('input[name=expiration]').is(':checked') ) {
+      $('#hwp-until-datepicker').show();
+    } else {
+      $('#hwp-until-datepicker').hide();
+    }
 
   }
 
   holler.updatePreviewContent = function() {
 
-  	var content;
+    var content;
 
-  	if( $('#wp-content-wrap').hasClass('tmce-active') ) {
-  		// rich editor selected
-  		content = window.tinymce.get('content').getContent();
-  	} else {
-  		// HTML editor selected
-  		content = $('#content').val();
-  	}
+    if( $('#wp-content-wrap').hasClass('tmce-active') ) {
+      // rich editor selected
+      content = window.tinymce.get('content').getContent();
+    } else {
+      // HTML editor selected
+      content = $('#content').val();
+    }
 
     var firstRow = document.getElementById('hwp-first-row');
     if( firstRow )
-  	 firstRow.innerHTML = content;
+     firstRow.innerHTML = content;
   }
 
   holler.mediaUpload = function(e) {

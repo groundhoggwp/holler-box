@@ -539,6 +539,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $mc_url = get_post_meta( $id, 'mc_url', 1 );
 
+            $ac_list_id = get_post_meta( $id, 'ac_list_id', 1 );
+
             $btn_text = ( !empty( get_post_meta( $id, 'submit_text', 1 ) ) ? get_post_meta( $id, 'submit_text', 1 ) : 'Send' );
 
             if( $mc_url && empty( $mc_list_id ) && is_user_logged_in() ) {
@@ -558,6 +560,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     echo '<input type="hidden" class="mc-interests" value=' . json_encode( get_post_meta( $id, 'mc_interests', 1 ) ) . ' />';
                 } elseif( $provider === 'mailpoet' ) {
                     echo '<input type="hidden" class="mailpoet-list-id" value="' . esc_attr( get_post_meta( $id, 'mailpoet_list_id', 1 ) ) . '" />';
+                } elseif( $provider === 'ac' && !empty( $ac_list_id ) ) {
+                    echo '<input type="hidden" class="ac-list-id" value="' . esc_attr( get_post_meta( $id, 'ac_list_id', 1 ) ) . '" />';
                 }
                 ?>
                 <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>
