@@ -690,6 +690,8 @@
 
         } else {
           console.warn(msg)
+          $('#hwp-' + id + ' .hwp-first-row').html('<p>' + msg.data + '</p>');
+          holler.hideSpinner();
         }
 
       })
