@@ -238,6 +238,7 @@ if (!class_exists('Holler_Ajax')) {
                 "contactList" => array(
                     "contact" => $contactId,
                     "list" => $list_id,
+                    "status" => 1
                 )
             );
 
@@ -273,11 +274,8 @@ if (!class_exists('Holler_Ajax')) {
             $email = sanitize_text_field($_GET['email']);
             $name = sanitize_text_field($_GET['name']);
 
-
             if (empty($list_id) || empty($email))
                 wp_send_json_error('Missing required field.');
-
-
 
             // member information
             $contacts = array(
