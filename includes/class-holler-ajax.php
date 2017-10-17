@@ -107,6 +107,8 @@ if (!class_exists('Holler_Ajax')) {
             if (!empty($name))
                 $msg .= "\nName: " . $name;
 
+            $msg = apply_filters( 'hwp_email_msg', $msg, $email, $name );
+
             $id = $_GET['id'];
 
             $title = get_option('hwp_email_title');

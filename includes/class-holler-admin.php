@@ -241,10 +241,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <input id="hwp_ck_api_key" name="hwp_ck_api_key" value="<?php echo esc_html( get_option( 'hwp_ck_api_key' ) ); ?>" placeholder="Convertkit API key" type="text" size="50" />
 
                 <p><?php _e('If you are using Active Campaign, entery your url and API key. It can be found under My Settings -> Developer.', 'holler-box'); ?></p>
-                
-                <input id="hwp_ac_api_key" name="hwp_ac_api_key" value="<?php echo esc_html( get_option( 'hwp_ac_api_key' ) ); ?>" placeholder="Active Campaign API key" type="password" size="50" /><br/>
 
                 <input id="hwp_ac_url" name="hwp_ac_url" value="<?php echo esc_html( get_option( 'hwp_ac_url' ) ); ?>" placeholder="Active Campaign URL" type="text" size="50" /><br/>
+
+                <input id="hwp_ac_api_key" name="hwp_ac_api_key" value="<?php echo esc_html( get_option( 'hwp_ac_api_key' ) ); ?>" placeholder="Active Campaign API key" type="password" size="50" /><br/>
 
                 <p><?php _e('If you are using MailChimp, entery your API key. It can be found under Account -> Extras -> API Keys.', 'holler-box'); ?></p>
                 
