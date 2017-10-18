@@ -535,11 +535,13 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $provider = get_post_meta( $id, 'email_provider', 1 );
 
-            $mc_list_id = get_post_meta( $id, 'mc_list_id', 1 );
+            $mc_list_id = esc_attr( get_post_meta( $id, 'mc_list_id', 1 ) );
 
             $mc_url = get_post_meta( $id, 'mc_url', 1 );
 
-            $ac_list_id = get_post_meta( $id, 'ac_list_id', 1 );
+            $ac_list_id = esc_attr( get_post_meta( $id, 'ac_list_id', 1 ) );
+
+            $drip_tags = esc_html( get_post_meta( $id, 'drip_tags', 1 ) );
 
             $btn_text = ( !empty( get_post_meta( $id, 'submit_text', 1 ) ) ? get_post_meta( $id, 'submit_text', 1 ) : 'Send' );
 
@@ -556,12 +558,14 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 if( $provider === 'ck' ) {
                     echo '<input type="hidden" class="ck-form-id" value="' . esc_attr( get_post_meta( $id, 'ck_id', 1 ) ) . '" />';
                 } elseif( $provider === 'mc' && !empty( $mc_list_id ) ) {
-                    echo '<input type="hidden" class="mc-list-id" value="' . esc_attr( get_post_meta( $id, 'mc_list_id', 1 ) ) . '" />';
+                    echo '<input type="hidden" class="mc-list-id" value="' . $mc_list_id . '" />';
                     echo '<input type="hidden" class="mc-interests" value=' . json_encode( get_post_meta( $id, 'mc_interests', 1 ) ) . ' />';
                 } elseif( $provider === 'mailpoet' ) {
                     echo '<input type="hidden" class="mailpoet-list-id" value="' . esc_attr( get_post_meta( $id, 'mailpoet_list_id', 1 ) ) . '" />';
                 } elseif( $provider === 'ac' && !empty( $ac_list_id ) ) {
-                    echo '<input type="hidden" class="ac-list-id" value="' . esc_attr( get_post_meta( $id, 'ac_list_id', 1 ) ) . '" />';
+                    echo '<input type="hidden" class="ac-list-id" value="' . $ac_list_id . '" />';
+                } elseif( $provider === 'drip' && !empty( $drip_tags ) ) {
+                    echo '<input type="hidden" class="drip-tags" value="' . $drip_tags . '" />';
                 }
                 ?>
                 <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>

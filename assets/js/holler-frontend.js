@@ -710,22 +710,24 @@
   // Submit to Drip
   holler.dripSubscribe = function( email, id ) {
 
-    var tags = 'tag1';
-    var name = $('#hwp-' + id + ' .hwp-name').val();
-
-    holler.showSpinner( id );
-
     if( !window._dcq ) {
       alert("Drip code not installed properly.");
       return;
     }
+
+    var tags = $('#hwp-' + id + ' .drip-tags').val();
+    var name = $('#hwp-' + id + ' .hwp-name').val();
+
+    var tagArr = tags.split(",");
+
+    holler.showSpinner( id );
 
     holler.dripid = id;
 
     var response = _dcq.push(["identify", {
       email: email,
       first_name: name,
-      tags: [tags],
+      tags: tagArr,
       success: holler.dripResponse,
       failure: holler.dripResponse
     }]);
