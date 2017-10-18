@@ -573,6 +573,9 @@
     } else if( window.hollerVars[id].emailProvider === 'mailpoet' ) {
       holler.mpSubscribe( email, id );
       return;
+    } else if( window.hollerVars[id].emailProvider === 'drip' ) {
+      holler.dripSubscribe( email, id );
+      return;
     }
 
     // send default message to server
@@ -701,6 +704,49 @@
         console.warn(err);
         holler.hideSpinner();
       });
+
+  }
+
+  // Submit to Drip
+  holler.dripSubscribe = function( email, id ) {
+
+    var tags = 'tag1';
+    var name = $('#hwp-' + id + ' .hwp-name').val();
+
+    holler.showSpinner( id );
+
+    if( !window._dcq ) {
+      alert("Drip code not installed properly.");
+      return;
+    }
+
+    holler.dripid = id;
+
+    var response = _dcq.push(["identify", {
+      email: email,
+      first_name: name,
+      tags: [tags],
+      success: holler.dripResponse,
+      failure: holler.dripResponse
+    }]);
+
+  }
+
+  holler.dripResponse = function( response ) {
+
+    holler.hideSpinner();
+
+    if( response.success == true ) {
+
+      // reset to defaults
+      holler.showConfirmation( holler.dripid );
+      $('#hwp-' + holler.dripid + ' .hwp-email-row').hide();
+      holler.conversion( holler.dripid );
+
+    } else {
+      console.warn(response);
+      $('#hwp-' + holler.dripid + ' .hwp-first-row').html('<p>' + response.error + '</p>');
+    }
 
   }
 

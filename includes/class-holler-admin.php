@@ -179,54 +179,52 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 delete_option( 'hwp_powered_by' );
             }
 
-            $license_key = get_option( 'hwp_pro_edd_license' );
-
             ?>
             <div id="holler-wrap" class="wrap">          
 
             <h2><?php _e('Settings', 'holler-box'); ?></h2>
 
-            <?php if( !$license_key ) : ?>
+            <div id="hwp-upgrade-box" class="widgets-holder-wrap">
+                
+                <div class="hwp-content">
 
-                <div id="hwp-upgrade-box" class="widgets-holder-wrap">
-                    
-                    <div class="hwp-content">
-
-                        <h2>Get More Conversions</h2>
-                        <span class="big-icon-right dashicons dashicons-chart-line"></span> 
-                        <p>Click subscribe below to get free tips and tricks on how to convert more site visitors into customers. No spam, unsubscribe at any time.</p>
-                        <!-- Begin MailChimp Signup Form -->
-                        <div id="hwp_embed_signup">
-                        <form action="//hollerwp.us16.list-manage.com/subscribe/post?u=d9d0193288fd8270922c02b01&amp;id=590bf0a85f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-                            <div id="mc_embed_signup_scroll">
-                            
-                            <input type="email" value="<?php echo get_option('admin_email'); ?>" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-                            <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-                            <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_d9d0193288fd8270922c02b01_590bf0a85f" tabindex="-1" value=""></div>
-                            <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button button-primary"></div>
-                            </div>
-                        </form>
+                    <h2>Get More Conversions</h2>
+                    <span class="big-icon-right dashicons dashicons-chart-line"></span> 
+                    <p>Click subscribe below to get free tips and tricks on how to convert more site visitors into customers. No spam, unsubscribe at any time.</p>
+                    <!-- Begin MailChimp Signup Form -->
+                    <div id="hwp_embed_signup">
+                    <form action="//hollerwp.us16.list-manage.com/subscribe/post?u=d9d0193288fd8270922c02b01&amp;id=590bf0a85f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
+                        <div id="mc_embed_signup_scroll">
+                        
+                        <input type="email" value="<?php echo get_option('admin_email'); ?>" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
+                        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+                        <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_d9d0193288fd8270922c02b01_590bf0a85f" tabindex="-1" value=""></div>
+                        <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button button-primary"></div>
                         </div>
-
-                        <hr>
-
-                        <h3>Get Holler Box Pro!</h3>
-                        <ul>
-                        <li>More display settings like taxonomy and post type</li>
-                        <li>Header banner option</li>
-                        <li>Bigger popout option</li>
-                        <li>EDD and WooCommerce integration</li>
-                        <li>Exit detection, link activation</li>
-                        <li>Priority support</li>
-                        <li>Lots more...</li>
-                        </ul>
-                        <a href="https://hollerwp.com/pro?utm_source=settings_page&utm_medium=link&utm_campaign=hwp_settings" class="button button-primary">View features &amp; pricing</a>
-
+                    </form>
                     </div>
-                    
-                </div>
 
-            <?php endif; ?>
+                    <?php if( !is_plugin_active('hollerbox-pro/holler-box-pro.php') ) : ?>
+
+                    <hr>
+
+                    <h3>Get Holler Box Pro!</h3>
+                    <ul>
+                    <li>More display settings like taxonomy and post type</li>
+                    <li>Header banner option</li>
+                    <li>Bigger popout option</li>
+                    <li>EDD and WooCommerce integration</li>
+                    <li>Exit detection, link activation</li>
+                    <li>Priority support</li>
+                    <li>Lots more...</li>
+                    </ul>
+                    <a href="https://hollerwp.com/pro?utm_source=settings_page&utm_medium=link&utm_campaign=hwp_settings" class="button button-primary">View features &amp; pricing</a>
+
+                    <?php endif; ?>
+
+                </div>
+                
+            </div>
 
             <form method="post" action="edit.php?post_type=hollerbox&page=hollerbox">
 
@@ -619,6 +617,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
                             <?php _e( 'Active Campaign', 'holler-box' ); ?>
                         </option>
 
+                        <option value="drip" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "drip"); ?> >
+                            <?php _e( 'Drip', 'holler-box' ); ?>
+                        </option>
+
                         <?php if( class_exists('\MailPoet\API\API') ) : ?>
 
                         <option value="mailpoet" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "mailpoet"); ?> >
@@ -632,6 +634,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                         </option>
 
                     </select>
+
+                    <?php do_action( 'hwp_below_provider_select', $post->ID ); ?>
 
                     <p id="convertkit-fields">
                         <?php _e( 'Convertkit List ID, <a href=
@@ -1027,8 +1031,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <?php do_action('hwp_advanced_settings_after', $post->ID ); ?>
 
                 <?php 
-                    $license_key = get_option( 'hwp_pro_edd_license' );
-                    if( !$license_key ) {
+                    
+                    if( !is_plugin_active('hollerbox-pro/holler-box-pro.php') ) {
                         echo '<p>Get more powerful display and customization settings in <strong><a href="https://hollerwp.com/pro?utm_source=after_settings&utm_medium=link&utm_campaign=hwp_settings">Holler Box Pro</a></strong></p>';
                     }
                 ?>

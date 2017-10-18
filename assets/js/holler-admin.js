@@ -214,6 +214,7 @@
     var acFields = $('#ac-fields');
     var ckFields = $('#convertkit-fields');
     var mailpoet = $('#mailpoet-fields');
+    var drip = $('#drip-fields');
 
     // Show optin in preview
     if( itemTypeVal === 'optin' ) {
@@ -230,6 +231,7 @@
       mcFields.hide();
       mailpoet.hide();
       acFields.hide();
+      drip.hide();
     } else if( checkedVal === 'custom' ) {
       custom.fadeIn();
       defaultDiv.hide();
@@ -238,6 +240,7 @@
       mcFields.hide();
       mailpoet.hide();
       acFields.hide();
+      drip.hide();
     } else if( checkedVal === 'mc' ) {
       mcFields.fadeIn();
       defaultDiv.fadeIn();
@@ -246,6 +249,7 @@
       sendTo.hide();
       mailpoet.hide();
       acFields.hide();
+      drip.hide();
     } else if( checkedVal === 'ck' ) {
       ckFields.fadeIn();
       defaultDiv.fadeIn();
@@ -254,6 +258,7 @@
       sendTo.hide();
       mailpoet.hide();
       acFields.hide();
+      drip.hide();
     } else if( checkedVal === 'mailpoet' ) {
       mailpoet.fadeIn();
       defaultDiv.fadeIn();
@@ -262,6 +267,7 @@
       sendTo.hide();
       ckFields.hide();
       acFields.hide();
+      drip.hide();
     } else if( checkedVal === 'ac' ) {
       ckFields.hide();
       defaultDiv.fadeIn();
@@ -270,6 +276,16 @@
       sendTo.hide();
       mailpoet.hide();
       acFields.fadeIn();
+      drip.hide();
+    } else if( checkedVal === 'drip' ) {
+      drip.fadeIn();
+      ckFields.hide();
+      defaultDiv.fadeIn();
+      mcFields.hide();
+      custom.hide();
+      sendTo.hide();
+      mailpoet.hide();
+      acFields.hide();
     }
 
   }
