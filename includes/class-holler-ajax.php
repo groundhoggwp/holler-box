@@ -75,6 +75,16 @@ if (!class_exists('Holler_Ajax')) {
             add_action('wp_ajax_hwp_ajax_page_search', array($this, 'page_search'));
 
         }
+        
+         public function mailType($content_type) {
+            $mail_type = 'text/html';
+            return apply_filters('holler_box_mailtype', $mail_type);
+        }
+
+        public function charType($charset) {
+            $charType = 'utf-8';
+            return apply_filters('holler_box_mail_chartype', $charType);
+        }
 
         /**
          * Send message via email
@@ -118,8 +128,15 @@ if (!class_exists('Holler_Ajax')) {
             $sendto = get_post_meta($id, 'opt_in_send_to', 1);
 
             $headers = array('Reply-To: <' . $email . '>');
+            
+            add_filter('wp_mail_content_type', array($this, 'mailType')); // to support mail content type.
+            add_filter('wp_mail_charset', array($this, 'charType'));  // to support email content in different language 
+            
+            $endcodedTitle='=?UTF-8?B?'.base64_encode($title).'?='; // to support different language than English
 
-            $success = wp_mail($sendto, $title, $msg, $headers);
+            $success = wp_mail($sendto, $endcodedTitle, $msg, $headers);
+            
+            remove_filter('wp_mail_content_type', 'set_html_content_type');
 
             wp_send_json_success('Sent ' . $msg . ' from ' . $email . ' Success: ' . $success);
         }
