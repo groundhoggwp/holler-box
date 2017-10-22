@@ -234,9 +234,9 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 
                 <input id="hwp_email_title" name="hwp_email_title" value="<?php echo esc_html( get_option( 'hwp_email_title' ) ); ?>" placeholder="New Holler Box Message" type="text" size="50" />
 
-                <p><?php _e('If you are using Convertkit, entery your API key. It can be found on your <a href="https://app.convertkit.com/account/edit#account_info" target="_blank">account info page.</a>', 'holler-box'); ?></p>
+                <p><?php _e('If you are using ConvertKit, entery your API key. It can be found on your <a href="https://app.convertkit.com/account/edit#account_info" target="_blank">account info page.</a>', 'holler-box'); ?></p>
                 
-                <input id="hwp_ck_api_key" name="hwp_ck_api_key" value="<?php echo esc_html( get_option( 'hwp_ck_api_key' ) ); ?>" placeholder="Convertkit API key" type="text" size="50" />
+                <input id="hwp_ck_api_key" name="hwp_ck_api_key" value="<?php echo esc_html( get_option( 'hwp_ck_api_key' ) ); ?>" placeholder="ConvertKit API key" type="text" size="50" />
 
                 <p><?php _e('If you are using Active Campaign, entery your url and API key. It can be found under My Settings -> Developer.', 'holler-box'); ?></p>
 
@@ -606,7 +606,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                         </option>
 
                         <option value="ck" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "ck"); ?> >
-                            <?php _e( 'Convertkit', 'holler-box' ); ?>
+                            <?php _e( 'ConvertKit', 'holler-box' ); ?>
                         </option>
 
                         <option value="mc" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "mc"); ?> >
@@ -638,9 +638,9 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <?php do_action( 'hwp_below_provider_select', $post->ID ); ?>
 
                     <p id="convertkit-fields">
-                        <?php _e( 'Convertkit List ID, <a href=
+                        <?php _e( 'ConvertKit List ID, <a href=
                         "http://hollerbox.helpscoutdocs.com/article/6-convertkit-integration" target="_blank">click for help.</a> <em>*required</em>', 'holler-box' ); ?>
-                        <input id="ck_id" name="ck_id" class="widefat" value="<?php echo get_post_meta( $post->ID, 'ck_id', 1 ); ?>" placeholder="Convertkit list ID" type="text" />
+                        <input id="ck_id" name="ck_id" class="widefat" value="<?php echo get_post_meta( $post->ID, 'ck_id', 1 ); ?>" placeholder="ConvertKit list ID" type="text" />
                     </p>
                     
                     <div id="mailchimp-fields">
