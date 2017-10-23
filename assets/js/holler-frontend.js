@@ -587,7 +587,7 @@
   }
 
 
-  // Convertkit subscribe through API
+  // ConvertKit subscribe through API
   holler.ckSubscribe = function( email, id ) {
 
     var options = window.hollerVars[id];

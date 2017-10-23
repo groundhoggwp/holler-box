@@ -39,7 +39,7 @@ Holler Box integrates with your favorite membership plugin to show announcements
 - Add unlimited popups
 - Exit-intent popups
 - Choose between subtle notification bubble or lightbox popup
-- Integrate with MailChimp, Convertkit, MailPoet, or a custom form
+- Integrate with MailChimp, ConvertKit, MailPoet, or a custom form
 - Limit to certain pages
 - Time delay
 - Scroll triggers
@@ -133,7 +133,7 @@ See how your messages are performing. Track views and conversions (link clicks a
 
 **Interactivity**
 
-Add a link, video, contact form, or simple opt-in form that integrates with major email providers like MailChimp and Convertkit.
+Add a link, video, contact form, or simple opt-in form that integrates with major email providers like MailChimp and ConvertKit.
 
 ## Holler Box Pro
 
@@ -202,7 +202,7 @@ Content can be pretty much anything, but keep your message short.
 - Show email opt-in: default sends to your email address, or choose a provider or custom HTML form. Details below.
 - Default: sends to the email address you enter in the settings.
 - MailChimp integration: add your API key in the settings, then your list ID (Get your list ID in your MailChimp account under Lists => Settings => List name and defaults => List ID on right side of screen) 
-- Convertkit: visit Holler Box => Settings, enter <a href="https://app.convertkit.com/account/edit" target="_blank">your API key</a>. Choose Convertkit when creating your new Holler Box, then enter your form ID. Find your form ID by visiting your signup form, then copy the numbers in the url (or in the embed code).
+- ConvertKit: visit Holler Box => Settings, enter <a href="https://app.convertkit.com/account/edit" target="_blank">your API key</a>. Choose ConvertKit when creating your new Holler Box, then enter your form ID. Find your form ID by visiting your signup form, then copy the numbers in the url (or in the embed code).
 - Show chat: show the (fake) live chat
 
 **Advanced Settings**
@@ -239,7 +239,7 @@ Next, in your Holler Box, choose Mailchimp as the opt-in provider. Add your list
 
 Copy/paste that into the MailChimp list ID field and save.
 
-<strong>How do I find my Convertkit form ID and API key?</strong>
+<strong>How do I find my ConvertKit form ID and API key?</strong>
 
 Your API key is on your account page.
 
@@ -247,7 +247,7 @@ To get your form ID, visit Forms => your form. Look in the browser address bar, 
 
 https://app.convertkit.com/landing_pages/445667/edit
 
-That number is the form ID, in this case it's 445667. Enter that number as the Convertkit form ID.
+That number is the form ID, in this case it's 445667. Enter that number as the ConvertKit form ID.
 
 *How do I setup MailPoet?*
 
