@@ -4,7 +4,7 @@ Contributors: scottopolis
 Tags: popup, optin, lead generation, marketing, email opt-in, woocommerce, easy digital downloads
 Requires at least: 4.5
 Tested up to: 4.8.1
-Stable tag: 1.2.1
+Stable tag: 1.3.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -280,6 +280,15 @@ Make sure your email form does not have a required field that is not displayed. 
 7. Conversion Analytics
 
 == Changelog ==
+
+= 1.3.0 =
+
+* Feature: redirect to url after email submission
+* Feature: Drip integration (requires Drip plugin)
+* Feature: Active Campaign integration (thanks WP E-Signature team!)
+* Change: new boxes automatically default to "hide after user interacts"
+* hwp_email_msg filter for "send to email" setting
+* fixed bug with multiple word tags/cats/etc
 
 = 1.2.0 =
 
