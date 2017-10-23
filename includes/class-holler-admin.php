@@ -890,7 +890,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
             } else {
                 $api_response = json_decode( wp_remote_retrieve_body( $response ), true );
 
-                if( array_key_exists( 'lists', $api_response ) ) {
+
+                if( is_array( $api_response) && array_key_exists( 'lists', $api_response ) ) {
                     return $api_response['lists'];
 
                     set_transient( 'hwp_ac_lists', $api_response['lists'], HOUR_IN_SECONDS );
