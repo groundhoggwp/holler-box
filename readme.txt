@@ -1,7 +1,7 @@
 === Holler Box - WordPress Popup Plugin for eCommerce ===
 
 Contributors: scottopolis
-Tags: popup, optin, lead generation, marketing, email opt-in, woocommerce, easy digital downloads
+Tags: popup, optin, lead generation, mailchimp popup, email opt-in, woocommerce
 Requires at least: 4.5
 Tested up to: 4.8.1
 Stable tag: 1.3.0
@@ -39,7 +39,7 @@ Holler Box integrates with your favorite membership plugin to show announcements
 - Add unlimited popups
 - Exit-intent popups
 - Choose between subtle notification bubble or lightbox popup
-- Integrate with MailChimp, ConvertKit, MailPoet, or a custom form
+- Integrate with MailChimp, ConvertKit, MailPoet, Drip, Active Campaign, or a custom form
 - Limit to certain pages
 - Time delay
 - Scroll triggers
