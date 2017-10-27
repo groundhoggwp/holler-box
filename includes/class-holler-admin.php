@@ -912,6 +912,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
             $show_on = get_post_meta( $post->ID, 'show_on', 1 );
             ?>
 
+            <?php do_action('hwp_advanced_settings_before', $post->ID ); ?>
+
             <div class="hwp-section">
 
                 <p><label><?php _e( 'What pages?', 'holler-box' ); ?></label></p>

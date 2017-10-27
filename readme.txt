@@ -283,12 +283,11 @@ Make sure your email form does not have a required field that is not displayed. 
 
 = 1.3.0 =
 
-* Feature: redirect to url after email submission
+* Feature: redirect to url after email submission (Pro only)
 * Feature: Drip integration (requires Drip plugin)
 * Feature: Active Campaign integration (thanks WP E-Signature team!)
 * Change: new boxes automatically default to "hide after user interacts"
 * hwp_email_msg filter for "send to email" setting
-* fixed bug with multiple word tags/cats/etc
 
 = 1.2.0 =
 

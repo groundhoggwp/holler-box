@@ -209,6 +209,11 @@
       // hide box, show btn
       holler.transitionOut( item );
 
+      // if set to show every page load and floating btn is hidden, need to delete hide cookie so it shows properly
+      if( options.hideBtn === '1' && options.showSettings === 'always' ) {
+        holler.setCookie( 'hwp-' + id + '_hide', '', -1 );
+      }
+
       if( options.hideBtn != '1' && options.type != 'holler-banner' ) {
         holler.transitionIn( $( '.hwp-btn-' + id ) );
       }
