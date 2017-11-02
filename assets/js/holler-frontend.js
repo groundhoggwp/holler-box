@@ -95,17 +95,19 @@
     var shown = holler.getCookie( 'hwp_' + id + '_shown' );
 
     // only show once?
-    if( vars.showSettings === 'hide_for' && shown === 'true' )
+    if( vars.showSettings === 'hide_for' && shown === 'true' && !forceShow )
       return;
 
     // passes checks, show it
 
     if( vars.display_when === 'exit' ) {
 
+      // bail if it's been closed already
+      if( holler.getCookie( 'hwp-' + id + '_hide' ) === 'true' )
+        return;
+
       // add exit listener
-      $('body').on( 'mouseleave', holler.debounce( function() {
-        holler.mouseExit();
-      }, 1000) );
+      $('body').on( 'mouseleave', holler.mouseExit );
 
     }
 
@@ -963,9 +965,6 @@
       return;
     
     var id = el.id.split('-')[1];
-
-    // clear any hide cookies so it always shows when link is clicked
-    holler.setCookie( 'hwp-' + id + '_hide', '', -1 );
 
     holler.doChecks( id, true );
 
