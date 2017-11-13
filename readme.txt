@@ -1,7 +1,7 @@
-=== Holler Box - WordPress Popup Plugin for eCommerce ===
+=== Holler Box - Lead Generation and Marketing Automation ===
 
 Contributors: scottopolis
-Tags: popup, optin, lead generation, mailchimp popup, email opt-in, woocommerce
+Tags: popup, optin, lead generation, mailchimp popup, email opt-in, marketing
 Requires at least: 4.5
 Tested up to: 4.8.1
 Stable tag: 1.3.0

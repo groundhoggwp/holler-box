@@ -2,7 +2,7 @@
 /**
  * Plugin Name:     Holler Box
  * Plugin URI:      http://hollerwp.com
- * Description:     The eCommerce WordPress popup plugin. Lightweight, stylish, and effective.
+ * Description:     Sales and marketing automation for eCommerce stores. Lead generation and conversion popups and more.
  * Version:         1.3.1
  * Author:          Scott Bolinger
  * Author URI:      http://scottbolinger.com

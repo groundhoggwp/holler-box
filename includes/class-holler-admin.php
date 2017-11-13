@@ -61,7 +61,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
             add_action( 'manage_hollerbox_posts_custom_column', array( $this, 'custom_columns' ), 10, 2 );
             add_action( 'transition_post_status',  array( $this, 'save_default_meta' ), 10, 3 );
 
-            add_filter( 'plugin_action_links_holler-box/holler-box.php', array( $this, 'hwp_plugin_links' ) );
+            add_action( 'admin_init', array( $this, 'maybe_show_upgrade_link' ) );
 
             add_action( 'hwp_popup_templates', array( $this, 'type_upsell' ), 99 );
 
@@ -105,6 +105,21 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 }
                 /* Restore original Post Data */
                 wp_reset_postdata();
+            }
+
+        }
+
+        /**
+         * Show or hide upgrade link
+         *
+         * @access      public
+         * @since       1.3.1
+         * @return      void
+         */
+        public function maybe_show_upgrade_link() {
+
+            if( !is_plugin_active('hollerbox-pro/holler-box-pro.php') ) {
+                add_filter( 'plugin_action_links_holler-box/holler-box.php', array( $this, 'hwp_plugin_links' ) );
             }
 
         }
