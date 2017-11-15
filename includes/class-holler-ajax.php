@@ -105,7 +105,7 @@ if (!class_exists('Holler_Ajax')) {
 
             $email = $_GET['email'];
 
-            $name = $_GET['name'];
+            $name = ( !empty( $_GET['name'] ) ? $_GET['name'] : null );
 
             $title = $_GET['title'];
 
