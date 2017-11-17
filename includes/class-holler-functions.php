@@ -543,7 +543,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $drip_tags = esc_html( get_post_meta( $id, 'drip_tags', 1 ) );
 
-            $btn_text = ( !empty( get_post_meta( $id, 'submit_text', 1 ) ) ? get_post_meta( $id, 'submit_text', 1 ) : 'Send' );
+            $submit_text = get_post_meta( $id, 'submit_text', 1 );
+            $btn_text = ( !empty( $submit_text ) ? $submit_text : 'Send' );
 
             if( $mc_url && empty( $mc_list_id ) && is_user_logged_in() ) {
                 echo 'Site admin: please update your MailChimp settings.';
