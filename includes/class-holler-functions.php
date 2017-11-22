@@ -613,8 +613,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 $title = trim( $value ); 
                 $page = get_page_by_title( $title );
 
-                // cant get id of front page or null
-                if( !$page || $page->post_name === 'front-page' ) continue;
+                // cant get id of null
+                if( !$page ) continue;
 
                 $newarr[] = $page->ID;
             }
