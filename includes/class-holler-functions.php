@@ -151,7 +151,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             // do checks for page conditionals, logged in, etc here
             // if any of the checks are true, we show it
-            $post_id = get_the_ID();
+            $post_id = get_queried_object_id();
             $logged_in = is_user_logged_in();
 
             foreach (self::$active as $key => $box_id) {
@@ -610,8 +610,10 @@ if( !class_exists( 'Holler_Functions' ) ) {
             $newarr = array();
 
             foreach ($arr as $key => $value) {
-                $title = trim( $value ); 
+                $title = trim( $value );
                 $page = get_page_by_title( $title );
+
+                // var_dump( $page );
 
                 // cant get id of null
                 if( !$page ) continue;
