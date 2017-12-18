@@ -615,8 +615,6 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 $title = str_replace( array("“", "”"),'"', $title );
                 $page = get_page_by_title( $title );
 
-                var_dump( $title );
-
                 // cant get id of null
                 if( !$page ) continue;
 
