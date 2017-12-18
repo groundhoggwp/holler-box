@@ -178,7 +178,7 @@
         avatar.fadeIn();
         templates.hide();
         pOptions.hide();
-        name.fadeIn();
+        name.hide();
         sendBtn.show();
         fomoSettings.hide();
     }
