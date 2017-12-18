@@ -611,9 +611,11 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             foreach ($arr as $key => $value) {
                 $title = trim( $value );
+                $title = str_replace("’","'", $title );
+                $title = str_replace( array("“", "”"),'"', $title );
                 $page = get_page_by_title( $title );
 
-                // var_dump( $page );
+                var_dump( $title );
 
                 // cant get id of null
                 if( !$page ) continue;
