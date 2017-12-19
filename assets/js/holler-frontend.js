@@ -550,8 +550,10 @@
 
     var email = $('#hwp-' + id + ' .hwp-email-input').val();
 
-    if( !email )
+    if( !email ) {
+      alert('We had a problem reading your email, please contact the site administrator.');
       return;
+    }
 
     var name = $('#hwp-' + id + ' .hwp-name').val();
 
