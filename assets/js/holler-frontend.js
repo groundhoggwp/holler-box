@@ -1001,6 +1001,9 @@
         // Show the box and what's in it
         holler.transitionIn( item );
 
+        // re-add click listener
+        $('#hwp-' + id + ' a').on('click', holler.interactionLink );
+
         if( parseInt( int ) > 10 )
           int = 1;
         
