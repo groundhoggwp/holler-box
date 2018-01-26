@@ -995,6 +995,9 @@
       .done(function(data) {
         // console.log(data);
 
+        if( !data.data )
+          return;
+
         // box content
         $('#hwp-' + id + ' .hwp-first-row').html( data.data );
 
