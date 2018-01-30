@@ -223,7 +223,7 @@
     } else {
 
       if( options.type === 'fomo' && options.fomoLoopTimes ) {
-        holler.fomoLoop( id, item, options.fomoLoopTimes, 1 );
+        holler.fomoLoopStart( id, item, options.fomoLoopTimes, 1 );
       } else if( options.type === 'fomo' ) {
         holler.fomoContent( id, item );
       } else {
@@ -252,8 +252,8 @@
       holler.toggleBnrMargin( id );
     
 
-    // Should we hide it
-    if( options.hide_after === 'delay' && options.type != 'fomo' ) {
+    // Should we hide it after a delay? Skip if showing multiple fomos
+    if( options.hide_after === 'delay' && !options.fomoDisplayTime ) {
 
       setTimeout( function() {
         holler.transitionOut( item );
@@ -976,30 +976,52 @@
 
   }
 
-  holler.fomoLoop = function ( id, item, times, i ) {
+  // multiple fomos start here
+  holler.fomoLoopStart = function ( id, item, times, i ) {
 
     var options = window.hollerVars[id];
 
+    // delay between notifications
     var loopDelay = ( options.fomoLoopDelay ? parseInt( options.fomoLoopDelay ) * 1000 : 7000 );
 
+    // how long it is up on the page before disappearing
     var displayTime = ( options.fomoDisplayTime ? parseInt( options.fomoDisplayTime ) * 1000 : 3000 );
 
+    // show the first fomo
     holler.fomoContent( id, item )
 
-    // hide the popup
-     setTimeout(function() {
+    // wait for displayTime seconds, then hide fomo. Run loop to show other fomos with loopDelay
+    holler.fomoDisplayTime( displayTime ).then( function() {
       holler.transitionOut(item)
-    }, displayTime );
+      holler.fomoLoop( id, item, times, i, loopDelay )
+    });
 
-    if( !i ) {
-      var i = 1;
-    }
-    
+  }
+
+  holler.fomoDisplayTime = function( displayTime ) {
+
+    console.log('display time ' + displayTime)
+
+    return new Promise(
+
+      function( resolve ) {
+        // hide the popup
+         setTimeout(function() {
+          resolve()
+        }, displayTime );
+      }
+
+    )
+
+  }
+
+  holler.fomoLoop = function( id, item, times, i, loopDelay ) {
+
     // show multiple popups on a single page
     setTimeout(function () {
       i++;
       if ( i < parseInt( times ) + 1 ) {
-         holler.fomoLoop( id, item, times, i )
+         holler.fomoLoopStart( id, item, times, i )
       }
 
     }, loopDelay );
