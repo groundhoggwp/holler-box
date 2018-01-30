@@ -136,6 +136,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     'position' => get_post_meta($value, 'position', 1)
                 );
 
+                $array[$value] = apply_filters( 'hwp_localized_vars', $array[$value], $value );
+
             }
 
             return $array;

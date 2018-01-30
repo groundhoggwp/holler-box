@@ -222,7 +222,9 @@
 
     } else {
 
-      if( options.type === 'fomo' ) {
+      if( options.type === 'fomo' && options.fomoLoopTimes ) {
+        holler.fomoLoop( id, item, options.fomoLoopTimes, 1 );
+      } else if( options.type === 'fomo' ) {
         holler.fomoContent( id, item );
       } else {
         // Show the box and what's in it
@@ -251,7 +253,7 @@
     
 
     // Should we hide it
-    if( options.hide_after === 'delay' ) {
+    if( options.hide_after === 'delay' && options.type != 'fomo' ) {
 
       setTimeout( function() {
         holler.transitionOut( item );
@@ -401,6 +403,8 @@
   }
 
   holler.transitionOut = function(item) {
+
+    console.log('transition out ', item)
     
     $(item).addClass('hwp-transition-out').removeClass('hwp-show');
 
@@ -969,6 +973,36 @@
     var id = el.id.split('-')[1];
 
     holler.doChecks( id, true );
+
+  }
+
+  holler.fomoLoop = function ( id, item, times, i ) {
+
+    var options = window.hollerVars[id];
+
+    var loopDelay = ( options.fomoLoopDelay ? parseInt( options.fomoLoopDelay ) * 1000 : 7000 );
+
+    var displayTime = ( options.fomoDisplayTime ? parseInt( options.fomoDisplayTime ) * 1000 : 3000 );
+
+    holler.fomoContent( id, item )
+
+    // hide the popup
+     setTimeout(function() {
+      holler.transitionOut(item)
+    }, displayTime );
+
+    if( !i ) {
+      var i = 1;
+    }
+    
+    // show multiple popups on a single page
+    setTimeout(function () {
+      i++;
+      if ( i < parseInt( times ) + 1 ) {
+         holler.fomoLoop( id, item, times, i )
+      }
+
+    }, loopDelay );
 
   }
 
