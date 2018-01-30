@@ -3,8 +3,8 @@
 Contributors: scottopolis
 Tags: popup, optin, lead generation, mailchimp popup, email opt-in, marketing
 Requires at least: 4.5
-Tested up to: 4.9.1
-Stable tag: 1.3.2
+Tested up to: 4.9.2
+Stable tag: 1.4.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -280,6 +280,10 @@ Make sure your email form does not have a required field that is not displayed. 
 7. Conversion Analytics
 
 == Changelog ==
+
+= 1.4.0 =
+
+* Feature: support multiple popups with FOMO add-on
 
 = 1.3.0 =
 
