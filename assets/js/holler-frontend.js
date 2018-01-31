@@ -1070,6 +1070,7 @@
 
       })
       .fail(function(err) {
+        holler.setCookie( 'hwp_fomo', 1, 1 );
         console.log(err);
       });
 
