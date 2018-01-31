@@ -22,7 +22,7 @@
 
   }
 
-  function getUrlParameter( name ) {
+  function hollerGetUrlParameter( name ) {
 
     name = name.replace( /[\[]/, '\\[').replace(/[\]]/, '\\]' );
 
@@ -37,9 +37,9 @@
   // if using the ?hwp_preview=ID query string, show it no matter what
   holler.checkForPreview = function() {
 
-    if( getUrlParameter( 'hwp_preview' ) ) {
+    if( hollerGetUrlParameter( 'hwp_preview' ) ) {
 
-      var id = getUrlParameter( 'hwp_preview' )
+      var id = hollerGetUrlParameter( 'hwp_preview' )
 
       holler.showNote( id );
 
