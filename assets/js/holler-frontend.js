@@ -8,16 +8,38 @@
     holler.newVisitor = false;
 
     holler.checkForPreview();
-    
+
   }
+
+  // Polyfill for Date.now() on IE
+  if ( ! Date.now ) {
+
+    Date.now = function now() {
+
+      return new Date().getTime();
+
+    };
+
+  }
+
+  function hollerGetUrlParameter( name ) {
+
+    name = name.replace( /[\[]/, '\\[').replace(/[\]]/, '\\]' );
+
+    var regex = new RegExp( '[\\?&]' + name + '=([^&#]*)' );
+
+    var results = regex.exec( location.search );
+
+    return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+
+  };
 
   // if using the ?hwp_preview=ID query string, show it no matter what
   holler.checkForPreview = function() {
-    var urlParams = new URLSearchParams(window.location.search);
 
-    if( urlParams.has('hwp_preview') ) {
+    if( hollerGetUrlParameter( 'hwp_preview' ) ) {
 
-      var id = urlParams.get('hwp_preview');
+      var id = hollerGetUrlParameter( 'hwp_preview' )
 
       holler.showNote( id );
 
