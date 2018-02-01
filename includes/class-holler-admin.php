@@ -219,20 +219,23 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     </form>
                     </div>
 
-                    <?php if( !is_plugin_active('hollerbox-pro/holler-box-pro.php') ) : ?>
+                    <?php if( !is_plugin_active('hollerbox-pro/holler-box-pro.php') && !is_plugin_active('hollerbox-sales/holler-box-sales.php') ) : ?>
 
                     <hr>
 
                     <h3>Get Holler Box Pro!</h3>
+
+                    <img src="<?php echo Holler_Box_URL . 'assets/img/fomo-small.png'; ?>" class="hwp-upsell-img" />
+
+                    <p>Get advanced settings, more popups, and FOMO sale notifications with Pro.</p>
+
                     <ul>
-                    <li>More display settings like taxonomy and post type</li>
-                    <li>Header banner option</li>
-                    <li>Bigger popout option</li>
                     <li>EDD and WooCommerce integration</li>
-                    <li>Exit detection, link activation</li>
-                    <li>Priority support</li>
+                    <li>Content upgrade popups</li>
+                    <li>CPT and taxonomy settings</li>
                     <li>Lots more...</li>
                     </ul>
+                    
                     <a href="https://hollerwp.com/pro?utm_source=settings_page&utm_medium=link&utm_campaign=hwp_settings" class="button button-primary">View features &amp; pricing</a>
 
                     <?php endif; ?>

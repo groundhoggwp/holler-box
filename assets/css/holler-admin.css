@@ -61,12 +61,24 @@ span.mc-description {
 	padding: 15px;
 }
 
+#hwp-upgrade-box ul {
+	list-style-type: disc;
+	margin-left: 20px;
+}
+
 #hwp-upgrade-box .hwp-content {
 	padding: 0 15px 10px 15px;
 }
 
 #hwp-upgrade-box hr {
 	margin: 15px 0;
+}
+
+img.hwp-upsell-img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	width: auto;
 }
 
 .big-icon-right {
