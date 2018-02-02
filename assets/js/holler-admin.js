@@ -10,13 +10,14 @@
     holler.toggleDatepicker();
     holler.emailCheckbox();
     holler.toggleEmailForm();
+    holler.toggleTimeAgo();
 
     $('.hwp-datepicker').datepicker({
       dateFormat : 'mm/dd/yy'
     });
 
     $('.hwp-colors').wpColorPicker();
-    
+
   }
 
   holler.listeners = function() {
@@ -48,9 +49,10 @@
     .on('change', 'select[name=email_provider]', holler.toggleEmailForm )
     .on('keyup', '#content', holler.updatePreviewContent )
     .on('focus', 'input#scroll_delay', function() {
-      $('input[name=display_when][value=delay]').prop('checked', 'checked'); 
+      $('input[name=display_when][value=delay]').prop('checked', 'checked');
     })
     .on('click', '#hwp-upload-btn', holler.mediaUpload )
+    .on('change', 'select[name=fomo_integration]', holler.toggleTimeAgo )
 
     $('#show_on_pages').suggest( window.ajaxurl + "?action=hwp_ajax_page_search", {multiple:true, multipleSep: ","});
 
@@ -332,6 +334,25 @@
       $('#hwp-until-datepicker').show();
     } else {
       $('#hwp-until-datepicker').hide();
+    }
+
+  }
+
+  holler.toggleTimeAgo = function() {
+
+    var fomoIntegration = $('select[name=fomo_integration]').val();
+
+    var timeAgoOptions = $('#fomo-time_ago-settings');
+
+    switch( fomoIntegration ) {
+      case 'edd':
+        timeAgoOptions.fadeIn();
+        break;
+      case 'woo':
+        timeAgoOptions.fadeIn();
+        break;
+      default:
+        timeAgoOptions.hide();
     }
 
   }
