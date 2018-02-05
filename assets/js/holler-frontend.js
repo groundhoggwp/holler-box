@@ -1073,8 +1073,10 @@
       .done(function(data) {
         // console.log(data);
 
-        if( !data.data )
+        if( !data.data ) {
+          holler.setCookie( 'hwp_fomo', 1, 1 );
           return;
+        }
 
         // box content
         $('#hwp-' + id + ' .hwp-first-row').html( data.data );
