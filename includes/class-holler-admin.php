@@ -223,7 +223,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                     <hr>
 
-                    <h3>Get Holler Box Pro!</h3>
+                    <h3>Get 10% off the Holler Box Pro Bundle!</h3>
 
                     <img src="<?php echo Holler_Box_URL . 'assets/img/fomo-small.png'; ?>" class="hwp-upsell-img" />
 
@@ -235,6 +235,9 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <li>CPT and taxonomy settings</li>
                     <li>Lots more...</li>
                     </ul>
+
+                    <p><strong>Discount code: 10OFFBUNDLE</strong><br><small>*Only applies to Pro Bundle</small></p>
+
                     
                     <a href="https://hollerwp.com/pro?utm_source=settings_page&utm_medium=link&utm_campaign=hwp_settings" class="button button-primary">View features &amp; pricing</a>
 
