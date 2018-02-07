@@ -160,7 +160,8 @@ Make sure your email form does not have a required field that is not displayed. 
 
 = 1.4.0 =
 
-* Feature: support multiple popups with FOMO add-on
+* Fix display in Internet Explorer
+* Support multiple popups and time ago settings with FOMO add-on
 
 = 1.3.0 =
 
