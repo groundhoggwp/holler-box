@@ -1077,7 +1077,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
             
             if ( $old_status === 'new' && $new_status === 'auto-draft' && $post->post_type === 'hollerbox' ) {
 
-                $item_type = get_post_meta( $post->ID, 'item_type' );
+                $item_type = get_post_meta( $post->ID, 'hwp_type' );
 
                 // if we already have a setting, bail
                 if( !empty( $item_type ) )

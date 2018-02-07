@@ -425,8 +425,6 @@
   }
 
   holler.transitionOut = function(item) {
-
-    console.log('transition out ', item)
     
     $(item).addClass('hwp-transition-out').removeClass('hwp-show');
 
@@ -719,7 +717,7 @@
       })
       .done(function(msg) {
 
-        console.log(msg)
+        // console.log(msg)
 
         if( msg.success == true ) {
 
@@ -808,7 +806,7 @@
       })
       .done(function(msg) {
 
-        console.log(msg)
+        // console.log(msg)
 
         // reset to defaults
         holler.showConfirmation( id );
@@ -1022,8 +1020,6 @@
 
   holler.fomoDisplayTime = function( displayTime ) {
 
-    console.log('display time ' + displayTime)
-
     return new Promise(
 
       function( resolve ) {
@@ -1056,7 +1052,7 @@
 
     int = holler.getCookie( 'hwp_fomo' );
 
-    if( int ) {
+    if( int && int > 0 ) {
       int = parseInt( int ) + 1;
     } else {
       int = 1;
@@ -1074,7 +1070,7 @@
         // console.log(data);
 
         if( !data.data ) {
-          holler.setCookie( 'hwp_fomo', 1, 1 );
+          holler.setCookie( 'hwp_fomo', 0, 1 );
           return;
         }
 
