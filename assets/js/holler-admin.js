@@ -107,6 +107,8 @@
     var name = $('#hwp-name-fields');
     var sendBtn = $('#send-btn-color');
     var fomoSettings = $('#fomo-settings');
+    var editor = $('#postdivrich');
+    var disappear = $('#hwp-disappear');
 
     switch( val ) {
       case 'holler-banner':
@@ -121,6 +123,8 @@
         name.hide();
         sendBtn.show();
         fomoSettings.hide();
+        editor.fadeIn();
+        disappear.fadeIn();
         break;
       case 'footer-bar':
         popChat.hide();
@@ -134,6 +138,8 @@
         name.hide();
         sendBtn.show();
         fomoSettings.hide();
+        editor.fadeIn();
+        disappear.fadeIn();
         break;
       case 'hwp-popup':
         templates.fadeIn();
@@ -147,6 +153,8 @@
         pOptions.fadeIn();
         sendBtn.show();
         fomoSettings.hide();
+        editor.fadeIn();
+        disappear.fadeIn();
         break;
       case 'popout':
         popMeta.fadeIn();
@@ -158,6 +166,8 @@
         name.hide();
         sendBtn.show();
         fomoSettings.hide();
+        editor.fadeIn();
+        disappear.fadeIn();
         break;
       case 'fomo':
         fomoSettings.fadeIn();
@@ -170,6 +180,8 @@
         name.hide();
         sendBtn.hide();
         hideBtn.hide();
+        editor.hide();
+        disappear.hide();
         break;
       default:
         popChat.fadeIn();
@@ -183,6 +195,8 @@
         name.hide();
         sendBtn.show();
         fomoSettings.hide();
+        editor.fadeIn();
+        disappear.fadeIn();
     }
   }
 

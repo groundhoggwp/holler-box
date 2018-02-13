@@ -71,6 +71,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             add_filter('page_row_actions', array( $this, 'row_actions' ), 10, 2 );
 
+            add_action( 'edit_form_after_title', array( $this, 'type_settings' ) );
+
         }
 
         /**
@@ -428,6 +430,44 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
         }
 
+        public function type_settings() {
+
+            global $post;
+            ?>
+            
+            <div class="postbox" style="margin-top:15px">
+                <div class="inside">
+
+                    <h4>
+                        <label for="type"><?php _e( 'Choose a Holler Box Type' ); ?></label>
+                    </h4>
+                    <p>
+                        <label class="hwp-radio-withimage">
+                            <span class="text">Notification Box</span>
+                            <img src="<?php echo Holler_Box_URL . 'assets/img/bottom-right-icon.png'; ?>" class="hwp-radio-image" />
+                            <input type="radio" name="hwp_type" value="notification" <?php checked( "notification", get_post_meta( $post->ID, 'hwp_type', true ) ); ?> />
+                        </label>
+
+                        <label class="hwp-radio-withimage">
+                            <span class="text">Popup</span>
+                            <img src="<?php echo Holler_Box_URL . 'assets/img/popup-icon.png'; ?>" class="hwp-radio-image" />
+                            <input type="radio" name="hwp_type" value="hwp-popup" <?php checked( "hwp-popup", get_post_meta( $post->ID, 'hwp_type', 1 ) ); ?> />
+                        </label>
+
+                        <label class="hwp-radio-withimage">
+                            <span class="text">Faux Chat</span>
+                            <img src="<?php echo Holler_Box_URL . 'assets/img/chat-icon.png'; ?>" class="hwp-radio-image" />
+                            <input type="radio" name="hwp_type" value="chat" <?php checked( "chat", get_post_meta( $post->ID, 'hwp_type', true ) ); ?> />
+                        </label>
+
+                        <?php do_action('hwp_type_settings', $post->ID); ?>
+                    </p>
+                </div>
+            </div>
+
+            <?php
+        }
+
         /**
          * Display upsell text if license is missing
          *
@@ -491,30 +531,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             <?php wp_nonce_field( basename( __FILE__ ), 'hollerbox_meta_box_nonce' ); ?>
 
-            <h4>
-                <label for="type"><?php _e( 'Choose a Holler Box Type' ); ?></label>
-            </h4>
-            <p>
-                <label class="hwp-radio-withimage">
-                    <span class="text">Notification Box</span>
-                    <img src="<?php echo Holler_Box_URL . 'assets/img/bottom-right-icon.png'; ?>" class="hwp-radio-image" />
-                    <input type="radio" name="hwp_type" value="notification" <?php checked( "notification", get_post_meta( $post->ID, 'hwp_type', true ) ); ?> />
-                </label>
-
-                <label class="hwp-radio-withimage">
-                    <span class="text">Popup</span>
-                    <img src="<?php echo Holler_Box_URL . 'assets/img/popup-icon.png'; ?>" class="hwp-radio-image" />
-                    <input type="radio" name="hwp_type" value="hwp-popup" <?php checked( "hwp-popup", get_post_meta( $post->ID, 'hwp_type', 1 ) ); ?> />
-                </label>
-
-                <label class="hwp-radio-withimage">
-                    <span class="text">Faux Chat</span>
-                    <img src="<?php echo Holler_Box_URL . 'assets/img/chat-icon.png'; ?>" class="hwp-radio-image" />
-                    <input type="radio" name="hwp_type" value="chat" <?php checked( "chat", get_post_meta( $post->ID, 'hwp_type', true ) ); ?> />
-                </label>
-
-                <?php do_action('hwp_type_settings', $post->ID); ?>
-            </p>
+            
 
             <div class="hwp-section" id="position-settings">
 
@@ -993,7 +1010,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 </div>
             </div>
 
-            <div class="hwp-section">
+            <div class="hwp-section" id="hwp-disappear">
 
                 <p>
                     <label for="hide_after"><?php _e( 'After it displays, when should it disappear?', 'holler-box' ); ?></label>
