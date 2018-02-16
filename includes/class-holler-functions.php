@@ -71,14 +71,17 @@ if( !class_exists( 'Holler_Functions' ) ) {
          */
         public function scripts_styles( $hook ) {
 
-            // Use minified libraries if SCRIPT_DEBUG is turned off
-            $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+            if( ! empty( self::$active ) ) {
 
-            wp_enqueue_script( 'holler-js', Holler_Box_URL . 'assets/js/holler-frontend' . $suffix . '.js', array( 'jquery' ), Holler_Box_VER, true );
-            wp_enqueue_style( 'holler-css', Holler_Box_URL . 'assets/css/holler-frontend' . $suffix . '.css', null, Holler_Box_VER );
+                // Use minified libraries if SCRIPT_DEBUG is turned off
+                $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 
-            wp_localize_script( 'holler-js', 'hollerVars', $this->get_localized_vars()
-            );
+                wp_enqueue_script( 'holler-js', Holler_Box_URL . 'assets/js/holler-frontend' . $suffix . '.js', array( 'jquery' ), Holler_Box_VER, true );
+                wp_enqueue_style( 'holler-css', Holler_Box_URL . 'assets/css/holler-frontend' . $suffix . '.css', null, Holler_Box_VER );
+
+                wp_localize_script( 'holler-js', 'hollerVars', $this->get_localized_vars() );
+
+            }
 
         }
 
