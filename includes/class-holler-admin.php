@@ -433,6 +433,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
         public function type_settings() {
 
             global $post;
+
+            if( $post->post_type != 'hollerbox' )
+                return;
+            
             ?>
             
             <div class="postbox" style="margin-top:15px">
