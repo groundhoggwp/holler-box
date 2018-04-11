@@ -266,6 +266,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <input id="hwp_ac_url" name="hwp_ac_url" value="<?php echo esc_html( get_option( 'hwp_ac_url' ) ); ?>" placeholder="Active Campaign URL" type="text" size="50" /><br/>
 
                 <input id="hwp_ac_api_key" name="hwp_ac_api_key" value="<?php echo esc_html( get_option( 'hwp_ac_api_key' ) ); ?>" placeholder="Active Campaign API key" type="password" size="50" /><br/>
+				
+
 
                 <p><?php _e('If you are using MailChimp, enter your API key. It can be found under Account -> Extras -> API Keys.', 'holler-box'); ?></p>
                 
@@ -289,7 +291,70 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             </form>
 
+			
+<!-- Start Zoho Campaign --> 
+<?php 
+ if( isset($_POST['zc_domain_url'])) {
+    update_option('zc_domain_url', $_POST['zc_domain_url']);
+
+update_option('zc4wp_a_apikey', $_POST['zc4wp_a_apikey']);
+    }
+
+$dbKey = get_option('zc4wp_a_apikey');
+$zc_domain_url = get_option('zc_domain_url');
+//$zc_domain_url = 'https://campaigns.zoho.com';
+
+?>
+
+<script type="text/javascript">
+var zc_domain_url = "<?php echo get_option('zc_domain_url'); ?>";
+//zc_pluginDir = "<?php echo plugins_url("",__FILE__); ?>";
+zc_pluginDir = "<?php echo plugins_url('holler-box'); ?>";
+const zc_on_load_api_val = "<?php if($dbKey != '') { echo $dbKey['api_key']; } else { echo ''; } ?>";
+const zc_on_load_account_id = "<?php if($dbKey != '') {  echo $dbKey['accountId']; } else { echo ''; } ?>";
+</script>
+ <form action="" method="post" id="api_key_form" autocomplete="off">			
+ <h3><?php _e('Zoho Campaigns Account Details', 'holler-box'); ?></h3>
+ 
+
+				
+				 <p><?php _e('If you are using Zoho Campaign, enter your zoho email and  API key. <a class="zcsmallink" href="https://www.zoho.com/campaigns/help/api/authentication-token.html#API_Auth_Token" id="help_link" target="_blank">Learn how to generate the API key.</a>', 'holler-box'); ?></p>
+				
+				<input type="text" class="zcctmzfldpan_1" onkeyup="if (event.keyCode == 13) { zc_accountVerfication();}else{zc_emailIdValidator();}" id="zc_emailId" name="zc4wp_a_apikey[emailId]" size="50" autocomplete="on" onfocus="zc_fieldFocused('1');" placeholder="example@gmail.com" value="<?php if($dbKey != ''){echo  $dbKey['emailId'];}else{echo "";}?>" onblur="zc_emailIdValidator();">&nbsp;
+                                        <span id="zc_email_error">
+                                            <img width="20" height="20" src="<?php echo plugins_url('assets/images/zc_success.png',__FILE__); ?>" align="absmiddle" style="display:none;" />
+                                        </span><br/>
+
+               <input type="text" class="zcctmzfldpan_1" onkeyup="if (event.keyCode == 13) { zc_accountVerfication();}else{zc_apiKeyValidator();}" id="zc_api_key" name="zc4wp_a_apikey[api_key]" value="<?php if($dbKey != ''){echo  $dbKey['api_key'];}else{echo "";}?>" size="50" autocomplete="on" onfocus="zc_fieldFocused('0');" placeholder="Api Key" onblur="zc_apiKeyValidator();"> &nbsp;
+                                        <span id="zc_api_key_error">
+                                            <img width="20" height="20" src="<?php echo plugins_url('assets/images/zc_success.png',__FILE__); ?>" align="absmiddle" style="display:none;" />
+                                        </span><br/>
+										
+				<input type="text" name="zc_domain_url"  size="50" id="zc_domain_url" value ="<?php if($zc_domain_url != ''){echo  $zc_domain_url; }else{echo "https://campaigns.zoho.com";}?>" />
+			   
+			   <input type="hidden" name="zc4wp_a_apikey[ageIndicator]" id="ageIndicator" value="new">
+				<input type="hidden" name="zc4wp_a_apikey[accountId]" id="accountId" value="<?php if($dbKey != ''){echo  $dbKey['accountId'];}else{echo "-1";}?>">
+				<input type="hidden" name="zc4wp_a_apikey[orgName]" id="orgName" value="<?php if($dbKey != ''){echo  $dbKey['orgName'];}else{echo "-1";}?>">
+				<input type="hidden" name="zc4wp_a_apikey[active]" id="active" value="<?php if($dbKey != ''){echo  $dbKey['active'];}else{echo "-1";}?>">
+				<input type="hidden" name="zc4wp_a_apikey[emailId]" id="emailId" value="<?php if($dbKey != ''){echo  $dbKey['emailId'];}else{echo "-1";}?>">
+				<input type="hidden" name="zc4wp_a_apikey[integratedDate]" id="integratedDate" value="<?php if($dbKey != ''){echo  $dbKey['integratedDate'];}else{echo "-1";}?>">
+				
+				
+				 <div class="zcmt20"><br/>
+					<div id="save_account" onclick="return zc_accountVerfication('1')" class="button button-primary" style="box-shadow:none;margin-right:15px;">
+						Integrate
+					</div>
+					<input type="button" value="Cancel" id="cancel_account_changes" onclick="zc_cancelChanges()" style="display:none;" class="button">
+				</div>
+										
+</form>		
+		
+<!-- End Zoho Campaign -->
+
+
             </div>
+			
+
             <?php
             
         }
@@ -675,6 +740,10 @@ if( !class_exists( 'Holler_Admin' ) ) {
                             <?php _e( 'Custom', 'holler-box' ); ?>
                         </option>
 
+						<option value="zc" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "zc"); ?> >
+                            <?php _e( 'Zoho Campaigns', 'holler-box' ); ?>
+                        </option>
+
                     </select>
 
                     <?php do_action( 'hwp_below_provider_select', $post->ID ); ?>
@@ -794,7 +863,32 @@ if( !class_exists( 'Holler_Admin' ) ) {
                             <textarea class="hwp-textarea" name="custom_email_form" id="custom_email_form"><?php echo esc_html( get_post_meta( $post->ID, 'custom_email_form', true ) ); ?></textarea>
                         </p>
                     </div>
+					
+					<!-- Zoho Campaigns Start -->
+					<div id="zoho-campaigns">
 
+						<?php _e( 'Zoho Campaigns List *required', 'holler-box' ); ?>
+						<?php 
+						$vall = get_post_meta( $post->ID, 'zc_list_id', true );
+						$dbKey = get_option('zc4wp_a_apikey');
+						?>
+
+						<script type="text/javascript">
+						var zc_domain_url = "<?php echo get_option('zc_domain_url'); ?>";
+						//zc_pluginDir = "<?php echo plugins_url("",__FILE__); ?>";
+zc_pluginDir = "<?php echo plugins_url('holler-box'); ?>";
+						//const zc_on_load_api_val = "<?php if($dbKey != '') { echo $dbKey['api_key']; } else { echo ''; } ?>";
+						const zc_on_load_apikey_val = "<?php if($dbKey != '') { echo $dbKey['api_key']; } else { echo ''; } ?>";
+
+						</script>
+									<select required ="required" rel="<?php echo $vall; ?>" name="zc_list_id" id="zoho_c"></select>
+
+
+										<?php do_action( 'hwp_zc_settings', $post->ID );?>
+
+                        
+                    </div>
+					<!-- Zoho Campaigns End -->
                     <div id="default-email-options">
 
                         <div id="hwp-name-fields">
@@ -1179,6 +1273,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 'custom_email_form',
                 'ck_id',
                 'mc_list_id',
+                'zc_list_id',
                 'ac_list_id',
                 'mailpoet_list_id',
                 'hwp_type',

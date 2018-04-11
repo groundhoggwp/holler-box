@@ -571,7 +571,7 @@
 
   // User submitted email, send to server
   holler.emailSubmitted = function( id ) {
-
+alert('1321');
     var email = $('#hwp-' + id + ' .hwp-email-input').val();
 
     if( !email ) {
@@ -592,6 +592,8 @@
     // honeypot
     if( $( '#hwp-' + id + ' input[name=hwp_hp]').val() != "" )
       return;
+
+alert(window.hollerVars[id].emailProvider);
 
     // do different things for email providers
     if( window.hollerVars[id].emailProvider === 'ck' ) {
@@ -696,6 +698,7 @@
       });
 
   }
+
 
   // Submit to Active Campaign
   holler.acSubscribe = function( email, id ) {
@@ -873,7 +876,7 @@
   holler.conversion = function( id ) {
 
     var params = { action: 'hwp_track_event', nonce: window.hollerVars.hwpNonce, id: id };
-
+alert('kgh');
     // store interaction data
     $.ajax({
       method: "GET",
@@ -1099,6 +1102,7 @@
   $(window).load(function(){
     holler.init();
   })
+
 
   window.hollerbox = holler;
 

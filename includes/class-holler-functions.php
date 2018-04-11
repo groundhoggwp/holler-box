@@ -546,8 +546,10 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $ac_list_id = esc_attr( get_post_meta( $id, 'ac_list_id', 1 ) );
 
-            $drip_tags = esc_html( get_post_meta( $id, 'drip_tags', 1 ) );
+            $drip_tags = esc_html( get_post_meta( $id, 'drip_tags', 1 ) ); 
 
+$dbKey = get_option('zc4wp_a_apikey');
+			$zc_domain_url = get_option('zc_domain_url'); 
             $submit_text = get_post_meta( $id, 'submit_text', 1 );
             $btn_text = ( !empty( $submit_text ) ? $submit_text : 'Send' );
 
@@ -572,6 +574,9 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     echo '<input type="hidden" class="ac-list-id" value="' . $ac_list_id . '" />';
                 } elseif( $provider === 'drip' && !empty( $drip_tags ) ) {
                     echo '<input type="hidden" class="drip-tags" value="' . $drip_tags . '" />';
+                } elseif( $provider === 'zc' && !empty( $zc_domain_url ) ) {
+                    echo '<input type="hidden" class="zc-list-url" value="' . $zc_domain_url . '" />';
+                    echo '<input type="hidden" class="zc-list-key" value="' . $dbKey['api_key'] . '" />';
                 }
                 ?>
                 <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>
