@@ -322,12 +322,12 @@ const zc_on_load_account_id = "<?php if($dbKey != '') {  echo $dbKey['accountId'
 				
 				<input type="text" class="zcctmzfldpan_1" onkeyup="if (event.keyCode == 13) { zc_accountVerfication();}else{zc_emailIdValidator();}" id="zc_emailId" name="zc4wp_a_apikey[emailId]" size="50" autocomplete="on" onfocus="zc_fieldFocused('1');" placeholder="example@gmail.com" value="<?php if($dbKey != ''){echo  $dbKey['emailId'];}else{echo "";}?>" onblur="zc_emailIdValidator();">&nbsp;
                                         <span id="zc_email_error">
-                                            <img width="20" height="20" src="<?php echo plugins_url('assets/images/zc_success.png',__FILE__); ?>" align="absmiddle" style="display:none;" />
+                                            <img width="20" height="20" src="<?php echo plugins_url('assets/img/zc_success.png',__FILE__); ?>" align="absmiddle" style="display:none;" />
                                         </span><br/>
 
                <input type="text" class="zcctmzfldpan_1" onkeyup="if (event.keyCode == 13) { zc_accountVerfication();}else{zc_apiKeyValidator();}" id="zc_api_key" name="zc4wp_a_apikey[api_key]" value="<?php if($dbKey != ''){echo  $dbKey['api_key'];}else{echo "";}?>" size="50" autocomplete="on" onfocus="zc_fieldFocused('0');" placeholder="Api Key" onblur="zc_apiKeyValidator();"> &nbsp;
                                         <span id="zc_api_key_error">
-                                            <img width="20" height="20" src="<?php echo plugins_url('assets/images/zc_success.png',__FILE__); ?>" align="absmiddle" style="display:none;" />
+                                            <img width="20" height="20" src="<?php echo plugins_url('assets/img/zc_success.png',__FILE__); ?>" align="absmiddle" style="display:none;" />
                                         </span><br/>
 										
 				<input type="text" name="zc_domain_url"  size="50" id="zc_domain_url" value ="<?php if($zc_domain_url != ''){echo  $zc_domain_url; }else{echo "https://campaigns.zoho.com";}?>" />

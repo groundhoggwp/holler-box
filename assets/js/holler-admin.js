@@ -736,8 +736,8 @@ var zc_domain_url = jQuery("#zc_domain_url").val();
     jQuery("#save_account").attr("disabled", "disabled");
     jQuery("#cancel_account_changes").attr("disabled","disabled");
 	var api_url = zc_domain_url + '/api/checkuserispresentincampaign?authtoken=' + api_key_val + '&scope=CampaignsAPI&resfmt=XML&apikeyzuid=true';
-    jQuery("#zc_api_key_error").html('<img width="20" height="20" align="absmiddle" src="' + zc_pluginDir + '/assets/images/uploadImg.gif" />&nbsp;Validating API Key');
-    jQuery("#zc_email_error").html('<img width="20" height="20" align="absmiddle" src="' + zc_pluginDir + '/assets/images/uploadImg.gif" />&nbsp;Validating email id');
+    jQuery("#zc_api_key_error").html('<img width="20" height="20" align="absmiddle" src="' + zc_pluginDir + '/assets/img/loading.gif" />&nbsp;Validating API Key');
+    jQuery("#zc_email_error").html('<img width="20" height="20" align="absmiddle" src="' + zc_pluginDir + '/assets/img/loading.gif" />&nbsp;Validating email id');
     jQuery.ajax({
         type: 'POST',
         url: api_url,
@@ -752,7 +752,7 @@ var zc_domain_url = jQuery("#zc_domain_url").val();
             accountStatus = (accountStatus=="true")?1:0;
             if(emailId != jQuery("#zc_emailId").val().trim())   {
                 jQuery("#zc_emailId").css({"border": "2px solid #e03131"});
-                jQuery("#zc_email_error").html("<img width='20' height='20' src='" + zc_pluginDir + "/assets/images/zc_fail.png' align='absmiddle'/>&nbsp;This is not a valid email id.");
+                jQuery("#zc_email_error").html("<img width='20' height='20' src='" + zc_pluginDir + "/assets/img/zc_fail.png' align='absmiddle'/>&nbsp;This is not a valid email id.");
                 jQuery("#zc_email_error").css({
                     "color": "#e03131",
                     "font-size": "100%"
@@ -798,9 +798,9 @@ var zc_domain_url = jQuery("#zc_domain_url").val();
                     jQuery("#integratedDate").val(dd+"/"+mm+"/"+yyyy);
                 }
                 jQuery("#zc_api_key_error").css({"color":"#55b667"});
-                jQuery("#zc_api_key_error").html('<img width="20" height="20" src="' + zc_pluginDir + '/assets/images/zc_success.png" align="absmiddle" />&nbsp;Verified');
+                jQuery("#zc_api_key_error").html('<img width="20" height="20" src="' + zc_pluginDir + '/assets/img/zc_success.png" align="absmiddle" />&nbsp;Verified');
                 jQuery("#zc_email_error").css({"color":"#55b667"});
-                jQuery("#zc_email_error").html('<img width="20" height="20" src="' + zc_pluginDir + '/assets/images/zc_success.png" align="absmiddle" />&nbsp;Verified');
+                jQuery("#zc_email_error").html('<img width="20" height="20" src="' + zc_pluginDir + '/assets/img/zc_success.png" align="absmiddle" />&nbsp;Verified');
                 jQuery("#save_account").html('Saved');
                 jQuery("#cancel_account_changes").attr("disabled","disabled");
                 jQuery("#next_page_span").css("display","none");
@@ -826,7 +826,7 @@ var zc_domain_url = jQuery("#zc_domain_url").val();
                     alert(message);
                 }  
                 jQuery("#zc_api_key").css({"border": "2px solid #e03131"});
-                jQuery("#zc_api_key_error").html("<img width='20' height='20' src='" + zc_pluginDir + "/assets/images/zc_fail.png' align='absmiddle'/>&nbsp;Invalid API key.");
+                jQuery("#zc_api_key_error").html("<img width='20' height='20' src='" + zc_pluginDir + "/assets/img/zc_fail.png' align='absmiddle'/>&nbsp;Invalid API key.");
                 jQuery("#zc_email_error").html("");
                 jQuery("#zc_api_key_error").css({
                     "color": "#e03131",
@@ -856,7 +856,7 @@ var zc_domain_url = jQuery("#zc_domain_url").val();
                     accountStatus = (accountStatus=="true")?1:0;
                     if(emailId != jQuery("#zc_emailId").val().trim())   {
                         jQuery("#zc_emailId").css({"border": "2px solid #e03131"});
-                        jQuery("#zc_email_error").html("<img width='20' height='20' src='" + zc_pluginDir + "/assets/images/zc_fail.png' align='absmiddle'/>&nbsp;This is not a valid email id.");
+                        jQuery("#zc_email_error").html("<img width='20' height='20' src='" + zc_pluginDir + "/assets/img/zc_fail.png' align='absmiddle'/>&nbsp;This is not a valid email id.");
                         jQuery("#zc_email_error").css({
                             "color": "#e03131",
                             "font-size": "100%"
@@ -902,10 +902,10 @@ var zc_domain_url = jQuery("#zc_domain_url").val();
                             jQuery("#integratedDate").val(dd+"/"+mm+"/"+yyyy);
                         }
                         jQuery("#zc_api_key_error").css({"color":"#55b667"});
-                        jQuery("#zc_api_key_error").html('<img width="20" height="20" src="' + zc_pluginDir + '/assets/images/zc_success.png" align="absmiddle" />&nbsp;Verified');
+                        jQuery("#zc_api_key_error").html('<img width="20" height="20" src="' + zc_pluginDir + '/assets/img/zc_success.png" align="absmiddle" />&nbsp;Verified');
                         jQuery("#zc_email_error").css({"color":"#55b667"});
-                        jQuery("#zc_email_error").html('<img width="20" height="20" src="' + zc_pluginDir + '/assets/images/zc_success.png" align="absmiddle" />&nbsp;Verified');
-                        jQuery("#save_account").html('Saving..&nbsp;<img width="20" height="20" src="' + zc_pluginDir + '/assets/images/uploadImg.gif" align="absmiddle" />');
+                        jQuery("#zc_email_error").html('<img width="20" height="20" src="' + zc_pluginDir + '/assets/img/zc_success.png" align="absmiddle" />&nbsp;Verified');
+                        jQuery("#save_account").html('Saving..&nbsp;<img width="20" height="20" src="' + zc_pluginDir + '/assets/img/loading.gif" align="absmiddle" />');
                         jQuery("#cancel_account_changes").attr("disabled","disabled");
                         jQuery("#next_page_span").css("display","none");
                         jQuery("#hidden_text").val("VALID");
@@ -926,7 +926,7 @@ var zc_domain_url = jQuery("#zc_domain_url").val();
                             alert(message);
                         }  
                         jQuery("#zc_api_key").css({"border": "2px solid #e03131"});
-                        jQuery("#zc_api_key_error").html("<img width='20' height='20' src='" + zc_pluginDir + "/assets/images/zc_fail.png' align='absmiddle'/>&nbsp;Invalid API key.");
+                        jQuery("#zc_api_key_error").html("<img width='20' height='20' src='" + zc_pluginDir + "/assets/img/zc_fail.png' align='absmiddle'/>&nbsp;Invalid API key.");
                         jQuery("#zc_email_error").html("");
                         jQuery("#zc_api_key_error").css({
                             "color": "#e03131",
@@ -946,7 +946,7 @@ var zc_domain_url = jQuery("#zc_domain_url").val();
                     jQuery("#zc_api_key").css({
                         "border": "2px solid #e03131"
                     });
-                    jQuery("#zc_api_key_error").html("<img width='20' height='20' src='" + zc_pluginDir + "/assets/images/zc_fail.png' align='absmiddle'/>&nbsp;Invalid API key.");
+                    jQuery("#zc_api_key_error").html("<img width='20' height='20' src='" + zc_pluginDir + "/assets/img/zc_fail.png' align='absmiddle'/>&nbsp;Invalid API key.");
                     jQuery("#zc_email_error").html("");
                     jQuery("#zc_api_key_error").css({
                         "color": "#e03131",
