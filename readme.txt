@@ -3,8 +3,8 @@
 Contributors: scottopolis
 Tags: popup, optin, lead generation, email opt-in, pop up, fomo
 Requires at least: 4.5
-Tested up to: 4.9.4
-Stable tag: 1.4.1
+Tested up to: 4.9.8
+Stable tag: 1.4.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -157,6 +157,10 @@ Make sure your email form does not have a required field that is not displayed. 
 7. Conversion Analytics
 
 == Changelog ==
+
+= 1.4.2 =
+
+* Update for WP 4.9.8
 
 = 1.4.1 =
 

@@ -63,7 +63,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             add_action( 'admin_init', array( $this, 'maybe_show_upgrade_link' ) );
 
-            add_action( 'hwp_popup_templates', array( $this, 'type_upsell' ), 99 );
+            add_action( 'hwp_type_settings', array( $this, 'type_upsell' ), 99 );
 
             add_action( 'admin_init', array( $this, 'update_meta' ) );
 
@@ -205,27 +205,25 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 
                 <div class="hwp-content">
 
-                    <h2>Get More Conversions</h2>
+                    <!-- <h2>Get Pro for 50% off</h2>
                     <span class="big-icon-right dashicons dashicons-chart-line"></span> 
                     <p>Click subscribe below to get free tips and tricks on how to convert more site visitors into customers. No spam, unsubscribe at any time.</p>
-                    <!-- Begin MailChimp Signup Form -->
+
                     <div id="hwp_embed_signup">
                     <form action="//hollerwp.us16.list-manage.com/subscribe/post?u=d9d0193288fd8270922c02b01&amp;id=590bf0a85f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
                         <div id="mc_embed_signup_scroll">
                         
                         <input type="email" value="<?php echo get_option('admin_email'); ?>" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-                        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
+ 
                         <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_d9d0193288fd8270922c02b01_590bf0a85f" tabindex="-1" value=""></div>
                         <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button button-primary"></div>
                         </div>
                     </form>
-                    </div>
+                    </div> -->
 
                     <?php if( !is_plugin_active('hollerbox-pro/holler-box-pro.php') && !is_plugin_active('hollerbox-sales/holler-box-sales.php') ) : ?>
 
-                    <hr>
-
-                    <h3>Get 10% off the Holler Box Pro Bundle!</h3>
+                    <h3>Get 50% off the Holler Box Pro Bundle!</h3>
 
                     <img src="<?php echo Holler_Box_URL . 'assets/img/fomo-small.png'; ?>" class="hwp-upsell-img" />
 
@@ -238,7 +236,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <li>Lots more...</li>
                     </ul>
 
-                    <p><strong>Discount code: 10OFFBUNDLE</strong><br><small>*Only applies to Pro Bundle</small></p>
+                    <p><strong>Discount code: HOLLER50</strong><br><small>*Only applies to Pro Bundle</small></p>
 
                     
                     <a href="https://hollerwp.com/pro?utm_source=settings_page&utm_medium=link&utm_campaign=hwp_settings" class="button button-primary">View features &amp; pricing</a>
@@ -485,7 +483,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 return;
 
             ?>
-            <p style="clear:both;"><small><a href="https://hollerwp.com/pro?utm_source=template_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999">Get more templates in Pro</a></small></p>
+            <p style="clear:both;"><small><a href="https://hollerwp.com/pro?utm_source=template_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999">Get banners, FOMO popups, and more with Pro</a></small></p>
             <?php
         }
 
