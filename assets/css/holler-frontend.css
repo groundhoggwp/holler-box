@@ -269,6 +269,10 @@
 	margin-bottom: 10px;
 }
 
+.popout input.hwp-name {
+	width: 100%;
+}
+
 .holler-box input#s {
 	margin: 10px 0;
 	width: 100%;

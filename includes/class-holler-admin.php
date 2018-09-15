@@ -227,7 +227,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
                     <img src="<?php echo Holler_Box_URL . 'assets/img/fomo-small.png'; ?>" class="hwp-upsell-img" />
 
-                    <p>Get advanced settings, more popups, and FOMO sale notifications with Pro.</p>
+                    <p>Get advanced settings, more popups, and sale notifications with Pro.</p>
 
                     <ul>
                     <li>EDD and WooCommerce integration</li>
@@ -483,7 +483,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 return;
 
             ?>
-            <p style="clear:both;"><small><a href="https://hollerwp.com/pro?utm_source=template_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999">Get banners, FOMO popups, and more with Pro</a></small></p>
+            <p style="clear:both;"><small><a href="https://hollerwp.com/pro?utm_source=template_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999">Get banners, sale notification popups, and more with Pro</a></small></p>
             <?php
         }
 

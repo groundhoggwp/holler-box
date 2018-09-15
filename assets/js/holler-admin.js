@@ -163,7 +163,7 @@
         avatar.fadeIn();
         templates.hide();
         pOptions.hide();
-        name.hide();
+        name.show();
         sendBtn.show();
         fomoSettings.hide();
         editor.fadeIn();

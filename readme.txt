@@ -1,7 +1,7 @@
 === Holler Box - Lead Generation and Popups for eCommerce ===
 
 Contributors: scottopolis
-Tags: popup, optin, lead generation, email opt-in, pop up, fomo
+Tags: popup, optin, lead generation, email opt-in, pop up
 Requires at least: 4.5
 Tested up to: 4.9.8
 Stable tag: 1.4.2
@@ -23,7 +23,7 @@ If one of these describes you…
 - I need a popup or content upgrade form to collect more emails.
 - I need a header banner or popup to promote my sale.
 - I have an event I want my customers to know about without being annoying.
-- I want to show that other people are buying to create FOMO.
+- I want to show that other people are buying to create FOMO (fear of missing out).
 - I need a popup plugin for my store that doesn’t suck.
 
 …Holler Box can help.
@@ -52,7 +52,7 @@ If one of these describes you…
 
 Here's a short list of features available only in Pro:
 
-- <a href="https://hollerwp.com/downloads/wordpress-fomo-popups/" target="_blank">FOMO popups</a> (Sale notification popups like - Scott just bought Holler Box Pro)
+- <a href="https://hollerwp.com/downloads/sale-notification-popup/" target="_blank">Sale notification popups</a> (Scott just bought Holler Box Pro)
 - Content upgrades
 - More popup designs
 - Advanced targeting filters
