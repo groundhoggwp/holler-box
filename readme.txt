@@ -4,7 +4,7 @@ Contributors: scottopolis
 Tags: popup, optin, lead generation, email opt-in, pop up
 Requires at least: 4.5
 Tested up to: 4.9.8
-Stable tag: 1.4.2
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -157,6 +157,13 @@ Make sure your email form does not have a required field that is not displayed. 
 7. Conversion Analytics
 
 == Changelog ==
+
+= 1.5.0 =
+
+* Allow name field in popout
+* Translate email error string
+* Fix top banner showing on all pages
+* Update deprecated jQuery load function
 
 = 1.4.2 =
 
