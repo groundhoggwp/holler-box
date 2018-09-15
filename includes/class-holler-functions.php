@@ -127,6 +127,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     'optinMsg' => get_post_meta($value, 'opt_in_message', 1),
                     'placeholder' => get_post_meta($value, 'opt_in_placeholder', 1),
                     'confirmMsg' => get_post_meta($value, 'opt_in_confirmation', 1),
+                    'emailErr' => __( 'Please enter a valid email address.', 'holler-box' ),
                     'display_when' => get_post_meta($value, 'display_when', 1),
                     'delay' => get_post_meta($value, 'scroll_delay', 1),
                     'showSettings' => get_post_meta($value, 'show_settings', 1),
