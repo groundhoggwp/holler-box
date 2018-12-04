@@ -196,6 +196,12 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 delete_option( 'hwp_powered_by' );
             }
 
+            if( isset( $_POST['hwp_disable_tracking'] ) ) {
+                update_option( 'hwp_disable_tracking', sanitize_text_field( $_POST['hwp_disable_tracking'] ) );
+            } elseif( !empty( $_POST ) && empty( $_POST['hwp_disable_tracking'] )  ) {
+                delete_option( 'hwp_disable_tracking' );
+            }
+
             ?>
             <div id="holler-wrap" class="wrap">          
 
@@ -204,22 +210,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
             <div id="hwp-upgrade-box" class="widgets-holder-wrap">
                 
                 <div class="hwp-content">
-
-                    <!-- <h2>Get Pro for 50% off</h2>
-                    <span class="big-icon-right dashicons dashicons-chart-line"></span> 
-                    <p>Click subscribe below to get free tips and tricks on how to convert more site visitors into customers. No spam, unsubscribe at any time.</p>
-
-                    <div id="hwp_embed_signup">
-                    <form action="//hollerwp.us16.list-manage.com/subscribe/post?u=d9d0193288fd8270922c02b01&amp;id=590bf0a85f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-                        <div id="mc_embed_signup_scroll">
-                        
-                        <input type="email" value="<?php echo get_option('admin_email'); ?>" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
- 
-                        <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_d9d0193288fd8270922c02b01_590bf0a85f" tabindex="-1" value=""></div>
-                        <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button button-primary"></div>
-                        </div>
-                    </form>
-                    </div> -->
 
                     <?php if( !is_plugin_active('hollerbox-pro/holler-box-pro.php') && !is_plugin_active('hollerbox-sales/holler-box-sales.php') ) : ?>
 
@@ -277,6 +267,11 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <h3><?php _e('Miscellaneous', 'holler-box'); ?></h3>
 
                 <p>
+                    <input type="checkbox" id="hwp_disable_tracking" name="hwp_disable_tracking" value="1" <?php checked('1', get_option( 'hwp_disable_tracking' ), true); ?> />
+                    <?php _e( 'Disable Tracking (High traffic sites should check this for better performance)', 'holler-box' ); ?>
+                </p>
+
+                <p>
                     <input type="checkbox" id="hwp_powered_by" name="hwp_powered_by" value="1" <?php checked('1', get_option( 'hwp_powered_by' ), true); ?> />
                     <?php _e( 'Hide attribution links', 'holler-box' ); ?>
                 </p>
@@ -301,11 +296,19 @@ if( !class_exists( 'Holler_Admin' ) ) {
          * @return      array
          */
         public function notification_columns( $columns ) {
+
             $date = $columns['date'];
             unset($columns['date']);
-            $columns["impressions"] = "Impressions";
-            $columns["conversions"] = "Conversions";
-            $columns["rate"] = "Percent";
+
+            if( !get_option('hwp_disable_tracking') ) {
+                $columns["impressions"] = "Impressions";
+                $columns["conversions"] = "Conversions";
+                $columns["rate"] = "Percent";
+            } else {
+                $columns["tracking_disabled"] = "Views (Disabled)";
+                $columns["conversions"] = "Conversions";
+            }
+            
             $columns["active"] = "Active";
             $columns['date'] = $date;
 
@@ -332,13 +335,22 @@ if( !class_exists( 'Holler_Admin' ) ) {
         public function custom_columns( $column, $post_id ) {
 
             $conversions = get_post_meta( $post_id, 'hwp_conversions', 1);
-            $views = get_post_meta( $post_id, 'hwp_views', 1);
 
-            if( empty( $conversions ) || empty( $views ) ) {
-                $rate = '0%';
+            if( get_option( 'hwp_disable_tracking' ) ) {
+
+                $views = $rate = '<small>Disabled</small>';
+
             } else {
-                $rate = intval( $conversions ) / intval( $views );
-                $rate = number_format( $rate, 3 ) * 100 . '%';
+
+                $views = get_post_meta( $post_id, 'hwp_views', 1);
+
+                if( empty( $conversions ) || empty( $views ) ) {
+                    $rate = '0%';
+                } else {
+                    $rate = intval( $conversions ) / intval( $views );
+                    $rate = number_format( $rate, 3 ) * 100 . '%';
+                }
+
             }
 
             switch ( $column ) {

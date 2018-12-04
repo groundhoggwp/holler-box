@@ -921,6 +921,11 @@
     var hideFor = ( options.hideForDays ? parseInt( options.hideForDays ) : 1 );
     holler.setCookie( 'hwp_' + id + '_shown', 'true', hideFor );
 
+    // don't track view if it's disabled
+    if( window.hollerVars.disable_tracking === '1' ) {
+      return;
+    }
+
     var params = { action: 'hwp_track_view', nonce: window.hollerVars.hwpNonce, id: id };
 
     // store interaction data
@@ -930,7 +935,7 @@
       data: params
       })
       .done(function(msg) {
-        //console.log(msg);
+        // console.log('track', msg);
       })
       .fail(function(err) {
         //console.log(err);

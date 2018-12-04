@@ -108,6 +108,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $array['isMobile'] = wp_is_mobile();
 
+            $array['disable_tracking'] = get_option('hwp_disable_tracking');
+
             // active notification IDs
             $array['active'] = self::$active;
 

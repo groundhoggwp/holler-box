@@ -467,16 +467,16 @@
 			"file": "assets/js/holler-frontend.js",
 			"settings":
 			{
-				"buffer_size": 28088,
+				"buffer_size": 27400,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
 		},
 		{
-			"file": "includes/class-holler-functions.php",
+			"file": "readme.txt",
 			"settings":
 			{
-				"buffer_size": 25516,
+				"buffer_size": 10100,
 				"encoding": "UTF-8",
 				"line_ending": "Unix"
 			}
@@ -595,10 +595,7 @@
 	"expanded_folders":
 	[
 		"/Users/scottopolis/Documents/Websites/Flywheel Local/app/public/wp-content/plugins/holler-box",
-		"/Users/scottopolis/Documents/Websites/Flywheel Local/app/public/wp-content/plugins/holler-box/assets",
-		"/Users/scottopolis/Documents/Websites/Flywheel Local/app/public/wp-content/plugins/holler-box/assets/css",
-		"/Users/scottopolis/Documents/Websites/Flywheel Local/app/public/wp-content/plugins/holler-box/assets/js",
-		"/Users/scottopolis/Documents/Websites/Flywheel Local/app/public/wp-content/plugins/holler-box/includes"
+		"/Users/scottopolis/Documents/Websites/Flywheel Local/app/public/wp-content/plugins/holler-box/assets"
 	],
 	"file_history":
 	[
@@ -733,7 +730,7 @@
 	],
 	"find":
 	{
-		"height": 46.0
+		"height": 36.0
 	},
 	"find_in_files":
 	{
@@ -778,15 +775,15 @@
 					"semi_transient": false,
 					"settings":
 					{
-						"buffer_size": 28088,
+						"buffer_size": 27400,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								21151,
-								21151
+								6229,
+								6229
 							]
 						],
 						"settings":
@@ -796,7 +793,7 @@
 							"translate_tabs_to_spaces": true
 						},
 						"translation.x": 0.0,
-						"translation.y": 17457.0,
+						"translation.y": 6594.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 1,
@@ -804,29 +801,27 @@
 				},
 				{
 					"buffer": 1,
-					"file": "includes/class-holler-functions.php",
+					"file": "readme.txt",
 					"semi_transient": true,
 					"settings":
 					{
-						"buffer_size": 25516,
+						"buffer_size": 10100,
 						"regions":
 						{
 						},
 						"selection":
 						[
 							[
-								2206,
-								2221
+								6791,
+								6753
 							]
 						],
 						"settings":
 						{
-							"syntax": "Packages/PHP/PHP.sublime-syntax",
-							"tab_size": 4,
-							"translate_tabs_to_spaces": true
+							"syntax": "Packages/Text/Plain text.tmLanguage"
 						},
 						"translation.x": 0.0,
-						"translation.y": 1934.0,
+						"translation.y": 5917.0,
 						"zoom_level": 1.0
 					},
 					"stack_index": 0,
@@ -837,7 +832,7 @@
 	],
 	"incremental_find":
 	{
-		"height": 34.0
+		"height": 36.0
 	},
 	"input":
 	{
@@ -882,7 +877,7 @@
 	"project": "holler-box.sublime-project",
 	"replace":
 	{
-		"height": 64.0
+		"height": 68.0
 	},
 	"save_all_on_build": true,
 	"select_file":
