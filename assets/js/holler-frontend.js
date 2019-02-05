@@ -555,7 +555,13 @@
     var email = $('#hwp-' + id + ' .hwp-email-input').val();
 
     if( !email ) {
-      alert( window.hollerVars.emailErr + ' err1' );
+      var msg;
+      if( window.hollerVars.emailErr ) {
+        msg = window.hollerVars.emailErr;
+      } else {
+        msg = 'Please enter your email.';
+      }
+      alert( msg + ' err1' );
       return;
     }
 
