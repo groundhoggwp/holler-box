@@ -108,6 +108,8 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $array['isMobile'] = wp_is_mobile();
 
+            $array['disable_tracking'] = get_option('hwp_disable_tracking');
+
             // active notification IDs
             $array['active'] = self::$active;
 
@@ -127,6 +129,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                     'optinMsg' => get_post_meta($value, 'opt_in_message', 1),
                     'placeholder' => get_post_meta($value, 'opt_in_placeholder', 1),
                     'confirmMsg' => get_post_meta($value, 'opt_in_confirmation', 1),
+                    'emailErr' => __( 'Please enter a valid email address.', 'holler-box' ),
                     'display_when' => get_post_meta($value, 'display_when', 1),
                     'delay' => get_post_meta($value, 'scroll_delay', 1),
                     'showSettings' => get_post_meta($value, 'show_settings', 1),
@@ -546,10 +549,11 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $ac_list_id = esc_attr( get_post_meta( $id, 'ac_list_id', 1 ) );
 
-            $drip_tags = esc_html( get_post_meta( $id, 'drip_tags', 1 ) ); 
-
-$dbKey = get_option('zc4wp_a_apikey');
-			$zc_domain_url = get_option('zc_domain_url'); 
+            $drip_tags = esc_html( get_post_meta( $id, 'drip_tags', 1 ) );
+			
+			$dbKey = get_option('zc4wp_a_apikey');
+			$zc_domain_url = get_option('zc_domain_url');
+			
             $submit_text = get_post_meta( $id, 'submit_text', 1 );
             $btn_text = ( !empty( $submit_text ) ? $submit_text : 'Send' );
 
@@ -574,7 +578,7 @@ $dbKey = get_option('zc4wp_a_apikey');
                     echo '<input type="hidden" class="ac-list-id" value="' . $ac_list_id . '" />';
                 } elseif( $provider === 'drip' && !empty( $drip_tags ) ) {
                     echo '<input type="hidden" class="drip-tags" value="' . $drip_tags . '" />';
-                } elseif( $provider === 'zc' && !empty( $zc_domain_url ) ) {
+                }elseif( $provider === 'zc' && !empty( $zc_domain_url ) ) {
                     echo '<input type="hidden" class="zc-list-url" value="' . $zc_domain_url . '" />';
                     echo '<input type="hidden" class="zc-list-key" value="' . $dbKey['api_key'] . '" />';
                 }
@@ -598,7 +602,9 @@ $dbKey = get_option('zc4wp_a_apikey');
          */
         public function name_row( $id ) {
 
-            if( get_post_meta( $id, 'dont_show_name', 1 ) === '1' || get_post_meta( $id, 'hwp_type', 1 ) != 'hwp-popup' )
+            $type = get_post_meta( $id, 'hwp_type', 1 );
+
+            if( get_post_meta( $id, 'dont_show_name', 1 ) === '1' || $type != 'hwp-popup' && $type != 'popout' )
                 return;
 
             ?>

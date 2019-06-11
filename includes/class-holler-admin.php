@@ -63,7 +63,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
 
             add_action( 'admin_init', array( $this, 'maybe_show_upgrade_link' ) );
 
-            add_action( 'hwp_popup_templates', array( $this, 'type_upsell' ), 99 );
+            add_action( 'hwp_type_settings', array( $this, 'type_upsell' ), 99 );
 
             add_action( 'admin_init', array( $this, 'update_meta' ) );
 
@@ -196,6 +196,12 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 delete_option( 'hwp_powered_by' );
             }
 
+            if( isset( $_POST['hwp_disable_tracking'] ) ) {
+                update_option( 'hwp_disable_tracking', sanitize_text_field( $_POST['hwp_disable_tracking'] ) );
+            } elseif( !empty( $_POST ) && empty( $_POST['hwp_disable_tracking'] )  ) {
+                delete_option( 'hwp_disable_tracking' );
+            }
+
             ?>
             <div id="holler-wrap" class="wrap">          
 
@@ -205,31 +211,13 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 
                 <div class="hwp-content">
 
-                    <h2>Get More Conversions</h2>
-                    <span class="big-icon-right dashicons dashicons-chart-line"></span> 
-                    <p>Click subscribe below to get free tips and tricks on how to convert more site visitors into customers. No spam, unsubscribe at any time.</p>
-                    <!-- Begin MailChimp Signup Form -->
-                    <div id="hwp_embed_signup">
-                    <form action="//hollerwp.us16.list-manage.com/subscribe/post?u=d9d0193288fd8270922c02b01&amp;id=590bf0a85f" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
-                        <div id="mc_embed_signup_scroll">
-                        
-                        <input type="email" value="<?php echo get_option('admin_email'); ?>" name="EMAIL" class="email" id="mce-EMAIL" placeholder="email address" required>
-                        <!-- real people should not fill this in and expect good things - do not remove this or risk form bot signups-->
-                        <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="b_d9d0193288fd8270922c02b01_590bf0a85f" tabindex="-1" value=""></div>
-                        <div class="clear"><input type="submit" value="Subscribe" name="subscribe" id="mc-embedded-subscribe" class="button button-primary"></div>
-                        </div>
-                    </form>
-                    </div>
-
                     <?php if( !is_plugin_active('hollerbox-pro/holler-box-pro.php') && !is_plugin_active('hollerbox-sales/holler-box-sales.php') ) : ?>
 
-                    <hr>
-
-                    <h3>Get 10% off the Holler Box Pro Bundle!</h3>
+                    <h3>Get 50% off the Holler Box Pro Bundle!</h3>
 
                     <img src="<?php echo Holler_Box_URL . 'assets/img/fomo-small.png'; ?>" class="hwp-upsell-img" />
 
-                    <p>Get advanced settings, more popups, and FOMO sale notifications with Pro.</p>
+                    <p>Get advanced settings, more popups, and sale notifications with Pro.</p>
 
                     <ul>
                     <li>EDD and WooCommerce integration</li>
@@ -238,7 +226,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
                     <li>Lots more...</li>
                     </ul>
 
-                    <p><strong>Discount code: 10OFFBUNDLE</strong><br><small>*Only applies to Pro Bundle</small></p>
+                    <p><strong>Discount code: HOLLER50</strong><br><small>*Only applies to Pro Bundle</small></p>
 
                     
                     <a href="https://hollerwp.com/pro?utm_source=settings_page&utm_medium=link&utm_campaign=hwp_settings" class="button button-primary">View features &amp; pricing</a>
@@ -266,8 +254,6 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <input id="hwp_ac_url" name="hwp_ac_url" value="<?php echo esc_html( get_option( 'hwp_ac_url' ) ); ?>" placeholder="Active Campaign URL" type="text" size="50" /><br/>
 
                 <input id="hwp_ac_api_key" name="hwp_ac_api_key" value="<?php echo esc_html( get_option( 'hwp_ac_api_key' ) ); ?>" placeholder="Active Campaign API key" type="password" size="50" /><br/>
-				
-
 
                 <p><?php _e('If you are using MailChimp, enter your API key. It can be found under Account -> Extras -> API Keys.', 'holler-box'); ?></p>
                 
@@ -281,6 +267,11 @@ if( !class_exists( 'Holler_Admin' ) ) {
                 <h3><?php _e('Miscellaneous', 'holler-box'); ?></h3>
 
                 <p>
+                    <input type="checkbox" id="hwp_disable_tracking" name="hwp_disable_tracking" value="1" <?php checked('1', get_option( 'hwp_disable_tracking' ), true); ?> />
+                    <?php _e( 'Disable Tracking (High traffic sites should check this for better performance)', 'holler-box' ); ?>
+                </p>
+
+                <p>
                     <input type="checkbox" id="hwp_powered_by" name="hwp_powered_by" value="1" <?php checked('1', get_option( 'hwp_powered_by' ), true); ?> />
                     <?php _e( 'Hide attribution links', 'holler-box' ); ?>
                 </p>
@@ -290,9 +281,8 @@ if( !class_exists( 'Holler_Admin' ) ) {
             <?php submit_button(); ?>
 
             </form>
-
 			
-<!-- Start Zoho Campaign --> 
+			<!-- Start Zoho Campaign --> 
 <?php 
  if( isset($_POST['zc_domain_url'])) {
     update_option('zc_domain_url', $_POST['zc_domain_url']);
@@ -347,14 +337,14 @@ const zc_on_load_account_id = "<?php if($dbKey != '') {  echo $dbKey['accountId'
 					<input type="button" value="Cancel" id="cancel_account_changes" onclick="zc_cancelChanges()" style="display:none;" class="button">
 				</div>
 										
-</form>		
+</form>	
+
+	
 		
 <!-- End Zoho Campaign -->
 
-
             </div>
 			
-
             <?php
             
         }
@@ -368,11 +358,19 @@ const zc_on_load_account_id = "<?php if($dbKey != '') {  echo $dbKey['accountId'
          * @return      array
          */
         public function notification_columns( $columns ) {
+
             $date = $columns['date'];
             unset($columns['date']);
-            $columns["impressions"] = "Impressions";
-            $columns["conversions"] = "Conversions";
-            $columns["rate"] = "Percent";
+
+            if( !get_option('hwp_disable_tracking') ) {
+                $columns["impressions"] = "Impressions";
+                $columns["conversions"] = "Conversions";
+                $columns["rate"] = "Percent";
+            } else {
+                $columns["tracking_disabled"] = "Views (Disabled)";
+                $columns["conversions"] = "Conversions";
+            }
+            
             $columns["active"] = "Active";
             $columns['date'] = $date;
 
@@ -399,13 +397,22 @@ const zc_on_load_account_id = "<?php if($dbKey != '') {  echo $dbKey['accountId'
         public function custom_columns( $column, $post_id ) {
 
             $conversions = get_post_meta( $post_id, 'hwp_conversions', 1);
-            $views = get_post_meta( $post_id, 'hwp_views', 1);
 
-            if( empty( $conversions ) || empty( $views ) ) {
-                $rate = '0%';
+            if( get_option( 'hwp_disable_tracking' ) ) {
+
+                $views = $rate = '<small>Disabled</small>';
+
             } else {
-                $rate = intval( $conversions ) / intval( $views );
-                $rate = number_format( $rate, 3 ) * 100 . '%';
+
+                $views = get_post_meta( $post_id, 'hwp_views', 1);
+
+                if( empty( $conversions ) || empty( $views ) ) {
+                    $rate = '0%';
+                } else {
+                    $rate = intval( $conversions ) / intval( $views );
+                    $rate = number_format( $rate, 3 ) * 100 . '%';
+                }
+
             }
 
             switch ( $column ) {
@@ -550,7 +557,7 @@ const zc_on_load_account_id = "<?php if($dbKey != '') {  echo $dbKey['accountId'
                 return;
 
             ?>
-            <p style="clear:both;"><small><a href="https://hollerwp.com/pro?utm_source=template_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999">Get more templates in Pro</a></small></p>
+            <p style="clear:both;"><small><a href="https://hollerwp.com/pro?utm_source=template_settings&utm_medium=link&utm_campaign=hwp_settings" target="_blank" style="color:#999">Get banners, sale notification popups, and more with Pro</a></small></p>
             <?php
         }
 
@@ -743,7 +750,6 @@ const zc_on_load_account_id = "<?php if($dbKey != '') {  echo $dbKey['accountId'
 						<option value="zc" <?php selected( get_post_meta( $post->ID, 'email_provider', true ), "zc"); ?> >
                             <?php _e( 'Zoho Campaigns', 'holler-box' ); ?>
                         </option>
-
                     </select>
 
                     <?php do_action( 'hwp_below_provider_select', $post->ID ); ?>
@@ -863,7 +869,7 @@ const zc_on_load_account_id = "<?php if($dbKey != '') {  echo $dbKey['accountId'
                             <textarea class="hwp-textarea" name="custom_email_form" id="custom_email_form"><?php echo esc_html( get_post_meta( $post->ID, 'custom_email_form', true ) ); ?></textarea>
                         </p>
                     </div>
-					
+
 					<!-- Zoho Campaigns Start -->
 					<div id="zoho-campaigns">
 
@@ -889,6 +895,7 @@ zc_pluginDir = "<?php echo plugins_url('holler-box'); ?>";
                         
                     </div>
 					<!-- Zoho Campaigns End -->
+					
                     <div id="default-email-options">
 
                         <div id="hwp-name-fields">
@@ -1273,7 +1280,7 @@ zc_pluginDir = "<?php echo plugins_url('holler-box'); ?>";
                 'custom_email_form',
                 'ck_id',
                 'mc_list_id',
-                'zc_list_id',
+				'zc_list_id',
                 'ac_list_id',
                 'mailpoet_list_id',
                 'hwp_type',

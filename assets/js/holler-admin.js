@@ -163,7 +163,7 @@
         avatar.fadeIn();
         templates.hide();
         pOptions.hide();
-        name.hide();
+        name.show();
         sendBtn.show();
         fomoSettings.hide();
         editor.fadeIn();
@@ -231,7 +231,7 @@
     var ckFields = $('#convertkit-fields');
     var mailpoet = $('#mailpoet-fields');
     var drip = $('#drip-fields');
-    var zohoC = $('#zoho-campaigns');
+	var zohoC = $('#zoho-campaigns');
 
     // Show optin in preview
     if( itemTypeVal === 'optin' ) {
@@ -259,7 +259,7 @@
       mailpoet.hide();
       acFields.hide();
       drip.hide();
-	  zohoC.hide();
+      zohoC.hide();
     } else if( checkedVal === 'mc' ) {
       mcFields.fadeIn();
       defaultDiv.fadeIn();
@@ -269,7 +269,7 @@
       mailpoet.hide();
       acFields.hide();
       drip.hide();
-	  zohoC.hide();
+      zohoC.hide();
     } else if( checkedVal === 'ck' ) {
       ckFields.fadeIn();
       defaultDiv.fadeIn();
@@ -279,7 +279,7 @@
       mailpoet.hide();
       acFields.hide();
       drip.hide();
-	  zohoC.hide();
+      zohoC.hide();
     } else if( checkedVal === 'mailpoet' ) {
       mailpoet.fadeIn();
       defaultDiv.fadeIn();
@@ -289,7 +289,7 @@
       ckFields.hide();
       acFields.hide();
       drip.hide();
-	  zohoC.hide();
+      zohoC.hide();
     } else if( checkedVal === 'ac' ) {
       ckFields.hide();
       defaultDiv.fadeIn();
@@ -299,7 +299,7 @@
       mailpoet.hide();
       acFields.fadeIn();
       drip.hide();
-	  zohoC.hide();
+      zohoC.hide();
     } else if( checkedVal === 'drip' ) {
       drip.fadeIn();
       ckFields.hide();
@@ -309,7 +309,7 @@
       sendTo.hide();
       mailpoet.hide();
       acFields.hide();
-	  zohoC.hide();
+      zohoC.hide();
     } else if( checkedVal === 'zc' ) {
       drip.hide();
       ckFields.hide();
@@ -319,9 +319,9 @@
       sendTo.hide();
       mailpoet.hide();
       acFields.hide();
-zohoC.fadeIn();
-
-// zoho campaign list calling function 
+	  zohoC.fadeIn();
+	  
+	  // zoho campaign list calling function 
 
     var userType = "1";
     var query = "";
@@ -362,15 +362,15 @@ zohoC.fadeIn();
 						
                        // unSavedListTemplate = "<div class=\"zcmlist\" id=\"list_name_" + sno + "\" onclick=\"javascript:zc_setSelection('" + sno + "','" + name + "');\">&nbsp; <span class=\"zclstnmeblk\" style=\"vertical-align:middle;cursor:default;\">" + name + "</span><div style=\"display:none;\" id=\"list_key_" + sno + "\">" + listkey + "</div></div>";
 
-var selected = '';						
-var rel = jQuery("#zoho_c").attr('rel');
-if(rel == "list_name_" + sno){
-selected = "selected='selected'";
-}
-if('undefined' != unSavedListTemplate ){
-						unSavedListTemplate += "<option "+selected+" value=\"list_name_" + sno + "\">"+name+"</option>";
-						
- }                       
+				var selected = '';						
+				var rel = jQuery("#zoho_c").attr('rel');
+				if(rel == "list_name_" + sno){
+				selected = "selected='selected'";
+				}
+				if('undefined' != unSavedListTemplate ){
+										unSavedListTemplate += "<option "+selected+" value=\"list_name_" + sno + "\">"+name+"</option>";
+										
+				 }                       
 
 						
                     }
@@ -394,8 +394,8 @@ if('undefined' != unSavedListTemplate ){
         }
     });
 
-    }
-
+  }
+  
   }
 
   holler.toggleChat = function() {
@@ -515,6 +515,7 @@ if('undefined' != unSavedListTemplate ){
   window.hollerAdmin = holler;
 
 })(window, document, jQuery);
+
 
 
 

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Holler Box\n"
-"POT-Creation-Date: 2017-06-22 16:24-0800\n"
-"PO-Revision-Date: 2017-06-22 16:25-0800\n"
+"POT-Creation-Date: 2018-09-15 13:14-0800\n"
+"PO-Revision-Date: 2018-09-15 13:14-0800\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -11,291 +11,435 @@ msgstr ""
 "X-Generator: Poedit 1.5.7\n"
 "X-Poedit-KeywordsList: _;gettext;gettext_noop;__;_e\n"
 "X-Poedit-Basepath: .\n"
-"X-Poedit-SearchPath-0: /Users/scottopolis/Documents/Websites/www.local.dev/"
-"wp-content/plugins/hollerbox\n"
+"X-Poedit-SearchPath-0: /Users/scottopolis/Documents/Websites/Flywheel Local/"
+"app/public/wp-content/plugins/holler-box\n"
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:124
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-functions.php:130
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-functions.php:324
+msgid "Type your message"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-functions.php:399
+msgid "50% Complete"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-functions.php:582
+msgid "Enter email"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:202
 msgid "Settings"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:128
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:252
 msgid "Email Settings"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:130
-msgid "Email title"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:254
+msgid "Email title <em>(only used with \"send to email\" setting)</em>"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:134
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:258
 msgid ""
-"If you are using Convertkit, entery your API key. It can be found on your <a "
+"If you are using ConvertKit, entery your API key. It can be found on your <a "
 "href=\"https://app.convertkit.com/account/edit#account_info\" target=\"_blank"
 "\">account info page.</a>"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:138
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:262
 msgid ""
-"If you are using MailChimp, entery your API key. It can be found under "
+"If you are using Active Campaign, enter your url and API key. It can be "
+"found under My Settings -> Developer."
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:268
+msgid ""
+"If you are using MailChimp, enter your API key. It can be found under "
 "Account -> Extras -> API Keys."
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:142
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:274
+msgid ""
+"Disable MailChimp double-opt in? Check to subscribe users to your list "
+"without confirmation. If checked, MailChimp will not send a final welcome "
+"email."
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:277
 msgid "Miscellaneous"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:146
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:281
 msgid "Hide attribution links"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:214
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:215
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:216
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:217
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:365
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:366
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:367
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:368
 msgid "Holler Box"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:218
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:369
 msgid "Add New"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:219
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:370
 msgid "Add New Box"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:220
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:371
 msgid "New Box"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:221
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:372
 msgid "Edit Box"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:222
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:373
 msgid "View Box"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:223
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:374
 msgid "All Boxes"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:224
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:375
 msgid "Search Boxes"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:225
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:376
 msgid "Parent Boxes:"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:226
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:377
 msgid "No Boxes found."
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:227
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:378
 msgid "No Boxes found in Trash."
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:262
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:413
 msgid "Display"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:271
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:422
 msgid "Advanced Settings"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:301
-msgid "Activate? Check to show this box."
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:444
+msgid "Choose a Holler Box Type"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:305
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:541
 msgid "Position"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:309
-msgid "Bottom right"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:564
+msgid "Choose a Template"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:311
-msgid "Bottom left"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:604
+msgid "Popup Options"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:313
-msgid "Top right"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:608
+msgid "Upload a Custom Image"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:315
-msgid "Top left"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:621
+msgid "Accent color"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:319
-msgid "Button color"
-msgstr ""
-
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:322
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:625
 msgid "Background color"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:325
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:628
 msgid "Text color"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:330
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:637
 msgid "Show email opt-in"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:335
-msgid "Default"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:645
+msgid "Send to email address"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:338
-msgid "Convertkit"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:649
+msgid "ConvertKit"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:341
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:653
 msgid "MailChimp"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:341
-msgid ""
-"Get your list ID under Lists => Settings => List name and defaults => List "
-"ID (on right side of screen)"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:657
+msgid "Active Campaign"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:344
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:661
+msgid "Drip"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:667
 msgid "MailPoet"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:372
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:673
 msgid "Custom"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:377
-msgid "Message"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:681
+msgid ""
+"ConvertKit List ID, <a href=\n"
+"                        \"http://hollerbox.helpscoutdocs.com/article/6-"
+"convertkit-integration\" target=\"_blank\">click for help.</a> "
+"<em>*required</em>"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:380
-msgid "Placeholder"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:687
+msgid "MailChimp List *required"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:383
-msgid "Send to email"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:720
+msgid "Active Campaign List *required"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:389
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:752
+msgid "MailPoet List <em>*required</em>"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:784
+msgid "Send to email <em>*required</em>"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:791
 msgid "Insert HTML form code here"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:393
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:801
+msgid "Name Field Placeholder"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:807
+msgid "Don't show first name field"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:813
+msgid "Small text above email field"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:818
+msgid "Placeholder"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:823
 msgid "Confirmation Message"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:401
-msgid "Show chat"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:828
+msgid "Submit Button Text"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:415
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:959
 msgid "What pages?"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:422
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:966
 msgid "Show on pages"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:432
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:978
 msgid "Show to these visitors"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:435
-msgid "Logged in only"
-msgstr ""
-
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:436
-msgid "Logged out only"
-msgstr ""
-
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:437
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:444
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:981
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:992
 msgid "All visitors"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:440
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:982
+msgid "Logged in only"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:983
+msgid "Logged out only"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:989
 msgid "New or returning"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:442
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:993
 msgid "New visitors only"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:443
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:994
 msgid "Returning visitors only"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:448
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1001
 msgid "When should we show it?"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:451
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1005
 msgid "Immediately"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:452
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:464
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1006
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1023
 msgid "Delay of"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:452
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:464
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1006
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1023
 msgid "seconds"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:453
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1007
 msgid "User scrolls halfway down the page"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:460
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1008
+msgid "Exit Detection"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1018
 msgid "After it displays, when should it disappear?"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:463
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1022
 msgid "When user clicks hide"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:468
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1031
 msgid "How often should we show it to each visitor?"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:471
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1035
+msgid "Hide after user interacts (Close or email submit)"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1036
 msgid "Every page load"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:472
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1037
 msgid "Show, then hide for"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:472
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1037
 msgid "days"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:473
-msgid "Hide after user interacts (clicks link or submits email)"
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1044
+msgid "Show on Devices"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:478
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1048
+msgid "All devices"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1049
+msgid "Desktop only"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1050
+msgid "Mobile only"
+msgstr ""
+
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1059
 msgid "Hide the floating button? (Appears when box is hidden.)"
 msgstr ""
 
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:481
+#: /Users/scottopolis/Documents/Websites/Flywheel
+#: Local/app/public/wp-content/plugins/holler-box/includes/class-holler-admin.php:1068
 msgid "Gravatar Email"
-msgstr ""
-
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-admin.php:508
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-functions.php:336
-msgid "Send"
-msgstr ""
-
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-functions.php:281
-msgid "Type your message"
-msgstr ""
-
-#: /Users/scottopolis/Documents/Websites/www.local.dev/wp-content/plugins/hollerbox/includes/class-holler-functions.php:335
-msgid "Enter email"
 msgstr ""

@@ -234,11 +234,16 @@
       holler.transitionOut( item );
 
       // if set to show every page load and floating btn is hidden, need to delete hide cookie so it shows properly
-      if( options.hideBtn === '1' && options.showSettings === 'always' ) {
-        holler.setCookie( 'hwp-' + id + '_hide', '', -1 );
+      if( options.showSettings === 'always' ) {
+
+        if( options.hideBtn === '1' || options.type == 'holler-banner' || options.type == 'footer-bar' ) {
+          holler.setCookie( 'hwp-' + id + '_hide', '', -1 );
+        }
+        
       }
 
-      if( options.hideBtn != '1' && options.type != 'holler-banner' ) {
+      // show stuff that should always be shown. Includes holler banner and footer bar if show every page load is selected
+      if( options.hideBtn != '1' && options.type != 'holler-banner' || options.type == 'holler-banner' && options.showSettings === 'always' ) {
         holler.transitionIn( $( '.hwp-btn-' + id ) );
       }
 
@@ -338,33 +343,6 @@
     
   }
 
-  // check how old cookie is
-  // return true or false
-  // holler.lastSeen = function( cookie ) {
-
-  //   // Display to everyone if no lastSeen filter is set
-  //   if( !window.hollerVars.lastSeen || window.hollerVars.lastSeen === 'none' ) {
-  //     console.log("lastSeen true (show the thing)");
-  //     return true;
-  //   }
-    
-  //   // Compare cookie age and lastSeen setting. If we want to show something to people who visited at least 2 days ago, lastSeen would be 2.
-  //   var daysAgo = parseInt( window.hollerVars.lastSeen );
-  //   var days = new Date();
-  //   days.setDate(days.getDate()-daysAgo);
-    
-  //   // If cookie is older than lastSeen setting, return true to show item. 
-  //   if( cookie <= days ) {
-  //     // cookie is older than daysAgo
-  //     console.log("lastSeen true (show the thing)");
-  //     return true;
-  //   } else {
-  //     console.log("lastSeen false (don't show the thing)", days);
-  //     return false;
-  //   }
-
-  // }
-
   // User clicked hide
   holler.hideItem = function( e ) {
 
@@ -399,6 +377,8 @@
   holler.toggleHide = function( id ) {
 
     var hide = holler.getCookie( 'hwp-' + id + '_hide');
+
+    console.log('hide ' + id, hide)
 
     if( hide === 'true' ) {
       holler.setCookie( 'hwp-' + id + '_hide', 'true', -1 );
@@ -571,11 +551,17 @@
 
   // User submitted email, send to server
   holler.emailSubmitted = function( id ) {
-alert('1321');
+
     var email = $('#hwp-' + id + ' .hwp-email-input').val();
 
     if( !email ) {
-      alert('We had a problem reading your email, please contact the site administrator.');
+      var msg;
+      if( window.hollerVars.emailErr ) {
+        msg = window.hollerVars.emailErr;
+      } else {
+        msg = 'Please enter your email.';
+      }
+      alert( msg + ' err1' );
       return;
     }
 
@@ -585,15 +571,13 @@ alert('1321');
 
     // validate email
     if( email.indexOf('@') === -1 || email.indexOf('.') === -1 ) {
-      alert('Something is wrong with your email, please try again.')
+      alert( window.hollerVars.emailErr + ' err2')
       return;
     }
 
     // honeypot
     if( $( '#hwp-' + id + ' input[name=hwp_hp]').val() != "" )
       return;
-
-alert(window.hollerVars[id].emailProvider);
 
     // do different things for email providers
     if( window.hollerVars[id].emailProvider === 'ck' ) {
@@ -698,7 +682,6 @@ alert(window.hollerVars[id].emailProvider);
       });
 
   }
-
 
   // Submit to Active Campaign
   holler.acSubscribe = function( email, id ) {
@@ -876,7 +859,7 @@ alert(window.hollerVars[id].emailProvider);
   holler.conversion = function( id ) {
 
     var params = { action: 'hwp_track_event', nonce: window.hollerVars.hwpNonce, id: id };
-alert('kgh');
+
     // store interaction data
     $.ajax({
       method: "GET",
@@ -944,6 +927,11 @@ alert('kgh');
     var hideFor = ( options.hideForDays ? parseInt( options.hideForDays ) : 1 );
     holler.setCookie( 'hwp_' + id + '_shown', 'true', hideFor );
 
+    // don't track view if it's disabled
+    if( window.hollerVars.disable_tracking === '1' ) {
+      return;
+    }
+
     var params = { action: 'hwp_track_view', nonce: window.hollerVars.hwpNonce, id: id };
 
     // store interaction data
@@ -953,7 +941,7 @@ alert('kgh');
       data: params
       })
       .done(function(msg) {
-        //console.log(msg);
+        // console.log('track', msg);
       })
       .fail(function(err) {
         //console.log(err);
@@ -1099,10 +1087,9 @@ alert('kgh');
 
   }
 
-  $(window).load(function(){
+  $(window).on( 'load', function() {
     holler.init();
-  })
-
+  });
 
   window.hollerbox = holler;
 
