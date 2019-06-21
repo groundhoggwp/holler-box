@@ -5,11 +5,11 @@
  * Description:     Sales and marketing automation for eCommerce stores. Lead generation and conversion popups and more.
  * Version:         1.5.1
  * Author:          Scott Bolinger
- * Author URI:      http://scottbolinger.com
+ * Author URI:      https://scottbolinger.com
  * Text Domain:     holler-box
  *
  * @author          Scott Bolinger
- * @copyright       Copyright (c) Scott Bolinger 2017
+ * @copyright       Copyright (c) Scott Bolinger 2019
  *
  */
 
