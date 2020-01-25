@@ -623,7 +623,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 $title = trim( $value );
                 $title = str_replace("’","'", $title );
                 $title = str_replace( array("“", "”"),'"', $title );
-                $page = get_page_by_title( $title );
+                $page = get_page_by_title( html_entity_decode( $title ) );
 
                 // cant get id of null
                 if( !$page ) continue;

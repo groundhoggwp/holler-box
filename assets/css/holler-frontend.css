@@ -363,7 +363,7 @@ input.hwp-name {
 .holler-box.hwp-popup {
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -50%) scale(1.1);
+	transform: translate(-50%, -50%);
 	-webkit-font-smoothing: antialiased;
 	width: 80%;
 	max-width: 800px;
@@ -379,7 +379,7 @@ input.hwp-name {
 
 /* scale() fixes blurry text in chrome */
 .hwp-popup.hwp-hide {
-	transform: translate(-50%, -50%) scale(1);
+	transform: translate(-50%, -50%);
 }
 
 .hwp-popup .hwp-row {
@@ -620,7 +620,7 @@ input.hwp-name {
 		bottom: 0;
 		top: auto;
 		max-height: 80%;
-		transform: translate(0,0) scale(1);
+		transform: translate(0,0);
 	}
 
 	.hwp-template-3 input.hwp-email-input, .hwp-template-3 .hwp-email-btn, .hwp-template-3 input.hwp-name, .hwp-template-3 input.hwp-email-input.no-name {

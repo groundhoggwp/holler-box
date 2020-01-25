@@ -1,32 +1,18 @@
-=== Holler Box - Lead Generation and Popups for eCommerce ===
+=== Holler Box - Lightweight popup plugin ===
 
 Contributors: scottopolis
 Tags: popup, optin, lead generation, email opt-in, pop up
 Requires at least: 4.5
-Tested up to: 5.2.2
-Stable tag: 1.5.1
+Tested up to: 5.3.2
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Sales and lead generation popups for eCommerce stores and membership sites.
+Popups with lead generation forms that won't slow down your site.
 
 == Description ==
 
-Holler Box is a popup and banner plugin for people who sell stuff online with WooCommerce or Easy Digital Downloads.
-
-It’s lightweight and easy to use, unlike other complex popup building tools.
-
-Holler Box is trusted by some of the best brands in WordPress, like Memberpress, SearchWP, Slocum Studio, Pixel Jar, and more.
-
-If one of these describes you…
-
-- I need a popup or content upgrade form to collect more emails.
-- I need a header banner or popup to promote my sale.
-- I have an event I want my customers to know about without being annoying.
-- I want to show that other people are buying to create FOMO (fear of missing out).
-- I need a popup plugin for my store that doesn’t suck.
-
-…Holler Box can help.
+Holler Box is a popup plugin focused on being lightweight and easy to use.
 
 ## Included for free
 
@@ -47,6 +33,8 @@ If one of these describes you…
 - Forms plugins like Ninja Forms, Gravity Forms, WPForms, Contact Form 7, etc.
 - eCommerce buy buttons
 - Lots more
+
+Holler Box is trusted by some of the best brands in WordPress, like Memberpress, SearchWP, Slocum Studio, Pixel Jar, and more.
 
 ## Holler Box Pro
 
@@ -157,6 +145,11 @@ Make sure your email form does not have a required field that is not displayed. 
 7. Conversion Analytics
 
 == Changelog ==
+
+= 1.5.2 =
+
+* Fix blurry text
+* Fix issue with special characters in page titles
 
 = 1.5.1 =
 
