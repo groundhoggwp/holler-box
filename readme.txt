@@ -3,8 +3,8 @@
 Contributors: scottopolis
 Tags: popup, optin, lead generation, email opt-in, pop up
 Requires at least: 4.5
-Tested up to: 5.3.2
-Stable tag: 1.5.2
+Tested up to: 5.5.3
+Stable tag: 1.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -145,6 +145,10 @@ Make sure your email form does not have a required field that is not displayed. 
 7. Conversion Analytics
 
 == Changelog ==
+
+= 1.5.3 =
+
+* Fix device detection with caching enabled
 
 = 1.5.2 =
 

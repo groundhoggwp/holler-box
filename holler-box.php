@@ -3,7 +3,7 @@
  * Plugin Name:     Holler Box
  * Plugin URI:      http://hollerwp.com
  * Description:     Sales and marketing automation for eCommerce stores. Lead generation and conversion popups and more.
- * Version:         1.5.2
+ * Version:         1.5.3
  * Author:          Scott Bolinger
  * Author URI:      https://scottbolinger.com
  * Text Domain:     holler-box
@@ -62,7 +62,7 @@ if( !class_exists( 'Holler_Box' ) ) {
          */
         private function setup_constants() {
             // Plugin version
-            define( 'Holler_Box_VER', '1.5.2' );
+            define( 'Holler_Box_VER', '1.5.3' );
 
             // Plugin path
             define( 'Holler_Box_DIR', plugin_dir_path( __FILE__ ) );
