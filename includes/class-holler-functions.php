@@ -115,35 +115,35 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $array['emailErr'] = __( 'Please enter a valid email address.', 'holler-box' );
 
-            foreach (self::$active as $key => $value) {
+            foreach (self::$active as $key => $post_id) {
 
-                $type = get_post_meta( $value, 'hwp_type', 1 );
+                $type = get_post_meta( $post_id, 'hwp_type', 1 );
 
-                $array[$value] = array(
+                $array[$post_id] = array(
                     'type' => $type,
-                    'showEmail' => get_post_meta($value, 'show_optin', 1),
+                    'showEmail' => get_post_meta($post_id, 'show_optin', 1),
                     'showChat' => ( $type === 'chat' ? '1' : '' ),
-                    'emailProvider' => get_post_meta( $value, 'email_provider', 1 ),
-                    'redirect' => get_post_meta( $value, 'hwp_redirect', 1 ),
+                    'emailProvider' => get_post_meta( $post_id, 'email_provider', 1 ),
+                    'redirect' => get_post_meta( $post_id, 'hwp_redirect', 1 ),
                     'ckApi' => get_option( 'hwp_ck_api_key' ),
-                    'visitor' => get_post_meta($value, 'new_or_returning', 1),
-                    'hideBtn' => get_post_meta($value, 'hide_btn', 1),
-                    'optinMsg' => get_post_meta($value, 'opt_in_message', 1),
-                    'placeholder' => get_post_meta($value, 'opt_in_placeholder', 1),
-                    'confirmMsg' => get_post_meta($value, 'opt_in_confirmation', 1),
-                    'display_when' => get_post_meta($value, 'display_when', 1),
-                    'delay' => get_post_meta($value, 'scroll_delay', 1),
-                    'showSettings' => get_post_meta($value, 'show_settings', 1),
-                    'hideForDays' => get_post_meta($value, 'hide_for_days', 1),
-                    'hide_after' => get_post_meta($value, 'hide_after', 1),
-                    'hide_after_delay' => get_post_meta($value, 'hide_after_delay', 1),
-                    'devices' => get_post_meta($value, 'hwp_devices', 1),
-                    'bgColor' => get_post_meta($value, 'bg_color', 1),
-                    'btnColor1' => get_post_meta($value, 'button_color1', 1),
-                    'position' => get_post_meta($value, 'position', 1)
+                    'visitor' => get_post_meta($post_id, 'new_or_returning', 1),
+                    'hideBtn' => get_post_meta($post_id, 'hide_btn', 1),
+                    'optinMsg' => get_post_meta($post_id, 'opt_in_message', 1),
+                    'placeholder' => get_post_meta($post_id, 'opt_in_placeholder', 1),
+                    'confirmMsg' => get_post_meta($post_id, 'opt_in_confirmation', 1),
+                    'display_when' => get_post_meta($post_id, 'display_when', 1),
+                    'delay' => get_post_meta($post_id, 'scroll_delay', 1),
+                    'showSettings' => get_post_meta($post_id, 'show_settings', 1),
+                    'hideForDays' => get_post_meta($post_id, 'hide_for_days', 1),
+                    'hide_after' => get_post_meta($post_id, 'hide_after', 1),
+                    'hide_after_delay' => get_post_meta($post_id, 'hide_after_delay', 1),
+                    'devices' => get_post_meta($post_id, 'hwp_devices', 1),
+                    'bgColor' => get_post_meta($post_id, 'bg_color', 1),
+                    'btnColor1' => get_post_meta($post_id, 'button_color1', 1),
+                    'position' => get_post_meta($post_id, 'position', 1)
                 );
 
-                $array[$value] = apply_filters( 'hwp_localized_vars', $array[$value], $value );
+                $array[$post_id] = apply_filters( 'hwp_localized_vars', $array[$post_id], $post_id );
 
             }
 
@@ -613,18 +613,25 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * @param string $string
          * @return array
          */
-        public static function titles_to_ids( $string ) {
+        public static function titles_to_ids( $string, $type = "page" ) {
 
             // explode into array
             $arr = explode( ",", $string );
 
             $newarr = array();
+            
+            $types = get_option( 'hwp_post_types', []);
+
+            // using the display on post, so search the set post types
+            if( $types !== 'page' && !empty( $types ) ) {
+                $type = $types;
+            }
 
             foreach ($arr as $key => $value) {
                 $title = trim( $value );
                 $title = str_replace("’","'", $title );
                 $title = str_replace( array("“", "”"),'"', $title );
-                $page = get_page_by_title( html_entity_decode( $title ) );
+                $page = get_page_by_title( html_entity_decode( $title ), 'OBJECT', $type );
 
                 // cant get id of null
                 if( !$page ) continue;

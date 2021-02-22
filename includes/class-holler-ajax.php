@@ -74,6 +74,8 @@ if (!class_exists('Holler_Ajax')) {
 
             add_action('wp_ajax_hwp_ajax_page_search', array($this, 'page_search'));
 
+            add_action('wp_ajax_hwp_ajax_post_search', array($this, 'post_search'));
+
         }
         
          public function mailType($content_type) {
@@ -452,6 +454,53 @@ if (!class_exists('Holler_Ajax')) {
                 's' => $s,
                 'posts_per_page' => 5,
                 'post_type' => 'page'
+                    )
+            );
+
+            if ($the_query->have_posts()) {
+                while ($the_query->have_posts()) {
+                    $the_query->the_post();
+                    $results[] = get_the_title();
+                }
+                /* Restore original Post Data */
+                wp_reset_postdata();
+            } else {
+                $results = 'No results';
+            }
+
+            echo join($results, "\n");
+            wp_die();
+        }
+
+        /**
+         * Used for autofilling pages via admin text field, using jQuery suggest
+         *
+         * @access      public
+         * @since       0.1
+         * @return      void
+         */
+        public function post_search() {
+
+            $s = wp_unslash($_GET['q']);
+
+            $comma = _x(',', 'page delimiter');
+            if (',' !== $comma)
+                $s = str_replace($comma, ',', $s);
+            if (false !== strpos($s, ',')) {
+                $s = explode(',', $s);
+                $s = $s[count($s) - 1];
+            }
+            $s = trim($s);
+
+            $term_search_min_chars = 2;
+
+            $types = get_option( 'hwp_post_types', ['post']);
+
+            $the_query = new WP_Query(
+                    array(
+                's' => $s,
+                'posts_per_page' => 5,
+                'post_type' => $types
                     )
             );
 
