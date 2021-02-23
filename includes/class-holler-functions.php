@@ -160,7 +160,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             // do checks for page conditionals, logged in, etc here
             // if any of the checks are true, we show it
-            $post_id = get_queried_object_id();
+            $post_id = ( is_category() ? 0 : get_queried_object_id() );
             $logged_in = is_user_logged_in();
 
             foreach (self::$active as $key => $box_id) {
