@@ -1,15 +1,15 @@
 <?php
 /**
  * Plugin Name:     Holler Box
- * Plugin URI:      http://hollerwp.com
- * Description:     Sales and marketing automation for eCommerce stores. Lead generation and conversion popups and more.
- * Version:         1.5.3
+ * Plugin URI:      https://hollerwp.com
+ * Description:     A lightweight popup plugin with lead generation opt-in forms.
+ * Version:         1.5.4
  * Author:          Scott Bolinger
  * Author URI:      https://scottbolinger.com
  * Text Domain:     holler-box
  *
  * @author          Scott Bolinger
- * @copyright       Copyright (c) Scott Bolinger 2019
+ * @copyright       Copyright (c) Scott Bolinger 2021
  *
  */
 
@@ -62,7 +62,7 @@ if( !class_exists( 'Holler_Box' ) ) {
          */
         private function setup_constants() {
             // Plugin version
-            define( 'Holler_Box_VER', '1.5.3' );
+            define( 'Holler_Box_VER', '1.5.4' );
 
             // Plugin path
             define( 'Holler_Box_DIR', plugin_dir_path( __FILE__ ) );

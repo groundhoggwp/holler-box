@@ -3,8 +3,8 @@
 Contributors: scottopolis
 Tags: popup, optin, lead generation, email opt-in, pop up
 Requires at least: 4.5
-Tested up to: 5.5.3
-Stable tag: 1.5.3
+Tested up to: 5.6.2
+Stable tag: 1.5.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -43,7 +43,7 @@ Here's a short list of features available only in Pro:
 - <a href="https://hollerwp.com/downloads/sale-notification-popup/" target="_blank">Sale notification popups</a> (Scott just bought Holler Box Pro)
 - Content upgrades
 - More popup designs
-- Advanced targeting filters
+- Advanced targeting filters, like choose a post or page to display the popup
 - Scheduling
 - Header banner
 - Support and updates
@@ -145,6 +145,11 @@ Make sure your email form does not have a required field that is not displayed. 
 7. Conversion Analytics
 
 == Changelog ==
+
+= 1.5.4 =
+
+* Support for display on post in Pro version
+* Fix for display on category archive pages
 
 = 1.5.3 =
 
