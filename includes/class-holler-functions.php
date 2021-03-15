@@ -71,7 +71,9 @@ if( !class_exists( 'Holler_Functions' ) ) {
          */
         public function scripts_styles( $hook ) {
 
-            if( ! empty( self::$active ) ) {
+            $box_id = $this->get_box_for_this_page();
+
+            if( $box_id ) {
 
                 // Use minified libraries if SCRIPT_DEBUG is turned off
                 $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
@@ -150,13 +152,22 @@ if( !class_exists( 'Holler_Functions' ) ) {
             return $array;
         }
 
+        public function maybe_display_items() {
+
+            $box_id = $this->get_box_for_this_page();
+
+            if( $box_id ) {
+                self::$instance->show_box_types( $box_id );
+            }
+        }
+
         /**
-         * Show the box
+         * Returns a box id if it should be show on this page, otherwise null
          *
          * @since       0.1.0
          * @return      string
          */
-        public function maybe_display_items() {
+        public function get_box_for_this_page() {
 
             // do checks for page conditionals, logged in, etc here
             // if any of the checks are true, we show it
@@ -217,7 +228,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 if( $show_it === false )
                     continue;
 
-                self::$instance->show_box_types( $box_id );
+                return $box_id;
 
             }
 
@@ -528,6 +539,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $post_content = get_post($id);
             $content = $post_content->post_content;
+            $content = apply_filters('the_content', $content );
             $content = apply_filters('hollerbox_content', $content, $id );
             return do_shortcode( $content );
 
