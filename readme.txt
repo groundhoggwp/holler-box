@@ -3,8 +3,8 @@
 Contributors: scottopolis
 Tags: popup, optin, lead generation, email opt-in, pop up
 Requires at least: 4.5
-Tested up to: 5.6.2
-Stable tag: 1.5.4
+Tested up to: 5.7
+Stable tag: 1.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -145,6 +145,13 @@ Make sure your email form does not have a required field that is not displayed. 
 7. Conversion Analytics
 
 == Changelog ==
+
+= 1.5.5 =
+
+* fix display on page not working
+* fix for close and other icons not displaying (theme conflicts)
+* fix conditional asset loading (stop loading assets on all pages, only load them when needed)
+* fix for papge builder in popup content area (added the_content filter)
 
 = 1.5.4 =
 
