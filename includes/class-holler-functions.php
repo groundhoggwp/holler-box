@@ -211,7 +211,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 if( $show_on === 'limited' && !empty( $show_on_pages ) ) {
 
                     // turn titles into array of ids
-                    $arr = self::titles_to_ids( $show_on_pages );
+                    $arr = self::titles_to_ids( $show_on_pages, 'page' );
 
                     if( in_array( $post_id, $arr ) )
                         $show_it = true;
@@ -632,11 +632,11 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             $newarr = array();
             
-            $types = get_option( 'hwp_post_types', []);
+            $post_types = get_option( 'hwp_post_types', []);
 
             // using the display on post, so search the set post types
-            if( $types !== 'page' && !empty( $types ) ) {
-                $type = $types;
+            if( $type !== 'page' && !empty( $post_types ) ) {
+                $type = $post_types;
             }
 
             foreach ($arr as $key => $value) {
