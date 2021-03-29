@@ -683,13 +683,13 @@ input.hwp-name {
 }
 
 @font-face {
-  font-family: "hwpfontello" !important;
-  src: url("../font/fontello.eot?57130597");
-  src: url("../font/fontello.eot?57130597#iefix") format("embedded-opentype"),
-    url("../font/fontello.woff2?57130597") format("woff2"),
-    url("../font/fontello.woff?57130597") format("woff"),
-    url("../font/fontello.ttf?57130597") format("truetype"),
-    url("../font/fontello.svg?57130597#fontello") format("svg");
+  font-family: 'hwpfontello';
+  src: url('../font/fontello.eot?57130597');
+  src: url('../font/fontello.eot?57130597#iefix') format('embedded-opentype'),
+       url('../font/fontello.woff2?57130597') format('woff2'),
+       url('../font/fontello.woff?57130597') format('woff'),
+       url('../font/fontello.ttf?57130597') format('truetype'),
+       url('../font/fontello.svg?57130597#fontello') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -704,11 +704,8 @@ input.hwp-name {
 }
 */
 
-.holler-box [class^="icon-"]:before,
-.holler-box [class*=" icon-"]:before,
-.hwp-floating-btn [class^="icon-"]:before,
-.hwp-floating-btn [class*=" icon-"]:before {
-  font-family: "hwpfontello" !important;
+.holler-box [class^="icon-"]:before, .holler-box [class*=" icon-"]:before, .hwp-floating-btn [class^="icon-"]:before, .hwp-floating-btn [class*=" icon-"]:before {
+  font-family: "hwpfontello";
   font-style: normal;
   font-weight: normal;
   speak: none;
@@ -742,30 +739,16 @@ input.hwp-name {
   /* text-shadow: 1px 1px 1px rgba(127, 127, 127, 0.3); */
 }
 
-.icon-search:before {
-  content: "\e800";
-} /* '' */
-.icon-cancel:before {
-  content: "\e801";
-} /* '' */
-.icon-mail:before {
-  content: "\e802";
-} /* '' */
-.icon-chat:before {
-  content: "\e803";
-} /* '' */
-.icon-comment:before {
-  content: "\e804";
-} /* '' */
-.icon-comment-empty:before {
-  content: "\f0e5";
-} /* '' */
-.icon-chat-empty:before {
-  content: "\f0e6";
-} /* '' */
-.icon-help:before {
-  content: "\f128";
-} /* '' */
-.icon-info:before {
-  content: "\f129";
-} /* '' */
+i.hwp-icon, i.hwp-icon:before {
+  font-family: "hwpfontello";
+}
+
+.icon-search:before { content: '\e800'; } /* '' */
+.icon-cancel:before { content: '\e801'; } /* '' */
+.icon-mail:before { content: '\e802'; } /* '' */
+.icon-chat:before { content: '\e803'; } /* '' */
+.icon-comment:before { content: '\e804'; } /* '' */
+.icon-comment-empty:before { content: '\f0e5'; } /* '' */
+.icon-chat-empty:before { content: '\f0e6'; } /* '' */
+.icon-help:before { content: '\f128'; } /* '' */
+.icon-info:before { content: '\f129'; } /* '' */

@@ -305,14 +305,14 @@ if( !class_exists( 'Holler_Functions' ) ) {
             </style>
 
             <?php if( $type != 'holler-banner' && $type != 'fomo' ) : ?>
-            <div data-id="<?php echo esc_attr( $id ); ?>" class="hwp-floating-btn hwp-btn-<?php echo esc_attr( $id ); ?> <?php echo esc_attr( get_post_meta( $id, 'position', 1 ) ); ?>"><i class="icon icon-chat"></i></div>
+            <div data-id="<?php echo esc_attr( $id ); ?>" class="hwp-floating-btn hwp-btn-<?php echo esc_attr( $id ); ?> <?php echo esc_attr( get_post_meta( $id, 'position', 1 ) ); ?>"><i class="hwp-icon icon-chat"></i></div>
             <?php endif; ?>
 
             <div id="hwp-<?php echo esc_attr( $id ); ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">
 
                 <div class="holler-inside">
 
-                    <div class="hwp-close"><i class="icon icon-cancel"></i></div>
+                    <div class="hwp-close"><i class="hwp-icon icon-cancel"></i></div>
 
                     <?php do_action('hollerbox_above_content', $id); ?>
 
@@ -336,7 +336,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                     <div class="hwp-row hwp-text">
                         <input type="text" class="hwp-text-input" placeholder="<?php _e( 'Type your message', 'holler-box' ); ?>" />
-                        <i class="icon icon-mail"></i>
+                        <i class="hwp-icon icon-mail"></i>
                     </div>
                 </div>
 
@@ -423,7 +423,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
                 <div class="holler-inside">
 
-                <div class="hwp-close"><i class="icon icon-cancel"></i></div>
+                <div class="hwp-close"><i class="hwp-icon icon-cancel"></i></div>
 
                 <?php if( $template === 'hwp-template-3' ) : ?>
                     <div class="hwp-img-wrap">
@@ -499,7 +499,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                         <img src="<?php echo $img; ?>" class="hwp-popup-image" />
                     </div>
 
-                    <div class="hwp-close"><i class="icon icon-cancel"></i></div>
+                    <div class="hwp-close"><i class="hwp-icon icon-cancel"></i></div>
 
                     <div class="hwp-content-wrap">
 
