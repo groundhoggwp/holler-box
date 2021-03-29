@@ -393,7 +393,7 @@ if( !class_exists( 'Holler_Admin' ) ) {
             $args = array(
                 'labels'                => $labels,
                 'public'                => true,
-                'publicly_queryable' => false,
+                'publicly_queryable' => true,
                 'show_ui'           => true,
                 'show_in_nav_menus' => false,
                 'show_in_menu'      => true,

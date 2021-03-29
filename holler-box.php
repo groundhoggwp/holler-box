@@ -3,7 +3,7 @@
  * Plugin Name:     Holler Box
  * Plugin URI:      https://hollerwp.com
  * Description:     A lightweight popup plugin with lead generation opt-in forms.
- * Version:         1.5.5
+ * Version:         1.5.6
  * Author:          Scott Bolinger
  * Author URI:      https://scottbolinger.com
  * Text Domain:     holler-box
@@ -62,7 +62,7 @@ if( !class_exists( 'Holler_Box' ) ) {
          */
         private function setup_constants() {
             // Plugin version
-            define( 'Holler_Box_VER', '1.5.5' );
+            define( 'Holler_Box_VER', '1.5.6' );
 
             // Plugin path
             define( 'Holler_Box_DIR', plugin_dir_path( __FILE__ ) );
@@ -84,8 +84,7 @@ if( !class_exists( 'Holler_Box' ) ) {
             require_once Holler_Box_DIR . 'includes/class-holler-functions.php';
             require_once Holler_Box_DIR . 'includes/class-holler-ajax.php';
 
-            if( is_admin() )
-                require_once Holler_Box_DIR . 'includes/class-holler-admin.php';
+            require_once Holler_Box_DIR . 'includes/class-holler-admin.php';
             
         }
 
