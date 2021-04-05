@@ -541,7 +541,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
             $content = $post_content->post_content;
             $content = apply_filters('the_content', $content );
             $content = apply_filters('hollerbox_content', $content, $id );
-            return do_shortcode( $content );
+            return $content;
 
         }
 
