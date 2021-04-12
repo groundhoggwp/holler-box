@@ -71,9 +71,9 @@ if( !class_exists( 'Holler_Functions' ) ) {
          */
         public function scripts_styles( $hook ) {
 
-            $box_id = $this->get_box_for_this_page();
+            $boxes = $this->get_boxes_for_this_page();
 
-            if( $box_id ) {
+            if( !empty( $boxes ) ) {
 
                 // Use minified libraries if SCRIPT_DEBUG is turned off
                 $suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
@@ -154,11 +154,12 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
         public function maybe_display_items() {
 
-            $box_id = $this->get_box_for_this_page();
+            $active_boxes = $this->get_boxes_for_this_page();
 
-            if( $box_id ) {
+            foreach( $active_boxes as $box_id ) {
                 self::$instance->show_box_types( $box_id );
             }
+
         }
 
         /**
@@ -167,7 +168,9 @@ if( !class_exists( 'Holler_Functions' ) ) {
          * @since       0.1.0
          * @return      string
          */
-        public function get_box_for_this_page() {
+        public function get_boxes_for_this_page() {
+
+            $active_boxes = [];
 
             // do checks for page conditionals, logged in, etc here
             // if any of the checks are true, we show it
@@ -228,9 +231,11 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 if( $show_it === false )
                     continue;
 
-                return $box_id;
+                $active_boxes[] = $box_id;
 
             }
+
+            return $active_boxes;
 
         }
 
