@@ -468,7 +468,7 @@ if (!class_exists('Holler_Ajax')) {
                 $results = 'No results';
             }
 
-            echo join($results, "\n");
+            echo implode("\n",$results);
             wp_die();
         }
 
@@ -515,7 +515,7 @@ if (!class_exists('Holler_Ajax')) {
                 $results = 'No results';
             }
 
-            echo join($results, "\n");
+            echo implode("\n",$results);
             wp_die();
         }
 

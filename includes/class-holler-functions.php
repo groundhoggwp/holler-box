@@ -394,7 +394,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
 
             <div id="hwp-<?php echo esc_attr( $id ); ?>" class="holler-box hwp-hide <?php echo apply_filters( 'hollerbox_classes', '', $id ); ?>">
 
-            <?php self::get_popup_template( $template, $id, $img ); ?>
+            <?php $this->get_popup_template( $template, $id, $img ); ?>
 
             </div>
             <?php
@@ -596,7 +596,7 @@ if( !class_exists( 'Holler_Functions' ) ) {
                 ?>
                 <div style="position: absolute; left: -5000px;" aria-hidden="true"><input type="text" name="hwp_hp" tabindex="-1" value=""></div>
 
-                <?php self::name_row( $id ); ?>
+                <?php $this->name_row( $id ); ?>
 
                 <input type="email" name="email" class="hwp-email-input <?php if( get_post_meta( $id, 'dont_show_name', 1 ) === '1' ) echo 'no-name'; ?>" placeholder="<?php _e( 'Enter email', 'holler-box' ); ?>" autocomplete="on" autocapitalize="off" />
                 <button class="hwp-email-btn"><?php echo $btn_text; ?></button>
