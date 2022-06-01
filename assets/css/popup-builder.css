@@ -1,0 +1,120 @@
+@charset "UTF-8";
+#wpcontent {
+  padding: 0;
+}
+
+#wpfooter {
+  display: none;
+}
+
+#app {
+  position: fixed;
+  top: 32px;
+  right: 0;
+  bottom: 0;
+  left: 160px;
+  display: flex;
+  flex-direction: column;
+}
+#app #header {
+  background: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid rgba(16, 38, 64, 0.1);
+  padding: 20px;
+  align-items: center;
+}
+#app #header h1.holler-title {
+  margin: 0;
+  font-size: 20px;
+}
+#app #editor {
+  height: 100%;
+  display: flex;
+  align-items: stretch;
+}
+#app #editor #preview {
+  box-sizing: border-box;
+  padding: 20px;
+  position: relative;
+  width: 100%;
+}
+#app #editor #preview .holler-box .holler-box-overlay {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  bottom: 20px;
+  border-radius: 5px;
+}
+#app #editor #preview .holler-box .holler-box-modal {
+  position: absolute;
+}
+#app #editor #controls {
+  background: #ffffff;
+  width: 360px;
+  flex-shrink: 0;
+  border-left: 1px solid rgba(16, 38, 64, 0.1);
+  display: flex;
+  flex-direction: column;
+}
+#app #editor #controls .control-group {
+  border-bottom: 1px solid rgba(16, 38, 64, 0.1);
+}
+#app #editor #controls .control-group .control-group-header {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
+#app #editor #controls .control-group .control-group-header:hover {
+  background-color: rgba(16, 38, 64, 0.05);
+}
+#app #editor #controls .control-group .control-group-header .control-group-name {
+  padding: 12px 0 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+#app #editor #controls .control-group .control-group-header button.toggle-indicator {
+  background: transparent;
+  border: none;
+}
+#app #editor #controls .control-group .control-group-header button.toggle-indicator:hover {
+  background: rgba(16, 38, 64, 0.05);
+}
+#app #editor #controls .control-group .control-group-header button.toggle-indicator:focus {
+  box-shadow: 0 0 0 1px #0075ff, 0 0 2px 1px rgba(0, 117, 255, 0.6);
+  outline: 1px solid transparent;
+}
+#app #editor #controls .control-group .control-group-header button.toggle-indicator::before {
+  display: inline-block;
+  font: normal 20px/1 dashicons;
+  speak: never;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-decoration: none;
+}
+#app #editor #controls .control-group .control-group-header button.toggle-indicator::before {
+  content: "";
+}
+#app #editor #controls .control-group.open .controls {
+  display: flex;
+}
+#app #editor #controls .control-group.open button.toggle-indicator::before {
+  content: "";
+}
+#app #editor #controls .control-group .controls {
+  display: none;
+  padding: 20px;
+  flex-direction: column;
+  gap: 10px;
+}
+#app #editor #controls .control-group .controls .control {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+#app #editor #controls .control-group .controls .control label {
+  font-size: 14px;
+}
+
+/*# sourceMappingURL=popup-builder.css.map */
