@@ -7,7 +7,160 @@
   display: none;
 }
 
-#app {
+table.display-conditions-grid {
+  box-sizing: border-box;
+  border-collapse: collapse;
+  width: 100%;
+}
+table.display-conditions-grid .picker-here {
+  margin-top: 10px;
+}
+table.display-conditions-grid .rules {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+table.display-conditions-grid .rules .rule {
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(16, 38, 64, 0.15);
+}
+table.display-conditions-grid .rules select {
+  max-width: 100%;
+}
+table.display-conditions-grid th {
+  text-align: left;
+  font-size: 16px;
+  padding: 30px;
+  border-right: 1px solid rgba(16, 38, 64, 0.15);
+}
+table.display-conditions-grid td {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 30px;
+}
+table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-grid tr:not(:last-child) th {
+  border-bottom: 1px solid rgba(16, 38, 64, 0.15);
+}
+
+#triggers {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#triggers .trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid rgba(16, 38, 64, 0.15);
+  border-radius: 5px;
+  padding: 10px 10px 10px 15px;
+}
+#triggers .trigger input[type=number] {
+  width: 60px;
+}
+#triggers .trigger .controls {
+  display: none;
+}
+#triggers .trigger.enabled .controls {
+  display: block;
+}
+#triggers .trigger.enabled .name {
+  opacity: 1;
+}
+#triggers .trigger:hover {
+  box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.05);
+}
+#triggers .trigger .name {
+  font-size: 16px;
+  font-weight: 500;
+  opacity: 0.6;
+}
+#triggers .trigger button {
+  justify-self: flex-end;
+  margin-left: auto;
+}
+
+#integrations-here {
+  box-sizing: content-box;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 20px;
+  grid-auto-flow: row;
+}
+#integrations-here .integration {
+  cursor: pointer;
+}
+#integrations-here .integration:hover .integration-name {
+  font-weight: bold;
+  color: #0075ff;
+}
+#integrations-here .integration:hover .icon {
+  background: rgba(0, 117, 255, 0.02);
+  box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.05);
+}
+#integrations-here .integration .integration-name {
+  text-align: center;
+}
+#integrations-here .integration .icon {
+  display: flex;
+  align-items: center;
+  padding: 0 20px;
+  border-radius: 5px;
+  border: 1px solid rgba(16, 38, 64, 0.15);
+  height: 110px;
+}
+
+#templates {
+  box-sizing: border-box;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 30px 30px;
+  grid-auto-flow: row;
+  padding: 30px;
+}
+#templates .template {
+  box-sizing: content-box;
+  cursor: pointer;
+}
+#templates .template .template-name {
+  text-align: center;
+}
+#templates .template .preview-wrap {
+  overflow: hidden;
+  border-radius: 5px;
+  height: 250px;
+  border: 1px solid rgba(16, 38, 64, 0.15);
+  background: rgba(0, 117, 255, 0.02);
+}
+#templates .template .preview-wrap .preview {
+  box-sizing: content-box;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  zoom: 40%;
+}
+#templates .template .preview-wrap .preview .holler-box .holler-box-overlay {
+  position: absolute;
+}
+#templates .template .preview-wrap .preview .holler-box .holler-box-modal {
+  position: absolute;
+}
+#templates .template:hover .template-name {
+  font-weight: bold;
+  color: #0075ff;
+}
+#templates .template:hover .preview-wrap {
+  box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.05);
+  transition: 0.4s;
+}
+#templates .template:hover .preview-wrap .preview {
+  zoom: 45%;
+}
+
+#holler-app {
   position: fixed;
   top: 32px;
   right: 0;
@@ -16,30 +169,53 @@
   display: flex;
   flex-direction: column;
 }
-#app #header {
+#holler-app #header {
   background: #ffffff;
   display: flex;
-  justify-content: space-between;
+  gap: 20px;
   border-bottom: 1px solid rgba(16, 38, 64, 0.1);
-  padding: 20px;
   align-items: center;
 }
-#app #header h1.holler-title {
+#holler-app #header .holler {
+  padding: 0 10px;
+  border-right: 1px solid rgba(16, 38, 64, 0.1);
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+#holler-app #header .holler svg {
+  height: 30px;
+  width: 30px;
+}
+#holler-app #header .inside-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  align-items: center;
+}
+#holler-app #header .inside-header h1.holler-title {
   margin: 0;
   font-size: 20px;
+  font-weight: 400;
 }
-#app #editor {
+#holler-app #header .inside-header h1.holler-title:hover b {
+  color: #0075ff;
+}
+#holler-app #editor {
   height: 100%;
+  overflow: auto;
   display: flex;
   align-items: stretch;
 }
-#app #editor #preview {
+#holler-app #editor #preview {
   box-sizing: border-box;
   padding: 20px;
   position: relative;
   width: 100%;
+  overflow: hidden;
 }
-#app #editor #preview .holler-box .holler-box-overlay {
+#holler-app #editor #preview .holler-box .holler-box-overlay {
   position: absolute;
   top: 20px;
   left: 20px;
@@ -47,45 +223,62 @@
   bottom: 20px;
   border-radius: 5px;
 }
-#app #editor #preview .holler-box .holler-box-modal {
+#holler-app #editor #preview .holler-box .holler-box-modal {
   position: absolute;
 }
-#app #editor #controls {
-  background: #ffffff;
-  width: 360px;
+#holler-app #editor .control-wrap {
   flex-shrink: 0;
-  border-left: 1px solid rgba(16, 38, 64, 0.1);
+  width: 360px;
+  background: #ffffff;
+  border-right: 1px solid rgba(16, 38, 64, 0.1);
+  overflow: auto;
+}
+#holler-app #editor .control-wrap #controls {
   display: flex;
   flex-direction: column;
 }
-#app #editor #controls .control-group {
+#holler-app #editor .control-wrap #controls .control-button {
+  border: none;
+  border-bottom: 1px solid rgba(16, 38, 64, 0.1);
+  background: #FFFFFF;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+  padding: 12px 10px 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+}
+#holler-app #editor .control-wrap #controls .control-button:hover {
+  background-color: rgba(16, 38, 64, 0.05);
+}
+#holler-app #editor .control-wrap #controls .control-group {
   border-bottom: 1px solid rgba(16, 38, 64, 0.1);
 }
-#app #editor #controls .control-group .control-group-header {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header {
   display: flex;
   justify-content: space-between;
   cursor: pointer;
 }
-#app #editor #controls .control-group .control-group-header:hover {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header:hover {
   background-color: rgba(16, 38, 64, 0.05);
 }
-#app #editor #controls .control-group .control-group-header .control-group-name {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header .control-group-name {
   padding: 12px 0 12px 20px;
   font-size: 14px;
   font-weight: 500;
 }
-#app #editor #controls .control-group .control-group-header button.toggle-indicator {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header button.toggle-indicator {
   background: transparent;
   border: none;
 }
-#app #editor #controls .control-group .control-group-header button.toggle-indicator:hover {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header button.toggle-indicator:hover {
   background: rgba(16, 38, 64, 0.05);
 }
-#app #editor #controls .control-group .control-group-header button.toggle-indicator:focus {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header button.toggle-indicator:focus {
   box-shadow: 0 0 0 1px #0075ff, 0 0 2px 1px rgba(0, 117, 255, 0.6);
   outline: 1px solid transparent;
 }
-#app #editor #controls .control-group .control-group-header button.toggle-indicator::before {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header button.toggle-indicator::before {
   display: inline-block;
   font: normal 20px/1 dashicons;
   speak: never;
@@ -93,28 +286,61 @@
   -moz-osx-font-smoothing: grayscale;
   text-decoration: none;
 }
-#app #editor #controls .control-group .control-group-header button.toggle-indicator::before {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header button.toggle-indicator::before {
   content: "";
 }
-#app #editor #controls .control-group.open .controls {
+#holler-app #editor .control-wrap #controls .control-group.open .controls {
   display: flex;
 }
-#app #editor #controls .control-group.open button.toggle-indicator::before {
+#holler-app #editor .control-wrap #controls .control-group.open button.toggle-indicator::before {
   content: "";
 }
-#app #editor #controls .control-group .controls {
+#holler-app #editor .control-wrap #controls .control-group .controls {
   display: none;
   padding: 20px;
   flex-direction: column;
   gap: 10px;
 }
-#app #editor #controls .control-group .controls .control {
+#holler-app #editor .control-wrap #controls .control-group .controls .control {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-#app #editor #controls .control-group .controls .control label {
+#holler-app #editor .control-wrap #controls .control-group .controls .control label {
   font-size: 14px;
+}
+#holler-app #editor .control-wrap #controls .control-group .controls #integrations {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+#holler-app #editor .control-wrap #controls .control-group .controls #integrations .integration {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 10px;
+  border: 1px solid rgba(16, 38, 64, 0.15);
+  border-radius: 5px;
+  padding: 5px 5px 5px 15px;
+}
+#holler-app #editor .control-wrap #controls .control-group .controls #integrations .integration:hover {
+  box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.05);
+}
+#holler-app #editor .control-wrap #controls .control-group .controls #integrations .integration > .icon {
+  display: flex;
+  align-items: center;
+}
+#holler-app #editor .control-wrap #controls .control-group .controls #integrations .integration > .icon > svg {
+  height: 20px;
+  width: 20px;
+}
+#holler-app #editor .control-wrap #controls .control-group .controls #integrations .integration .name {
+  font-size: 16px;
+}
+#holler-app #editor .control-wrap #controls .control-group .controls #integrations .integration button {
+  justify-self: flex-end;
+  margin-left: auto;
 }
 
 /*# sourceMappingURL=popup-builder.css.map */

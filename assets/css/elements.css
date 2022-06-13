@@ -1,4 +1,8 @@
 @charset "UTF-8";
+.full-width {
+  width: 100%;
+}
+
 h3.no-margin-top {
   margin-top: 0;
 }
@@ -1056,14 +1060,23 @@ button.holler-submit.loud {
   right: 0;
   padding: 8px 20px;
 }
+.holler-modal-dialog .holler-header.is-sticky {
+  position: sticky;
+}
 .holler-modal-dialog .holler-header h3 {
   margin: 0;
+}
+.holler-modal-dialog.has-header {
+  padding-top: 80px;
 }
 .holler-modal-dialog.overflow-visible {
   overflow: visible;
 }
 .holler-modal-dialog.no-padding {
   padding: 0;
+}
+.holler-modal-dialog.no-padding.has-header {
+  padding-top: 50px;
 }
 .holler-modal-dialog-alert p {
   font-size: 18px;
@@ -1371,15 +1384,17 @@ p.error,
 .holler-rows-and-columns label.block {
   display: block;
 }
-.holler-rows-and-columns input:not([type=checkbox], [type=radio]), .holler-rows-and-columns select {
-  width: 100%;
-}
+.holler-rows-and-columns .row,
 .holler-rows-and-columns .holler-row {
   display: flex;
   gap: 10px;
   justify-content: space-between;
 }
-.holler-rows-and-columns .holler-row .holler-col, .holler-rows-and-columns .holler-row .holler-column {
+.holler-rows-and-columns .row .holler-col, .holler-rows-and-columns .row .holler-column, .holler-rows-and-columns .row .col, .holler-rows-and-columns .row .column,
+.holler-rows-and-columns .holler-row .holler-col,
+.holler-rows-and-columns .holler-row .holler-column,
+.holler-rows-and-columns .holler-row .col,
+.holler-rows-and-columns .holler-row .column {
   width: 100%;
 }
 
@@ -1837,7 +1852,7 @@ ul.holler-form-errors {
 .holler-switch .slider.round:before {
   border-radius: 50%;
 }
-.holler-switch span {
+.holler-switch span:not(.slider) {
   font-weight: 500;
   color: white;
   position: absolute;
@@ -1846,11 +1861,11 @@ ul.holler-form-errors {
   font-size: 10px;
   font-family: Verdana, sans-serif;
 }
-.holler-switch span.on {
+.holler-switch span:not(.slider).on {
   display: none;
   left: 7px;
 }
-.holler-switch span.off {
+.holler-switch span:not(.slider).off {
   right: 7px;
 }
 .holler-switch input:checked ~ span.on {
@@ -1858,6 +1873,85 @@ ul.holler-form-errors {
 }
 .holler-switch input:checked ~ span.off {
   display: none;
+}
+
+.holler-picker {
+  position: relative;
+  border: 1px solid #8c8f94;
+  border-radius: 5px;
+}
+.holler-picker.options-visible {
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.holler-picker.options-visible .holler-picker-options {
+  display: block;
+}
+.holler-picker .holler-picker-selected {
+  padding: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+.holler-picker .holler-picker-selected .holler-picker-search {
+  flex-grow: 1;
+  border: none;
+}
+.holler-picker .holler-picker-selected .holler-picker-search:focus {
+  border: none;
+  box-shadow: none;
+  outline: none;
+}
+.holler-picker .holler-picker-selected .holler-picker-item {
+  padding: 5px 5px 5px 10px;
+  background: rgba(16, 38, 64, 0.1);
+  border-radius: 3px;
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+.holler-picker .holler-picker-selected .holler-picker-item .holler-picker-item-delete {
+  display: inline-block;
+  padding: 3px;
+  line-height: 1;
+  cursor: pointer;
+}
+.holler-picker .holler-picker-selected .holler-picker-item .holler-picker-item-delete:hover {
+  color: #102640;
+  font-weight: bold;
+}
+.holler-picker:focus-within {
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+  outline: 2px solid transparent;
+}
+.holler-picker .holler-picker-options {
+  display: none;
+  position: absolute;
+  left: -1px;
+  right: -1px;
+  border-top: none;
+  border-color: #2271b1;
+  box-shadow: 0 0 0 1px #2271b1;
+  outline: 2px solid transparent;
+  border-radius: 0 0 5px 5px;
+  background: #FFF;
+  overflow-y: auto;
+}
+.holler-picker .holler-picker-options .holler-picker-no-options {
+  font-size: 14px;
+  padding: 5px 10px;
+}
+.holler-picker .holler-picker-options .holler-picker-option {
+  cursor: pointer;
+  font-size: 14px;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.holler-picker .holler-picker-options .holler-picker-option:hover {
+  color: #102640;
+  background: rgba(0, 117, 255, 0.07);
 }
 
 /*# sourceMappingURL=elements.css.map */

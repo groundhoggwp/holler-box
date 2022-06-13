@@ -52,14 +52,14 @@ if( !class_exists( 'Holler_Functions' ) ) {
          */
         private function hooks() {
 
-            add_action( 'wp', array( $this, 'get_active_items' ) );
-            add_action( 'wp_footer', array( $this, 'maybe_display_items' ) );
-            add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
-            add_action( 'hwp_email_form', array( $this, 'email_forms' ) );
-
-            add_filter( 'hollerbox_classes', array( $this, 'add_hb_classes'), 10, 2 );
-
-            add_action( 'init', array( $this, 'preview_box' ) );
+//            add_action( 'wp', array( $this, 'get_active_items' ) );
+//            add_action( 'wp_footer', array( $this, 'maybe_display_items' ) );
+//            add_action( 'wp_enqueue_scripts', array( $this, 'scripts_styles' ) );
+//            add_action( 'hwp_email_form', array( $this, 'email_forms' ) );
+//
+//            add_filter( 'hollerbox_classes', array( $this, 'add_hb_classes'), 10, 2 );
+//
+//            add_action( 'init', array( $this, 'preview_box' ) );
 
         }
 

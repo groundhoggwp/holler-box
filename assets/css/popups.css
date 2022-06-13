@@ -1,3 +1,7 @@
+body.holler-box-blurred {
+  filter: blur(4px);
+}
+
 .holler-box .holler-box-overlay {
   position: fixed;
   background: #333333;
@@ -18,15 +22,44 @@
   padding: 30px;
   box-sizing: border-box;
 }
-.holler-box .holler-box-modal h6.holler-box-modal-title {
+.holler-box .holler-box-modal.notification-closed {
+  cursor: pointer;
+  box-sizing: border-box;
+  position: fixed;
+  width: 60px !important;
+  height: 60px !important;
+  border-radius: 50% !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #0075ff;
+  box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.15);
+  min-width: 0 !important;
+  padding: 0 !important;
+}
+.holler-box .holler-box-modal.notification-closed svg {
+  height: 30px;
+  width: 30px;
+}
+.holler-box .holler-box-modal img {
+  display: block;
+  max-width: 500px;
+}
+.holler-box .holler-box-modal .holler-box-modal-title {
   width: max-content;
   margin: 0;
   line-height: 1;
   font-size: 36px;
   font-weight: bold;
 }
-.holler-box .holler-box-modal p.holler-box-modal-text {
+.holler-box .holler-box-modal .holler-box-modal-content * {
   font-size: 18px;
+}
+.holler-box .holler-box-modal .holler-box-modal-content h2 {
+  font-size: 32px;
+}
+.holler-box .holler-box-modal .holler-box-modal-content h3 {
+  font-size: 24px;
 }
 .holler-box .holler-box-modal .holler-box-modal-close {
   cursor: pointer;
@@ -81,13 +114,79 @@
   bottom: 20px;
   right: 20px;
 }
+.holler-box.holler-notification-box.with-button .holler-button-cta {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 10px;
+}
+.holler-box.holler-notification-box.with-button .holler-button-cta .holler-box-button {
+  border-radius: 5px;
+  font-size: 18px;
+}
+.holler-box.holler-notification-box.with-form form.holler-box-form {
+  margin-top: 10px;
+  display: flex;
+  width: 100%;
+  min-width: 0;
+  gap: 0;
+}
+.holler-box.holler-notification-box.with-form form.holler-box-form input {
+  width: 100%;
+  background: rgba(16, 38, 64, 0.05);
+  border: none;
+  font-size: 16px;
+  border-radius: 5px 0 0 5px;
+}
+.holler-box.holler-notification-box.with-form form.holler-box-form button {
+  border-radius: 0 5px 5px 0;
+  font-size: 18px;
+}
+.holler-box.holler-notification-box .holler-box-modal {
+  width: 330px;
+  min-width: 330px;
+  padding: 20px 10px 10px 10px;
+  box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.15);
+  border-radius: 5px;
+}
+.holler-box.holler-notification-box .holler-box-modal .display-flex {
+  align-items: flex-start;
+  gap: 10px;
+}
+.holler-box.holler-notification-box .holler-box-modal img {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+}
+.holler-box.holler-notification-box .holler-box-modal .holler-box-modal-content {
+  width: 100%;
+  padding: 20px;
+  background-color: rgba(0, 117, 255, 0.07);
+  border-radius: 5px;
+}
+.holler-box.holler-notification-box .holler-box-modal .holler-box-modal-content p {
+  font-size: 16px;
+  margin: 0.8em 0;
+  line-height: 1.1;
+}
+.holler-box.holler-notification-box .holler-box-modal .holler-box-modal-content p:first-child {
+  margin-top: 0;
+}
+.holler-box.holler-notification-box .holler-box-modal .holler-box-modal-content p:last-child {
+  margin-bottom: 0;
+}
+.holler-box.holler-popup-image-left .holler-box-modal {
+  padding: 0;
+}
 .holler-box.holler-popup-image-left .display-flex {
   display: flex;
-  gap: 20px;
   align-items: flex-end;
 }
 .holler-box.holler-popup-image-left .display-flex .left img {
   display: block;
+}
+.holler-box.holler-popup-image-left .display-flex .right {
+  align-self: flex-start;
+  padding: 30px;
 }
 .holler-box.holler-popup-form-below .holler-box-modal {
   padding: 0;
@@ -103,6 +202,29 @@
 .holler-box.holler-popup-form-below .holler-box-form {
   padding: 20px;
   background: #ddd;
+}
+.holler-box.holler-popup-progress-bar .left {
+  min-width: 150px;
+}
+.holler-box.holler-popup-image-beside-text-top .left {
+  min-width: 200px;
+}
+.holler-box.holler-popup-image-beside-text-top .display-flex {
+  align-items: flex-end;
+}
+.holler-box button.holler-box-button {
+  font-size: 20px;
+  padding: 10px 16px;
+  border-radius: 0;
+  background: #2196F3;
+  color: #ffffff;
+  font-weight: bold;
+  border: none;
+  white-space: nowrap;
+  cursor: pointer;
+}
+.holler-box button.holler-box-button:disabled {
+  opacity: 0.8;
 }
 .holler-box form.holler-box-form {
   display: flex;
@@ -120,6 +242,10 @@
   padding: 6px 16px;
   font-size: 18px;
   width: 100%;
+  border: 1px solid rgba(16, 38, 64, 0.3);
+  line-height: 2;
+  min-height: 30px;
+  box-sizing: border-box;
   min-width: 0;
 }
 .holler-box form.holler-box-form input.holler-box-input::placeholder {
@@ -127,15 +253,6 @@
 }
 .holler-box form.holler-box-form input.holler-box-input:-ms-input-placeholder {
   color: #cccccc;
-}
-.holler-box form.holler-box-form button.holler-box-button {
-  font-size: 20px;
-  padding: 10px 16px;
-  border-radius: 0;
-  background: #2196F3;
-  color: #ffffff;
-  font-weight: bold;
-  border: none;
 }
 
 /*# sourceMappingURL=popups.css.map */

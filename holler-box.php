@@ -15,108 +15,116 @@
 
 
 // Exit if accessed directly
-if( !defined( 'ABSPATH' ) ) exit;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
 
-if( !class_exists( 'Holler_Box' ) ) {
+if ( ! class_exists( 'Holler_Box' ) ) {
 
-    /**
-     * Main Holler_Box class
-     *
-     * @since       0.1.0
-     */
-    class Holler_Box {
+	/**
+	 * Main Holler_Box class
+	 *
+	 * @since       0.1.0
+	 */
+	class Holler_Box {
 
-        /**
-         * @var         Holler_Box $instance The one true Holler_Box
-         * @since       0.1.0
-         */
-        private static $instance;
-
-
-        /**
-         * Get active instance
-         *
-         * @access      public
-         * @since       0.1.0
-         * @return      self The one true Holler_Box
-         */
-        public static function instance() {
-            if( !self::$instance ) {
-                self::$instance = new Holler_Box();
-                self::$instance->setup_constants();
-                self::$instance->includes();
-                self::$instance->load_textdomain();
-                self::$instance->hooks();
-            }
-
-            return self::$instance;
-        }
+		/**
+		 * @var         Holler_Box $instance The one true Holler_Box
+		 * @since       0.1.0
+		 */
+		private static $instance;
 
 
-        /**
-         * Setup plugin constants
-         *
-         * @access      private
-         * @since       0.1.0
-         * @return      void
-         */
-        private function setup_constants() {
-            // Plugin version
-            define( 'Holler_Box_VER', '1.5.8' );
+		/**
+		 * Get active instance
+		 *
+		 * @access      public
+		 * @return      self The one true Holler_Box
+		 * @since       0.1.0
+		 */
+		public static function instance() {
+			if ( ! self::$instance ) {
+				self::$instance = new Holler_Box();
+				self::$instance->setup_constants();
+				self::$instance->includes();
+				self::$instance->load_textdomain();
+				self::$instance->hooks();
 
-            // Plugin path
-            define( 'Holler_Box_DIR', plugin_dir_path( __FILE__ ) );
+				new Holler_Api();
+				new Holler_Frontend();
+			}
 
-            // Plugin URL
-            define( 'Holler_Box_URL', plugin_dir_url( __FILE__ ) );
-        }
-
-
-        /**
-         * Include necessary files
-         *
-         * @access      private
-         * @since       0.1.0
-         * @return      void
-         */
-        private function includes() {
-
-            require_once Holler_Box_DIR . 'includes/class-holler-functions.php';
-            require_once Holler_Box_DIR . 'includes/class-holler-ajax.php';
-
-            require_once Holler_Box_DIR . 'includes/class-holler-admin.php';
-            
-        }
+			return self::$instance;
+		}
 
 
-        /**
-         * Run action and filter hooks
-         *
-         * @access      private
-         * @since       0.1.0
-         * @return      void
-         *
-         *
-         */
-        private function hooks() {
+		/**
+		 * Setup plugin constants
+		 *
+		 * @access      private
+		 * @return      void
+		 * @since       0.1.0
+		 */
+		private function setup_constants() {
+			// Plugin version
+			define( 'Holler_Box_VER', '1.5.8' );
 
-        }
+			// Plugin path
+			define( 'Holler_Box_DIR', plugin_dir_path( __FILE__ ) );
+
+			// Plugin URL
+			define( 'Holler_Box_URL', plugin_dir_url( __FILE__ ) );
+		}
 
 
-        /**
-         * Internationalization
-         *
-         * @access      public
-         * @since       0.1.0
-         * @return      void
-         */
-        public function load_textdomain() {
+		/**
+		 * Include necessary files
+		 *
+		 * @access      private
+		 * @return      void
+		 * @since       0.1.0
+		 */
+		private function includes() {
 
-            load_plugin_textdomain( 'holler-box' );
-            
-        }
+			require_once __DIR__ . '/includes/class-holler-functions.php';
+			require_once __DIR__ . '/includes/class-holler-ajax.php';
+			require_once __DIR__ . '/includes/class-holler-api.php';
+			require_once __DIR__ . '/includes/class-holler-admin.php';
+			require_once __DIR__ . '/includes/class-holler-popup.php';
+			require_once __DIR__ . '/includes/class-holler-frontend.php';
 
-    }
+
+		}
+
+
+		/**
+		 * Run action and filter hooks
+		 *
+		 * @access      private
+		 * @return      void
+		 *
+		 *
+		 * @since       0.1.0
+		 */
+		private function hooks() {
+
+		}
+
+
+		/**
+		 * Internationalization
+		 *
+		 * @access      public
+		 * @return      void
+		 * @since       0.1.0
+		 */
+		public function load_textdomain() {
+
+			load_plugin_textdomain( 'holler-box' );
+
+		}
+
+	}
 } // End if class_exists check
 
 
@@ -124,13 +132,14 @@ if( !class_exists( 'Holler_Box' ) ) {
  * The main function responsible for returning the one true EDD_Metrics
  * instance to functions everywhere
  *
- * @since       0.1.0
  * @return      \Holler_Box The one true Holler_Box
  *
+ * @since       0.1.0
  */
 function holler_box_load() {
-    return Holler_Box::instance();
+	return Holler_Box::instance();
 }
+
 add_action( 'plugins_loaded', 'holler_box_load' );
 
 
@@ -140,10 +149,11 @@ add_action( 'plugins_loaded', 'holler_box_load' );
  * hook for compatibility, we also can't reference a function inside the plugin class
  * for the activation function. If you need an activation function, put it here.
  *
- * @since       0.1.0
  * @return      void
+ * @since       0.1.0
  */
 function holler_box_activation() {
-    /* Activation functions here */
+	/* Activation functions here */
 }
+
 register_activation_hook( __FILE__, 'holler_box_activation' );
