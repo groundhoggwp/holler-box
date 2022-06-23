@@ -47,6 +47,22 @@ class Holler_Api {
 				'permission_callback' => [ $this, 'permission_callback' ]
 			]
 		] );
+
+		register_rest_route( 'hollerbox', 'content', [
+			[
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'process_content' ],
+				'permission_callback' => [ $this, 'permission_callback' ]
+			]
+		] );
+
+		register_rest_route( 'hollerbox', 'install', [
+			[
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'install_plugin' ],
+				'permission_callback' => [ $this, 'plugins_permission_callback' ]
+			]
+		] );
 	}
 
 	/**
@@ -56,6 +72,136 @@ class Holler_Api {
 	 */
 	protected static function ERROR_404() {
 		return new WP_Error( 'missing', 'Popup not found.', [ 'status' => 404 ] );
+	}
+
+	/**
+	 * Install either MailHawk or Groundhogg remotely
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return bool|void|WP_Error
+	 */
+	public function install_plugin( WP_REST_Request $request ) {
+
+		$slug = sanitize_text_field( $request->get_param( 'slug' ) );
+
+		if ( ! in_array( $slug, [ 'groundhogg', 'mailhawk' ] ) ) {
+			return new WP_Error( 'invalid_slug', 'Not a valid slug.', [ 'status' => 401 ] );
+		}
+
+		$installed = $this->_install_plugin( $slug );
+
+		if ( is_wp_error( $installed ) ) {
+			return $installed;
+		}
+
+		if ( ! $installed ) {
+			return new WP_Error( 'not_installed', 'Unable to install.', [ 'status' => 500 ] );
+		}
+
+		$response = [];
+
+		switch ( $slug ) {
+			case 'mailhawk':
+
+				if ( ! defined( 'MAILHAWK_VERSION' ) ) {
+					return new WP_Error( 'mailhawk_missing', 'Unable to find MailHawk.', [ 'status' => 500 ] );
+				}
+
+				$response = [
+					'partner_id'   => '', // todo change this
+					'register_url' => esc_url( trailingslashit( MAILHAWK_LICENSE_SERVER_URL ) ),
+					'redirect_uri' => \MailHawk\get_admin_mailhawk_uri(),
+					'client_state' => esc_attr( \MailHawk\Keys::instance()->state() ),
+				];
+
+				break;
+			case 'groundhogg':
+				$response = [];
+				break;
+		}
+
+
+		return rest_ensure_response( wp_parse_args( $response, [
+			'success' => true
+		] ) );
+
+	}
+
+	/**
+	 * Pre-process the post content
+	 *
+	 * @param $slug string
+	 *
+	 * @return WP_Error|bool
+	 */
+	public function _install_plugin( $slug ) {
+
+		include_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+		foreach ( get_plugins() as $path => $details ) {
+
+			if ( false === strpos( $path, sprintf( '/%s.php', $slug ) ) ) {
+				continue;
+			}
+
+			$activate = activate_plugin( $path );
+
+			if ( is_wp_error( $activate ) ) {
+				return $activate;
+			}
+
+			return true;
+		}
+
+		include_once ABSPATH . 'wp-admin/includes/plugin-install.php';
+		include_once ABSPATH . 'wp-admin/includes/file.php';
+		include_once ABSPATH . 'wp-admin/includes/class-wp-upgrader.php';
+
+		// Use the WordPress Plugins API to get the plugin download link.
+		$api = plugins_api(
+			'plugin_information',
+			array(
+				'slug' => $slug,
+			)
+		);
+
+		if ( is_wp_error( $api ) ) {
+			return $api;
+		}
+
+		// Use the AJAX upgrader skin to quietly install the plugin.
+		$upgrader = new \Plugin_Upgrader( new \WP_Ajax_Upgrader_Skin() );
+		$install  = $upgrader->install( $api->download_link );
+
+		if ( is_wp_error( $install ) ) {
+			return $install;
+		}
+
+		$activate = activate_plugin( $upgrader->plugin_info() );
+
+		if ( is_wp_error( $activate ) ) {
+			return $activate;
+		}
+
+		return true;
+	}
+
+	/**
+	 * Pre-process the post content
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
+	 */
+	public function process_content( WP_REST_Request $request ) {
+
+		$content = wp_kses_post( $request->get_param( 'content' ) );
+		$content = do_shortcode( $content );
+
+		return rest_ensure_response( [
+			'content' => $content
+		] );
 	}
 
 	/**
@@ -121,7 +267,11 @@ class Holler_Api {
 
 		$new_settings = $request->get_json_params();
 
-		$popup->update( $new_settings );
+		$result = $popup->update( $new_settings );
+
+		if ( is_wp_error( $result ) ){
+			return $result;
+		}
 
 		return rest_ensure_response( $popup );
 	}
@@ -192,6 +342,10 @@ class Holler_Api {
 
 	public function permission_callback() {
 		return current_user_can( 'manage_options' );
+	}
+
+	public function plugins_permission_callback() {
+		return current_user_can( 'install_plugins' );
 	}
 
 }

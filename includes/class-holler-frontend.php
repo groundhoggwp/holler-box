@@ -19,6 +19,10 @@ class Holler_Frontend {
 	 */
 	protected $active = [];
 
+	public function is_builder_preview() {
+		return isset( $_GET['suppress_hollerbox'] ) && current_user_can( 'manage_options' );
+	}
+
 	public function __construct() {
 		add_action( 'wp', [ $this, 'get_active_popups' ] );
 		add_action( 'wp_head', [ $this, 'popup_css' ] );
@@ -27,35 +31,52 @@ class Holler_Frontend {
 	}
 
 	public function popup_css() {
+
+		if ( $this->is_builder_preview() ):
+			?>
+            <style id="hollerbox-builder-styles"></style>
+		<?php
+		endif;
+
 		?>
-		<style id="hollerbox-styles">
-			<?php foreach ( $this->active as $popup ):
+        <style id="hollerbox-frontend-styles">
+
+            .no-click {
+                cursor: not-allowed;
+                /*pointer-events: none;*/
+            }
+
+            <?php foreach ( $this->active as $popup ):
 
 				$popup->output_css();
 
 			endforeach;?>
-		</style>
+        </style>
 		<?php
 	}
 
 	public function enqueue_scripts() {
 
-		wp_enqueue_style( 'hollerbox-popups', Holler_Box_URL . 'assets/css/popups.css' );
-		wp_enqueue_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups.js', [], false, true );
+		wp_enqueue_style( 'hollerbox-popups', Holler_Box_URL . 'assets/css/popups.css', [], time() );
+		wp_enqueue_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups.js', [], time(), true );
 
 		$l10n = [
-			'active'      => $this->active,
-			'is_preview'  => is_preview(),
-			'is_frontend' => ! is_admin(),
-			'routes'      => [
+			'active'             => $this->active,
+			'home_url'           => home_url(),
+			'is_preview'         => is_preview(),
+			'is_frontend'        => ! is_admin(),
+			'is_builder_preview' => $this->is_builder_preview(),
+			'routes'             => [
 				'submit' => rest_url( 'hollerbox/submit' ),
 			],
-			'nonces'      => [
+			'nonces'             => [
 				'_wprest' => wp_create_nonce( 'wp_rest' )
 			]
 		];
 
-		wp_localize_script( 'hollerbox-popups', 'HollerBox', $l10n );
+		do_action( 'hollerbox/scripts' );
+
+		wp_add_inline_script( 'hollerbox-popups', "HollerBox = " . wp_json_encode( $l10n ), 'before' );
 
 	}
 
@@ -84,16 +105,33 @@ class Holler_Frontend {
 	}
 
 	/**
+	 * There are active popups on this page
+	 *
+	 * @return bool
+	 */
+	public function has_active() {
+		return ! empty( $this->active );
+	}
+
+	/**
 	 * Find which popups are active for the current request
 	 *
 	 * @param $query
 	 */
 	public function get_active_popups() {
 
+		// Suppress popups from being displayed
+		if ( $this->is_builder_preview() ) {
+			add_filter( 'show_admin_bar', '__return_false' );
+
+			return;
+		}
+
 		$args = [ 'post_type' => 'hollerbox', 'posts_per_page' => - 1, 'post_status' => 'publish' ];
 
 		// The Query
 		$the_query = new WP_Query( $args );
+		$popups    = [];
 
 		// The Loop
 		if ( $the_query->have_posts() ) {
@@ -104,13 +142,59 @@ class Holler_Frontend {
 
 				$popup = new Holler_Popup( $id );
 
-				if ( $popup->can_show() ) {
-					$this->add_active( $popup );
-				}
+				$popups[] = $popup;
 			}
 
 			/* Restore original Post Data */
 			wp_reset_postdata();
+		}
+
+		// only show active popups for the current query
+		foreach ( $popups as $popup ) {
+			if ( $popup->can_show() ) {
+				$this->add_active( $popup );
+			}
+		}
+
+		if ( $this->has_active() && ! $this->is_builder_preview() ) {
+			add_action( 'admin_bar_menu', [ $this, 'holler_box_menu_item' ], 99 );
+		}
+
+	}
+
+	/**
+	 * Add HollerBox menu item to admin bar
+	 *
+	 * @param $wp_admin_bar WP_Admin_Bar
+	 *
+	 * @return void
+	 */
+	public function holler_box_menu_item( $wp_admin_bar ) {
+
+		if ( ! $this->has_active() ) {
+			return;
+		}
+
+		$wp_admin_bar->add_node( [
+			'id'   => 'manage-hollerbox',
+			'title' => '<svg width="20" height="20" style="padding-top: 5px;" xmlns="http://www.w3.org/2000/svg" viewBox="75.3 55.7 134.4 152.3">
+            <path fill="#e8ad0b" d="m144 137-49-29v53l49 28 50-28v-53Zm0 43-18-10v-7l18 10Zm0-14-18-10v-8l18 11Z"/>
+            <path fill="#e8ad0b" d="m190 102-46-26-45 26 45 26 46-26z"/>
+            <path fill="" d="m126 170 18 10v-7l-18-10v7zm18-11-18-11v8l18 10v-7z"/>
+            <path fill="#fff"
+                    d="m190 102-46 26-45-26-9-5 57-33 43 26 7-5-50-29-72 41 20 11 49 29 50-29 8-5v63l-58 33-35-20-11 8v-14l-14-9v-48l-7-5v58l14 8v26l18-15 35 20 66-38V90l-20 12z"/>
+        </svg>'
+		] );
+
+		foreach ( $this->active as $popup ) {
+
+			$wp_admin_bar->add_node( [
+				'parent' => 'manage-hollerbox',
+				'id'     => 'holler-' . $popup->ID,
+				'title'   => $popup->post_title,
+				'href'   => get_edit_post_link( $popup->ID )
+			] );
+
 		}
 
 	}

@@ -373,6 +373,7 @@ h2.nav-tab-wrapper.gh {
 }
 
 input {
+  &.invalid,
   &:invalid {
     border-color: $error-red;
 
@@ -666,6 +667,15 @@ a.holler-button {
   line-height: 1.3;
 }
 
+@keyframes holler-rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 a,
 input[type='button'],
 input[type='submit'],
@@ -867,8 +877,18 @@ button {
       text-transform: uppercase;
     }
   }
-}
 
+  .holler-spinner {
+    display: block;
+    height: 15px;
+    width: 15px;
+    border: 5px solid rgba(255, 255, 255, 0.4);
+    border-bottom-color: #ffffff;
+    border-radius: 50%;
+    position: relative;
+    animation: holler-rotation 1s linear infinite;
+  }
+}
 
 .holler-button-group {
 
@@ -1221,13 +1241,9 @@ p.error,
 }
 
 .wp-editor-container {
-  textarea.wp-editor-area {
+  textarea {
     width: 100%;
-    margin: 0;
     box-shadow: none;
-  }
-
-  .wp-editor-area {
     font-family: Consolas, Monaco, monospace;
     font-size: 13px;
     padding: 10px;
@@ -1512,8 +1528,8 @@ p.error,
 
     .holler-col, .holler-column, .col, .column {
       width: 100%;
-      //display: flex;
-      //flex-direction: column;
+      display: flex;
+      flex-direction: column;
       //gap: 10px;
     }
   }
@@ -2082,7 +2098,7 @@ ul.holler-form-errors {
 
   &.options-visible {
     border-bottom-right-radius: 0;
-    border-bottom-left-radius:  0;
+    border-bottom-left-radius: 0;
 
     .holler-picker-options {
       display: block;
@@ -2119,6 +2135,11 @@ ul.holler-form-errors {
       gap: 5px;
       align-items: center;
 
+      &.is-invalid {
+        background: $error-red-10;
+        color: darken( $error-red, 10 );
+      }
+
       .holler-picker-item-delete {
         display: inline-block;
         padding: 3px;
@@ -2152,7 +2173,7 @@ ul.holler-form-errors {
     background: #FFF;
     overflow-y: auto;
 
-    .holler-picker-no-options{
+    .holler-picker-no-options {
       font-size: 14px;
       padding: 5px 10px;
     }
@@ -2171,4 +2192,20 @@ ul.holler-form-errors {
     }
   }
 
+}
+
+p.holler-notice {
+
+  padding: 10px 20px;
+  font-size: 14px;
+  background: $primary-blue-10;
+  color: $primary-dark;
+  border-radius: 5px;
+  //text-align: center;
+
+  svg {
+    flex-shrink: 0;
+    width: 40px;
+    height: 40px;
+  }
 }

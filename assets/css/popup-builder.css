@@ -1,4 +1,30 @@
 @charset "UTF-8";
+.promote-groundhogg img {
+  max-width: 100%;
+  border-radius: 5px;
+}
+.promote-groundhogg h1 {
+  font-size: 42px;
+  margin-bottom: 40px;
+  font-weight: 300;
+  line-height: 1.1;
+}
+.promote-groundhogg p, .promote-groundhogg ul, .promote-groundhogg li {
+  font-size: 18px;
+}
+
+.pro-feature {
+  max-width: 400px;
+}
+.pro-feature h1 {
+  font-size: 42px;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+.pro-feature p, .pro-feature ul, .pro-feature li {
+  font-size: 18px;
+}
+
 #wpcontent {
   padding: 0;
 }
@@ -7,6 +33,14 @@
   display: none;
 }
 
+@keyframes holler-grow {
+  from {
+    max-height: 0;
+  }
+  to {
+    max-height: 100vh;
+  }
+}
 table.display-conditions-grid {
   box-sizing: border-box;
   border-collapse: collapse;
@@ -85,30 +119,52 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   box-sizing: content-box;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 20px;
-  grid-auto-flow: row;
 }
 #integrations-here .integration {
+  position: relative;
+  min-width: calc(100% / 6);
   cursor: pointer;
+  border-radius: 5px;
+  background: #ffffff;
+  border: 1px solid rgba(16, 38, 64, 0.15);
+}
+#integrations-here .integration span.pro-integration {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #e8ad0b;
+  padding: 4px 6px;
+  border-radius: 5px;
+  color: #ffffff;
+  z-index: 9999;
+}
+#integrations-here .integration span.pro-integration svg {
+  height: 14px;
+  width: 14px;
+}
+#integrations-here .integration:hover {
+  box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.05);
 }
 #integrations-here .integration:hover .integration-name {
   font-weight: bold;
   color: #0075ff;
 }
-#integrations-here .integration:hover .icon {
-  background: rgba(0, 117, 255, 0.02);
-  box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.05);
+#integrations-here .integration:hover svg {
+  transform: scale(1.1);
 }
 #integrations-here .integration .integration-name {
   text-align: center;
 }
+#integrations-here .integration svg {
+  transition: 0.4s;
+}
 #integrations-here .integration .icon {
+  border-bottom: 1px solid rgba(16, 38, 64, 0.15);
   display: flex;
   align-items: center;
   padding: 0 20px;
-  border-radius: 5px;
-  border: 1px solid rgba(16, 38, 64, 0.15);
   height: 110px;
 }
 
@@ -124,16 +180,33 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
 #templates .template {
   box-sizing: content-box;
   cursor: pointer;
+  border-radius: 5px;
+  border: 1px solid rgba(16, 38, 64, 0.15);
+  overflow: hidden;
+  position: relative;
+}
+#templates .template span.pro-template {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: #e8ad0b;
+  padding: 4px 6px;
+  border-radius: 5px;
+  color: #ffffff;
+  z-index: 9999;
+}
+#templates .template span.pro-template svg {
+  height: 14px;
+  width: 14px;
 }
 #templates .template .template-name {
   text-align: center;
 }
 #templates .template .preview-wrap {
   overflow: hidden;
-  border-radius: 5px;
   height: 250px;
-  border: 1px solid rgba(16, 38, 64, 0.15);
   background: rgba(0, 117, 255, 0.02);
+  border-bottom: 1px solid rgba(16, 38, 64, 0.15);
 }
 #templates .template .preview-wrap .preview {
   box-sizing: content-box;
@@ -145,19 +218,22 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
 #templates .template .preview-wrap .preview .holler-box .holler-box-overlay {
   position: absolute;
 }
-#templates .template .preview-wrap .preview .holler-box .holler-box-modal {
+#templates .template .preview-wrap .preview .holler-box .positioner {
   position: absolute;
+}
+#templates .template .preview-wrap .preview .holler-box .holler-box-modal {
+  transition: 0.3s;
+}
+#templates .template:hover {
+  box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.05);
+  transition: 0.4s;
 }
 #templates .template:hover .template-name {
   font-weight: bold;
   color: #0075ff;
 }
-#templates .template:hover .preview-wrap {
-  box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.05);
-  transition: 0.4s;
-}
-#templates .template:hover .preview-wrap .preview {
-  zoom: 45%;
+#templates .template:hover .preview-wrap .preview .holler-box-modal {
+  transform: scale(1.1);
 }
 
 #holler-app {
@@ -208,22 +284,34 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   display: flex;
   align-items: stretch;
 }
-#holler-app #editor #preview {
-  box-sizing: border-box;
-  padding: 20px;
-  position: relative;
+#holler-app #editor #frame {
+  margin: 20px;
   width: 100%;
+  position: relative;
+  box-sizing: border-box;
   overflow: hidden;
+  border-radius: 5px;
+  transition: 0.4s;
 }
-#holler-app #editor #preview .holler-box .holler-box-overlay {
+#holler-app #editor #frame.mobile {
+  width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  height: 853px;
+}
+#holler-app #editor #frame iframe {
+  overflow: hidden;
+  height: 100%;
+  width: 100%;
+}
+#holler-app #editor #frame #preview.suppress-animations .animation {
+  animation: none !important;
+}
+#holler-app #editor #frame #preview .holler-box .holler-box-overlay {
   position: absolute;
-  top: 20px;
-  left: 20px;
-  right: 20px;
-  bottom: 20px;
   border-radius: 5px;
 }
-#holler-app #editor #preview .holler-box .holler-box-modal {
+#holler-app #editor #frame #preview .holler-box .positioner {
   position: absolute;
 }
 #holler-app #editor .control-wrap {
@@ -254,6 +342,16 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
 #holler-app #editor .control-wrap #controls .control-group {
   border-bottom: 1px solid rgba(16, 38, 64, 0.1);
 }
+#holler-app #editor .control-wrap #controls .control-group#codemirror .controls {
+  padding: 0;
+}
+#holler-app #editor .control-wrap #controls .control-group#codemirror .controls > .CodeMirror {
+  border: solid rgba(16, 38, 64, 0.1);
+  border-width: 1px 0 1px 0;
+}
+#holler-app #editor .control-wrap #controls .control-group#codemirror .controls p {
+  text-align: center;
+}
 #holler-app #editor .control-wrap #controls .control-group .control-group-header {
   display: flex;
   justify-content: space-between;
@@ -267,18 +365,18 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   font-size: 14px;
   font-weight: 500;
 }
-#holler-app #editor .control-wrap #controls .control-group .control-group-header button.toggle-indicator {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header > button.toggle-indicator {
   background: transparent;
   border: none;
 }
-#holler-app #editor .control-wrap #controls .control-group .control-group-header button.toggle-indicator:hover {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header > button.toggle-indicator:hover {
   background: rgba(16, 38, 64, 0.05);
 }
-#holler-app #editor .control-wrap #controls .control-group .control-group-header button.toggle-indicator:focus {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header > button.toggle-indicator:focus {
   box-shadow: 0 0 0 1px #0075ff, 0 0 2px 1px rgba(0, 117, 255, 0.6);
   outline: 1px solid transparent;
 }
-#holler-app #editor .control-wrap #controls .control-group .control-group-header button.toggle-indicator::before {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header > button.toggle-indicator::before {
   display: inline-block;
   font: normal 20px/1 dashicons;
   speak: never;
@@ -286,13 +384,15 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   -moz-osx-font-smoothing: grayscale;
   text-decoration: none;
 }
-#holler-app #editor .control-wrap #controls .control-group .control-group-header button.toggle-indicator::before {
+#holler-app #editor .control-wrap #controls .control-group .control-group-header > button.toggle-indicator::before {
   content: "";
 }
 #holler-app #editor .control-wrap #controls .control-group.open .controls {
   display: flex;
+  animation: holler-grow 0.5s linear;
+  overflow: hidden;
 }
-#holler-app #editor .control-wrap #controls .control-group.open button.toggle-indicator::before {
+#holler-app #editor .control-wrap #controls .control-group.open .control-group-header > button.toggle-indicator::before {
   content: "";
 }
 #holler-app #editor .control-wrap #controls .control-group .controls {

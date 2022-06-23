@@ -9,10 +9,16 @@ class Holler_Lead {
 
 	public $email = '';
 	public $name = '';
+	public $first_name = '';
+	public $last_name = '';
 
 	public function __construct( WP_REST_Request $request ) {
 		$this->name  = sanitize_text_field( $request->get_param( 'name' ) );
 		$this->email = sanitize_email( $request->get_param( 'email' ) );
+
+		$parts = explode( ' ', $this->name );
+		$this->first_name = trim( $parts[0] );
+		$this->last_name = trim( $parts[1] );
 	}
 
 	/**
@@ -32,5 +38,31 @@ class Holler_Lead {
 	public function get_name(){
 		return $this->name;
 	}
+
+	/**
+	 * Get the first name
+	 *
+	 * @return string
+	 */
+	public function get_first_name(){
+		return $this->first_name;
+	}
+
+	/**
+	 * Get the last name
+	 *
+	 * @return string
+	 */
+	public function get_last_name(){
+		return $this->last_name;
+	}
+
+	/**
+	 * @return void
+	 */
+	public function get_ip_address(){
+
+	}
+
 
 }

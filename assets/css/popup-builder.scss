@@ -17,6 +17,7 @@ $error-red-10: rgba(233, 31, 79, 0.10);
 $secondary-purple: rgb(108, 25, 173);
 $alert-yellow-50: rgba(255, 238, 88, 0.50);
 $alert-yellow: rgb(255, 238, 88);
+$holler-yellow: rgb(232, 173, 11);
 $benchmark-orange: rgb(245, 129, 21);
 $benchmark-orange-50: rgba(245, 129, 21, 0.50);
 $benchmark-orange-25: rgba(245, 129, 21, 0.25);
@@ -24,6 +25,42 @@ $action-green: rgb(158, 206, 56);
 $action-green-50: rgba(158, 206, 56, 0.5);
 $box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.05);
 $background-color: #F6F9FB;
+
+.promote-groundhogg {
+
+  img {
+    max-width: 100%;
+    border-radius: 5px;
+  }
+
+  h1 {
+    font-size: 42px;
+    //text-align: center;
+    margin-bottom: 40px;
+    font-weight: 300;
+    line-height: 1.1;
+  }
+
+  p, ul, li {
+    font-size: 18px;
+  }
+}
+
+.pro-feature {
+
+  max-width: 400px;
+
+  h1 {
+    font-size: 42px;
+    //text-align: center;
+    margin-bottom: 40px;
+    font-weight: 300;
+  }
+
+  p, ul, li {
+    font-size: 18px;
+  }
+}
 
 #wpcontent {
   padding: 0;
@@ -33,13 +70,27 @@ $background-color: #F6F9FB;
   display: none;
 }
 
+@keyframes holler-grow {
+  from {
+    max-height: 0;
+  }
+
+  to {
+    max-height: 100vh;
+  }
+}
+
+#text-content {
+
+}
+
 table.display-conditions-grid {
 
   box-sizing: border-box;
   border-collapse: collapse;
   width: 100%;
 
-  .picker-here{
+  .picker-here {
     margin-top: 10px;
   }
 
@@ -72,8 +123,8 @@ table.display-conditions-grid {
     padding: 30px;
   }
 
-  tr:not(:last-child){
-    td,th {
+  tr:not(:last-child) {
+    td, th {
       border-bottom: 1px solid $primary-dark-15;
     }
   }
@@ -92,11 +143,11 @@ table.display-conditions-grid {
     border-radius: 5px;
     padding: 10px 10px 10px 15px;
 
-    input[type=number]{
+    input[type=number] {
       width: 60px;
     }
 
-    .controls{
+    .controls {
       display: none;
     }
 
@@ -105,7 +156,7 @@ table.display-conditions-grid {
         display: block;
       }
 
-      .name{
+      .name {
         opacity: 1;
       }
     }
@@ -120,47 +171,74 @@ table.display-conditions-grid {
       opacity: 0.6;
     }
 
-    button{
+    button {
       justify-self: flex-end;
       margin-left: auto;
     }
   }
 }
 
-#integrations-here{
+#integrations-here {
   box-sizing: content-box;
   width: 100%;
   display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 20px;
-  grid-auto-flow: row;
 
   .integration {
 
+    position: relative;
+    min-width: calc(100% / 6);
     cursor: pointer;
+    border-radius: 5px;
+    background: #ffffff;
+    border: 1px solid $primary-dark-15;
 
-    &:hover{
-      .integration-name{
+    span.pro-integration {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: $holler-yellow;
+      padding: 4px 6px;
+      border-radius: 5px;
+      color: #ffffff;
+      z-index: 9999;
+
+      svg {
+        height: 14px;
+        width: 14px;
+      }
+    }
+
+    &:hover {
+      .integration-name {
         font-weight: bold;
         color: $primary-blue;
       }
 
-      .icon {
-        background: $primary-blue-2;
-        box-shadow: $box-shadow;
+      box-shadow: $box-shadow;
+
+      svg {
+        transform: scale(1.1);
       }
+
     }
 
     .integration-name {
       text-align: center;
     }
 
+    svg {
+      transition: 0.4s;
+    }
+
     .icon {
+      border-bottom: 1px solid $primary-dark-15;
+
       display: flex;
       align-items: center;
       padding: 0 20px;
-      border-radius: 5px;
-      border: 1px solid $primary-dark-15;
+
       height: 110px;
     }
 
@@ -181,17 +259,36 @@ table.display-conditions-grid {
   .template {
     box-sizing: content-box;
     cursor: pointer;
+    border-radius: 5px;
+    border: 1px solid $primary-dark-15;
+    overflow: hidden;
+    position: relative;
 
-    .template-name{
+    span.pro-template {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: $holler-yellow;
+      padding: 4px 6px;
+      border-radius: 5px;
+      color: #ffffff;
+      z-index: 9999;
+
+      svg {
+        height: 14px;
+        width: 14px;
+      }
+    }
+
+    .template-name {
       text-align: center;
     }
 
     .preview-wrap {
       overflow: hidden;
-      border-radius: 5px;
       height: 250px;
-      border: 1px solid $primary-dark-15;
       background: $primary-blue-2;
+      border-bottom: 1px solid $primary-dark-15;
 
       .preview {
         box-sizing: content-box;
@@ -207,8 +304,12 @@ table.display-conditions-grid {
             position: absolute;
           }
 
-          .holler-box-modal {
+          .positioner {
             position: absolute;
+          }
+
+          .holler-box-modal {
+            transition: .3s;
           }
         }
       }
@@ -216,17 +317,17 @@ table.display-conditions-grid {
 
     &:hover {
 
-      .template-name{
+      box-shadow: $box-shadow;
+      transition: 0.4s;
+
+      .template-name {
         font-weight: bold;
         color: $primary-blue;
       }
 
       .preview-wrap {
-        box-shadow: $box-shadow;
-        transition: 0.4s;
-
-        .preview {
-          zoom: 45%;
+        .preview .holler-box-modal {
+          transform: scale(1.1);
         }
       }
     }
@@ -259,13 +360,14 @@ table.display-conditions-grid {
       height: 100%;
       display: flex;
       align-items: center;
+
       svg {
         height: 30px;
         width: 30px;
       }
     }
 
-    .inside-header{
+    .inside-header {
       width: 100%;
       display: flex;
       justify-content: space-between;
@@ -277,7 +379,7 @@ table.display-conditions-grid {
         font-size: 20px;
         font-weight: 400;
 
-        &:hover{
+        &:hover {
           b {
             color: $primary-blue;
           }
@@ -292,25 +394,45 @@ table.display-conditions-grid {
     display: flex;
     align-items: stretch;
 
-    #preview {
-      box-sizing: border-box;
-      padding: 20px;
-      position: relative;
+    #frame {
+      margin: 20px;
       width: 100%;
+      position: relative;
+      box-sizing: border-box;
       overflow: hidden;
+      border-radius: 5px;
+      transition: 0.4s;
 
-      .holler-box {
-        .holler-box-overlay {
-          position: absolute;
-          top: 20px;
-          left: 20px;
-          right: 20px;
-          bottom: 20px;
-          border-radius: 5px;
+      &.mobile {
+        width: 480px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 853px;
+      }
+
+      iframe {
+        overflow: hidden;
+        height: 100%;
+        width: 100%;
+      }
+
+      #preview {
+
+        &.suppress-animations {
+          .animation {
+            animation: none !important;
+          }
         }
 
-        .holler-box-modal {
-          position: absolute;
+        .holler-box {
+          .holler-box-overlay {
+            position: absolute;
+            border-radius: 5px;
+          }
+
+          .positioner {
+            position: absolute;
+          }
         }
       }
     }
@@ -327,7 +449,7 @@ table.display-conditions-grid {
         display: flex;
         flex-direction: column;
 
-        .control-button{
+        .control-button {
           border: none;
           border-bottom: 1px solid $primary-dark-10;
           background: #FFFFFF;
@@ -348,6 +470,21 @@ table.display-conditions-grid {
         .control-group {
           border-bottom: 1px solid $primary-dark-10;
 
+          &#codemirror {
+            .controls {
+              padding: 0;
+
+              > .CodeMirror{
+                border: solid $primary-dark-10;
+                border-width: 1px 0 1px 0;
+              }
+
+              p {
+                text-align: center;
+              }
+            }
+          }
+
           .control-group-header {
             display: flex;
             justify-content: space-between;
@@ -363,7 +500,7 @@ table.display-conditions-grid {
               font-weight: 500;
             }
 
-            button.toggle-indicator {
+            > button.toggle-indicator {
               background: transparent;
               border: none;
 
@@ -386,7 +523,7 @@ table.display-conditions-grid {
               }
             }
 
-            button {
+            > button {
               &.toggle-indicator::before {
                 content: "\f140";
               }
@@ -396,9 +533,11 @@ table.display-conditions-grid {
           &.open {
             .controls {
               display: flex;
+              animation: holler-grow 0.5s linear;
+              overflow: hidden;
             }
 
-            button.toggle-indicator::before {
+            .control-group-header > button.toggle-indicator::before {
               content: "\f142";
             }
           }
@@ -455,7 +594,7 @@ table.display-conditions-grid {
                   font-size: 16px;
                 }
 
-                button{
+                button {
                   justify-self: flex-end;
                   margin-left: auto;
                 }

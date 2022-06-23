@@ -19,6 +19,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+define( 'HOLLERBOX_VERSION', '2.0' );
+
 if ( ! class_exists( 'Holler_Box' ) ) {
 
 	/**
@@ -86,13 +88,12 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 		 */
 		private function includes() {
 
-			require_once __DIR__ . '/includes/class-holler-functions.php';
-			require_once __DIR__ . '/includes/class-holler-ajax.php';
 			require_once __DIR__ . '/includes/class-holler-api.php';
 			require_once __DIR__ . '/includes/class-holler-admin.php';
 			require_once __DIR__ . '/includes/class-holler-popup.php';
 			require_once __DIR__ . '/includes/class-holler-frontend.php';
-
+			require_once __DIR__ . '/includes/class-holler-lead.php';
+			require_once __DIR__ . '/includes/class-holler-integrations.php';
 
 		}
 
