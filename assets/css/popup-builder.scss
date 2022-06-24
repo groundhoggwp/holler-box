@@ -142,6 +142,7 @@ table.display-conditions-grid {
     border: 1px solid $primary-dark-15;
     border-radius: 5px;
     padding: 10px 10px 10px 15px;
+    min-height: 30px;
 
     input[type=number] {
       width: 60px;
@@ -194,22 +195,6 @@ table.display-conditions-grid {
     background: #ffffff;
     border: 1px solid $primary-dark-15;
 
-    span.pro-integration {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: $holler-yellow;
-      padding: 4px 6px;
-      border-radius: 5px;
-      color: #ffffff;
-      z-index: 9999;
-
-      svg {
-        height: 14px;
-        width: 14px;
-      }
-    }
-
     &:hover {
       .integration-name {
         font-weight: bold;
@@ -228,18 +213,22 @@ table.display-conditions-grid {
       text-align: center;
     }
 
-    svg {
-      transition: 0.4s;
-    }
-
     .icon {
       border-bottom: 1px solid $primary-dark-15;
 
       display: flex;
       align-items: center;
+      justify-content: center;
       padding: 0 20px;
 
       height: 110px;
+
+      svg {
+        transition: 0.4s;
+        width: 60px;
+        height: 60px;
+      }
+
     }
 
   }

@@ -48,11 +48,19 @@ class Holler_Api {
 			]
 		] );
 
-		register_rest_route( 'hollerbox', 'content', [
+		register_rest_route( 'hollerbox', 'conversion', [
 			[
 				'methods'             => WP_REST_Server::CREATABLE,
-				'callback'            => [ $this, 'process_content' ],
-				'permission_callback' => [ $this, 'permission_callback' ]
+				'callback'            => [ $this, 'track_conversion' ],
+				'permission_callback' => '__return_true'
+			]
+		] );
+
+		register_rest_route( 'hollerbox', 'impression', [
+			[
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'track_impression' ],
+				'permission_callback' => '__return_true'
 			]
 		] );
 
@@ -62,6 +70,57 @@ class Holler_Api {
 				'callback'            => [ $this, 'install_plugin' ],
 				'permission_callback' => [ $this, 'plugins_permission_callback' ]
 			]
+		] );
+	}
+
+	/**
+	 * Track a conversion
+	 *
+	 * This is primarily used for Non-submission based conversions, like link clicks
+	 * The Popup::submit() method will track a conversion automatically
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
+	 */
+	public function track_conversion( WP_REST_Request $request ) {
+
+		$id = absint( $request->get_param( 'popup_id' ) );
+
+		$popup = new Holler_Popup( $id );
+
+		if ( ! $popup->exists() ) {
+			return self::ERROR_404();
+		}
+
+		Holler_Reporting::instance()->add_conversion( $popup );
+
+		return rest_ensure_response( [
+			'success' => true
+		] );
+	}
+
+	/**
+	 * Track an impression
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
+	 */
+	public function track_impression( WP_REST_Request $request ) {
+
+		$id = absint( $request->get_param( 'popup_id' ) );
+
+		$popup = new Holler_Popup( $id );
+
+		if ( ! $popup->exists() ) {
+			return self::ERROR_404();
+		}
+
+		Holler_Reporting::instance()->add_impression( $popup );
+
+		return rest_ensure_response( [
+			'success' => true
 		] );
 	}
 
@@ -188,23 +247,6 @@ class Holler_Api {
 	}
 
 	/**
-	 * Pre-process the post content
-	 *
-	 * @param WP_REST_Request $request
-	 *
-	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
-	 */
-	public function process_content( WP_REST_Request $request ) {
-
-		$content = wp_kses_post( $request->get_param( 'content' ) );
-		$content = do_shortcode( $content );
-
-		return rest_ensure_response( [
-			'content' => $content
-		] );
-	}
-
-	/**
 	 * Submit a form for a specific popup
 	 *
 	 * @param WP_REST_Request $request
@@ -269,7 +311,7 @@ class Holler_Api {
 
 		$result = $popup->update( $new_settings );
 
-		if ( is_wp_error( $result ) ){
+		if ( is_wp_error( $result ) ) {
 			return $result;
 		}
 

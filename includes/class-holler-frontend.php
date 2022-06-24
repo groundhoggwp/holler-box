@@ -67,7 +67,10 @@ class Holler_Frontend {
 			'is_frontend'        => ! is_admin(),
 			'is_builder_preview' => $this->is_builder_preview(),
 			'routes'             => [
-				'submit' => rest_url( 'hollerbox/submit' ),
+				'root'       => rest_url( 'hollerbox' ),
+				'conversion' => rest_url( 'hollerbox/conversion' ),
+				'impression' => rest_url( 'hollerbox/impression' ),
+				'submit'     => rest_url( 'hollerbox/submit' ),
 			],
 			'nonces'             => [
 				'_wprest' => wp_create_nonce( 'wp_rest' )
@@ -176,7 +179,7 @@ class Holler_Frontend {
 		}
 
 		$wp_admin_bar->add_node( [
-			'id'   => 'manage-hollerbox',
+			'id'    => 'manage-hollerbox',
 			'title' => '<svg width="20" height="20" style="padding-top: 5px;" xmlns="http://www.w3.org/2000/svg" viewBox="75.3 55.7 134.4 152.3">
             <path fill="#e8ad0b" d="m144 137-49-29v53l49 28 50-28v-53Zm0 43-18-10v-7l18 10Zm0-14-18-10v-8l18 11Z"/>
             <path fill="#e8ad0b" d="m190 102-46-26-45 26 45 26 46-26z"/>
@@ -191,7 +194,7 @@ class Holler_Frontend {
 			$wp_admin_bar->add_node( [
 				'parent' => 'manage-hollerbox',
 				'id'     => 'holler-' . $popup->ID,
-				'title'   => $popup->post_title,
+				'title'  => $popup->post_title,
 				'href'   => get_edit_post_link( $popup->ID )
 			] );
 

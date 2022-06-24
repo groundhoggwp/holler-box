@@ -60,8 +60,8 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 			add_action( 'load-post-new.php', [ $this, 'post_new' ] );
 			add_action( 'load-post.php', [ $this, 'post' ] );
 
-			add_action( 'admin_menu', array( $this, 'settings_page' ) );
-			add_action( 'init', array( $this, 'register_cpt' ) );
+			add_action( 'admin_menu', [ $this, 'register_admin_pages' ] );
+			add_action( 'init', [ $this, 'register_cpt' ] );
 		}
 
 		/**
@@ -70,15 +70,27 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 * @access      public
 		 * @since       0.1
 		 */
-		public function settings_page() {
-
-			add_submenu_page( 'edit.php?post_type=hollerbox', 'Holler Box Settings', 'Settings', 'manage_options', 'hollerbox', array(
+		public function register_admin_pages() {
+			add_submenu_page( 'edit.php?post_type=hollerbox', 'Holler Box Settings', 'Settings', 'manage_options', 'hollerbox', [
 				$this,
-				'render_settings'
-			) );
-
+				'settings_page'
+			] );
 		}
 
+		/**
+         * Render the settigns page
+         *
+		 * @return void
+		 */
+        public function settings_page(){
+
+        }
+
+		/**
+         * Enqueue scripts for the popup editor
+         *
+		 * @return void
+		 */
 		public function builder_scripts() {
 
 			global $post;

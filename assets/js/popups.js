@@ -257,14 +257,16 @@
       let url = new URL(redirect_url)
       let home = new URL(HollerBox.home_url)
 
-      if (HollerBox.is_builder_preview) {
+      if (isBuilderPreview()) {
+
         if (url.hostname !== home.hostname) {
           popup.close()
           return
         }
-      }
 
-      url.searchParams.append('suppress_hollerbox', 1)
+        url.searchParams.append('suppress_hollerbox', 1)
+
+      }
 
       window.open(url, '_self')
     },
@@ -319,10 +321,9 @@
         form.querySelector('button').innerHTML = '<span class="holler-spinner"></span>'
 
         const submit = () => apiPost(`${ HollerBox.routes.submit }/${ popup.ID }`, Object.fromEntries(formData)).
-          then(r => {
+          then( (r) => {
             popup.submitted = true
-
-            popup.converted()
+            popup.converted( false )
 
             SubmitActions[after_submit](popup)
 
@@ -340,19 +341,16 @@
     },
     buttonClicked: (popup) => {
 
-      const { id, button_link = '' } = popup
+      const { id, button_link } = popup
 
       let button = document.querySelector(`#${ id } button.holler-box-button`)
 
       button.addEventListener('click', e => {
-        try {
-          let _url = new URL(button_link)
-          popup.converted()
-          button.innerHTML = '<span class="holler-spinner"></span>'
-          window.open(_url)
-
-        }
-        catch (e) {}
+        e.preventDefault()
+        button.innerHTML = '<span class="holler-spinner"></span>'
+        popup.converted().then( () => {
+          window.open(button_link, '_self')
+        })
       })
 
     },
@@ -704,7 +702,7 @@
               apiPost(`${ HollerBox.routes.submit }/${ popup.ID }`, popup.responses).
                 then(r => {
                   popup.submitted = true
-                  popup.converted()
+                  popup.converted( false )
                   document.dispatchEvent(new CustomEvent('holler_submit', this.responses))
                 }).then(() => {
 
@@ -1247,8 +1245,32 @@
       document.getElementById(this.id)?.remove()
     },
 
-    converted () {
+    converted ( check = true ) {
+
+      if ( isBuilderPreview() ){
+        return
+      }
+
       Cookies.addPopupConversion(this.ID)
+
+      if ( check ){
+        return apiPost( HollerBox.routes.conversion, {
+          popup_id: this.ID,
+        } )
+      }
+    },
+
+    viewed () {
+
+      if ( isBuilderPreview() ){
+        return
+      }
+
+      Cookies.addPopupView(this.ID)
+
+      return apiPost( HollerBox.routes.impression, {
+        popup_id: this.ID,
+      } )
     },
 
     getConversions () {
@@ -1281,11 +1303,9 @@
       try {
         PopupTemplates[this.template].onOpen(this)
       }
-      catch (e) {
-        return
-      }
+      catch (e) {}
 
-      Cookies.addPopupView(this.ID)
+      this.viewed()
     },
 
     async close () {
@@ -1303,7 +1323,7 @@
       }
       catch (e) {}
 
-      if (HollerBox.is_builder_preview) {
+      if (isBuilderPreview()) {
 
         this.submitted = false
 
@@ -1368,13 +1388,16 @@
   // we are on the site frontend
   if (HollerBox.is_frontend) {
 
-    HollerBox.active = HollerBox.active.map(p => Popup(p))
+    window.addEventListener( 'load', () => {
+      HollerBox.active = HollerBox.active.map(p => Popup(p))
 
-    HollerBox.active.forEach(popup => {
-      popup.init()
-    })
+      HollerBox.active.forEach(popup => {
+        popup.init()
+      })
 
-    Cookies.addPageView()
+      Cookies.addPageView()
+    } )
+
   }
 
   /**
@@ -1402,8 +1425,10 @@
     return false
   }
 
+  const isBuilderPreview = () => HollerBox.is_builder_preview
+
   // We are in the builder preview
-  if (HollerBox.is_builder_preview) {
+  if (isBuilderPreview()) {
 
     let home = new URL(HollerBox.home_url)
 
@@ -1526,6 +1551,7 @@
     emailInput,
     __content,
     submitButton,
+    TriggerCallbacks,
   }
 
 } )()

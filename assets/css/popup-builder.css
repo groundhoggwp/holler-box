@@ -89,6 +89,7 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   border: 1px solid rgba(16, 38, 64, 0.15);
   border-radius: 5px;
   padding: 10px 10px 10px 15px;
+  min-height: 30px;
 }
 #triggers .trigger input[type=number] {
   width: 60px;
@@ -130,20 +131,6 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   background: #ffffff;
   border: 1px solid rgba(16, 38, 64, 0.15);
 }
-#integrations-here .integration span.pro-integration {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  background: #e8ad0b;
-  padding: 4px 6px;
-  border-radius: 5px;
-  color: #ffffff;
-  z-index: 9999;
-}
-#integrations-here .integration span.pro-integration svg {
-  height: 14px;
-  width: 14px;
-}
 #integrations-here .integration:hover {
   box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.05);
 }
@@ -157,15 +144,18 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
 #integrations-here .integration .integration-name {
   text-align: center;
 }
-#integrations-here .integration svg {
-  transition: 0.4s;
-}
 #integrations-here .integration .icon {
   border-bottom: 1px solid rgba(16, 38, 64, 0.15);
   display: flex;
   align-items: center;
+  justify-content: center;
   padding: 0 20px;
   height: 110px;
+}
+#integrations-here .integration .icon svg {
+  transition: 0.4s;
+  width: 60px;
+  height: 60px;
 }
 
 #templates {

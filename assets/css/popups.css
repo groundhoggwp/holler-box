@@ -14,6 +14,7 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 body:not(.wp-admin).holler-box-blurred {
   filter: blur(4px);
 }
+body:not(.wp-admin).holler-suppress-animations .holler-box-overlay,
 body:not(.wp-admin).holler-suppress-animations .holler-box .animation {
   animation: none !important;
 }
@@ -38,6 +39,11 @@ body:not(.wp-admin).holler-slide-down {
   }
   100% {
     transform: rotate(360deg);
+  }
+}
+@keyframes holler-overlay-appear {
+  from {
+    opacity: 0;
   }
 }
 @keyframes holler-appear {
@@ -257,6 +263,7 @@ body:not(.wp-admin).holler-slide-down {
   right: 0;
   bottom: 0;
   z-index: 999;
+  animation: holler-overlay-appear 0.4s ease-in-out;
 }
 .holler-box .display-flex {
   display: flex;

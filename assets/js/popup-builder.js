@@ -190,7 +190,7 @@
   const controlGroup = (control, popup) => {
     //language=HTML
     return `
-        <div class="control-group" ${control.id ? `id="${control.id}"` : ''}>
+        <div class="control-group" ${ control.id ? `id="${ control.id }"` : '' }>
             <div class="control-group-header">
                 <div class="control-group-name">${ control.name }</div>
                 <button class="toggle-indicator"></button>
@@ -275,18 +275,20 @@
   }
 
   const selectTemplateModal = ({
+    modalSettings = {},
     onSelect = (t) => {},
   }) => {
 
     modal({
+      ...modalSettings,
       dialogClasses: 'select-template no-padding',
       // language=HTML
       content: `
           <div class="holler-header is-sticky">
               <h3>${ __('Select Template') }</h3>
-              <button class="holler-button secondary text icon holler-modal-button-close"><span
+              ${ modalSettings.canClose ? '' : `<button class="holler-button secondary text icon holler-modal-button-close"><span
                       class="dashicons dashicons-no-alt"></span>
-              </button>
+              </button>` }
           </div>
           <div id="templates"></div>`,
       width: 1200,
@@ -1869,26 +1871,26 @@
       id: 'codemirror',
       name: __('Custom CSS', 'holler-box'),
       render: ({
-        custom_css = ''
+        custom_css = '',
       }) => {
         return [
           textarea({
             id: 'custom-css',
-            value: custom_css
+            value: custom_css,
           }),
-          `<p>${__('Use the <code>popup</code> selector to target elements in your popup.')}</p>`
+          `<p>${ __('Use the <code>popup</code> selector to target elements in your popup.') }</p>`,
         ].join('')
       },
       onMount: ({ custom_css = '' }, updateSetting) => {
-        this.codeMirror = codeEditor( '#custom-css', {
+        this.codeMirror = codeEditor('#custom-css', {
           onChange: custom_css => {
-            updateSetting({custom_css})
+            updateSetting({ custom_css })
           },
           initialContent: custom_css,
-          height: 500
+          height: 500,
         })
       },
-      css: ({custom_css = '', id}) => custom_css.replaceAll( 'popup', `#${id}` )
+      css: ({ custom_css = '', id }) => custom_css.replaceAll('popup', `#${ id }`),
     },
   }
 
@@ -2286,6 +2288,9 @@
             confirmText: __('Change Template'),
             onConfirm: () => {
               selectTemplateModal({
+                modalSettings: {
+                  canClose: false,
+                },
                 onSelect: (t) => {
                   this.popup.template = t
                   this.mount()
@@ -2311,11 +2316,11 @@
     titleSuffix: '',
 
     setTitle () {
-      if ( ! this.titleSuffix ){
+      if (!this.titleSuffix) {
         this.titleSuffix = document.title
       }
 
-      document.title = `${this.popup.post_title} ${this.titleSuffix}`
+      document.title = `${ this.popup.post_title } ${ this.titleSuffix }`
     },
 
     setPopup (popup) {
@@ -2354,7 +2359,7 @@
       return [
         Controls.template,
         ...this.getTemplate().controls,
-        Controls.custom_css
+        Controls.custom_css,
       ]
     },
 
@@ -2431,6 +2436,9 @@
 
       if (!this.popup.template) {
         selectTemplateModal({
+          modalSettings: {
+            canClose: false,
+          },
           onSelect: (template) => {
             updateSettings({
               post_title: Templates[template].name,
@@ -2463,32 +2471,32 @@
 
         $title.on('click', e => {
 
-          const $input = $( input({
+          const $input = $(input({
             name: 'post_title',
             id: 'post-title',
             className: 'holler-title',
-            value: this.popup.post_title
-          }) )
+            value: this.popup.post_title,
+          }))
 
-          $title.replaceWith( $input )
+          $title.replaceWith($input)
 
           $input.focus()
 
           $input.on('blur keydown', e => {
 
-            if ( e.type === 'keydown' && e.key !== 'Enter' ){
-              return;
+            if (e.type === 'keydown' && e.key !== 'Enter') {
+              return
             }
 
             updateSettings({
-              post_title: $input.val()
+              post_title: $input.val(),
             })
 
-            $input.replaceWith( popupTitle() )
+            $input.replaceWith(popupTitle())
             this.setTitle()
             titleEdit()
 
-          } )
+          })
 
         })
       }
@@ -3028,7 +3036,7 @@
     hide_if_converted: {
       name: __('Hide if previously converted'),
       controls: () => '',
-      onMount: () => {}
+      onMount: () => {},
     },
   }
 

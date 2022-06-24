@@ -1,15 +1,15 @@
 <?php
 /**
- * Plugin Name:     Holler Box
+ * Plugin Name:     HollerBox
  * Plugin URI:      https://hollerwp.com
  * Description:     A lightweight popup plugin with lead generation opt-in forms.
  * Version:         1.5.8
- * Author:          Scott Bolinger
- * Author URI:      https://scottbolinger.com
+ * Author:          Groundhogg Inc.
+ * Author URI:      https://groundhogg.io
  * Text Domain:     holler-box
  *
- * @author          Scott Bolinger
- * @copyright       Copyright (c) Scott Bolinger 2021
+ * @author          Groundhogg Inc.
+ * @copyright       Copyright (c) Groundhogg Inc 2022
  *
  */
 
@@ -94,6 +94,7 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 			require_once __DIR__ . '/includes/class-holler-frontend.php';
 			require_once __DIR__ . '/includes/class-holler-lead.php';
 			require_once __DIR__ . '/includes/class-holler-integrations.php';
+			require_once __DIR__ . '/includes/class-holler-reporting.php';
 
 		}
 

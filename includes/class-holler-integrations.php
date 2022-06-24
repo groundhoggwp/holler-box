@@ -72,7 +72,7 @@ class Holler_Integrations {
 		self::register( 'email', [ $this, 'email' ] );
 		self::register( 'groundhogg', [ $this, 'groundhogg' ] );
 		self::register( 'webhook', [ $this, 'webhook' ] );
-		self::register( 'user', [ $this, 'user' ] );
+//		self::register( 'user', [ $this, 'user' ] );
 
 		do_action( 'hollerbox/register_integrations' );
 	}
@@ -238,6 +238,8 @@ class Holler_Integrations {
 		}
 
 		$contact->add_tag( map_deep( $props['tags'], 'sanitize_text_field' ) );
+
+		\Groundhogg\after_form_submit_handler( $contact );
 
 		return true;
 	}

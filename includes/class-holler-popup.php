@@ -284,6 +284,8 @@ class Holler_Popup implements JsonSerializable {
 			$results[ $integration['type'] . '_' . $i ] = Holler_Integrations::_do( $integration, $lead );
 		}
 
+		Holler_Reporting::instance()->add_conversion( $this );
+
 		return [
 			'status'  => 'success',
 			'results' => $results
