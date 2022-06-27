@@ -1,4 +1,32 @@
 @charset "UTF-8";
+input#post-title {
+  font-size: 16px;
+  min-width: 500px;
+}
+
+.holler-pro-ad {
+  padding: 20px;
+  font-size: 18px;
+  background: #e8ad0b;
+  color: #fff;
+  text-align: center;
+  margin: 20px 30px 0 30px;
+  border-radius: 5px;
+  line-height: 1.3;
+}
+.holler-pro-ad a {
+  color: #fff;
+}
+
+#triggers .holler-pro-ad {
+  margin: 0;
+}
+
+.integration-group .holler-pro-ad {
+  margin: 0;
+  grid-column: span 3;
+}
+
 .promote-groundhogg img {
   max-width: 100%;
   border-radius: 5px;

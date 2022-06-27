@@ -290,13 +290,13 @@
   }
 
   const CommonActions = {
-    disableScrolling: ( popup ) => {
-      if ( popup.disable_scrolling ){
-        document.body.classList.add( 'disable-scrolling' )
+    maybeDisableScrolling: (popup) => {
+      if (popup.disable_scrolling) {
+        document.body.classList.add('disable-scrolling')
       }
     },
     enableScrolling: () => {
-      document.body.classList.remove( 'disable-scrolling' )
+      document.body.classList.remove('disable-scrolling')
     },
     notificationClosed: (popup) => {
       popup.closed = true
@@ -329,9 +329,9 @@
         form.querySelector('button').innerHTML = '<span class="holler-spinner"></span>'
 
         const submit = () => apiPost(`${ HollerBox.routes.submit }/${ popup.ID }`, Object.fromEntries(formData)).
-          then( (r) => {
+          then((r) => {
             popup.submitted = true
-            popup.converted( false )
+            popup.converted(false)
 
             SubmitActions[after_submit](popup)
 
@@ -356,7 +356,7 @@
       button.addEventListener('click', e => {
         e.preventDefault()
         button.innerHTML = '<span class="holler-spinner"></span>'
-        popup.converted().then( () => {
+        popup.converted().then(() => {
           window.open(button_link, '_self')
         })
       })
@@ -710,7 +710,7 @@
               apiPost(`${ HollerBox.routes.submit }/${ popup.ID }`, popup.responses).
                 then(r => {
                   popup.submitted = true
-                  popup.converted( false )
+                  popup.converted(false)
                   document.dispatchEvent(new CustomEvent('holler_submit', this.responses))
                 }).then(() => {
 
@@ -773,6 +773,8 @@
                 </div>
             </div>`
       },
+      onOpen: CommonActions.maybeDisableScrolling,
+      onClosed: CommonActions.enableScrolling,
     },
     popup_standard: {
       render: ({
@@ -825,7 +827,11 @@
                 </div>
             </div>`
       },
-      onOpen: CommonActions.formSubmitted,
+      onOpen: popup => {
+        CommonActions.formSubmitted(popup)
+        CommonActions.maybeDisableScrolling(popup)
+      },
+      onClose: CommonActions.enableScrolling,
     },
     popup_image_left: {
       render: ({
@@ -871,7 +877,11 @@
                 </div>
             </div>`
       },
-      onOpen: CommonActions.formSubmitted,
+      onOpen: popup => {
+        CommonActions.formSubmitted(popup)
+        CommonActions.maybeDisableScrolling(popup)
+      },
+      onClose: CommonActions.enableScrolling,
     },
     popup_image_right: {
       render: ({
@@ -917,7 +927,11 @@
                 </div>
             </div>`
       },
-      onOpen: CommonActions.formSubmitted,
+      onOpen: popup => {
+        CommonActions.formSubmitted(popup)
+        CommonActions.maybeDisableScrolling(popup)
+      },
+      onClose: CommonActions.enableScrolling,
     },
     popup_form_below: {
       render: ({
@@ -962,7 +976,11 @@
                 </div>
             </div>`
       },
-      onOpen: CommonActions.formSubmitted,
+      onOpen: popup => {
+        CommonActions.formSubmitted(popup)
+        CommonActions.maybeDisableScrolling(popup)
+      },
+      onClose: CommonActions.enableScrolling,
     },
     popup_progress_bar: {
       render: ({
@@ -1011,7 +1029,11 @@
                 </div>
             </div>`
       },
-      onOpen: CommonActions.formSubmitted,
+      onOpen: popup => {
+        CommonActions.formSubmitted(popup)
+        CommonActions.maybeDisableScrolling(popup)
+      },
+      onClose: CommonActions.enableScrolling,
     },
     popup_image_beside_text_top: {
       render: ({
@@ -1054,7 +1076,11 @@
                 </div>
             </div>`
       },
-      onOpen: CommonActions.formSubmitted,
+      onOpen: popup => {
+        CommonActions.formSubmitted(popup)
+        CommonActions.maybeDisableScrolling(popup)
+      },
+      onClose: CommonActions.enableScrolling,
     },
     popup_full_image_background: {
       render: ({
@@ -1092,7 +1118,11 @@
                 </div>
             </div>`
       },
-      onOpen: CommonActions.formSubmitted,
+      onOpen: popup => {
+        CommonActions.formSubmitted(popup)
+        CommonActions.maybeDisableScrolling(popup)
+      },
+      onClose: CommonActions.enableScrolling,
     },
     popup_text_top_with_color_background: {
       render: ({
@@ -1132,7 +1162,11 @@
             </div>
         `
       },
-      onOpen: CommonActions.formSubmitted,
+      onOpen: popup => {
+        CommonActions.formSubmitted(popup)
+        CommonActions.maybeDisableScrolling(popup)
+      },
+      onClose: CommonActions.enableScrolling,
     },
   }
 
@@ -1253,32 +1287,32 @@
       document.getElementById(this.id)?.remove()
     },
 
-    converted ( check = true ) {
+    converted (check = true) {
 
-      if ( isBuilderPreview() ){
+      if (isBuilderPreview()) {
         return
       }
 
       Cookies.addPopupConversion(this.ID)
 
-      if ( check ){
-        return apiPost( HollerBox.routes.conversion, {
+      if (check) {
+        return apiPost(HollerBox.routes.conversion, {
           popup_id: this.ID,
-        } )
+        })
       }
     },
 
     viewed () {
 
-      if ( isBuilderPreview() ){
+      if (isBuilderPreview()) {
         return
       }
 
       Cookies.addPopupView(this.ID)
 
-      return apiPost( HollerBox.routes.impression, {
+      return apiPost(HollerBox.routes.impression, {
         popup_id: this.ID,
-      } )
+      })
     },
 
     getConversions () {
@@ -1308,8 +1342,6 @@
         })
       })
 
-      CommonActions.disableScrolling( this )
-
       try {
         PopupTemplates[this.template].onOpen(this)
       }
@@ -1332,8 +1364,6 @@
         await PopupTemplates[this.template].onClosed(this)
       }
       catch (e) {}
-
-      CommonActions.enableScrolling( this )
 
       if (isBuilderPreview()) {
 
@@ -1400,7 +1430,7 @@
   // we are on the site frontend
   if (HollerBox.is_frontend) {
 
-    window.addEventListener( 'load', () => {
+    window.addEventListener('load', () => {
       HollerBox.active = HollerBox.active.map(p => Popup(p))
 
       HollerBox.active.forEach(popup => {
@@ -1408,7 +1438,7 @@
       })
 
       Cookies.addPageView()
-    } )
+    })
 
   }
 

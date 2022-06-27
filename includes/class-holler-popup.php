@@ -24,7 +24,7 @@ class Holler_Popup implements JsonSerializable {
 	 *
 	 * @return array|mixed
 	 */
-	public function __get( $key ){
+	public function __get( $key ) {
 		return $this->post->$key;
 	}
 
@@ -119,7 +119,7 @@ class Holler_Popup implements JsonSerializable {
 		// Commit any temp post args
 		$result = $this->_commit_post_args();
 
-		if ( ! $result || is_wp_error( $result ) ){
+		if ( ! $result || is_wp_error( $result ) ) {
 			return $result;
 		}
 
@@ -248,7 +248,7 @@ class Holler_Popup implements JsonSerializable {
 		] ) );
 
 		// Render shortcodes
-		$json['post_content'] = do_shortcode( $json['post_content'] );
+		$json['post_content']    = do_shortcode( $json['post_content'] );
 		$json['success_message'] = do_shortcode( $json['success_message'] );
 
 		return $json;
@@ -285,6 +285,14 @@ class Holler_Popup implements JsonSerializable {
 		}
 
 		Holler_Reporting::instance()->add_conversion( $this );
+
+		/**
+		 * When a form inside a popup has been submitted.
+		 *
+		 * @param $popup Holler_Popup
+		 * @param $lead  Holler_Lead
+		 */
+		do_action( 'hollerbox/submitted', $this, $lead );
 
 		return [
 			'status'  => 'success',
@@ -351,13 +359,13 @@ class Holler_Popup implements JsonSerializable {
 
 			global $wp;
 			$current_slug = trailingslashit( add_query_arg( [], $wp->request ) );
-			if ( $current_slug !== '/' ){
+			if ( $current_slug !== '/' ) {
 				$current_slug = '/' . $current_slug;
 			}
 
-			try  {
+			try {
 				return preg_match( "#{$filter['regex']}#", $current_slug );
-			} catch (Exception $e) {
+			} catch ( Exception $e ) {
 				return false;
 			}
 		} );
@@ -459,7 +467,7 @@ class Holler_Popup implements JsonSerializable {
 		}
 
 		// ignore
-		if ( ! is_callable( self::$display_conditions[ $condition['type'] ] ) ){
+		if ( ! is_callable( self::$display_conditions[ $condition['type'] ] ) ) {
 			return true;
 		}
 

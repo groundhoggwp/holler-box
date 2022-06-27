@@ -22,7 +22,12 @@
     loadingDots,
     confirmationModal,
   } = HollerBox.elements
+
   const { sprintf, __, _x, _n } = wp.i18n
+
+  const isPro = () => {
+    return typeof HollerBoxPro !== 'undefined'
+  }
 
   improveTinyMCE()
 
@@ -228,6 +233,13 @@
     })
   }
 
+  const proCrmIntegrationsAd = () => {
+    // language=HTML
+    return `<div class="holler-pro-ad">
+        Unlock more CRM Integrations when you get <a href="https://hollerwp.com/pricing/" target="_blank"><b>HollerBox Pro!</b></a> Including, ActiveCampaign, HubSpot, ConvertKit, MailChimp, and more!
+    </div>`
+  }
+
   const selectIntegrationModal = ({
     onSelect = () => {},
   }) => {
@@ -268,6 +280,7 @@
           return `<h2>${IntegrationGroups[group]}</h2>
           <div class="integration-group">
               ${integrations}
+              ${ ! isPro() && group === 'crm' ? proCrmIntegrationsAd() : '' }
           </div>`
 
         }).join(''))
@@ -282,6 +295,13 @@
 
       },
     })
+  }
+
+  const proTemplatesAd = () => {
+    // language=HTML
+    return `<div class="holler-pro-ad">
+        Unlock more templates when you get <a href="https://hollerwp.com/pricing/" target="_blank"><b>HollerBox Pro!</b></a> Including, banners, side-ins, sidebars, FOMO (Sale Notifications), and more!
+    </div>`
   }
 
   const selectTemplateModal = ({
@@ -300,6 +320,7 @@
                       class="dashicons dashicons-no-alt"></span>
               </button>` }
           </div>
+          ${ isPro() ? '' : proTemplatesAd() }
           <div id="templates"></div>`,
       width: 1200,
       onOpen: ({ close }) => {
@@ -3232,6 +3253,13 @@
       mountRules()
     }
 
+    const proConditionsAd = () => {
+      //language=HTML
+      return `<div class="holler-pro-ad">
+        Unlock popup <b>Scheduling</b> with <b><a href="https://hollerwp.com/pricing/" target="_blank">HollerBox Pro!</a></b>
+    </div>`
+    }
+
     modal({
       //language=HTML
       width: 800,
@@ -3264,6 +3292,7 @@
                           id: t,
                           ...AdvancedDisplayRules[t],
                       }, advanced_rules[t], advanced_rules[t] ? advanced_rules[t].enabled : false)).join('') }
+                      ${ isPro() ? '' : proConditionsAd() }
                   </td>
               </tr>
           </table>`,
@@ -3401,6 +3430,13 @@
         </div>`
   }
 
+  const proTriggersAd = () => {
+    //language=HTML
+    return `<div class="holler-pro-ad">
+        Unlock the <b>Inactivity</b> trigger with <b><a href="https://hollerwp.com/pricing/" target="_blank">HollerBox Pro!</a></b>
+    </div>`
+  }
+
   const editTriggersModal = ({
     triggers = {},
   }, updateSettings) => {
@@ -3422,6 +3458,7 @@
                   id: t,
                   ...Triggers[t],
               }, triggers[t], triggers[t] ? triggers[t].enabled : false)).join('') }
+              ${ isPro() ? '' : proTriggersAd() }
           </div>`,
       onOpen: () => {
 
