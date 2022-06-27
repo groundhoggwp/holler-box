@@ -1,3 +1,20 @@
+body.holler-box-blurred {
+  filter: blur(4px);
+}
+body.holler-suppress-animations .holler-box-overlay,
+body.holler-suppress-animations .holler-box .animation {
+  animation: none !important;
+}
+body.holler-slide-down {
+  animation-duration: 0.3s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: 1;
+  animation-fill-mode: forwards;
+}
+body.disable-scrolling {
+  overflow: hidden;
+}
+
 body:not(.wp-admin).admin-bar .positioner.top-left {
   top: calc(20px + 32px);
 }
@@ -10,19 +27,6 @@ body:not(.wp-admin).admin-bar .positioner.top-right {
 body:not(.wp-admin).admin-bar .holler-box.holler-sidebar .positioner,
 body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   top: 32px !important;
-}
-body:not(.wp-admin).holler-box-blurred {
-  filter: blur(4px);
-}
-body:not(.wp-admin).holler-suppress-animations .holler-box-overlay,
-body:not(.wp-admin).holler-suppress-animations .holler-box .animation {
-  animation: none !important;
-}
-body:not(.wp-admin).holler-slide-down {
-  animation-duration: 0.3s;
-  animation-timing-function: ease-in-out;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
 }
 
 @keyframes progress-bar-stripes {
@@ -271,7 +275,7 @@ body:not(.wp-admin).holler-slide-down {
 }
 .holler-box .holler-box-modal {
   min-width: 300px;
-  max-width: calc( 100vw - 40px );
+  max-width: calc(100vw - 40px);
   background: #ffffff;
   padding: 30px;
   box-sizing: border-box;
@@ -691,7 +695,7 @@ body:not(.wp-admin).holler-slide-down {
 }
 .holler-box form.holler-box-form.vertical {
   display: grid;
-  grid-template-rows: 1fr 1fr 1fr;
+  grid-auto-rows: 1fr 1fr 1fr;
   min-width: 300px;
 }
 .holler-box form.holler-box-form input.holler-box-input {
@@ -714,9 +718,43 @@ body:not(.wp-admin).holler-slide-down {
 }
 
 @media (max-width: 600px) {
+  .holler-box.holler-notification-box .positioner {
+    left: 0;
+    right: 0;
+  }
+  .holler-box.holler-notification-box .positioner.top-left, .holler-box.holler-notification-box .positioner.top-center, .holler-box.holler-notification-box .positioner.top-right {
+    top: 0;
+    transform: none;
+  }
+  .holler-box.holler-notification-box .positioner.top-left .notification-closed, .holler-box.holler-notification-box .positioner.top-center .notification-closed, .holler-box.holler-notification-box .positioner.top-right .notification-closed {
+    margin-top: 10px;
+  }
+  .holler-box.holler-notification-box .positioner.center-right, .holler-box.holler-notification-box .positioner.center-center, .holler-box.holler-notification-box .positioner.center-left, .holler-box.holler-notification-box .positioner.bottom-right, .holler-box.holler-notification-box .positioner.bottom-center, .holler-box.holler-notification-box .positioner.bottom-left {
+    top: auto;
+    bottom: 0;
+    transform: none;
+  }
+  .holler-box.holler-notification-box .positioner.center-right .notification-closed, .holler-box.holler-notification-box .positioner.center-center .notification-closed, .holler-box.holler-notification-box .positioner.center-left .notification-closed, .holler-box.holler-notification-box .positioner.bottom-right .notification-closed, .holler-box.holler-notification-box .positioner.bottom-center .notification-closed, .holler-box.holler-notification-box .positioner.bottom-left .notification-closed {
+    margin-bottom: 10px;
+  }
+  .holler-box.holler-notification-box .positioner.top-center .notification-closed, .holler-box.holler-notification-box .positioner.center-center .notification-closed, .holler-box.holler-notification-box .positioner.bottom-center .notification-closed, .holler-box.holler-notification-box .positioner.top-left .notification-closed, .holler-box.holler-notification-box .positioner.center-left .notification-closed, .holler-box.holler-notification-box .positioner.bottom-left .notification-closed {
+    margin-left: 10px;
+  }
+  .holler-box.holler-notification-box .positioner.top-right .notification-closed, .holler-box.holler-notification-box .positioner.center-right .notification-closed, .holler-box.holler-notification-box .positioner.bottom-right .notification-closed {
+    margin-left: auto;
+    margin-right: 10px;
+  }
+  .holler-box.holler-notification-box .positioner .holler-box-modal {
+    border-radius: 0;
+  }
+  .holler-box.holler-notification-box .positioner .holler-box-modal:not(.notification-closed) {
+    max-width: 100vw;
+    width: auto;
+  }
+
   .holler-box:not(.holler-notification-box) .holler-box-modal {
     overflow: auto !important;
-    max-height: calc( 100vh - 40px );
+    max-height: calc(100vh - 40px);
   }
   .holler-box:not(.holler-notification-box) .holler-box-modal .display-flex {
     flex-direction: column;
@@ -727,8 +765,12 @@ body:not(.wp-admin).holler-slide-down {
   }
   .holler-box:not(.holler-notification-box) .holler-box-modal form.holler-box-form.horizontal {
     display: grid;
-    grid-template-rows: 1fr 1fr 1fr;
+    grid-auto-rows: 1fr;
     min-width: 0;
+    width: 100%;
+  }
+  .holler-box:not(.holler-notification-box) .holler-box-modal form.holler-box-form.horizontal .holler-box-input {
+    max-width: 100% !important;
   }
   .holler-box:not(.holler-notification-box).holler-popup-form-below .display-flex {
     flex-direction: column-reverse;

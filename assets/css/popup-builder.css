@@ -117,11 +117,21 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
 }
 
 #integrations-here {
+  padding: 30px;
+}
+#integrations-here h2 {
+  font-size: 24px;
+}
+#integrations-here .integration-group {
+  margin: 20px 0 40px 0;
   box-sizing: content-box;
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
   gap: 20px;
+}
+#integrations-here .integration-group:last-child {
+  margin-bottom: 0;
 }
 #integrations-here .integration {
   position: relative;
@@ -156,6 +166,10 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   transition: 0.4s;
   width: 60px;
   height: 60px;
+}
+
+.edit-integration #edit-here {
+  padding: 30px;
 }
 
 #templates {
@@ -288,6 +302,7 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   margin-left: auto;
   margin-right: auto;
   height: 853px;
+  max-height: calc( 100vh - 32px - 56px - 40px );
 }
 #holler-app #editor #frame iframe {
   overflow: hidden;

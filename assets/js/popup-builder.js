@@ -232,10 +232,10 @@
     onSelect = () => {},
   }) => {
     modal({
-      dialogClasses: 'select-integration has-header',
+      dialogClasses: 'select-integration no-padding',
       //language=HTML
       content: `
-          <div class="holler-header">
+          <div class="holler-header is-sticky">
               <h3>${ __('Select an integration') }</h3>
               <button class="holler-button secondary text icon holler-modal-button-close"><span
                       class="dashicons dashicons-no-alt"></span>
@@ -245,21 +245,31 @@
       width: 800,
       onOpen: ({ close }) => {
 
-        $('#integrations-here').html(Object.keys(Integrations).map(i => {
+        $('#integrations-here').html(Object.keys(IntegrationGroups).map( group => {
 
-          i = {
-            id: i,
-            ...getIntegration(i),
-          }
+          let integrations = Object.keys(Integrations).filter( k => Integrations[k].group === group ).map( i => {
 
-          //language=HTML
-          return `
+            i = {
+              id: i,
+              ...getIntegration(i),
+            }
+
+            //language=HTML
+            return `
               <div class="integration" data-integration="${ i.id }">
                   <div class="icon">
                       ${ i.icon }
                   </div>
                   <p class="integration-name">${ i.name }</p>
               </div>`
+          }).join('')
+
+          // language=HTML
+          return `<h2>${IntegrationGroups[group]}</h2>
+          <div class="integration-group">
+              ${integrations}
+          </div>`
+
         }).join(''))
 
         $('.integration').on('click', e => {
@@ -403,9 +413,16 @@
     })
   }
 
+  const IntegrationGroups = {
+    basic: __('Basic'),
+    crm: __('CRM (Email Marketing)'),
+    advanced: __('Advanced')
+  }
+
   const Integrations = {
     email: {
       id: 'email',
+      group: 'basic',
       icon: icons.email,
       name: __('Send Email', 'holler-box'),
       _name: ({ to = [] }) => {
@@ -525,7 +542,7 @@
                 </div>
             </div>`
       },
-      onMount: ({ to = [] }, updateIntegration) => {
+      onMount: ({ to = [] }, { updateIntegration }) => {
 
         $('.replacements code').on('click', e => {
 
@@ -616,6 +633,7 @@
     },
     groundhogg: {
       id: 'groundhogg',
+      group: 'crm',
       name: __('Groundhogg', 'holler-box'),
       icon: icons.groundhogg,
       edit: ({ tags }) => {
@@ -633,7 +651,7 @@
             <p>${ __('Select which tags to add to the new contact record.') }</p>
             <div id="groundhogg-tags"></div>`
       },
-      onMount: ({ tags = [] }, updateIntegration) => {
+      onMount: ({ tags = [] }, { updateIntegration }) => {
 
         // Groundhogg is not installed
         if (!HollerBox.installed.groundhogg) {
@@ -756,6 +774,7 @@
     },
     webhook: {
       id: 'webhook',
+      group: 'advanced',
       name: 'Webhook',
       icon: icons.webhook,
       defaults: {
@@ -799,7 +818,6 @@
                                 className: 'full-width',
                                 value: url,
                             }) }
-                            <button id="test-webhook" class="holler-button secondary">${ __('Test') }</button>
                         </div>
                     </div>
                 </div>
@@ -819,7 +837,7 @@
             </div>
         `
       },
-      onMount: ({ url, method, payload }, updateIntegration) => {
+      onMount: ({ url, method, payload }, { updateIntegration }) => {
 
         $('#method,#url,#payload').on('input change', e => {
 
@@ -847,6 +865,7 @@
     },
     zapier: {
       id: 'zapier',
+      group: 'advanced',
       name: 'Zapier',
       icon: IntegrationIcons.zapier,
       defaults: {},
@@ -870,7 +889,7 @@
             </div>
         `
       },
-      onMount: ({ url, method, payload }, updateIntegration) => {
+      onMount: ({ url, method, payload }, { updateIntegration }) => {
 
         $('#url').on('input change', e => {
           updateIntegration({
@@ -920,17 +939,19 @@
   const editIntegrationUI = (integration) => {
     // language=HTML
     return `
-        <div class="holler-header">
+        <div class="holler-header is-sticky">
             <h3 style="font-weight: 400">
                 ${ sprintf(__('Edit %s Integration', 'HollerBox'),
                         `<b>${ getIntegration(integration.type).name }</b>`) }</h3>
             <button class="holler-button secondary text icon holler-modal-button-close"><span
                     class="dashicons dashicons-no-alt"></span></button>
         </div>
-        ${ getIntegration(integration.type).edit(integration) }
-        <div class="display-flex flex-end gap-10" style="margin-top: 20px">
-            <button class="holler-button danger text holler-modal-button-close">${ __('Cancel') }</button>
-            <button id="commit-integration" class="holler-button primary">${ __('Save Changes') }</button>
+        <div id="edit-here">
+            ${ getIntegration(integration.type).edit(integration) }
+            <div class="display-flex flex-end gap-10" style="margin-top: 20px">
+                <button class="holler-button danger text holler-modal-button-close">${ __('Cancel') }</button>
+                <button id="commit-integration" class="holler-button primary">${ __('Save Changes') }</button>
+            </div>
         </div>`
   }
 
@@ -975,29 +996,43 @@
         const editIntegrationModal = () => {
           modal({
             content: `<div id="edit-here"></div>`,
-            dialogClasses: 'has-header overflow-visible',
+            dialogClasses: 'no-padding edit-integration',
             width: 500,
             onOpen: ({ close, setContent }) => {
 
               let temp = copyObject(editingIntegration)
 
-              setContent(editIntegrationUI(temp))
+              const mount = () => {
+                setContent(editIntegrationUI(temp))
 
-              try {
-                getIntegration(temp.type).onMount(temp, (_new) => {
-                  temp = {
-                    ...temp,
-                    ..._new,
-                  }
+                try {
+                  getIntegration(temp.type).onMount(temp, {
+                    getState: () => temp,
+                    updateIntegration: (_new, remount = false ) => {
+                      temp = {
+                        ...temp,
+                        ..._new,
+                      }
+
+                      if ( remount ){
+                        mount()
+                      }
+                    },
+                    reMount: () => mount(),
+                  })
+                }
+                catch (e) {
+                }
+
+                $('#commit-integration').on('click', e => {
+                  updateIntegration(temp)
+                  close()
                 })
-              }
-              catch (e) {
+
               }
 
-              $('#commit-integration').on('click', e => {
-                updateIntegration(temp)
-                close()
-              })
+              mount()
+
             },
           })
         }
@@ -1577,13 +1612,25 @@
     },
     overlay: {
       name: __('Overlay', 'holler-box'),
-      render: ({ overlay_enabled = true, overlay_color, overlay_opacity = 0.5 }) => {
+      render: ({
+        overlay_enabled = true,
+        disable_scrolling = false,
+        overlay_color,
+        overlay_opacity = 0.5
+      }) => {
         return [
           singleControl({
-            label: __('Enabled'),
+            label: __('Show Overlay'),
             control: toggle({
               id: 'overlay-enabled',
               checked: overlay_enabled,
+            }),
+          }),
+          singleControl({
+            label: __('Disable Scrolling'),
+            control: toggle({
+              id: 'disable-scrolling',
+              checked: disable_scrolling,
             }),
           }),
           singleControl({
@@ -1622,6 +1669,12 @@
         $('#overlay-enabled').on('change', e => {
           updateSetting({
             overlay_enabled: e.target.checked,
+          })
+        })
+
+        $('#disable-scrolling').on('change', e => {
+          updateSetting({
+            disable_scrolling: e.target.checked,
           })
         })
       },
@@ -2740,10 +2793,33 @@
     }
 
     const showOptions = () => {
-      $el.find('.holler-picker-options').html(renderOptions())
+      const $options = $el.find('.holler-picker-options')
 
-      $('.holler-picker-option').on('click', e => {
+      $options.html(renderOptions())
+
+      $options.find('.holler-picker-option').on('click', e => {
         selectOption(e.currentTarget.dataset.id)
+      })
+
+      placeOptions()
+    }
+
+    const placeOptions = () => {
+
+      const $options = $el.find('.holler-picker-options')
+
+      const {
+        left,
+        right,
+        top,
+        bottom,
+      } = $el[0].getBoundingClientRect()
+
+      $options.css({
+        maxHeight: window.innerHeight - bottom - 20,
+        top: bottom,
+        left,
+        width: $el.width()
       })
     }
 
@@ -2798,6 +2874,8 @@
         $picker.find('.holler-picker-options').html(`<div class="holler-picker-no-options">${ __('Searching') }</div>`)
 
         let { stop } = loadingDots('.holler-picker-no-options')
+
+        placeOptions()
 
         fetchOptions(search, (opts) => {
           stop()

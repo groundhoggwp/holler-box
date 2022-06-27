@@ -14,7 +14,7 @@ class Holler_Lead {
 
 	public function __construct( WP_REST_Request $request ) {
 		$this->name  = sanitize_text_field( $request->get_param( 'name' ) );
-		$this->email = sanitize_email( $request->get_param( 'email' ) );
+		$this->email = sanitize_email( strtolower( $request->get_param( 'email' ) ) );
 
 		$parts = explode( ' ', $this->name );
 		$this->first_name = trim( $parts[0] );
@@ -58,10 +58,22 @@ class Holler_Lead {
 	}
 
 	/**
-	 * @return void
+	 * Get the leads IP address
+	 *
+	 * @return string
 	 */
-	public function get_ip_address(){
+	public function get_ip(){
+		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) )   //check ip from share internet
+		{
+			$ip = $_SERVER['HTTP_CLIENT_IP'];
+		} else if ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) )   //to check ip is pass from proxy
+		{
+			$ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+		} else {
+			$ip = $_SERVER['REMOTE_ADDR'];
+		}
 
+		return $ip;
 	}
 
 

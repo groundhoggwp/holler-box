@@ -58,7 +58,7 @@ class Holler_Integrations {
 		$type = $integration['type'];
 
 		if ( ! isset( self::$integrations[ $type ] ) ) {
-			return false;
+			return 'Unknown integration ' . $type;
 		}
 
 		return call_user_func( self::$integrations[ $type ], $integration, $lead );
@@ -149,7 +149,8 @@ class Holler_Integrations {
 			'full_name'  => $lead->get_name(),
 			'first_name' => $lead->get_first_name(),
 			'last_name'  => $lead->get_last_name(),
-			'email'      => $lead->get_email()
+			'email'      => $lead->get_email(),
+			'ip4'        => $lead->get_ip(),
 		];
 
 		if ( $props['method'] === 'get' ) {
@@ -192,7 +193,8 @@ class Holler_Integrations {
 			'full_name'  => $lead->get_name(),
 			'first_name' => $lead->get_first_name(),
 			'last_name'  => $lead->get_last_name(),
-			'email'      => $lead->get_email()
+			'email'      => $lead->get_email(),
+			'ip4'        => $lead->get_ip(),
 		];
 
 		$headers                 = [];

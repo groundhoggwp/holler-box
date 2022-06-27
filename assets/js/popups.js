@@ -290,6 +290,14 @@
   }
 
   const CommonActions = {
+    disableScrolling: ( popup ) => {
+      if ( popup.disable_scrolling ){
+        document.body.classList.add( 'disable-scrolling' )
+      }
+    },
+    enableScrolling: () => {
+      document.body.classList.remove( 'disable-scrolling' )
+    },
     notificationClosed: (popup) => {
       popup.closed = true
       popup.open()
@@ -1300,6 +1308,8 @@
         })
       })
 
+      CommonActions.disableScrolling( this )
+
       try {
         PopupTemplates[this.template].onOpen(this)
       }
@@ -1323,12 +1333,14 @@
       }
       catch (e) {}
 
+      CommonActions.enableScrolling( this )
+
       if (isBuilderPreview()) {
 
         this.submitted = false
 
         if (!this.isOpen()) {
-          setTimeout(() => this.open(), 500)
+          setTimeout(() => this.open(), 1000)
         }
 
         return

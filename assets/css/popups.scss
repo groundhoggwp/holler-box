@@ -27,6 +27,30 @@ $background-color: #F6F9FB;
 $admin-bar-height: 32px;
 $holler-yellow: rgb(232, 173, 11);
 
+body {
+  &.holler-box-blurred {
+    filter: blur(4px);
+  }
+
+  &.holler-suppress-animations {
+    .holler-box-overlay,
+    .holler-box .animation {
+      animation: none !important;
+    }
+  }
+
+  &.holler-slide-down {
+    animation-duration: 0.3s;
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
+  }
+
+  &.disable-scrolling {
+    overflow: hidden;
+  }
+}
+
 body:not(.wp-admin) {
 
   &.admin-bar {
@@ -51,30 +75,15 @@ body:not(.wp-admin) {
       top: $admin-bar-height !important;
     }
   }
-
-  &.holler-box-blurred {
-    filter: blur(4px);
-  }
-
-  &.holler-suppress-animations {
-    .holler-box-overlay,
-    .holler-box .animation {
-      animation: none !important;
-    }
-  }
-
-  &.holler-slide-down {
-    animation-duration: 0.3s;
-    animation-timing-function: ease-in-out;
-    animation-iteration-count: 1;
-    animation-fill-mode: forwards;
-
-  }
 }
 
 @keyframes progress-bar-stripes {
-  from { background-position: 0 40px; }
-  to { background-position: 0 0; }
+  from {
+    background-position: 0 40px;
+  }
+  to {
+    background-position: 0 0;
+  }
 }
 
 @keyframes holler-rotation {
@@ -373,7 +382,7 @@ body:not(.wp-admin) {
     bottom: 0;
     z-index: 999;
 
-    animation: holler-overlay-appear 0.4s ease-in-out ;
+    animation: holler-overlay-appear 0.4s ease-in-out;
   }
 
   .display-flex {
@@ -384,7 +393,7 @@ body:not(.wp-admin) {
   .holler-box-modal {
 
     min-width: 300px;
-    max-width: calc( 100vw - 40px );
+    max-width: calc(100vw - 40px);
     background: #ffffff;
     padding: 30px;
     box-sizing: border-box;
@@ -777,7 +786,7 @@ body:not(.wp-admin) {
       .left {
         padding: 30px;
 
-        .holler-box-modal-content{
+        .holler-box-modal-content {
           min-width: 300px;
         }
       }
@@ -872,7 +881,7 @@ body:not(.wp-admin) {
       padding: 0;
     }
 
-    .holler-box-modal-content{
+    .holler-box-modal-content {
       padding: 30px;
     }
 
@@ -944,7 +953,7 @@ body:not(.wp-admin) {
 
     &.vertical {
       display: grid;
-      grid-template-rows: 1fr 1fr 1fr;
+      grid-auto-rows: 1fr 1fr 1fr;
       min-width: 300px;
     }
 
@@ -976,13 +985,77 @@ body:not(.wp-admin) {
 
 @media (max-width: 600px) {
 
-  .holler-box:not(.holler-notification-box) {
+  .holler-box.holler-notification-box {
+    .positioner {
+      left: 0;
+      right: 0;
 
+      &.top-left,
+      &.top-center,
+      &.top-right {
+        top: 0;
+        transform: none;
+
+        .notification-closed {
+          margin-top: 10px;
+        }
+      }
+
+      &.center-right,
+      &.center-center,
+      &.center-left,
+      &.bottom-right,
+      &.bottom-center,
+      &.bottom-left {
+        top: auto;
+        bottom: 0;
+        transform: none;
+
+        .notification-closed {
+          margin-bottom: 10px;
+        }
+
+      }
+
+      &.top-center,
+      &.center-center,
+      &.bottom-center,
+      &.top-left,
+      &.center-left,
+      &.bottom-left {
+        .notification-closed {
+          margin-left: 10px;
+        }
+      }
+
+      &.top-right,
+      &.center-right,
+      &.bottom-right {
+        .notification-closed {
+          margin-left: auto;
+          margin-right: 10px;
+        }
+      }
+
+      .holler-box-modal {
+
+        border-radius: 0;
+
+        &:not(.notification-closed) {
+          max-width: 100vw;
+          width: auto;
+        }
+
+      }
+    }
+  }
+
+  .holler-box:not(.holler-notification-box) {
 
     .holler-box-modal {
 
       overflow: auto !important;
-      max-height: calc( 100vh - 40px );
+      max-height: calc(100vh - 40px);
 
       .display-flex {
         flex-direction: column;
@@ -993,10 +1066,15 @@ body:not(.wp-admin) {
         }
       }
 
-      form.holler-box-form.horizontal{
+      form.holler-box-form.horizontal {
         display: grid;
-        grid-template-rows: 1fr 1fr 1fr;
+        grid-auto-rows: 1fr;
         min-width: 0;
+        width: 100%;
+
+        .holler-box-input {
+          max-width: 100% !important;
+        }
       }
     }
 
