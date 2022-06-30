@@ -284,8 +284,6 @@ class Holler_Popup implements JsonSerializable {
 			$results[ $integration['type'] . '_' . $i ] = Holler_Integrations::_do( $integration, $lead );
 		}
 
-		Holler_Reporting::instance()->add_conversion( $this );
-
 		/**
 		 * When a form inside a popup has been submitted.
 		 *
@@ -472,5 +470,43 @@ class Holler_Popup implements JsonSerializable {
 		}
 
 		return call_user_func( self::$display_conditions[ $condition['type'] ], $condition );
+	}
+
+	/**
+	 * Get the number of impressions for the number of days given
+	 *
+	 * @param $days int the number of days to go back for stats
+	 *
+	 * @return int
+	 */
+	public function get_impressions( $days = 30 ) {
+		$interval = new DateInterval( "P{$days}D" );
+		return Holler_Reporting::instance()->get_total_impressions_for_interval( $this, $interval );
+	}
+
+	/**
+	 * Get the number of submissions for the number of days given
+	 *
+	 * @param $days
+	 *
+	 * @return int
+	 */
+	public function get_conversions( $days = 30 ) {
+		$interval = new DateInterval( "P{$days}D" );
+		return Holler_Reporting::instance()->get_total_conversions_for_interval( $this, $interval );
+	}
+
+	/**
+	 * Get report data for a specific time period for this popup
+	 *
+	 * @param array $query
+	 *
+	 * @return array
+	 */
+	public function get_report_data( array $query ) {
+
+		$query['popup_id'] = $this->ID;
+
+		return Holler_Reporting::instance()->get_report_data( $query );
 	}
 }

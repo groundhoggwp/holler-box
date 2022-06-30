@@ -129,40 +129,6 @@ h3 {
 
 }
 
-.space-between {
-  display: flex !important;
-  justify-content: space-between;
-  align-items: center;
-
-  &.align-right {
-    justify-content: flex-end;
-  }
-
-  &.align-left {
-    justify-content: flex-start;
-  }
-
-  &.align-center {
-    justify-content: center;
-  }
-
-  &.gap-20 {
-    gap: 20px;
-  }
-
-  &.gap-10 {
-    gap: 10px;
-  }
-
-  &.no-gap {
-    gap: 0;
-  }
-
-  &.align-top {
-    align-items: flex-start;
-  }
-}
-
 .property-groups {
 
   min-width: 360px;

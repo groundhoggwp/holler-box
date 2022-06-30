@@ -25,8 +25,6 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 * @var         Holler_Admin $instance The one true Holler_Admin
 		 */
 		private static $instance;
-		public static $errorpath = '../php-error-log.php';
-		// sample: error_log("meta: " . $meta . "\r\n",3,self::$errorpath);
 
 		/**
 		 * Get active instance
@@ -57,11 +55,89 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		private function hooks() {
 
 			add_filter( 'replace_editor', [ $this, 'replace_editor' ], 10, 2 );
-			add_action( 'load-post-new.php', [ $this, 'post_new' ] );
-			add_action( 'load-post.php', [ $this, 'post' ] );
 
 			add_action( 'admin_menu', [ $this, 'register_admin_pages' ] );
 			add_action( 'init', [ $this, 'register_cpt' ] );
+			add_filter( 'manage_hollerbox_posts_columns', [ $this, 'register_cpt_columns' ] );
+			add_action( 'manage_hollerbox_posts_custom_column', [ $this, 'do_cpt_columns' ], 10, 2 );
+			add_filter( 'post_row_actions', [ $this, 'manage_cpt_row_actions' ], 10, 2 );
+
+			add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
+		}
+
+		public function admin_scripts( $hook ) {
+
+			wp_register_style( 'hollerbox-elements', Holler_Box_URL . 'assets/css/elements.css' );
+			wp_register_style( 'baremetrics-calendar', Holler_Box_URL . 'assets/css/calendar.css' );
+			wp_register_style( 'hollerbox-admin', Holler_Box_URL . 'assets/css/admin.css', [
+				'hollerbox-elements',
+				'baremetrics-calendar',
+			] );
+			wp_register_script( 'hollerbox-elements', Holler_Box_URL . 'assets/js/elements.js', [
+				'jquery',
+				'wp-i18n',
+			] );
+			wp_register_script( 'baremetrics-calendar', Holler_Box_URL . 'assets/js/baremetrics-calendar.js', [
+				'moment'
+			] );
+			wp_register_script( 'hollerbox-chart-js', Holler_Box_URL . 'assets/js/chart.js' );
+			wp_register_script( 'hollerbox-reporting', Holler_Box_URL . 'assets/js/reports.js', [
+				'hollerbox-chart-js',
+				'hollerbox-elements',
+				'baremetrics-calendar'
+			] );
+
+			wp_register_script( 'hollerbox-settings', Holler_Box_URL . 'assets/js/settings.js', [
+				'hollerbox-elements',
+			] );
+
+			if ( $hook === 'edit.php' && get_current_screen()->post_type !== 'hollerbox' ) {
+				wp_enqueue_style( 'hollerbox-admin' );
+			}
+
+			if ( $hook === 'hollerbox_page_hollerbox_reports' ) {
+				wp_enqueue_style( 'hollerbox-admin' );
+				wp_enqueue_script( 'hollerbox-reporting' );
+
+				wp_localize_script( 'hollerbox-elements', 'HollerBox', [
+					'admin_url' => untrailingslashit( admin_url() ),
+					'routes'    => [
+						'root'   => rest_url( 'hollerbox' ),
+						'report' => rest_url( 'hollerbox/report' ),
+					],
+					'nonces'    => [
+						'_wprest' => wp_create_nonce( 'wp_rest' )
+					],
+				] );
+			}
+
+			if ( $hook === 'hollerbox_page_hollerbox' ) {
+				wp_enqueue_style( 'hollerbox-admin' );
+				wp_enqueue_script( 'hollerbox-settings' );
+
+				wp_enqueue_editor();
+
+				wp_add_inline_script( 'hollerbox-elements', 'var HollerBox = ' . wp_json_encode([
+					'admin_url'   => untrailingslashit( admin_url() ),
+					'currentUser' => wp_get_current_user(),
+					'routes'      => [
+						'root'     => rest_url( 'hollerbox' ),
+						'settings' => rest_url( 'hollerbox/settings' ),
+					],
+					'installed'   => [
+						'hollerBoxPro' => defined( 'Holler_Box_Pro_VER' ),
+						'groundhogg'   => defined( 'GROUNDHOGG_VERSION' ),
+						'mailhawk'     => defined( 'MAILHAWK_VERSION' ),
+					],
+					'nonces'      => [
+						'_wprest' => wp_create_nonce( 'wp_rest' )
+					],
+					'settings'    => get_option( 'hollerbox_settings', [
+						'is_licensed' => false
+					] )
+				] ), 'before');
+			}
+
 		}
 
 		/**
@@ -71,24 +147,41 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 * @since       0.1
 		 */
 		public function register_admin_pages() {
-			add_submenu_page( 'edit.php?post_type=hollerbox', 'Holler Box Settings', 'Settings', 'manage_options', 'hollerbox', [
+			add_submenu_page( 'edit.php?post_type=hollerbox', 'HollerBox Reports', 'Reports', 'manage_options', 'hollerbox_reports', [
+				$this,
+				'reports_page'
+			] );
+
+			add_submenu_page( 'edit.php?post_type=hollerbox', 'HollerBox Settings', 'Settings', 'manage_options', 'hollerbox', [
 				$this,
 				'settings_page'
 			] );
 		}
 
 		/**
-         * Render the settigns page
-         *
+		 * Render the settigns page
+		 *
 		 * @return void
 		 */
-        public function settings_page(){
-
-        }
+		public function settings_page() {
+			?>
+            <div id="holler-app"></div><?php
+		}
 
 		/**
-         * Enqueue scripts for the popup editor
-         *
+		 * Render the settigns page
+		 *
+		 * @return void
+		 */
+		public function reports_page() {
+
+			?>
+            <div id="holler-app"></div><?php
+		}
+
+		/**
+		 * Enqueue scripts for the popup editor
+		 *
 		 * @return void
 		 */
 		public function builder_scripts() {
@@ -109,22 +202,16 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 
 			wp_enqueue_script( 'csslint' );
 
-
 			wp_enqueue_style( 'hollerbox-popups', Holler_Box_URL . 'assets/css/popups.css' );
 			wp_enqueue_style( 'hollerbox-elements', Holler_Box_URL . 'assets/css/elements.css' );
 			wp_enqueue_style( 'hollerbox-builder', Holler_Box_URL . 'assets/css/popup-builder.css', [
 				'wp-color-picker'
 			] );
 
-			wp_register_script( 'hollerbox-elements', Holler_Box_URL . 'assets/js/elements.js', [
-				'jquery'
-			] );
-
 			wp_register_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups.js' );
 			wp_register_script( 'hollerbox-builder', Holler_Box_URL . 'assets/js/popup-builder.js', [
 				'hollerbox-elements',
 				'hollerbox-popups',
-				'wp-i18n',
 				'wp-color-picker',
 			] );
 
@@ -185,6 +272,10 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				return $bool;
 			}
 
+			if ( did_action( 'load-post-new.php' ) || did_action( 'load-post.php' ) ) {
+				$this->render_builder();
+			}
+
 			return true;
 		}
 
@@ -218,7 +309,9 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		}
 
 		/**
-		 * @return bool|mixed
+		 * Output HTML to for the builder
+		 *
+		 * @return void
 		 */
 		public function render_builder() {
 
@@ -231,47 +324,146 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
             <div id="holler-app"></div><?php
 		}
 
-		// Register holler box post type
+		/**
+		 * Reguister the HollerBox post type
+		 *
+		 * @return void
+		 */
 		public function register_cpt() {
 
+			global $wp_post_types;
+
 			$labels = array(
-				'name'               => __( 'Holler Box', 'holler-box' ),
-				'singular_name'      => __( 'Holler Box', 'holler-box' ),
-				'menu_name'          => __( 'Holler Box', 'holler-box' ),
-				'name_admin_bar'     => __( 'Holler Box', 'holler-box' ),
+				'name'               => __( 'HollerBox', 'holler-box' ),
+				'singular_name'      => __( 'Popup', 'holler-box' ),
+				'menu_name'          => __( 'HollerBox', 'holler-box' ),
+				'name_admin_bar'     => __( 'HollerBox', 'holler-box' ),
 				'add_new'            => __( 'Add New', 'holler-box' ),
-				'add_new_item'       => __( 'Add New Box', 'holler-box' ),
-				'new_item'           => __( 'New Box', 'holler-box' ),
-				'edit_item'          => __( 'Edit Box', 'holler-box' ),
-				'view_item'          => __( 'View Box', 'holler-box' ),
-				'all_items'          => __( 'All Boxes', 'holler-box' ),
-				'search_items'       => __( 'Search Boxes', 'holler-box' ),
-				'parent_item_colon'  => __( 'Parent Boxes:', 'holler-box' ),
-				'not_found'          => __( 'No Boxes found.', 'holler-box' ),
-				'not_found_in_trash' => __( 'No Boxes found in Trash.', 'holler-box' )
+				'add_new_item'       => __( 'Add New Popup', 'holler-box' ),
+				'new_item'           => __( 'New Popup', 'holler-box' ),
+				'edit_item'          => __( 'Edit Popup', 'holler-box' ),
+				'view_item'          => __( 'View Popup', 'holler-box' ),
+				'all_items'          => __( 'All Popups', 'holler-box' ),
+				'search_items'       => __( 'Search Popups', 'holler-box' ),
+				'parent_item_colon'  => __( 'Parent Popups:', 'holler-box' ),
+				'not_found'          => __( 'No Popups found.', 'holler-box' ),
+				'not_found_in_trash' => __( 'No Popups found in trash.', 'holler-box' )
 			);
 
-			$args = array(
-				'labels'               => $labels,
-				'public'               => true,
-				'publicly_queryable'   => true,
-				'show_ui'              => true,
-				'show_in_nav_menus'    => false,
-				'show_in_menu'         => true,
-				'show_in_rest'         => false,
-				'query_var'            => true,
-				// 'rewrite'           => array( 'slug' => 'hollerbox' ),
-				'capability_type'      => 'post',
-				'has_archive'          => true,
-				'hierarchical'         => true,
-				//'menu_position'     => 50,
-				'menu_icon'            => 'dashicons-testimonial',
-				'supports'             => array( 'title', 'editor' ),
-				'show_in_customizer'   => false,
-				'register_meta_box_cb' => array( $this, 'notification_meta_boxes' )
-			);
+			$args = [
+				'labels'             => $labels,
+				'public'             => true,
+				'publicly_queryable' => true,
+				'show_ui'            => true,
+				'show_in_nav_menus'  => false,
+				'show_in_menu'       => true,
+				'show_in_rest'       => false,
+				'query_var'          => true,
+				'capability_type'    => [ 'popup', 'popups' ],
+				'map_meta_cap'       => true,
+				'has_archive'        => false,
+				'hierarchical'       => false,
+				'menu_icon'          => 'dashicons-testimonial',
+				'supports'           => [ 'title' ],
+				'show_in_customizer' => false,
+			];
 
 			register_post_type( 'hollerbox', $args );
+
+			// get the generated caps
+			$caps = array_values( (array) get_post_type_object( 'hollerbox' )->cap );
+
+			$role = get_role( 'administrator' );
+
+			// If admin does nto have permission
+			if ( ! $role->has_cap( $caps[0] ) ) {
+
+				// Add all the caps
+				foreach ( $caps as $cap ) {
+					$role->add_cap( $cap );
+				}
+			}
+		}
+
+		/**
+		 * Register custom columns for HollerBox
+		 *
+		 * @param $columns array
+		 *
+		 * @return array
+		 */
+		public function register_cpt_columns( $columns ) {
+
+			$columns = array_filter( $columns, function ( $colum ) {
+				return in_array( $colum, [ 'cb', 'title' ] );
+			}, ARRAY_FILTER_USE_KEY );
+
+			$columns['impressions'] = __( 'Impressions' );
+			$columns['conversions'] = __( 'Conversions' );
+			$columns['cvr']         = __( 'CVR' );
+			$columns['date']        = __( 'Date' );
+
+			return $columns;
+		}
+
+		/**
+		 * Do custom columns
+		 *
+		 * @param $column  string
+		 * @param $post_id int
+		 *
+		 * @return void
+		 */
+		public function do_cpt_columns( $column, $post_id ) {
+
+			$popup = new Holler_Popup( $post_id );
+
+			switch ( $column ) {
+				case 'conversions':
+					echo number_format_i18n( $popup->get_conversions() );
+					break;
+				case 'impressions':
+					echo number_format_i18n( $popup->get_impressions() );
+					break;
+				case 'cvr':
+
+					$impressions = $popup->get_impressions();
+					$conversions = $popup->get_conversions();
+					$cvr         = ceil( ( $conversions / ( $impressions ?: 1 ) ) * 100 );
+
+					echo $cvr . '%';
+
+					break;
+			}
+
+		}
+
+		/**
+		 * Filter the row actions
+		 *
+		 * @param $actions array
+		 * @param $post    WP_Post
+		 *
+		 * @return array
+		 */
+		public function manage_cpt_row_actions( $actions, $post ) {
+			$post_type = get_post_type( $post );
+
+			if ( $post_type !== 'hollerbox' ) {
+				return $actions;
+			}
+
+			// remove unwanted actions
+			$actions = array_filter( $actions, function ( $action ) {
+				return ! in_array( $action, [ 'view' ] );
+			}, ARRAY_FILTER_USE_KEY );
+
+			$url  = esc_url( admin_url( 'edit.php?post_type=hollerbox&page=hollerbox_reports#/popup/' . $post->ID ) );
+			$text = __( 'Report' );
+
+			$actions['report'] = "<a href=\"${url}\">{$text}</a>";
+
+			return $actions;
 		}
 
 	}

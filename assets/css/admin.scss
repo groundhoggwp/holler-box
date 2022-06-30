@@ -1,0 +1,267 @@
+$primary-blue: rgb(0, 117, 255);
+$primary-blue-60: rgba(0, 117, 255, 0.60);
+$primary-blue-50: rgba(0, 117, 255, 0.50);
+$primary-blue-20: rgba(0, 117, 255, 0.20);
+$primary-blue-10: rgba(0, 117, 255, 0.10);
+$primary-blue-7: rgba(0, 117, 255, 0.07);
+$primary-blue-2: rgba(0, 117, 255, 0.02);
+$primary-dark: rgb(16, 38, 64);
+$primary-dark-50: rgba(16, 38, 64, 0.5);
+$primary-dark-30: rgba(16, 38, 64, 0.3);
+$primary-dark-15: rgba(16, 38, 64, 0.15);
+$primary-dark-10: rgba(16, 38, 64, 0.10);
+$primary-dark-5: rgba(16, 38, 64, 0.05);
+$primary-dark-1: rgba(16, 38, 64, 0.02);
+$error-red: rgb(233, 31, 79);
+$error-red-50: rgba(233, 31, 79, 0.5);
+$error-red-10: rgba(233, 31, 79, 0.10);
+$secondary-purple: rgb(108, 25, 173);
+$alert-yellow-50: rgba(255, 238, 88, 0.50);
+$alert-yellow: rgb(255, 238, 88);
+$holler-yellow: rgb(232, 173, 11);
+$benchmark-orange: rgb(245, 129, 21);
+$benchmark-orange-50: rgba(245, 129, 21, 0.50);
+$benchmark-orange-25: rgba(245, 129, 21, 0.25);
+$action-green: rgb(158, 206, 56);
+$action-green-50: rgba(158, 206, 56, 0.5);
+$box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.05);
+$background-color: #F6F9FB;
+
+.holler-spinner {
+  display: block;
+  height: 15px;
+  width: 15px;
+  border: 5px solid rgba(255, 255, 255, 0.4);
+  border-bottom-color: #ffffff;
+  border-radius: 50%;
+  position: relative;
+  animation: holler-rotation 1s linear infinite;
+}
+
+.widefat {
+  th, td {
+    &.column-impressions,
+    &.column-conversions,
+    &.column-cvr {
+      text-align: center;
+      width: 100px;
+    }
+  }
+}
+
+.holler-header {
+  padding-left: 30px;
+  padding-right: 30px;
+
+  #logo svg {
+    width: 200px;
+  }
+}
+
+body.hollerbox_page_hollerbox_reports,
+body.hollerbox_page_hollerbox {
+  #wpcontent {
+    padding: 0;
+  }
+}
+
+body.hollerbox_page_hollerbox {
+
+  .holler-header {
+    padding-left: calc( (100% - 800px) / 2 );
+    padding-right: calc( (100% - 800px) / 2 );
+  }
+
+  #page {
+    max-width: 800px;
+    margin: 30px auto;
+    gap: 30px;
+
+    #settings {
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      width: 100%;
+
+      .disable-credit {
+        &.disable-changes {
+          pointer-events: none;
+          opacity: 0.5;
+        }
+      }
+
+      .credit {
+        background: $primary-dark-5;
+        padding: 5px;
+        border-radius: 5px;
+      }
+
+      .danger-zone {
+        overflow: hidden;
+
+        .holler-panel-header{
+          background: $error-red-10;
+          h2 {
+            color: darken( $error-red, 20 );
+          }
+        }
+
+      }
+    }
+
+    #right {
+      width: 260px;
+      flex-shrink: 0;
+
+      .holler-menu {
+        a {
+          padding: 16px;
+          font-size: 14px;
+          display: flex;
+          gap: 10px;
+
+          &:hover{
+            background: $primary-dark-5;
+            text-decoration: none;
+          }
+        }
+      }
+    }
+
+  }
+
+  .setup-page {
+    max-width: 600px;
+    margin: auto;
+
+    .page-inner {
+      > .holler-panel {
+        > .inside {
+          padding: 30px;
+          padding-bottom: 50px;
+        }
+
+        input[type="text"],
+        input[type="email"]
+        {
+          width: 100%;
+          font-size: 16px;
+          padding: 4px 12px;
+        }
+      }
+
+      .plugin {
+
+        .plugin-actions {
+          border-top: 1px solid $primary-dark-10;
+          background: $primary-dark-1;
+        }
+
+        h2 {
+          margin: 0;
+          font-size: 22px;
+        }
+
+        .icon {
+          min-width: 80px;
+        }
+      }
+    }
+
+    label,
+    li,
+    p {
+      font-size: 16px;
+    }
+
+    ul {
+      list-style: disc;
+      padding-left: 20px;
+    }
+
+    #logo {
+
+      display: flex;
+      justify-content: center;
+
+      svg {
+        width: 300px;
+        margin: 60px auto;
+      }
+    }
+  }
+}
+
+body.hollerbox_page_hollerbox_reports {
+
+  #holler-app {
+
+    #reports-here {
+      padding: 30px;
+
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+      gap: 30px;
+    }
+
+    .span-full {
+      grid-column: span 6;
+    }
+
+    .span-half {
+      grid-column: span 3;
+    }
+
+    .span-third {
+      grid-column: span 2;
+    }
+
+    .holler-panel {
+
+      .holler-panel-header {
+        h2 {
+          font-size: 18px;
+          padding: 16px;
+        }
+      }
+
+      .holler-big-number {
+        font-size: 42px;
+        font-weight: 500;
+        margin: 10px 0;
+      }
+
+      table {
+        width: 100%;
+        border-collapse: collapse;
+
+        thead {
+          th {
+            font-weight: 500;
+            text-align: left;
+          }
+        }
+
+        th, td {
+          padding: 12px 16px;
+          font-size: 16px;
+
+          &:not(:first-child) {
+            text-align: center;
+          }
+
+          &:first-child {
+            width: 500px;
+          }
+        }
+
+        tbody tr:nth-child(odd) {
+          background-color: $primary-blue-2;
+        }
+      }
+    }
+
+  }
+
+
+}

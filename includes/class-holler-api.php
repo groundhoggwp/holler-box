@@ -40,6 +40,14 @@ class Holler_Api {
 			]
 		] );
 
+		register_rest_route( 'hollerbox', '/report', [
+			[
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'read_report' ],
+				'permission_callback' => [ $this, 'permission_callback' ]
+			]
+		] );
+
 		register_rest_route( 'hollerbox', 'options', [
 			[
 				'methods'             => WP_REST_Server::READABLE,
@@ -71,13 +79,50 @@ class Holler_Api {
 				'permission_callback' => [ $this, 'plugins_permission_callback' ]
 			]
 		] );
+
+		register_rest_route( 'hollerbox', 'settings', [
+			[
+				'methods'             => WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'update_settings' ],
+				'permission_callback' => [ $this, 'options_permission_callback' ]
+			]
+		] );
+
+
 	}
 
 	/**
-	 * Track a conversion
+	 * Get all report data for specific time rage
 	 *
-	 * This is primarily used for Non-submission based conversions, like link clicks
-	 * The Popup::submit() method will track a conversion automatically
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
+	 */
+	public function read_report( WP_REST_Request $request ) {
+
+		$fallback = new DateTime( '30 days ago', wp_timezone() );
+
+		$before = sanitize_text_field( $request->get_param( 'before' ) ?: current_time( 'Y-m-d' ) );
+		$after  = sanitize_text_field( $request->get_param( 'after' ) ?: $fallback->format( 'Y-m-d' ) );
+
+		$data = Holler_Reporting::instance()->get_report_data( [
+			'before' => $before,
+			'after'  => $after
+		] );
+
+		$popups = array_unique( wp_parse_id_list( wp_list_pluck( $data, 'popup_id' ) ) );
+		$popups = array_map( function ( $id ) {
+			return new Holler_Popup( $id );
+		}, $popups );
+
+		return rest_ensure_response( [
+			'data'   => $data,
+			'popups' => array_values( $popups ),
+		] );
+	}
+
+	/**
+	 * Track a popup conversion
 	 *
 	 * @param WP_REST_Request $request
 	 *
@@ -93,7 +138,10 @@ class Holler_Api {
 			return self::ERROR_404();
 		}
 
-		Holler_Reporting::instance()->add_conversion( $popup );
+		// Parse the location
+		$location = parse_url( sanitize_text_field( $request->get_param( 'location' ) ), PHP_URL_PATH );
+
+		Holler_Reporting::instance()->add_conversion( $popup, $location );
 
 		return rest_ensure_response( [
 			'success' => true
@@ -117,7 +165,10 @@ class Holler_Api {
 			return self::ERROR_404();
 		}
 
-		Holler_Reporting::instance()->add_impression( $popup );
+		// Parse the location
+		$location = parse_url( sanitize_text_field( $request->get_param( 'location' ) ), PHP_URL_PATH );
+
+		Holler_Reporting::instance()->add_impression( $popup, $location );
 
 		return rest_ensure_response( [
 			'success' => true
@@ -267,6 +318,8 @@ class Holler_Api {
 
 		$response = $popup->submit( $lead );
 
+		$this->track_conversion( $request );
+
 		return rest_ensure_response( $response );
 	}
 
@@ -340,6 +393,42 @@ class Holler_Api {
 	}
 
 	/**
+	 * Delete a popup
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public function update_settings( WP_REST_Request $request ) {
+		$settings = $request->get_param( 'settings' );
+
+		$sanitized_settings = [];
+
+		foreach ( $settings as $option_name => $option_value ) {
+			switch ( $option_name ) {
+				case 'gdpr_enabled':
+				case 'disabled_credit':
+				case 'disable_all':
+				case 'delete_all_data':
+				case 'telemetry_enabled':
+				case 'is_licensed':
+					$sanitized_settings[ sanitize_key( $option_name ) ] = boolval( $option_value );
+					break;
+				case 'gdpr_text':
+					$sanitized_settings[ sanitize_key( $option_name ) ] = wp_kses_post( $option_value );
+					break;
+				default:
+					$sanitized_settings[ sanitize_key( $option_name ) ] = sanitize_text_field( $option_value );
+					break;
+			}
+		}
+
+		update_option( 'hollerbox_settings', $sanitized_settings );
+
+		return rest_ensure_response( [ 'success' => true ] );
+	}
+
+	/**
 	 * Get options for the display condition pickers
 	 *
 	 * @param WP_REST_Request $request
@@ -383,6 +472,10 @@ class Holler_Api {
 	}
 
 	public function permission_callback() {
+		return current_user_can( 'edit_popups' );
+	}
+
+	public function options_permission_callback() {
 		return current_user_can( 'manage_options' );
 	}
 

@@ -3,7 +3,7 @@
  * Plugin Name:     HollerBox
  * Plugin URI:      https://hollerwp.com
  * Description:     A lightweight popup plugin with lead generation opt-in forms.
- * Version:         1.5.8
+ * Version:         2.0
  * Author:          Groundhogg Inc.
  * Author URI:      https://groundhogg.io
  * Text Domain:     holler-box

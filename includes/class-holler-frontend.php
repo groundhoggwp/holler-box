@@ -20,7 +20,7 @@ class Holler_Frontend {
 	protected $active = [];
 
 	public function is_builder_preview() {
-		return isset( $_GET['suppress_hollerbox'] ) && current_user_can( 'manage_options' );
+		return isset( $_GET['suppress_hollerbox'] ) && current_user_can( 'edit_popups' );
 	}
 
 	public function __construct() {
@@ -123,10 +123,16 @@ class Holler_Frontend {
 	 */
 	public function get_active_popups() {
 
-		// Suppress popups from being displayed
+
 		if ( $this->is_builder_preview() ) {
+
+            // hide admin bar
 			add_filter( 'show_admin_bar', '__return_false' );
 
+            // prevent query monitor output in preview
+            add_filter( 'qm/process', '__return_false' );
+
+			// Suppress popups from being displayed
 			return;
 		}
 

@@ -1298,6 +1298,8 @@
       if (check) {
         return apiPost(HollerBox.routes.conversion, {
           popup_id: this.ID,
+          location: window.location.href,
+          referer: document.referrer,
         })
       }
     },
@@ -1312,6 +1314,8 @@
 
       return apiPost(HollerBox.routes.impression, {
         popup_id: this.ID,
+        location: window.location.href,
+        referer: document.referrer,
       })
     },
 

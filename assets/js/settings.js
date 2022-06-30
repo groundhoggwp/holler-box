@@ -1,0 +1,725 @@
+( ($) => {
+
+  const {
+    icons,
+    toggle,
+    input,
+    tinymceElement,
+    textarea,
+    dialog,
+  } = HollerBox.elements
+
+  const { __ } = wp.i18n
+
+  function ApiError (message) {
+    this.name = 'ApiError'
+    this.message = message
+  }
+
+  ApiError.prototype = Error.prototype
+
+  /**
+   * Fetch stuff from the API
+   * @param route
+   * @param params
+   * @param opts
+   */
+  async function apiGet (route, params = {}, opts = {}) {
+
+    let __params = new URLSearchParams()
+
+    Object.keys(params).forEach(k => {
+      __params.append(k, params[k])
+    })
+
+    const response = await fetch(route + '?' + __params, {
+      headers: {
+        'X-WP-Nonce': HollerBox.nonces._wprest,
+      },
+      ...opts,
+    })
+
+    let json = await response.json()
+
+    if (!response.ok) {
+      console.log(json)
+      throw new ApiError(json.message)
+    }
+
+    return json
+  }
+
+  /**
+   * Post data
+   *
+   * @param url
+   * @param data
+   * @param opts
+   * @returns {Promise<any>}
+   */
+  async function apiPost (url = '', data = {}, opts = {}) {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-WP-Nonce': HollerBox.nonces._wprest,
+      },
+      body: JSON.stringify(data),
+      ...opts,
+    })
+
+    let json = await response.json()
+
+    if (!response.ok) {
+      throw new ApiError(json.message)
+    }
+
+    return json
+  }
+
+  /**
+   * There can be only one!
+   *
+   * @param items
+   * @returns {any[]}
+   */
+  const arrayUnique = (items) => {
+    let set = new Set(items)
+    return [...set]
+  }
+
+  const skipButton = (text) => {
+    // language=HTML
+    return `
+        <div class="display-flex center" style="margin-top: 40px">
+            <button id="skip" class="holler-button secondary text">
+                ${ text }
+            </button>
+        </div>`
+  }
+
+  const setupPage = ({
+    title = '',
+    render = () => {},
+    onMount = () => {},
+    onSkip = () => {},
+    onNext = () => {},
+    showButtons = true,
+    ...rest
+  }) => ( {
+    ...rest,
+    render: () => {
+
+      const buttons = () => {
+
+        if (!showButtons) {
+          return ''
+        }
+
+        // language=HTML
+        return `
+            <div class="display-flex flex-end gap-10" style="margin-top: 30px">
+                <button id="skip" class="holler-button secondary text">${ __('Skip') }</button>
+                <button id="next" class="holler-button primary">${ __('Next') }</button>
+            </div>`
+      }
+
+      // language=HTML
+      return `
+          <div class="setup-page">
+              <div id="logo">
+                  ${ icons.hollerbox_full }
+              </div>
+              <div class="page-inner">
+                  <div class="holler-panel">
+                      <div class="inside">
+                          <h1>${ title }</h1>
+                          ${ render() }
+                          ${ buttons() }
+                      </div>
+                  </div>
+              </div>
+          </div>`
+    },
+    onMount: (...args) => {
+      onMount(...args)
+      $('#skip').on('click', e => onSkip(...args))
+      $('#next').on('click', e => onSkip(...args))
+    },
+
+  } )
+
+  const setup_answers = {
+    role: '',
+    business: '',
+    license: '',
+    telemetry_subscribe: true,
+    subscribed: false,
+    install_groundhogg: true,
+    install_mailhawk: true,
+    email: HollerBox.currentUser.data.user_email,
+  }
+
+  const settings = {
+    license: '',
+    is_licensed: false,
+    credit_disabled: false,
+    telemetry_enabled: false,
+    gdpr_enabled: false,
+    delete_all_data: false,
+    disable_all: false,
+    gdpr_text: `<p>I consent</p>`,
+    ...HollerBox.settings,
+  }
+
+  const saveSettings = () => {
+    return apiPost(HollerBox.routes.settings, {
+      settings,
+    }).then(r => {
+      dialog({
+        message: 'Settings saved!',
+      })
+    })
+  }
+
+  const pages = [
+    {
+      slug: /settings/,
+      render: () => {
+
+        const utmSource = '?utm_source=settings_page&utm_medium=link&utm_campaign=hollerbox'
+
+        const links = [
+          ['https://hollerwp.com', 'dashicons dashicons-admin-site', 'HollerWP.com'],
+          ['https://hollerbox.helpscoutdocs.com/', 'dashicons dashicons-media-document', 'Documentation'],
+          ['https://hollerwp.com/pricing/', 'dashicons dashicons-store', 'Pricing'],
+          ['https://hollerwp.com/account/support/', 'dashicons dashicons-sos', 'Support'],
+          ['https://hollerwp.com/account/', 'dashicons dashicons-admin-users', 'My Account'],
+        ]
+
+        // language=HTML
+        return `
+            <div class="holler-header is-sticky">
+                <div id="logo">
+                    <a href="https://hollerwp.com" target="_blank">${ icons.hollerbox_full }</a>
+                </div>
+                <button id="save-settings" class="holler-button medium primary">${ __('Save Changes') }</button>
+            </div>
+            <div class="display-flex" id="page">
+                <div id="settings">
+
+                    <div class="holler-panel">
+                        <div class="holler-panel-header">
+                            <h2>${ __('License') }</h2>
+                        </div>
+                        <div class="inside">
+                            <p>${ __('Enter your license key to receive updates and support for HollerBox Pro.') }</p>
+                            <div class="display-flex gap-10">
+                                ${ input({
+                                    id: 'license',
+                                    className: 'full-width',
+                                    type: settings.license ? 'password' : 'text',
+                                    placeholder: __('Your license key'),
+                                }) }
+                                <button id="activate" class="holler-button primary">${ __('Activate') }</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="holler-panel">
+                        <div class="holler-panel-header">
+                            <h2>${ __('General') }</h2>
+                        </div>
+                        <div class="inside">
+                            <div class="disable-credit ${ settings.is_licensed ? '' : 'disable-changes' }">
+                                <label class="display-flex gap-20"><b>${ __(
+                                        'Hide the <span class="credit">⚡ by HollerBox</span> attribution') }</b>
+                                    ${ toggle({  name: 'credit_disabled', className: 'setting-toggle', checked: settings.credit_disabled }) }</label>
+                                <p>${ __('Can only be disabled when HollerBox is licensed.', 'holler-box') }</p>
+                            </div>
+                            <label class="display-flex gap-20"><b>${ __('Send anonymous telemetry') }</b>
+                                ${ toggle({ name: 'telemetry_enabled', className: 'setting-toggle', checked: settings.telemetry_enabled  }) }</label>
+                            <p>${ __('Occasionally send HollerBox non-sensitive information about your site so we can improve our plugin.', 'holler-box') }</p>
+                        </div>
+                    </div>
+                    <div class="holler-panel">
+                        <div class="holler-panel-header">
+                            <h2>${ __('GDPR') }</h2>
+                        </div>
+                        <div class="inside">
+                            <label class="display-flex gap-20"><b>${ __('Enable GDPR Consent') }</b>
+                                ${ toggle({ name: 'gdpr_enabled', className: 'setting-toggle', checked: settings.gdpr_enabled }) }</label>
+                            <p>${ __('Show a GDPR consent checkbox on all forms.', 'holler-box') }</p>
+                            <p><b>${ __('GDPR Consent Text') }</b></p>
+                            ${ textarea({
+                                id: 'gdpr-text',
+                                value: settings.gdpr_text,
+                            }) }
+                        </div>
+                    </div>
+                     <div class="holler-panel danger-zone">
+                        <div class="holler-panel-header">
+                            <h2>⚠️ ${ __('Danger Zone') }</h2>
+                        </div>
+                        <div class="inside">
+                            <label class="display-flex gap-20"><b>${ __('Delete all data when uninstalling') }</b>
+                                ${ toggle({ name: 'delete_all_data', className: 'setting-toggle', checked: settings.delete_all_data }) }</label>
+                            <p>${ __('The will delete all popups, reports, and options associated with HollerBox.', 'holler-box') }</p>
+                            <label class="display-flex gap-20"><b>${ __('Temporarily disable all popups') }</b>
+                                ${ toggle({ name: 'disable_all', className: 'setting-toggle', checked: settings.disable_all }) }</label>
+                            <p>${ __('Disable all active popups. This is only temporary and when turned off all popups will become active again.', 'holler-box') }</p>
+                        </div>
+                    </div>
+                </div>
+                <div id="right">
+                    <div class="holler-panel">
+                        <div class="holler-panel-header">
+                            <h2>${ __('Helpful Links') }</h2>
+                        </div>
+                        <div class="display-flex column holler-menu">
+                            ${ links.map(
+                                    ([href, dashicon, text]) => `<a href="${ href +
+                                    utmSource }" target="_blank"><span class="${ dashicon }"></span> ${ text }</a>`).
+                                    join('') }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `
+      },
+      onMount: (params, setPage) => {
+
+        $('#save-settings').on('click', e => {
+          saveSettings()
+        })
+
+        $('.setting-toggle').on('change', e => {
+          settings[e.target.name] = e.target.checked
+        })
+
+        tinymceElement('gdpr-text', {}, (content) => {
+          settings.gdpr_text = content
+        })
+      },
+    },
+    setupPage({
+      title: __('🎉 Thanks for Choosing HollerBox'),
+      slug: /s\/start/,
+      showButtons: false,
+      render: () => {
+        // language=HTML
+        return `
+            <p>
+                ${ __('In just a few minutes you\'ll be creating popups with HollerBox and generating more leads and sales! Click the button below to start the guided setup.') }
+            </p>
+            <div class="display-flex center" style="margin-top: 30px">
+                <button id="start" class="holler-button primary big">${ __('Let\'s get started!') }</button>
+            </div>
+        `
+      },
+      onMount: (params, setPage) => {
+        $('#start').on('click', e => setPage('/s/role/'))
+      },
+    }),
+
+    /**
+     * Ask for the role
+     */
+    setupPage({
+      title: __('What is your role?'),
+      slug: /s\/role/,
+      showButtons: false,
+      render: () => {
+
+        let items = [
+          'Agency/Freelancer',
+          'Business Owner',
+          'Marketing Team',
+          'Developer',
+        ]
+
+        // language=HTML
+        return `
+            <p>
+                ${ __('Can you tell us a bit about yourself so we can better tailor your experience?') }
+            </p>
+            <div id="items" class="display-flex column gap-10">
+                ${ items.map(
+                        r => `<button class="holler-button secondary text select-item medium" data-item="${ r }">${ r }</button>`).
+                        join('') }
+            </div>
+        `
+      },
+      onMount: (params, setPage) => {
+        $('.select-item').on('click', e => {
+          setup_answers.role = e.target.dataset.item
+          setPage('/s/business/')
+        })
+      },
+    }),
+
+    /**
+     * Ask for the kind of business
+     */
+    setupPage({
+      title: __('What kind of business are we building?'),
+      slug: /s\/business/,
+      showButtons: false,
+      render: () => {
+
+        let items = [
+          'Community/Membership',
+          'Learning/Education',
+          'Software',
+          'Ecommerce',
+          'Publishing/Media',
+          'Something else',
+        ]
+
+        // language=HTML
+        return `
+            <p>
+                ${ __('Can you tell us a bit about your business so we can make recommendations for how to use HollerBox to get the best results?') }
+            </p>
+            <div id="items" class="display-flex column gap-10">
+                ${ items.map(
+                        i => `<button class="holler-button secondary text select-item medium" data-item="${ i }">${ i }</button>`).
+                        join('') }
+            </div>
+        `
+      },
+      onMount: (params, setPage) => {
+        $('.select-item').on('click', e => {
+          setup_answers.business = e.target.dataset.item
+          setPage('/s/license/')
+        })
+      },
+    }),
+
+    /**
+     * Ask for the license key
+     */
+    setupPage({
+      title: __('Have a license key?'),
+      slug: /s\/license/,
+      showButtons: false,
+      render: () => {
+
+        // language=HTML
+        return `
+            <p>
+                ${ __('If you have previously purchased a license for HollerBox you can enter it now! <i><a href="#" target="_blank">Where do I find my license?</a></i>') }
+            </p>
+            <div class="inside display-flex gap-10">
+                ${ input({
+                    id: 'license',
+                    placeholder: __('Your license key'),
+                }) }
+                <button id="activate" class="holler-button primary medium">${ __('Activate') }</button>
+            </div>
+            ${ skipButton(__('I don\'t have a license yet.')) }
+        `
+      },
+      onSkip: (p, setPage) => setPage('/s/telemetry/'),
+      onMount: (params, setPage) => {
+
+        $('#license').on('change input', e => {
+          setup_answers.license = e.target.value
+        })
+
+        $('#activate').on('click', e => {
+          setPage('/s/telemetry-2/')
+        })
+      },
+    }),
+
+    /**
+     * Prompt to enable telemetry
+     */
+    setupPage({
+      title: __('Want 15% OFF HollerBox Pro?'),
+      slug: /s\/telemetry\/?$/,
+      showButtons: false,
+      render: () => {
+        // language=HTML
+        return `
+            <p>
+                ${ __('You can help improve HollerBox and get 15% OFF the first year of <b>Pro</b> by enabling anonymous telemetry.',
+                        'holler-box') }</p>
+            <div class="inside display-flex column align-center gap-20">
+                <label>${ input({
+                    type: 'checkbox',
+                    id: 'subscribe',
+                    checked: setup_answers.telemetry_subscribe,
+                }) }
+                    ${ __('Add me to the email list.',
+                            'holler-box') }</label>
+                <button id="optin" class="holler-button primary medium">
+                    <b>${ __('Yes, I want 15% OFF', 'holler-box') }</b>
+                </button>
+            </div>
+            <p><b>${ __('What information is shared?', 'holler-box') }</b></p>
+            <ul>
+                <li>${ __('Your name and email address.', 'holler-box') }</li>
+                <li>${ __('Total number of active popups', 'holler-box') }</li>
+                <li>${ __('Error messages and plugin failures', 'holler-box') }</li>
+                <li>${ __('System info such as WordPress version and language', 'holler-box') }</li>
+                <li>${ __('Installed plugins', 'holler-box') }</li>
+            </ul>
+            <p><b>${ __('What information is <b>NOT</b> shared?', 'holler-box') }</b></p>
+            <ul>
+                <li>${ __('Any personally identifiable information about your users or contacts', 'holler-box') }</li>
+                <li>${ __('Any site content such as emails or posts', 'holler-box') }</li>
+                <li>${ __('Passwords, usernames, or any data that might impact security', 'holler-box') }</li>
+            </ul>
+            <p>🔒<i>${ __('We do not sell or share any of your information with third party vendors.',
+                    'holler-box') }</i></p>
+            <p><i>${ __('You can opt out at any time.', 'holler-box') }</i></p>
+            ${ skipButton(__('No thanks, I don\'t want 15% OFF.')) }`
+      },
+      onSkip: (p, setPage) => setPage('/s/plugins/'),
+      onMount: (params, setPage) => {
+        $('#optin').on('click', e => {
+
+          if (setup_answers.telemetry_subscribe) {
+            setup_answers.subscribed = true
+          }
+
+          setPage('/s/plugins/')
+        })
+
+        $('#subscribe').on('click', e => {
+          setup_answers.telemetry_subscribe = e.target.checked
+        })
+      },
+    }),
+    /**
+     * Prompt to enable telemetry
+     */
+    setupPage({
+      title: __('Help improve HollerBox?'),
+      slug: /s\/telemetry-2/,
+      showButtons: false,
+      render: () => {
+        // language=HTML
+        return `
+            <p>
+                ${ __('You can help improve HollerBox by enabling anonymous telemetry. This will occasionally send us data about Groundhogg and how you use it. We use this data to improve feature, fix bugs, and create new products.',
+                        'holler-box') }</p>
+            <div class="inside display-flex column align-center gap-20">
+                <button id="optin" class="holler-button primary medium">
+                    <b>${ __('Yes, I\'m In!', 'holler-box') }</b>
+                </button>
+            </div>
+            <p><b>${ __('What information is shared?', 'holler-box') }</b>
+            </p>
+            <ul>
+                <li>${ __('Your name and email address.', 'holler-box') }</li>
+                <li>${ __('Total number of active popups', 'holler-box') }</li>
+                <li>${ __('Error messages and plugin failures', 'holler-box') }</li>
+                <li>${ __('System info such as WordPress version and language', 'holler-box') }</li>
+                <li>${ __('Installed plugins', 'holler-box') }</li>
+            </ul>
+            <p><b>${ __('What information is <b>NOT</b> shared?', 'holler-box') }</b></p>
+            <ul>
+                <li>${ __('Any personally identifiable information about your users or contacts', 'holler-box') }</li>
+                <li>${ __('Any site content such as emails or posts', 'holler-box') }</li>
+                <li>${ __('Passwords, usernames, or any data that might impact security', 'holler-box') }</li>
+            </ul>
+            <p>🔒<i>${ __('We do not sell or share any of your information with third party vendors.',
+                    'holler-box') }</i></p>
+            <p><i>${ __('You can opt out at any time.', 'holler-box') }</i></p>
+            ${ skipButton(__('No thanks, I don\'t want to help improve HollerBox.')) }`
+      },
+      onSkip: (p, setPage) => setPage('/s/plugins/'),
+      onMount: (params, setPage) => {
+        $('#optin').on('click', e => {
+          setPage('/s/plugins/')
+        })
+      },
+    }),
+    setupPage({
+      title: __('Install Recommended Plugins'),
+      slug: /s\/plugins/,
+      showButtons: false,
+      render: () => {
+        // language=HTML
+        return `
+            <p>${ __('These WordPress plugins make it easier to collect leads, send emails, and grow your business!',
+                    'holler-box') }</p>
+            <div class="display-flex gap-20 column">
+                <div class="holler-panel outlined plugin">
+                    <div class="inside display-flex gap-20">
+                        <div class="icon">
+                            ${ icons.groundhogg }
+                        </div>
+                        <div>
+                            <h2>Groundhogg - CRM for WordPress</h2>
+                            <p>FREE CRM & Marketing Automation for WordPress. Build your list, send emails, and create
+                                automations that will help you grow.</p>
+                        </div>
+                    </div>
+                    <div class="plugin-actions inside display-flex space-between align-center">
+                        <a href="https://wordpress.org/plugins/groundhogg/" target="_blank">${ __('More details') }</a>
+                        ${ toggle({
+                            id: 'install-groundhogg',
+                            onLabel: 'Yes',
+                            offLabel: 'No',
+                            checked: setup_answers.install_groundhogg,
+                        }) }
+                    </div>
+                </div>
+                <div class="holler-panel outlined plugin">
+                    <div class="inside display-flex gap-20">
+                        <div class="icon">
+                            ${ icons.mailhawk_bird }
+                        </div>
+                        <div>
+                            <h2>MailHawk - SMTP</h2>
+                            <p>Make sure your emails reach the inbox with MailHawk. The dedicated SMTP service for
+                                WordPress.</p>
+                        </div>
+                    </div>
+                    <div class="plugin-actions inside display-flex space-between align-center">
+                        <a href="https://wordpress.org/plugins/mailhawk/" target="_blank">${ __('More details') }</a>
+                        ${ toggle({
+                            id: 'install-mailhawk',
+                            onLabel: 'Yes',
+                            offLabel: 'No',
+                            checked: setup_answers.install_mailhawk,
+                        }) }
+                    </div>
+                </div>
+            </div>
+            <div class="display-flex center" style="margin-top: 30px">
+                <button id="install" class="holler-button primary medium">${ __('Install & Continue') }</button>
+            </div>
+            ${ skipButton(__('I\'ll do this later')) }`
+      },
+      onSkip: (p, setPage) => setPage(setup_answers.subscribed ? '/s/next-steps/' : '/s/subscribe/'),
+      onMount: (params, setPage) => {
+
+        $('#install-groundhogg').on('change', e => {
+          setup_answers.install_groundhogg = e.target.checked
+        })
+        $('#install-mailhawk').on('change', e => {
+          setup_answers.install_mailhawk = e.target.checked
+        })
+
+        $('#install').on('click', e => {
+          setPage(setup_answers.subscribed ? '/s/next-steps/' : '/s/subscribe/')
+        })
+      },
+    }),
+    setupPage({
+      title: __('Subscribe!'),
+      slug: /s\/subscribe/,
+      showButtons: false,
+      render: () => {
+
+        // language=HTML
+        return `
+            <p>
+                ${ __('Stay up to date on the latest changes & improvements, courses, articles, deals and promotions available to the HollerBox community by subscribing!') }
+            </p>
+            <div class="inside display-flex gap-10">
+                ${ input({
+                    type: 'email',
+                    id: 'email',
+                    placeholder: __('Your email address'),
+                    value: setup_answers.email,
+                }) }
+                <button class="holler-button primary medium">${ __('Subscribe') }</button>
+            </div>
+            <p><b>${ __('Why subscribe?', 'holler-box') }</b></p>
+            <ul>
+                <li>${ __('First to know about events, articles, deals, promotions and more!', 'holler-box') }</li>
+                <li>${ __('Tailored onboarding experience.', 'holler-box') }</li>
+                <li>${ __('Unsubscribe anytime.', 'holler-box') }</li>
+            </ul>
+            <p>🔒 <i>${ __('HollerBox does not sell or share your data with third party vendors.', 'holler-box') }</i>
+            </p>
+            ${ skipButton(__('I don\'t want to stay informed...')) }
+        `
+      },
+      onSkip: (p, setPage) => setPage('/s/next-steps/'),
+      onMount: (params, setPage) => {
+        $('#email').on('input', e => {
+          setup_answers.email = e.target.value
+        })
+      },
+    }),
+
+    /**
+     * Take them back to the settings page
+     */
+    setupPage({
+      title: __('Next Steps...'),
+      slug: /s\/next-steps/,
+      showButtons: false,
+      render: () => {
+
+        // language=HTML
+        return `
+            <p>${ __('Congrats! You\'re ready to start creating popups with HollerBox! Let\'s create one now!') }</p>
+            ${ skipButton(__('I\'ll make one later.')) }
+        `
+      },
+      onSkip: (p, setPage) => setPage('/settings/'),
+      onMount: (params, setPage) => {
+        $('#email').on('input', e => {
+          setup_answers.email = e.target.value
+        })
+      },
+    }),
+  ]
+
+  const Page = {
+
+    slug: '',
+    currentPage: pages[0],
+    params: [],
+
+    getCurSlug () {
+      return window.location.hash.substring(1)
+    },
+
+    initFromSlug () {
+      this.slug = this.getCurSlug()
+      this.params = this.getCurSlug().split('/').filter(p => p)
+      this.mount()
+    },
+
+    init () {
+      if (window.location.hash) {
+        this.initFromSlug()
+      }
+      else {
+        history.pushState({}, '', `#/settings/`)
+        this.initFromSlug()
+      }
+
+      window.addEventListener('popstate', (e) => {
+        this.initFromSlug()
+      })
+    },
+
+    mount () {
+
+      this.currentPage = pages.find(p => this.slug.match(p.slug))
+
+      console.log(this.slug, this.currentPage.slug)
+
+      const setPage = (slug) => {
+        history.pushState({}, '', `#${ slug }`)
+        this.initFromSlug()
+      }
+
+      $('#holler-app').html(this.currentPage.render(this.params))
+      this.currentPage.onMount(this.params, setPage)
+    },
+
+  }
+
+  $(() => Page.init())
+
+} )(jQuery)
