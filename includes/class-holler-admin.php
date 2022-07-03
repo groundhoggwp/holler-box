@@ -61,7 +61,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 
 			add_action( 'admin_menu', [ $this, 'register_admin_pages' ] );
 			add_action( 'init', [ $this, 'register_cpt' ] );
-			add_filter( 'manage_hollerbox_posts_columns', [ $this, 'register_cpt_columns' ] );
+			add_filter( 'manage_hollerbox_posts_columns', [ $this, 'register_cpt_columns' ], 999 );
 			add_action( 'manage_hollerbox_posts_custom_column', [ $this, 'do_cpt_columns' ], 10, 2 );
 			add_filter( 'post_row_actions', [ $this, 'manage_cpt_row_actions' ], 10, 2 );
 
@@ -94,7 +94,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				'hollerbox-elements',
 			] );
 
-			if ( $hook === 'edit.php' && get_current_screen()->post_type !== 'hollerbox' ) {
+			if ( $hook === 'edit.php' && get_current_screen()->post_type === 'hollerbox' ) {
 				wp_enqueue_style( 'hollerbox-admin' );
 			}
 
@@ -323,6 +323,8 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 */
 		public function render_builder() {
 
+            remove_all_actions( 'admin_notices' );
+
 			add_filter( 'screen_options_show_screen', '__return_false' );
 			add_action( 'in_admin_footer', [ $this, 'builder_scripts' ] );
 
@@ -360,8 +362,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 
 			$args = [
 				'labels'             => $labels,
-				'public'             => true,
-				'publicly_queryable' => true,
+				'public'             => false,
 				'show_ui'            => true,
 				'show_in_nav_menus'  => false,
 				'show_in_menu'       => true,

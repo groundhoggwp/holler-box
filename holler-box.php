@@ -121,9 +121,7 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 		 *
 		 */
 		private function hooks() {
-
 		}
-
 
 		/**
 		 * Internationalization
