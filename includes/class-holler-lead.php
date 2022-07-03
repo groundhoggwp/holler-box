@@ -11,6 +11,8 @@ class Holler_Lead {
 	public $name = '';
 	public $first_name = '';
 	public $last_name = '';
+	public $location = '';
+	public $referrer = '';
 
 	public function __construct( WP_REST_Request $request ) {
 		$this->name  = sanitize_text_field( $request->get_param( 'name' ) );
@@ -19,6 +21,8 @@ class Holler_Lead {
 		$parts = explode( ' ', $this->name );
 		$this->first_name = trim( $parts[0] );
 		$this->last_name = trim( $parts[1] );
+		$this->location = $request->get_param('location');
+		$this->referrer = $request->get_param('referer');
 	}
 
 	/**

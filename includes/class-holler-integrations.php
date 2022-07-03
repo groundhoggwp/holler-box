@@ -103,7 +103,20 @@ class Holler_Integrations {
 			return is_email( $email );
 		} );
 
+		$replacements = [
+			'{{email}}'      => $lead->email,
+			'{{name}}'       => $lead->name,
+			'{{full_name}}'  => $lead->name,
+			'{{first_name}}' => $lead->first_name,
+			'{{last_name}}'  => $lead->last_name,
+			'{{location}}'   => $lead->location,
+			'{{referrer}}'   => $lead->referrer,
+			'{{ip_address}}' => $lead->get_ip(),
+		];
+
 		$message = wp_kses_post( $props['content'] );
+		$message = str_replace( array_keys( $replacements ), array_values( $replacements ), $message );
+
 		$subject = sanitize_text_field( $props['subject'] );
 
 		$headers = [
