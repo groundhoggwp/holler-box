@@ -61,7 +61,14 @@ class Holler_Frontend {
 		wp_enqueue_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups.js', [], time(), true );
 
 		$l10n = [
-			'active'             => $this->active,
+			'active'             => array_map( function ( $popup ) {
+                $popup = $popup->jsonSerialize();
+
+                // Remove secret properties
+                unset( $popup[ 'integrations' ] );
+
+                return $popup;
+            }, $this->active ),
 			'home_url'           => home_url(),
 			'is_preview'         => is_preview(),
 			'is_frontend'        => ! is_admin(),
@@ -74,6 +81,11 @@ class Holler_Frontend {
 			],
 			'nonces'             => [
 				'_wprest' => wp_create_nonce( 'wp_rest' )
+			],
+			'settings'           => [
+				'credit_disabled' => Holler_Settings::instance()->get( 'credit_disabled' ),
+				'gdpr_enabled'    => Holler_Settings::instance()->get( 'gdpr_enabled' ),
+				'gdpr_text'       => Holler_Settings::instance()->get( 'gdpr_text' ),
 			]
 		];
 
@@ -126,11 +138,11 @@ class Holler_Frontend {
 
 		if ( $this->is_builder_preview() ) {
 
-            // hide admin bar
+			// hide admin bar
 			add_filter( 'show_admin_bar', '__return_false' );
 
-            // prevent query monitor output in preview
-            add_filter( 'qm/process', '__return_false' );
+			// prevent query monitor output in preview
+			add_filter( 'qm/process', '__return_false' );
 
 			// Suppress popups from being displayed
 			return;

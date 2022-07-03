@@ -96,7 +96,7 @@ h3 {
   }
 
   &.space-between {
-    justify-content: space-between;
+    justify-content: space-between !important;
   }
 
   &.stretch {
@@ -2129,6 +2129,7 @@ ul.holler-form-errors {
   .holler-picker-options {
 
     position: fixed;
+    z-index: 9999;
     display: none;
     border-top: none;
     border-color: #2271b1;

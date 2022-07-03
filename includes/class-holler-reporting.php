@@ -61,6 +61,27 @@ class Holler_Reporting {
 		return $wpdb->get_var( $wpdb->prepare( "SHOW TABLES LIKE '%s'", $this->table_name ) ) === $this->table_name;
 	}
 
+	/**
+	 * Drops the table
+	 */
+	public function drop() {
+
+		if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {
+			exit;
+		}
+
+		delete_option( $this->table_name . '_table_version' );
+
+		global $wpdb;
+
+		$wpdb->query( "DROP TABLE IF EXISTS " . $this->table_name );
+	}
+
+	/**
+	 * Creates the table
+	 *
+	 * @return void
+	 */
 	protected function create_table() {
 
 		global $wpdb;

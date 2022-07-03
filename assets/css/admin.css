@@ -1,0 +1,166 @@
+.holler-spinner {
+  display: block;
+  height: 15px;
+  width: 15px;
+  border: 5px solid rgba(255, 255, 255, 0.4);
+  border-bottom-color: #ffffff;
+  border-radius: 50%;
+  position: relative;
+  animation: holler-rotation 1s linear infinite;
+}
+
+.widefat th.column-impressions, .widefat th.column-conversions, .widefat th.column-cvr, .widefat td.column-impressions, .widefat td.column-conversions, .widefat td.column-cvr {
+  text-align: center;
+  width: 100px;
+}
+
+.holler-header {
+  padding-left: 30px;
+  padding-right: 30px;
+}
+.holler-header #logo svg {
+  width: 200px;
+}
+
+body.hollerbox_page_hollerbox_reports #wpcontent,
+body.hollerbox_page_hollerbox #wpcontent {
+  padding: 0;
+}
+
+body.hollerbox_page_hollerbox .holler-header {
+  padding-left: calc( (100% - 800px) / 2 );
+  padding-right: calc( (100% - 800px) / 2 );
+}
+body.hollerbox_page_hollerbox #page {
+  max-width: 800px;
+  margin: 30px auto;
+  gap: 30px;
+}
+body.hollerbox_page_hollerbox #page #settings {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  width: 100%;
+}
+body.hollerbox_page_hollerbox #page #settings .disable-credit.disable-changes {
+  pointer-events: none;
+  opacity: 0.5;
+}
+body.hollerbox_page_hollerbox #page #settings .credit {
+  background: rgba(16, 38, 64, 0.05);
+  padding: 5px;
+  border-radius: 5px;
+}
+body.hollerbox_page_hollerbox #page #settings .danger-zone {
+  overflow: hidden;
+}
+body.hollerbox_page_hollerbox #page #settings .danger-zone .holler-panel-header {
+  background: rgba(233, 31, 79, 0.1);
+}
+body.hollerbox_page_hollerbox #page #settings .danger-zone .holler-panel-header h2 {
+  color: #940e2e;
+}
+body.hollerbox_page_hollerbox #page #right {
+  width: 260px;
+  flex-shrink: 0;
+}
+body.hollerbox_page_hollerbox #page #right .holler-menu a {
+  padding: 16px;
+  font-size: 14px;
+  display: flex;
+  gap: 10px;
+}
+body.hollerbox_page_hollerbox #page #right .holler-menu a:hover {
+  background: rgba(16, 38, 64, 0.05);
+  text-decoration: none;
+}
+body.hollerbox_page_hollerbox .setup-page {
+  max-width: 600px;
+  margin: auto;
+}
+body.hollerbox_page_hollerbox .setup-page .page-inner > .holler-panel > .inside {
+  padding: 30px;
+  padding-bottom: 50px;
+}
+body.hollerbox_page_hollerbox .setup-page .page-inner > .holler-panel input[type=text],
+body.hollerbox_page_hollerbox .setup-page .page-inner > .holler-panel input[type=email] {
+  width: 100%;
+  font-size: 16px;
+  padding: 4px 12px;
+}
+body.hollerbox_page_hollerbox .setup-page .page-inner .plugin .plugin-actions {
+  border-top: 1px solid rgba(16, 38, 64, 0.1);
+  background: rgba(16, 38, 64, 0.02);
+}
+body.hollerbox_page_hollerbox .setup-page .page-inner .plugin h2 {
+  margin: 0;
+  font-size: 22px;
+}
+body.hollerbox_page_hollerbox .setup-page .page-inner .plugin .icon {
+  min-width: 80px;
+}
+body.hollerbox_page_hollerbox .setup-page label,
+body.hollerbox_page_hollerbox .setup-page li,
+body.hollerbox_page_hollerbox .setup-page p {
+  font-size: 16px;
+}
+body.hollerbox_page_hollerbox .setup-page ul {
+  list-style: disc;
+  padding-left: 20px;
+}
+body.hollerbox_page_hollerbox .setup-page #logo {
+  display: flex;
+  justify-content: center;
+}
+body.hollerbox_page_hollerbox .setup-page #logo svg {
+  width: 300px;
+  margin: 60px auto;
+}
+
+body.hollerbox_page_hollerbox_reports #holler-app #reports-here {
+  padding: 30px;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
+  gap: 30px;
+}
+body.hollerbox_page_hollerbox_reports #holler-app .span-full {
+  grid-column: span 6;
+}
+body.hollerbox_page_hollerbox_reports #holler-app .span-half {
+  grid-column: span 3;
+}
+body.hollerbox_page_hollerbox_reports #holler-app .span-third {
+  grid-column: span 2;
+}
+body.hollerbox_page_hollerbox_reports #holler-app .holler-panel .holler-panel-header h2 {
+  font-size: 18px;
+  padding: 16px;
+}
+body.hollerbox_page_hollerbox_reports #holler-app .holler-panel .holler-big-number {
+  font-size: 42px;
+  font-weight: 500;
+  margin: 10px 0;
+}
+body.hollerbox_page_hollerbox_reports #holler-app .holler-panel table {
+  width: 100%;
+  border-collapse: collapse;
+}
+body.hollerbox_page_hollerbox_reports #holler-app .holler-panel table thead th {
+  font-weight: 500;
+  text-align: left;
+}
+body.hollerbox_page_hollerbox_reports #holler-app .holler-panel table th, body.hollerbox_page_hollerbox_reports #holler-app .holler-panel table td {
+  padding: 12px 16px;
+  font-size: 16px;
+}
+body.hollerbox_page_hollerbox_reports #holler-app .holler-panel table th:not(:first-child), body.hollerbox_page_hollerbox_reports #holler-app .holler-panel table td:not(:first-child) {
+  text-align: center;
+}
+body.hollerbox_page_hollerbox_reports #holler-app .holler-panel table th:first-child, body.hollerbox_page_hollerbox_reports #holler-app .holler-panel table td:first-child {
+  width: 500px;
+}
+body.hollerbox_page_hollerbox_reports #holler-app .holler-panel table tbody tr:nth-child(odd) {
+  background-color: rgba(0, 117, 255, 0.02);
+}
+
+/*# sourceMappingURL=admin.css.map */

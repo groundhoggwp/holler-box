@@ -31,8 +31,8 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 	class Holler_Box {
 
 		/**
-		 * @var         Holler_Box $instance The one true Holler_Box
 		 * @since       0.1.0
+		 * @var         Holler_Box $instance The one true Holler_Box
 		 */
 		private static $instance;
 
@@ -41,31 +41,40 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 		 * Get active instance
 		 *
 		 * @access      public
-		 * @return      self The one true Holler_Box
 		 * @since       0.1.0
+		 * @return      self The one true Holler_Box
 		 */
 		public static function instance() {
 			if ( ! self::$instance ) {
 				self::$instance = new Holler_Box();
-				self::$instance->setup_constants();
-				self::$instance->includes();
-				self::$instance->load_textdomain();
-				self::$instance->hooks();
-
-				new Holler_Api();
-				new Holler_Frontend();
 			}
 
 			return self::$instance;
 		}
 
+		public function __construct() {
+
+			if ( self::$instance ){
+				return;
+			}
+
+			$this->setup_constants();
+			$this->includes();
+			$this->load_textdomain();
+			$this->hooks();
+
+			new Holler_Admin();
+			new Holler_Api();
+			new Holler_Frontend();
+			new Holler_Licensing();
+		}
 
 		/**
 		 * Setup plugin constants
 		 *
 		 * @access      private
-		 * @return      void
 		 * @since       0.1.0
+		 * @return      void
 		 */
 		private function setup_constants() {
 			// Plugin version
@@ -83,8 +92,8 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 		 * Include necessary files
 		 *
 		 * @access      private
-		 * @return      void
 		 * @since       0.1.0
+		 * @return      void
 		 */
 		private function includes() {
 
@@ -95,6 +104,9 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 			require_once __DIR__ . '/includes/class-holler-lead.php';
 			require_once __DIR__ . '/includes/class-holler-integrations.php';
 			require_once __DIR__ . '/includes/class-holler-reporting.php';
+			require_once __DIR__ . '/includes/class-holler-settings.php';
+			require_once __DIR__ . '/includes/class-holler-licensing.php';
+			require_once __DIR__ . '/includes/Holler_EDD_SL_Plugin_Updater.php';
 
 		}
 
@@ -103,10 +115,10 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 		 * Run action and filter hooks
 		 *
 		 * @access      private
+		 * @since       0.1.0
 		 * @return      void
 		 *
 		 *
-		 * @since       0.1.0
 		 */
 		private function hooks() {
 
@@ -117,8 +129,8 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 		 * Internationalization
 		 *
 		 * @access      public
-		 * @return      void
 		 * @since       0.1.0
+		 * @return      void
 		 */
 		public function load_textdomain() {
 
@@ -134,12 +146,14 @@ if ( ! class_exists( 'Holler_Box' ) ) {
  * The main function responsible for returning the one true EDD_Metrics
  * instance to functions everywhere
  *
+ * @since       0.1.0
  * @return      \Holler_Box The one true Holler_Box
  *
- * @since       0.1.0
  */
 function holler_box_load() {
-	return Holler_Box::instance();
+	Holler_Box::instance();
+
+	do_action( 'hollerbox/loaded' );
 }
 
 add_action( 'plugins_loaded', 'holler_box_load' );
@@ -151,8 +165,8 @@ add_action( 'plugins_loaded', 'holler_box_load' );
  * hook for compatibility, we also can't reference a function inside the plugin class
  * for the activation function. If you need an activation function, put it here.
  *
- * @return      void
  * @since       0.1.0
+ * @return      void
  */
 function holler_box_activation() {
 	/* Activation functions here */

@@ -3114,6 +3114,24 @@
         })
       },
     },
+    show_to_new_or_returning: {
+      name: __('Show to New or Returning'),
+      controls: ({ visitor = 'all' }) => {
+        //language=HTML
+        return select({ id: 'nor-visitor' }, {
+          all: __('All'),
+          new: __('New visitors'),
+          returning: __('Returning visitors'),
+        }, visitor)
+      },
+      onMount: (trigger, updateTrigger) => {
+        $('#nor-visitor').on('change', e => {
+          updateTrigger({
+            visitor: e.target.value,
+          })
+        })
+      },
+    },
     show_on_x_devices: {
       name: __('Show on X devices'),
       controls: ({ device = 'all' }) => {

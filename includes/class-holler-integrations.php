@@ -110,8 +110,10 @@ class Holler_Integrations {
 			'Content-Type: text/html',
 		];
 
-		if ( is_email( $props['reply_to'] ) ) {
-			$headers[] = sprintf( 'Reply-to: %s', $props['reply_to'] );
+		$reply_to = str_replace( '{{email}}', $lead->email, $props['reply_to'] );
+
+		if ( is_email( $reply_to ) ) {
+			$headers[] = sprintf( 'Reply-to: %s', $reply_to );
 		}
 
 		if ( is_email( $props['from'] ) ) {

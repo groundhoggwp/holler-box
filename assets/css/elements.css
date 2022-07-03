@@ -59,7 +59,7 @@ h3.no-margin-top {
   justify-content: center;
 }
 .display-flex.space-between {
-  justify-content: space-between;
+  justify-content: space-between !important;
 }
 .display-flex.stretch {
   align-items: stretch;
@@ -1924,6 +1924,7 @@ ul.holler-form-errors {
 }
 .holler-picker .holler-picker-options {
   position: fixed;
+  z-index: 9999;
   display: none;
   border-top: none;
   border-color: #2271b1;

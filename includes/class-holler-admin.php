@@ -18,7 +18,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 	 *
 	 * @since       0.2.0
 	 */
-	class Holler_Admin extends Holler_Box {
+	class Holler_Admin {
 
 		/**
 		 * @since       0.2.0
@@ -36,11 +36,14 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		public static function instance() {
 			if ( ! self::$instance ) {
 				self::$instance = new Holler_Admin();
-				self::$instance->hooks();
 			}
 
 			return self::$instance;
 		}
+
+        public function __construct() {
+            $this->hooks();
+        }
 
 
 		/**
@@ -117,25 +120,26 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 
 				wp_enqueue_editor();
 
-				wp_add_inline_script( 'hollerbox-elements', 'var HollerBox = ' . wp_json_encode([
-					'admin_url'   => untrailingslashit( admin_url() ),
-					'currentUser' => wp_get_current_user(),
-					'routes'      => [
-						'root'     => rest_url( 'hollerbox' ),
-						'settings' => rest_url( 'hollerbox/settings' ),
-					],
-					'installed'   => [
-						'hollerBoxPro' => defined( 'Holler_Box_Pro_VER' ),
-						'groundhogg'   => defined( 'GROUNDHOGG_VERSION' ),
-						'mailhawk'     => defined( 'MAILHAWK_VERSION' ),
-					],
-					'nonces'      => [
-						'_wprest' => wp_create_nonce( 'wp_rest' )
-					],
-					'settings'    => get_option( 'hollerbox_settings', [
-						'is_licensed' => false
-					] )
-				] ), 'before');
+				wp_add_inline_script( 'hollerbox-elements', 'var HollerBox = ' . wp_json_encode( [
+						'admin_url'   => untrailingslashit( admin_url() ),
+						'currentUser' => wp_get_current_user(),
+						'routes'      => [
+							'root'      => rest_url( 'hollerbox' ),
+							'settings'  => rest_url( 'hollerbox/settings' ),
+							'licensing' => rest_url( 'hollerbox/licensing' ),
+						],
+						'installed'   => [
+							'hollerBoxPro' => defined( 'Holler_Box_Pro_VER' ),
+							'groundhogg'   => defined( 'GROUNDHOGG_VERSION' ),
+							'mailhawk'     => defined( 'MAILHAWK_VERSION' ),
+						],
+						'nonces'      => [
+							'_wprest' => wp_create_nonce( 'wp_rest' )
+						],
+						'settings'    => get_option( 'hollerbox_settings', [
+							'is_licensed' => false
+						] )
+					] ), 'before' );
 			}
 
 		}
@@ -228,6 +232,9 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 
 			$popup = new Holler_Popup( $post );
 
+			$user = wp_get_current_user();
+            $user->avatar = get_avatar_url( $user->user_email );
+
 			wp_localize_script( 'hollerbox-elements', 'HollerBox', [
 				'gravatar'            => get_avatar_url( get_current_user_id() ),
 				'post_types'          => $post_types,
@@ -252,7 +259,8 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				'assets'              => [
 					'groundhogg_banner' => Holler_Box_URL . 'assets/img/groundhogg-banner.png',
 				],
-				'css_editor_settings' => $settings
+				'css_editor_settings' => $settings,
+				'currentUser' => $user,
 			] );
 
 			do_action( 'hollerbox/admin/scripts' );
@@ -467,8 +475,5 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		}
 
 	}
-
-	$holler_admin = new Holler_Admin();
-	$holler_admin->instance();
 
 } // end class_exists check

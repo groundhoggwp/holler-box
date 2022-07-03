@@ -9,7 +9,7 @@
     dialog,
   } = HollerBox.elements
 
-  const { __ } = wp.i18n
+  const { __, sprintf } = wp.i18n
 
   function ApiError (message) {
     this.name = 'ApiError'
@@ -160,7 +160,7 @@
     email: HollerBox.currentUser.data.user_email,
   }
 
-  const settings = {
+  let settings = {
     license: '',
     is_licensed: false,
     credit_disabled: false,
@@ -170,6 +170,12 @@
     disable_all: false,
     gdpr_text: `<p>I consent</p>`,
     ...HollerBox.settings,
+    set (_new) {
+      settings = {
+        ...settings,
+        ..._new,
+      }
+    },
   }
 
   const saveSettings = () => {
@@ -197,6 +203,15 @@
           ['https://hollerwp.com/account/', 'dashicons dashicons-admin-users', 'My Account'],
         ]
 
+        let expiry
+
+        try {
+          expiry = new Date(settings.license_expiry)
+        }
+        catch (e) {
+          expiry = new Date()
+        }
+
         // language=HTML
         return `
             <div class="holler-header is-sticky">
@@ -213,15 +228,23 @@
                             <h2>${ __('License') }</h2>
                         </div>
                         <div class="inside">
-                            <p>${ __('Enter your license key to receive updates and support for HollerBox Pro.') }</p>
+                            <p>${ settings.is_licensed ? sprintf(__('🎉 Your license is valid and expires %s.'),
+                                    expiry.toLocaleDateString()) : __(
+                                    'Enter your license key to receive updates and support for HollerBox Pro.') }</p>
                             <div class="display-flex gap-10">
                                 ${ input({
                                     id: 'license',
                                     className: 'full-width',
                                     type: settings.license ? 'password' : 'text',
                                     placeholder: __('Your license key'),
+                                    value: settings.license,
+                                    readonly: settings.is_licensed,
                                 }) }
-                                <button id="activate" class="holler-button primary">${ __('Activate') }</button>
+                                <button
+                                        id="${ settings.is_licensed ? 'deactivate' : 'activate' }"
+                                        class="holler-button ${ settings.is_licensed ? 'secondary' : 'primary' }">
+                                    ${ settings.is_licensed ? __('Deactivate') : __('Activate') }
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -233,12 +256,22 @@
                             <div class="disable-credit ${ settings.is_licensed ? '' : 'disable-changes' }">
                                 <label class="display-flex gap-20"><b>${ __(
                                         'Hide the <span class="credit">⚡ by HollerBox</span> attribution') }</b>
-                                    ${ toggle({  name: 'credit_disabled', className: 'setting-toggle', checked: settings.credit_disabled }) }</label>
+                                    ${ toggle({
+                                        name: 'credit_disabled',
+                                        className: 'setting-toggle',
+                                        checked: settings.credit_disabled,
+                                    }) }</label>
                                 <p>${ __('Can only be disabled when HollerBox is licensed.', 'holler-box') }</p>
                             </div>
                             <label class="display-flex gap-20"><b>${ __('Send anonymous telemetry') }</b>
-                                ${ toggle({ name: 'telemetry_enabled', className: 'setting-toggle', checked: settings.telemetry_enabled  }) }</label>
-                            <p>${ __('Occasionally send HollerBox non-sensitive information about your site so we can improve our plugin.', 'holler-box') }</p>
+                                ${ toggle({
+                                    name: 'telemetry_enabled',
+                                    className: 'setting-toggle',
+                                    checked: settings.telemetry_enabled,
+                                }) }</label>
+                            <p>
+                                ${ __('Occasionally send HollerBox non-sensitive information about your site so we can improve our plugin.',
+                                        'holler-box') }</p>
                         </div>
                     </div>
                     <div class="holler-panel">
@@ -247,7 +280,11 @@
                         </div>
                         <div class="inside">
                             <label class="display-flex gap-20"><b>${ __('Enable GDPR Consent') }</b>
-                                ${ toggle({ name: 'gdpr_enabled', className: 'setting-toggle', checked: settings.gdpr_enabled }) }</label>
+                                ${ toggle({
+                                    name: 'gdpr_enabled',
+                                    className: 'setting-toggle',
+                                    checked: settings.gdpr_enabled,
+                                }) }</label>
                             <p>${ __('Show a GDPR consent checkbox on all forms.', 'holler-box') }</p>
                             <p><b>${ __('GDPR Consent Text') }</b></p>
                             ${ textarea({
@@ -256,17 +293,28 @@
                             }) }
                         </div>
                     </div>
-                     <div class="holler-panel danger-zone">
+                    <div class="holler-panel danger-zone">
                         <div class="holler-panel-header">
                             <h2>⚠️ ${ __('Danger Zone') }</h2>
                         </div>
                         <div class="inside">
                             <label class="display-flex gap-20"><b>${ __('Delete all data when uninstalling') }</b>
-                                ${ toggle({ name: 'delete_all_data', className: 'setting-toggle', checked: settings.delete_all_data }) }</label>
-                            <p>${ __('The will delete all popups, reports, and options associated with HollerBox.', 'holler-box') }</p>
+                                ${ toggle({
+                                    name: 'delete_all_data',
+                                    className: 'setting-toggle',
+                                    checked: settings.delete_all_data,
+                                }) }</label>
+                            <p>${ __('The will delete all popups, reports, and options associated with HollerBox.',
+                                    'holler-box') }</p>
                             <label class="display-flex gap-20"><b>${ __('Temporarily disable all popups') }</b>
-                                ${ toggle({ name: 'disable_all', className: 'setting-toggle', checked: settings.disable_all }) }</label>
-                            <p>${ __('Disable all active popups. This is only temporary and when turned off all popups will become active again.', 'holler-box') }</p>
+                                ${ toggle({
+                                    name: 'disable_all',
+                                    className: 'setting-toggle',
+                                    checked: settings.disable_all,
+                                }) }</label>
+                            <p>
+                                ${ __('Disable all active popups. This is only temporary and when turned off all popups will become active again.',
+                                        'holler-box') }</p>
                         </div>
                     </div>
                 </div>
@@ -288,6 +336,64 @@
       },
       onMount: (params, setPage) => {
 
+        let license = ''
+
+        $('#activate').on('click', e => {
+
+          apiPost(HollerBox.routes.licensing, {
+            license,
+          }).then(r => {
+
+            if (!r.success) {
+              return
+            }
+
+            settings.set(r.license_data)
+            setPage('/settings/')
+
+            dialog({
+              message: __('License Activated!'),
+            })
+
+          }).catch(e => {
+            dialog({
+              message: e.message,
+              type: 'error',
+            })
+          })
+
+        })
+        $('#deactivate').on('click', e => {
+
+          apiPost(HollerBox.routes.licensing, {}, {
+            method: 'DELETE',
+          }).then(r => {
+
+            if (!r.success) {
+              return
+            }
+
+            settings.set({
+              is_licensed: false,
+              license: '',
+            })
+            setPage('/settings/')
+
+            dialog({
+              message: __('License deactivated!'),
+            })
+
+          }).catch(e => {
+            dialog({
+              message: e.message,
+              type: 'error',
+            })
+          })
+
+        })
+
+        $('#license').on('input', e => license = e.target.value)
+
         $('#save-settings').on('click', e => {
           saveSettings()
         })
@@ -296,6 +402,7 @@
           settings[e.target.name] = e.target.checked
         })
 
+        wp.editor.remove('gdpr-text')
         tinymceElement('gdpr-text', {}, (content) => {
           settings.gdpr_text = content
         })
@@ -660,15 +767,22 @@
 
         // language=HTML
         return `
-            <p>${ __('Congrats! You\'re ready to start creating popups with HollerBox! Let\'s create one now!') }</p>
+            <p>${ __('🎉 Congrats! You\'re ready to start creating popups with HollerBox! Let\'s create one now!') }</p>
+            <div class="display-flex center" style="margin-top: 30px">
+                <button id="new-popup" class="holler-button primary medium">${ __('Create a Popup') }</button>
+            </div>
             ${ skipButton(__('I\'ll make one later.')) }
         `
       },
       onSkip: (p, setPage) => setPage('/settings/'),
       onMount: (params, setPage) => {
-        $('#email').on('input', e => {
-          setup_answers.email = e.target.value
+
+        $('#new-popup').on('click', e => {
+
+          window.open( HollerBox.admin_url + '/post-new.php?post_type=hollerbox', '_self' )
+
         })
+
       },
     }),
   ]

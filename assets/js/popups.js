@@ -5,10 +5,13 @@
     MINUTE_IN_SECONDS: 60,
     HOUR_IN_SECONDS: this.MINUTE_IN_SECONDS * 60,
     DAY_IN_SECONDS: this.HOUR_IN_SECONDS * 24,
+    WEEK_IN_SECONDS: this.DAY_IN_SECONDS * 7,
+    MONTH_IN_SECONDS: this.DAY_IN_SECONDS * 30,
 
     popupConversions: 'holler-popup-conversions',
     popupViews: 'holler-popup-views',
     pageViews: 'holler-page-views',
+    sessions: 'holler-sessions',
 
     addPopupCount (cookie, id) {
       let counts = JSON.parse(this.getCookie(cookie, '{}'))
@@ -77,6 +80,26 @@
       }
       return _default
     },
+
+    getSessions () {
+      let obj = JSON.parse(this.getCookie(this.sessions, '{}'))
+      return parseInt(obj.sessions || 0)
+    },
+
+    maybeAddSession () {
+      let obj = JSON.parse(this.getCookie(this.sessions, '{}'))
+
+      let lastSession = new Date(obj.lastSession)
+      lastSession.setDate(lastSession.getDate() + 1)
+      let now = new Date()
+
+      if (now > lastSession) {
+        this.setCookie(this.sessions, JSON.stringify({
+          sessions: parseInt( obj.sessions ) + 1,
+          lastSession: now.toString()
+        }), Cookies.MONTH_IN_SECONDS )
+      }
+    },
   }
 
   function ApiError (message) {
@@ -114,37 +137,6 @@
     return json
   }
 
-  /**
-   * Fetch stuff from the API
-   * @param route
-   * @param params
-   * @param opts
-   */
-  async function apiGet (route, params = {}, opts = {}) {
-
-    let __params = new URLSearchParams()
-
-    Object.keys(params).forEach(k => {
-      __params.append(k, params[k])
-    })
-
-    const response = await fetch(route + '?' + __params, {
-      headers: {
-        'X-WP-Nonce': HollerBox.nonces._wprest,
-      },
-      ...opts,
-    })
-
-    let json = await response.json()
-
-    if (!response.ok) {
-      console.log(json)
-      throw new ApiError(json.message)
-    }
-
-    return json
-  }
-
   const overlay = () => {
     //language=HTML
     return `
@@ -160,7 +152,7 @@
   const credit = () => {
 
     // Credit is disabled
-    if (HollerBox.disable_credit) {
+    if (HollerBox.settings?.credit_disabled) {
       return ''
     }
 
@@ -1226,6 +1218,17 @@
     hide_if_converted: ({}, popup) => popup.getConversions() === 0,
     show_up_to_x_times: ({ times = '999' }, popup) => parseInt(times) > popup.getViews(),
     show_after_x_page_views: ({ views }) => parseInt(views) < Cookies.getPageViews(),
+    show_to_new_or_returning: ({ visitor = 'all' }) => {
+      switch (visitor) {
+        default:
+        case 'all':
+          return true
+        case 'new':
+          return Cookies.getSessions() <= 1
+        case 'returning':
+          return Cookies.getSessions() > 1
+      }
+    },
     show_on_x_devices: ({ device }) => {
       switch (device) {
         default:
@@ -1327,6 +1330,14 @@
       return Cookies.getPopupViews(this.ID)
     },
 
+    cleanup () {
+      try {
+        PopupTemplates[this.template].cleanup(this)
+      }
+      catch (e) {
+      }
+    },
+
     async open () {
 
       try {
@@ -1349,7 +1360,8 @@
       try {
         PopupTemplates[this.template].onOpen(this)
       }
-      catch (e) {}
+      catch (e) {
+      }
 
       this.viewed()
     },
@@ -1359,7 +1371,8 @@
       try {
         await PopupTemplates[this.template].onClose(this)
       }
-      catch (e) {}
+      catch (e) {
+      }
 
       this.removeFromDom()
       this._open = false
@@ -1367,7 +1380,8 @@
       try {
         await PopupTemplates[this.template].onClosed(this)
       }
-      catch (e) {}
+      catch (e) {
+      }
 
       if (isBuilderPreview()) {
 
@@ -1442,6 +1456,7 @@
       })
 
       Cookies.addPageView()
+      Cookies.maybeAddSession()
     })
 
   }
@@ -1477,14 +1492,19 @@
   if (isBuilderPreview()) {
 
     let home = new URL(HollerBox.home_url)
+    let popup
 
     window.addEventListener(
       'message',
       function (event) {
         if (event.origin === window.location.origin) {
 
+          if (popup) {
+            popup.cleanup()
+          }
+
           // shallow copy
-          const popup = Popup(event.data.popup)
+          popup = Popup(event.data.popup)
 
           if (event.data.suppressAnimations) {
             document.body.classList.add('holler-suppress-animations')
@@ -1498,8 +1518,6 @@
           // Remove any popups or possible modifications
           document.querySelectorAll('.holler-box').forEach(el => el.remove())
           document.getElementById('hollerbox-builder-styles').innerHTML = popup.css
-
-          console.log(popup.css)
 
           popup.open()
         }

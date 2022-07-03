@@ -180,7 +180,7 @@ class Holler_Api {
 	 *
 	 * @return WP_Error
 	 */
-	protected static function ERROR_404() {
+	public static function ERROR_404() {
 		return new WP_Error( 'missing', 'Popup not found.', [ 'status' => 404 ] );
 	}
 
@@ -407,7 +407,7 @@ class Holler_Api {
 		foreach ( $settings as $option_name => $option_value ) {
 			switch ( $option_name ) {
 				case 'gdpr_enabled':
-				case 'disabled_credit':
+				case 'credit_disabled':
 				case 'disable_all':
 				case 'delete_all_data':
 				case 'telemetry_enabled':
