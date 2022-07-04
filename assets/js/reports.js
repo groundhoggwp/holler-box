@@ -3,7 +3,10 @@
   const { report_data = [] } = HollerBox
   const {
     icons,
+    confirmationModal,
   } = HollerBox.elements
+
+  const { __ } = wp.i18n
 
   let after, before
 
@@ -209,7 +212,7 @@
         return `
             <div class="span-full">
                 <h1 class="popup-title"></h1>
-                <p><a href="#">&larr; Back</a></p>
+                <p class="popup-links"><a href="#">&larr; Back</a> | <a href="#" id="edit-popup">${__('Edit')}</a></p>
             </div>
             <div class="holler-panel span-full">
                 <div class="holler-panel-header">
@@ -256,7 +259,22 @@
 
         let popup = ReportData.getPopup(popup_id)
 
+        if ( ! popup ){
+          confirmationModal({
+            alert: `<p>${__('There is no data for this popup yet. Wait a few days and check again.')}</p>`,
+            onConfirm: () => {
+              setPage('/')
+            }
+          })
+          return
+        }
+
         $('.popup-title').html(popup.post_title)
+        $('#edit-popup').on('click', e => {
+          e.preventDefault()
+
+          window.open(`${HollerBox.admin_url}/post.php?post=${popup.ID}&action=edit`, '_self')
+        })
 
         lineChart('main-graph', {
           id: popup.ID,

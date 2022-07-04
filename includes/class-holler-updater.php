@@ -1,0 +1,85 @@
+<?php
+
+class Holler_Updater {
+
+	public function __construct() {
+		add_action( 'admin_init', [ $this, 'maybe_upgrade' ] );
+	}
+
+	public function get_updates() {
+		return [
+			'2.0'
+		];
+	}
+
+	/**
+	 * Upate to 2.0
+	 *
+	 * @return void
+	 */
+	public function v_2_0() {
+
+		// Migrate some settings over
+		Holler_Settings::instance()->update( 'license', get_option( 'hwp_pro_edd_license' ) );
+		Holler_Settings::instance()->update( 'is_licensed', get_option( 'hwp_pro_edd_license_status' ) === 'valid' );
+		Holler_Settings::instance()->update( 'credit_disabled', get_option( 'hwp_powered_by' ) );
+
+		// Create the reports table
+		Holler_Reporting::instance()->maybe_create_table();
+	}
+
+	/**
+	 * Array of updates which have already been performed
+	 *
+	 * @return false|mixed|void
+	 */
+	public function get_previous_updates() {
+		return get_option( 'holler_previous_updates', [] );
+	}
+
+	/**
+	 * Whether an update for a specific version was performed
+	 *
+	 * @param $version
+	 *
+	 * @return bool
+	 */
+	public function did_update( $version ) {
+		return in_array( $version, $this->get_previous_updates() );
+	}
+
+	/**
+	 * Remember that we did this update
+	 *
+	 * @param $version
+	 *
+	 * @return void
+	 */
+	public function update_complete( $version ){
+		$updates = $this->get_previous_updates();
+		$updates[] = $version;
+		update_option( 'holler_previous_updates', $updates );
+	}
+
+	/**
+	 * Maybe perform updates
+	 *
+	 * @return void
+	 */
+	public function maybe_upgrade() {
+		foreach ( $this->get_updates() as $update ) {
+			if ( $this->did_update( $update ) ) {
+				continue;
+			}
+
+			$method = 'v_' . str_replace( '.', '_', $update );
+
+			if ( method_exists( $this, $method ) ) {
+				call_user_func( [ $this, $method ] );
+
+				$this->update_complete( $update );
+			}
+		}
+	}
+
+}

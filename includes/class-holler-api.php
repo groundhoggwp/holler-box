@@ -410,7 +410,7 @@ class Holler_Api {
 				case 'credit_disabled':
 				case 'disable_all':
 				case 'delete_all_data':
-				case 'telemetry_enabled':
+				case 'telemetry_subscribed':
 				case 'is_licensed':
 					$sanitized_settings[ sanitize_key( $option_name ) ] = boolval( $option_value );
 					break;

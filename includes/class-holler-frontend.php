@@ -67,6 +67,9 @@ class Holler_Frontend {
                 // Remove secret properties
                 unset( $popup[ 'integrations' ] );
 
+                // Do shortcodes where relevant
+                $popup['post_content'] = do_shortcode( $popup[ 'post_content' ] );
+
                 return $popup;
             }, $this->active ),
 			'home_url'           => home_url(),

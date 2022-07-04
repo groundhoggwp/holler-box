@@ -117,6 +117,9 @@ body.hollerbox_page_hollerbox .setup-page #logo svg {
   margin: 60px auto;
 }
 
+body.hollerbox_page_hollerbox_reports .popup-links {
+  font-size: 16px;
+}
 body.hollerbox_page_hollerbox_reports #holler-app #reports-here {
   padding: 30px;
   display: grid;

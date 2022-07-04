@@ -36,7 +36,7 @@ class Holler_Settings {
 	 * Get a setting
 	 *
 	 * @param string $setting
-	 * @param mixed $default
+	 * @param mixed  $default
 	 *
 	 * @return mixed
 	 */
@@ -48,15 +48,15 @@ class Holler_Settings {
 	 * Update a setting
 	 *
 	 * @param $name   string
-	 * @param $value mixed
+	 * @param $value  mixed
 	 * @param $commit bool
 	 *
 	 * @return void
 	 */
-	public function update( string $name, $value, bool $commit = true ){
+	public function update( string $name, $value, bool $commit = true ) {
 		$this->settings[ $name ] = $value;
 
-		if ( $commit ){
+		if ( $commit ) {
 			$this->commit();
 		}
 	}
@@ -66,8 +66,16 @@ class Holler_Settings {
 	 *
 	 * @return bool
 	 */
-	public function commit(){
+	public function commit() {
 		return update_option( self::OPTION_NAME, $this->settings );
+	}
+
+	/**
+	 * Drop the option name
+	 * @return void
+	 */
+	public function drop() {
+		delete_option( self::OPTION_NAME );
 	}
 
 }

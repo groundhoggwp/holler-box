@@ -149,22 +149,12 @@
 
   } )
 
-  const setup_answers = {
-    role: '',
-    business: '',
-    license: '',
-    telemetry_subscribe: true,
-    subscribed: false,
-    install_groundhogg: true,
-    install_mailhawk: true,
-    email: HollerBox.currentUser.data.user_email,
-  }
-
   let settings = {
     license: '',
     is_licensed: false,
     credit_disabled: false,
-    telemetry_enabled: false,
+    telemetry_subscribed: false,
+    telemetry_email: HollerBox.currentUser.data.user_email,
     gdpr_enabled: false,
     delete_all_data: false,
     disable_all: false,
@@ -176,6 +166,18 @@
         ..._new,
       }
     },
+  }
+
+  const setup_answers = {
+    role: '',
+    business: '',
+    license: settings.license,
+    telemetry_subscribed: settings.telemetry_subscribed,
+    marketing_subscribed: true,
+    subscribed: settings.telemetry_subscribed,
+    install_groundhogg: true,
+    install_mailhawk: true,
+    email: settings.telemetry_email,
   }
 
   const saveSettings = () => {
@@ -265,12 +267,12 @@
                             </div>
                             <label class="display-flex gap-20"><b>${ __('Send anonymous telemetry') }</b>
                                 ${ toggle({
-                                    name: 'telemetry_enabled',
+                                    name: 'telemetry_subscribed',
                                     className: 'setting-toggle',
-                                    checked: settings.telemetry_enabled,
+                                    checked: settings.telemetry_subscribed,
                                 }) }</label>
                             <p>
-                                ${ __('Occasionally send HollerBox non-sensitive information about your site so we can improve our plugin.',
+                                ${ __('Occasionally send HollerBox non-sensitive information about your site so we can improve our plugin and provide you with a better experience.',
                                         'holler-box') }</p>
                         </div>
                     </div>
@@ -497,7 +499,7 @@
       onMount: (params, setPage) => {
         $('.select-item').on('click', e => {
           setup_answers.business = e.target.dataset.item
-          setPage('/s/license/')
+          setPage(settings.is_licensed ? '/s/telemetry-2/' : '/s/license/')
         })
       },
     }),
@@ -534,7 +536,28 @@
         })
 
         $('#activate').on('click', e => {
-          setPage('/s/telemetry-2/')
+
+          apiPost(HollerBox.routes.licensing, {
+            license: setup_answers.license,
+          }).then(r => {
+
+            if (!r.success) {
+              return
+            }
+
+            settings.set(r.license_data)
+            setPage('/s/telemetry-2/')
+
+            dialog({
+              message: __('License Activated!'),
+            })
+
+          }).catch(e => {
+            dialog({
+              message: e.message,
+              type: 'error',
+            })
+          })
         })
       },
     }),
@@ -556,7 +579,7 @@
                 <label>${ input({
                     type: 'checkbox',
                     id: 'subscribe',
-                    checked: setup_answers.telemetry_subscribe,
+                    checked: setup_answers.marketing_subscribed,
                 }) }
                     ${ __('Add me to the email list.',
                             'holler-box') }</label>
@@ -583,19 +606,23 @@
             <p><i>${ __('You can opt out at any time.', 'holler-box') }</i></p>
             ${ skipButton(__('No thanks, I don\'t want 15% OFF.')) }`
       },
-      onSkip: (p, setPage) => setPage('/s/plugins/'),
+      onSkip: (p, setPage) => setPage(
+        HollerBox.installed.mailhawk && HollerBox.installed.groundhogg ? '/s/subscribe/' : '/s/plugins/'),
       onMount: (params, setPage) => {
         $('#optin').on('click', e => {
 
-          if (setup_answers.telemetry_subscribe) {
-            setup_answers.subscribed = true
-          }
+          setup_answers.telemetry_subscribed = true
+          settings.telemetry_subscribed = true
 
-          setPage('/s/plugins/')
+          apiPost(`${ HollerBox.routes.root }/telemetry`, setup_answers).then(() => {
+            setup_answers.subscribed = true
+            setPage(HollerBox.installed.mailhawk && HollerBox.installed.groundhogg ? '/s/next-steps/' : '/s/plugins/')
+          })
+
         })
 
-        $('#subscribe').on('click', e => {
-          setup_answers.telemetry_subscribe = e.target.checked
+        $('#subscribe').on('change', e => {
+          setup_answers.marketing_subscribed = e.target.checked
         })
       },
     }),
@@ -610,7 +637,7 @@
         // language=HTML
         return `
             <p>
-                ${ __('You can help improve HollerBox by enabling anonymous telemetry. This will occasionally send us data about Groundhogg and how you use it. We use this data to improve feature, fix bugs, and create new products.',
+                ${ __('You can help improve HollerBox by enabling anonymous telemetry. This will occasionally send us data about HollerBox and how you use it. We use this data to improve feature, fix bugs, and create new products.',
                         'holler-box') }</p>
             <div class="inside display-flex column align-center gap-20">
                 <button id="optin" class="holler-button primary medium">
@@ -637,10 +664,17 @@
             <p><i>${ __('You can opt out at any time.', 'holler-box') }</i></p>
             ${ skipButton(__('No thanks, I don\'t want to help improve HollerBox.')) }`
       },
-      onSkip: (p, setPage) => setPage('/s/plugins/'),
+      onSkip: (p, setPage) => setPage(
+        HollerBox.installed.mailhawk && HollerBox.installed.groundhogg ? '/s/subscribe/' : '/s/plugins/'),
       onMount: (params, setPage) => {
         $('#optin').on('click', e => {
-          setPage('/s/plugins/')
+          setup_answers.telemetry_subscribed = true
+          settings.telemetry_subscribed = true
+
+          apiPost(`${ HollerBox.routes.root }/telemetry`, setup_answers).then(() => {
+            setup_answers.subscribed = true
+            setPage(HollerBox.installed.mailhawk && HollerBox.installed.groundhogg ? '/s/next-steps/' : '/s/plugins/')
+          })
         })
       },
     }),
@@ -713,7 +747,16 @@
         })
 
         $('#install').on('click', e => {
-          setPage(setup_answers.subscribed ? '/s/next-steps/' : '/s/subscribe/')
+          Promise.all([
+            apiPost(HollerBox.routes.install, {
+              slug: 'mailhawk',
+            }),
+            apiPost(HollerBox.routes.install, {
+              slug: 'groundhogg',
+            }),
+          ]).then(() => {
+            setPage(setup_answers.subscribed ? '/s/next-steps/' : '/s/subscribe/')
+          })
         })
       },
     }),
@@ -735,7 +778,7 @@
                     placeholder: __('Your email address'),
                     value: setup_answers.email,
                 }) }
-                <button class="holler-button primary medium">${ __('Subscribe') }</button>
+                <button id="subscribe" class="holler-button primary medium">${ __('Subscribe') }</button>
             </div>
             <p><b>${ __('Why subscribe?', 'holler-box') }</b></p>
             <ul>
@@ -750,8 +793,19 @@
       },
       onSkip: (p, setPage) => setPage('/s/next-steps/'),
       onMount: (params, setPage) => {
+
         $('#email').on('input', e => {
           setup_answers.email = e.target.value
+        })
+
+        $('#subscribe').on('click', e => {
+          setup_answers.marketing_subscribed = true
+          setup_answers.telemetry_subscribed = false
+
+          apiPost(`${ HollerBox.routes.root }/telemetry`, setup_answers).then(() => {
+            setup_answers.subscribed = true
+            setPage('/s/next-steps/')
+          })
         })
       },
     }),
@@ -779,7 +833,7 @@
 
         $('#new-popup').on('click', e => {
 
-          window.open( HollerBox.admin_url + '/post-new.php?post_type=hollerbox', '_self' )
+          window.open(HollerBox.admin_url + '/post-new.php?post_type=hollerbox', '_self')
 
         })
 

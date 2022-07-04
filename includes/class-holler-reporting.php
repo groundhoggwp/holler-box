@@ -31,6 +31,27 @@ class Holler_Reporting {
 		global $wpdb;
 		$this->table_name = $wpdb->prefix . 'hollerbox_stats';
 		$this->maybe_create_table();
+
+		add_action( 'deleted_post', [ $this, 'maybe_delete_stats' ], 10, 2 );
+	}
+
+	/**
+	 * Delete associated stats from the reporting because we no longer need them
+	 *
+	 * @param $post_id
+	 * @param $post WP_Post
+	 *
+	 * @return void
+	 */
+	public function maybe_delete_stats( $post_id, $post ){
+
+		if ( $post->post_type !== 'hollerbox' ){
+			return;
+		}
+
+		global $wpdb;
+
+		$wpdb->query( "DELETE FROM $this->table_name WHERE popup_id = $post_id" );
 	}
 
 	/**
@@ -180,9 +201,33 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 	 *
 	 * @return int
 	 */
-	public function get_total_count_for_interval( string $type, Holler_Popup $popup, DateInterval $interval ) {
+	public function get_total_popup_count_for_interval( string $type, Holler_Popup $popup, DateInterval $interval ) {
 
-		$cache_key = "{$popup->post_name}:{$type}";
+		$date  = new DateTime( 'now', wp_timezone() );
+		$today = $date->format( 'Y-m-d' );
+		$date->sub( $interval );
+		$prev = $date->format( 'Y-m-d' );
+
+		return $this->_get_total_count_for_interval( [
+			'popup_id' => $popup->ID,
+			'after'    => $prev,
+			'before'   => $today,
+			's_type'   => $type
+		] );
+	}
+
+	/**
+	 * Get the impression count for a given interval
+	 *
+	 * @param $query
+	 *
+	 * @return int
+	 */
+	public function _get_total_count_for_interval( $query = [] ) {
+
+		global $wpdb;
+
+		$cache_key = md5( wp_json_encode( $query ) );
 
 		$count = wp_cache_get( $cache_key, 'hollerbox:counts', null, $found );
 
@@ -190,22 +235,70 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 			return $count;
 		}
 
-		$date  = new DateTime( 'now', wp_timezone() );
-		$today = $date->format( 'Y-m-d' );
-		$date->sub( $interval );
-		$prev = $date->format( 'Y-m-d' );
+		$default_date = new DateTime( '30 days ago', wp_timezone() );
 
-		global $wpdb;
+		$query = wp_parse_args( $query, [
+			'before' => current_time( 'Y-m-d' ),
+			'after'  => $default_date->format( 'Y-m-d' )
+		] );
 
-		$count = $wpdb->get_var( $wpdb->prepare( "
-SELECT SUM(s_count) 
-FROM $this->table_name 
-WHERE s_date >= %s AND s_date <= %s AND s_type = %s AND popup_id = %d ",
-			$prev, $today, $type, $popup->ID ) );
+		$clauses = [];
+
+		foreach ( $query as $column => $value ) {
+			switch ( $column ) {
+				case 'before':
+					$clauses[] = "s_date <= '$value'";
+					break;
+				case 'after':
+					$clauses[] = "s_date >= '$value'";
+					break;
+				case 's_type':
+				case 'location':
+				case 's_date':
+					$clauses[] = "$column = '$value'";
+					break;
+				default:
+					$clauses[] = "$column = $value";
+					break;
+			}
+		}
+
+		$where = implode( ' AND ', $clauses );
+
+		$query = "SELECT SUM(s_count) FROM $this->table_name WHERE $where";
+
+		$count = $wpdb->get_var( $query );
 
 		wp_cache_set( $cache_key, $count, 'hollerbox:counts' );
 
 		return $count;
+	}
+
+	/**
+	 * Get all impressions for all popups for the last 30 days
+	 *
+	 * @return int
+	 */
+	public function get_total_impressions_last_30() {
+		$after = new DateTime( '30 days ago' );
+		return $this->_get_total_count_for_interval( [
+			's_type' => 'impression',
+			'after'  => $after->format( 'Y-m-d' )
+		] );
+	}
+
+	/**
+	 * Get all conversions for all popups for the last 30 days
+	 *
+	 * @return int
+	 */
+	public function get_total_conversions_last_30() {
+		$after = new DateTime( '30 days ago' );
+
+		return $this->_get_total_count_for_interval( [
+			's_type' => 'conversion',
+			'after'  => $after->format( 'Y-m-d' )
+		] );
 	}
 
 	/**
@@ -217,7 +310,7 @@ WHERE s_date >= %s AND s_date <= %s AND s_type = %s AND popup_id = %d ",
 	 * @return int
 	 */
 	public function get_total_impressions_for_interval( Holler_Popup $popup, DateInterval $interval ) {
-		return $this->get_total_count_for_interval( 'impression', $popup, $interval );
+		return $this->get_total_popup_count_for_interval( 'impression', $popup, $interval );
 	}
 
 	/**
@@ -229,7 +322,7 @@ WHERE s_date >= %s AND s_date <= %s AND s_type = %s AND popup_id = %d ",
 	 * @return int
 	 */
 	public function get_total_conversions_for_interval( Holler_Popup $popup, DateInterval $interval ) {
-		return $this->get_total_count_for_interval( 'conversion', $popup, $interval );
+		return $this->get_total_popup_count_for_interval( 'conversion', $popup, $interval );
 	}
 
 	/**

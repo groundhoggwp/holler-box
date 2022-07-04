@@ -67,6 +67,8 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 			new Holler_Api();
 			new Holler_Frontend();
 			new Holler_Licensing();
+			new Holler_Telemetry();
+			new Holler_Updater();
 		}
 
 		/**
@@ -106,6 +108,8 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 			require_once __DIR__ . '/includes/class-holler-reporting.php';
 			require_once __DIR__ . '/includes/class-holler-settings.php';
 			require_once __DIR__ . '/includes/class-holler-licensing.php';
+			require_once __DIR__ . '/includes/class-holler-telemetry.php';
+			require_once __DIR__ . '/includes/class-holler-updater.php';
 			require_once __DIR__ . '/includes/Holler_EDD_SL_Plugin_Updater.php';
 
 		}
@@ -155,7 +159,6 @@ function holler_box_load() {
 }
 
 add_action( 'plugins_loaded', 'holler_box_load' );
-
 
 /**
  * The activation hook is called outside of the singleton because WordPress doesn't

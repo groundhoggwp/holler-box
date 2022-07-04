@@ -1968,7 +1968,7 @@
           height: 500,
         })
       },
-      css: ({ custom_css = '', id }) => custom_css.replaceAll('popup', `#${ id }`),
+      css: ({ custom_css = '', id = '' }) => custom_css.replaceAll('popup', `#${ id }`),
     },
   }
 
@@ -2275,7 +2275,7 @@
                         </button>
                     </div>
                     ${ actions() }
-                    <button class="holler-button secondary text icon">${ icons.verticalDots }</button>
+                    <button id="popup-more" class="holler-button secondary text icon">${ icons.verticalDots }</button>
                 </div>
             </div>
         </div>
@@ -2322,7 +2322,7 @@
         catch (e) {
           return ''
         }
-      }).join('')
+      }).join('').replace(/(\r\n|\n|\r)/gm, "");
     },
 
     processShortcodeTimeout: null,
@@ -2417,9 +2417,9 @@
       }
 
       this.popup = {
-        id: `popup-${ popup.ID }`,
         display_rules: [],
         ...popup,
+        id: `popup-${ popup.ID }`,
       }
     },
 
@@ -2592,6 +2592,31 @@
       })
       $('#disable').on('click', e => {
         this.disable()
+      })
+
+      let $moreButton = $('#popup-more')
+      $moreButton.on('click', e => {
+        moreMenu(e.currentTarget, {
+          items: [
+            { key: 'report', text: __('View Report') },
+            { key: 'trash', text: `<span class="holler-text danger">${ __('Trash') }</span>` },
+          ],
+          onSelect: k => {
+            switch (k) {
+              case 'report':
+                window.open(
+                  `${ HollerBox.admin_url }/edit.php?post_type=hollerbox&page=hollerbox_reports#/popup/${ this.popup.ID }/`,
+                  '_blank')
+                break
+              case 'trash':
+                window.open(
+                  `${ HollerBox.admin_url }/post.php?post=${this.popup.ID}&action=trash&_wpnonce=${HollerBox.nonces.trash_post}`,
+                  '_self')
+                break
+            }
+          },
+        })
+
       })
 
     },
@@ -3164,12 +3189,13 @@
     },
   }
 
-  if ( HollerBox.installed.groundhogg ){
+  if (HollerBox.installed.groundhogg) {
     AdvancedDisplayRules.groundhogg = {
       name: __('Show only to Groundhogg contacts'),
       controls: ({ filters = [] }) => {
         //language=HTML
-        return `<button class="holler-button secondary small" id="edit-groundhogg-filters">${__('Edit Filters')}</button>`
+        return `
+            <button class="holler-button secondary small" id="edit-groundhogg-filters">${ __('Edit Filters') }</button>`
       },
       onMount: (trigger, updateTrigger) => {
 
@@ -3178,13 +3204,14 @@
           modal({
             width: 500,
             // language=HTML
-            content: `<div class="holler-header">
-              <h3>${ __('Edit Groundhogg Filters') }</h3>
-              <button class="holler-button secondary text icon holler-modal-button-close"><span
-                      class="dashicons dashicons-no-alt"></span>
-              </button>
-          </div>
-            <div id="holler-groundhogg-filters"></div>`,
+            content: `
+                <div class="holler-header">
+                    <h3>${ __('Edit Groundhogg Filters') }</h3>
+                    <button class="holler-button secondary text icon holler-modal-button-close"><span
+                            class="dashicons dashicons-no-alt"></span>
+                    </button>
+                </div>
+                <div id="holler-groundhogg-filters"></div>`,
             dialogClasses: 'overflow-visible has-header',
             onOpen: () => {
               createFilters('#holler-groundhogg-filters', trigger?.filters || [], (filters) => {
@@ -3192,11 +3219,10 @@
                   filters,
                 })
               }).init()
-            }
+            },
           })
 
         })
-
 
       },
     }

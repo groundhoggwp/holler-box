@@ -233,7 +233,7 @@ class Holler_Popup implements JsonSerializable {
 				if ( $this->check_condition( $condition ) ) {
 
 					// check the advanced conditions
-					if ( ! $this->check_advanced_rules() ){
+					if ( ! $this->check_advanced_rules() ) {
 						return false;
 					}
 
@@ -241,7 +241,7 @@ class Holler_Popup implements JsonSerializable {
 					 * Whether to show the popup or not, possibly based on external settings
 					 *
 					 * @param $can_show bool
-					 * @param $popup Holler_Popup
+					 * @param $popup    Holler_Popup
 					 */
 					return apply_filters( 'hollerbox/popup/can_show', true, $this );
 				}
@@ -376,7 +376,7 @@ class Holler_Popup implements JsonSerializable {
 		self::add_display_condition( 'groundhogg', function ( $filter ) {
 
 			// Groundhogg is not installed
-			if ( ! defined( 'GROUNDHOGG_VERSION' ) ){
+			if ( ! defined( 'GROUNDHOGG_VERSION' ) ) {
 				return true;
 			}
 
@@ -592,6 +592,15 @@ class Holler_Popup implements JsonSerializable {
 	}
 
 	/**
+	 * Is this a new Popup?
+	 *
+	 * @return bool
+	 */
+	public function is_new() {
+		return in_array( $this->post_status, [ 'new', 'auto-draft' ] );
+	}
+
+	/**
 	 * Migrates:
 	 * - display conditions
 	 * - triggers
@@ -604,7 +613,7 @@ class Holler_Popup implements JsonSerializable {
 	public function maybe_upgrade_to_2_0() {
 
 		// Already upgraded or is new version
-		if ( $this->_get_meta( 'template' ) ) {
+		if ( $this->_get_meta( 'template' ) || $this->is_new() ) {
 			return;
 		}
 
@@ -626,7 +635,7 @@ class Holler_Popup implements JsonSerializable {
 			'hwp-bottomright' => 'bottom-right',
 			'hwp-bottomleft'  => 'bottom-left',
 			'hwp-topright'    => 'top-right',
-			'hwp-topleft'     => 'top-right',
+			'hwp-topleft'     => 'top-left',
 		];
 
 		$new_position = $position_map[ $curr_position ] ?? 'center-center';
@@ -672,6 +681,9 @@ class Holler_Popup implements JsonSerializable {
 			case 'popout':
 				$new_template = 'sidebar_standard';
 				$new_position = 'center-right';
+				break;
+			case 'fomo':
+				$new_template = 'fomo';
 				break;
 			case 'chat':
 				$new_template = 'fake_chat';
