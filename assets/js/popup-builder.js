@@ -3187,6 +3187,11 @@
       controls: () => '',
       onMount: () => {},
     },
+    hide_if_closed: {
+      name: __('Hide if previously closed'),
+      controls: () => '',
+      onMount: () => {},
+    },
   }
 
   if (HollerBox.installed.groundhogg) {

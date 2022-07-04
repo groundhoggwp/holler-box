@@ -370,6 +370,7 @@ class Holler_Popup implements JsonSerializable {
 		// These are checked on the frontend, so just return true
 		self::add_display_condition( 'show_up_to_x_times', '__return_true' );
 		self::add_display_condition( 'hide_if_converted', '__return_true' );
+		self::add_display_condition( 'hide_if_closed', '__return_true' );
 		self::add_display_condition( 'show_after_x_page_views', '__return_true' );
 		self::add_display_condition( 'show_on_x_devices', '__return_true' );
 		self::add_display_condition( 'show_to_new_or_returning', '__return_true' );

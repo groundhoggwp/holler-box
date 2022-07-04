@@ -8,10 +8,22 @@
     WEEK_IN_SECONDS: this.DAY_IN_SECONDS * 7,
     MONTH_IN_SECONDS: this.DAY_IN_SECONDS * 30,
 
+    closedPopups: 'holler-closed-popups',
     popupConversions: 'holler-popup-conversions',
     popupViews: 'holler-popup-views',
     pageViews: 'holler-page-views',
     sessions: 'holler-sessions',
+
+    addClosedPopup ( id ){
+      let allClosed = this.getCookie( this.closedPopups, '' ).split( ',' )
+      allClosed.push( id )
+      this.setCookie( this.closedPopups, allClosed.join(), this.MONTH_IN_SECONDS )
+    },
+
+    isClosed( id ){
+      let allClosed = this.getCookie( this.closedPopups, '' ).split( ',' ).map( id => parseInt(id) )
+      return allClosed.includes( id )
+    },
 
     addPopupCount (cookie, id) {
       let counts = JSON.parse(this.getCookie(cookie, '{}'))
@@ -60,6 +72,11 @@
     },
 
     setCookie (name, value, duration) {
+
+      if ( isBuilderPreview() ){
+        return
+      }
+
       let d = new Date()
       d.setTime(d.getTime() + ( duration * 1000 ))
       let expires = 'expires=' + d.toUTCString()
@@ -95,9 +112,9 @@
 
       if (now > lastSession) {
         this.setCookie(this.sessions, JSON.stringify({
-          sessions: parseInt( obj.sessions ) + 1,
-          lastSession: now.toString()
-        }), Cookies.MONTH_IN_SECONDS )
+          sessions: parseInt(obj.sessions) + 1,
+          lastSession: now.toString(),
+        }), Cookies.MONTH_IN_SECONDS)
       }
     },
   }
@@ -1216,7 +1233,8 @@
 
   const AdvancedDisplayRules = {
     hide_if_converted: ({}, popup) => popup.getConversions() === 0,
-    show_up_to_x_times: ({ times = '999' }, popup) => parseInt(times) > popup.getViews(),
+    hide_if_closed: ({}, popup) => ! Cookies.isClosed( popup.ID ),
+    show_up_to_x_times: ({ times = 1 }, popup) => parseInt(times) > popup.getViews(),
     show_after_x_page_views: ({ views }) => parseInt(views) < Cookies.getPageViews(),
     show_to_new_or_returning: ({ visitor = 'all' }) => {
       switch (visitor) {
@@ -1393,6 +1411,8 @@
 
         return
       }
+
+      Cookies.addClosedPopup( this.ID )
 
       PopupStack.next()
     },
