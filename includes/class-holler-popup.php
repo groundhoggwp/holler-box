@@ -219,7 +219,7 @@ class Holler_Popup implements JsonSerializable {
 
 		if ( is_array( $exclude_conditions ) ) {
 			foreach ( $exclude_conditions as $condition ) {
-				if ( self::check_condition( $condition ) ) {
+				if ( $this->check_condition( $condition ) ) {
 					return false;
 				}
 			}
@@ -230,10 +230,20 @@ class Holler_Popup implements JsonSerializable {
 
 		if ( is_array( $display_conditions ) ) {
 			foreach ( $display_conditions as $condition ) {
-				if ( self::check_condition( $condition ) ) {
+				if ( $this->check_condition( $condition ) ) {
 
 					// check the advanced conditions
-					return $this->check_advanced_rules();
+					if ( ! $this->check_advanced_rules() ){
+						return false;
+					}
+
+					/**
+					 * Whether to show the popup or not, possibly based on external settings
+					 *
+					 * @param $can_show bool
+					 * @param $popup Holler_Popup
+					 */
+					return apply_filters( 'hollerbox/popup/can_show', true, $this );
 				}
 			}
 		}
@@ -260,7 +270,7 @@ class Holler_Popup implements JsonSerializable {
 			}
 
 			// Any false rule will prevent the popup from showing
-			if ( ! self::check_condition( wp_parse_args( $rule, [
+			if ( ! $this->check_condition( wp_parse_args( $rule, [
 				'type' => $type
 			] ) ) ) {
 				return false;
@@ -494,7 +504,7 @@ class Holler_Popup implements JsonSerializable {
 	 *
 	 * @return false|mixed
 	 */
-	static function check_condition( $condition ) {
+	protected function check_condition( $condition ) {
 		if ( empty( self::$display_conditions ) ) {
 			self::init_display_conditions();
 		}
@@ -504,7 +514,7 @@ class Holler_Popup implements JsonSerializable {
 			return true;
 		}
 
-		return call_user_func( self::$display_conditions[ $condition['type'] ], $condition );
+		return call_user_func( self::$display_conditions[ $condition['type'] ], $condition, $this );
 	}
 
 	/**

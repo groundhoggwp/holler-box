@@ -235,9 +235,11 @@
 
   const proCrmIntegrationsAd = () => {
     // language=HTML
-    return `<div class="holler-pro-ad">
-        Unlock more CRM Integrations when you get <a href="https://hollerwp.com/pricing/" target="_blank"><b>HollerBox Pro!</b></a> Including, ActiveCampaign, HubSpot, ConvertKit, MailChimp, and more!
-    </div>`
+    return `
+        <div class="holler-pro-ad">
+            Unlock more CRM Integrations when you get <a href="https://hollerwp.com/pricing/" target="_blank"><b>HollerBox
+            Pro!</b></a> Including, ActiveCampaign, HubSpot, ConvertKit, MailChimp, and more!
+        </div>`
   }
 
   const selectIntegrationModal = ({
@@ -257,9 +259,9 @@
       width: 800,
       onOpen: ({ close }) => {
 
-        $('#integrations-here').html(Object.keys(IntegrationGroups).map( group => {
+        $('#integrations-here').html(Object.keys(IntegrationGroups).map(group => {
 
-          let integrations = Object.keys(Integrations).filter( k => Integrations[k].group === group ).map( i => {
+          let integrations = Object.keys(Integrations).filter(k => Integrations[k].group === group).map(i => {
 
             i = {
               id: i,
@@ -268,19 +270,19 @@
 
             //language=HTML
             return `
-              <div class="integration" data-integration="${ i.id }">
-                  <div class="icon">
-                      ${ i.icon }
-                  </div>
-                  <p class="integration-name">${ i.name }</p>
-              </div>`
+                <div class="integration" data-integration="${ i.id }">
+                    <div class="icon">
+                        ${ i.icon }
+                    </div>
+                    <p class="integration-name">${ i.name }</p>
+                </div>`
           }).join('')
 
           // language=HTML
-          return `<h2>${IntegrationGroups[group]}</h2>
+          return `<h2>${ IntegrationGroups[group] }</h2>
           <div class="integration-group">
-              ${integrations}
-              ${ ! isPro() && group === 'crm' ? proCrmIntegrationsAd() : '' }
+              ${ integrations }
+              ${ !isPro() && group === 'crm' ? proCrmIntegrationsAd() : '' }
           </div>`
 
         }).join(''))
@@ -299,9 +301,11 @@
 
   const proTemplatesAd = () => {
     // language=HTML
-    return `<div class="holler-pro-ad">
-        Unlock more templates when you get <a href="https://hollerwp.com/pricing/" target="_blank"><b>HollerBox Pro!</b></a> Including, banners, side-ins, sidebars, FOMO (Sale Notifications), and more!
-    </div>`
+    return `
+        <div class="holler-pro-ad">
+            Unlock more templates when you get <a href="https://hollerwp.com/pricing/" target="_blank"><b>HollerBox
+            Pro!</b></a> Including, banners, side-ins, sidebars, FOMO (Sale Notifications), and more!
+        </div>`
   }
 
   const selectTemplateModal = ({
@@ -437,7 +441,7 @@
   const IntegrationGroups = {
     basic: __('Basic'),
     crm: __('CRM (Email Marketing)'),
-    advanced: __('Advanced')
+    advanced: __('Advanced'),
   }
 
   const Integrations = {
@@ -1029,13 +1033,13 @@
                 try {
                   getIntegration(temp.type).onMount(temp, {
                     getState: () => temp,
-                    updateIntegration: (_new, remount = false ) => {
+                    updateIntegration: (_new, remount = false) => {
                       temp = {
                         ...temp,
                         ..._new,
                       }
 
-                      if ( remount ){
+                      if (remount) {
                         mount()
                       }
                     },
@@ -1637,7 +1641,7 @@
         overlay_enabled = true,
         disable_scrolling = false,
         overlay_color,
-        overlay_opacity = 0.5
+        overlay_opacity = 0.5,
       }) => {
         return [
           singleControl({
@@ -2292,6 +2296,9 @@
 
     popup: {},
     previewMode: 'desktop',
+    globalControls: [
+      Controls.custom_css,
+    ],
 
     // static version of the popup to compare against
     _popup: {},
@@ -2433,23 +2440,21 @@
       return [
         Controls.template,
         ...this.getTemplate().controls,
-        Controls.custom_css,
+        ...this.globalControls,
       ]
     },
 
     mount () {
 
       const renderControls = () => {
-        // language=HTML
         return [
           ...this.getControls().map(control => controlGroup(control, this.getPopup())),
-          `
-              <button id="edit-display-conditions" class="control-button">${ __('Display Conditions') } <span
-                      class="dashicons dashicons-visibility"></span></button>`,
-          `
-              <button id="edit-triggers" class="control-button">${ __('Triggers') } <span
-                      class="dashicons dashicons-external"></span>
-              </button>`,
+          // language=HTML
+          `<button id="edit-display-conditions" class="control-button">${ __('Display Conditions') } <span
+                  class="dashicons dashicons-visibility"></span></button>`,
+          // language=HTML
+          `<button id="edit-triggers" class="control-button">${ __('Triggers') } <span
+                  class="dashicons dashicons-external"></span></button>`,
         ].join('')
       }
 
@@ -2840,7 +2845,7 @@
         maxHeight: window.innerHeight - bottom - 20,
         top: bottom,
         left,
-        width: $el.width()
+        width: $el.width(),
       })
     }
 
@@ -3273,9 +3278,11 @@
 
     const proConditionsAd = () => {
       //language=HTML
-      return `<div class="holler-pro-ad">
-        Unlock popup <b>Scheduling</b> with <b><a href="https://hollerwp.com/pricing/" target="_blank">HollerBox Pro!</a></b>
-    </div>`
+      return `
+          <div class="holler-pro-ad">
+              Unlock popup <b>Scheduling</b> with <b><a href="https://hollerwp.com/pricing/" target="_blank">HollerBox
+              Pro!</a></b>
+          </div>`
     }
 
     modal({
@@ -3450,9 +3457,11 @@
 
   const proTriggersAd = () => {
     //language=HTML
-    return `<div class="holler-pro-ad">
-        Unlock the <b>Inactivity</b> trigger with <b><a href="https://hollerwp.com/pricing/" target="_blank">HollerBox Pro!</a></b>
-    </div>`
+    return `
+        <div class="holler-pro-ad">
+            Unlock the <b>Inactivity</b> trigger with <b><a href="https://hollerwp.com/pricing/" target="_blank">HollerBox
+            Pro!</a></b>
+        </div>`
   }
 
   const editTriggersModal = ({
