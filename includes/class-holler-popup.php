@@ -373,6 +373,40 @@ class Holler_Popup implements JsonSerializable {
 		self::add_display_condition( 'show_after_x_page_views', '__return_true' );
 		self::add_display_condition( 'show_on_x_devices', '__return_true' );
 		self::add_display_condition( 'show_to_new_or_returning', '__return_true' );
+		self::add_display_condition( 'groundhogg', function ( $filter ) {
+
+			// Groundhogg is not installed
+			if ( ! defined( 'GROUNDHOGG_VERSION' ) ){
+				return true;
+			}
+
+			$contact = \Groundhogg\get_contactdata();
+
+			if ( ! $contact ) {
+				return false;
+			}
+
+			$filters = $filter['filters'];
+
+			// No filters were defined, so we are going to ignore...
+			if ( empty( $filters ) ) {
+				return true;
+			}
+
+			add_action( 'gh_parse_contact_query', function ( $query ) {
+				unset( $query->query_vars['owner'] );
+			} );
+
+			$query = new \Groundhogg\Contact_Query();
+
+			$count = $query->count( [
+				'filters' => $filters,
+				'include' => [ $contact->get_id() ]
+			] );
+
+			// If 1 or more contacts match, return
+			return $count >= 1;
+		} );
 
 		// Check for logged-in/out
 		self::add_display_condition( 'show_for_x_visitors', function ( $filter ) {

@@ -24,6 +24,7 @@
   } = HollerBox.elements
 
   const { sprintf, __, _x, _n } = wp.i18n
+  const { createFilters } = Groundhogg.filters.functions
 
   const isPro = () => {
     return typeof HollerBoxPro !== 'undefined'
@@ -981,7 +982,6 @@
   }
 
   const Controls = {
-
     integration: {
       name: __('Integration', 'holler-box'),
       render: ({
@@ -2450,11 +2450,13 @@
         return [
           ...this.getControls().map(control => controlGroup(control, this.getPopup())),
           // language=HTML
-          `<button id="edit-display-conditions" class="control-button">${ __('Display Conditions') } <span
-                  class="dashicons dashicons-visibility"></span></button>`,
+          `
+              <button id="edit-display-conditions" class="control-button">${ __('Display Conditions') } <span
+                      class="dashicons dashicons-visibility"></span></button>`,
           // language=HTML
-          `<button id="edit-triggers" class="control-button">${ __('Triggers') } <span
-                  class="dashicons dashicons-external"></span></button>`,
+          `
+              <button id="edit-triggers" class="control-button">${ __('Triggers') } <span
+                      class="dashicons dashicons-external"></span></button>`,
         ].join('')
       }
 
@@ -3160,6 +3162,44 @@
       controls: () => '',
       onMount: () => {},
     },
+  }
+
+  if ( HollerBox.installed.groundhogg ){
+    AdvancedDisplayRules.groundhogg = {
+      name: __('Show only to Groundhogg contacts'),
+      controls: ({ filters = [] }) => {
+        //language=HTML
+        return `<button class="holler-button secondary small" id="edit-groundhogg-filters">${__('Edit Filters')}</button>`
+      },
+      onMount: (trigger, updateTrigger) => {
+
+        $('#edit-groundhogg-filters').on('click', e => {
+
+          modal({
+            width: 500,
+            // language=HTML
+            content: `<div class="holler-header">
+              <h3>${ __('Edit Groundhogg Filters') }</h3>
+              <button class="holler-button secondary text icon holler-modal-button-close"><span
+                      class="dashicons dashicons-no-alt"></span>
+              </button>
+          </div>
+            <div id="holler-groundhogg-filters"></div>`,
+            dialogClasses: 'overflow-visible has-header',
+            onOpen: () => {
+              createFilters('#holler-groundhogg-filters', trigger?.filters || [], (filters) => {
+                updateTrigger({
+                  filters,
+                })
+              }).init()
+            }
+          })
+
+        })
+
+
+      },
+    }
   }
 
   const renderDisplayRule = (rule, i) => {

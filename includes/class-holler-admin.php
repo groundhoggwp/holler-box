@@ -191,6 +191,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		public function builder_scripts() {
 
 			global $post;
+            $groundhogg_installed = defined( 'GROUNDHOGG_VERSION' );
 
 			wp_enqueue_media();
 			wp_enqueue_editor();
@@ -252,7 +253,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 					'_wprest' => wp_create_nonce( 'wp_rest' )
 				],
 				'installed'           => [
-					'groundhogg' => defined( 'GROUNDHOGG_VERSION' ),
+					'groundhogg' => $groundhogg_installed,
 					'mailhawk'   => defined( 'MAILHAWK_VERSION' ),
 				],
 				'user'                => wp_get_current_user(),
@@ -262,6 +263,10 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				'css_editor_settings' => $settings,
 				'currentUser' => $user,
 			] );
+
+            if ( $groundhogg_installed ) {
+                \Groundhogg\enqueue_filter_assets();
+            }
 
 			do_action( 'hollerbox/admin/scripts' );
 		}
