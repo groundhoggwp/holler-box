@@ -286,16 +286,10 @@ class Holler_Popup implements JsonSerializable {
 	 * @return array|mixed|object
 	 */
 	public function jsonSerialize() {
-		$json = wp_parse_args( $this->post->to_array(), wp_parse_args( $this->settings, [
+		return wp_parse_args( $this->post->to_array(), wp_parse_args( $this->settings, [
 			'after_submit'    => 'close',
 			'success_message' => __( 'Thanks for subscribing.' )
 		] ) );
-
-		// Render shortcodes
-		$json['post_content']    = do_shortcode( $json['post_content'] );
-		$json['success_message'] = do_shortcode( $json['success_message'] );
-
-		return $json;
 	}
 
 	/**

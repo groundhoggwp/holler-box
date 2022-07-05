@@ -196,7 +196,9 @@
     const config = {
       type: 'line',
       data: data,
-      options: {},
+      options: {
+        maintainAspectRatio: false
+      },
     }
     const myChart = new Chart(
       document.getElementById(id),

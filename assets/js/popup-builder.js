@@ -3470,12 +3470,22 @@
             placeholder: '.my-class',
             id: 'selector',
             value: selector,
-        })) }`
+        })) } ${select({
+            id: 'trigger_multiple'
+        }, {
+          once: 'Trigger Once',
+          multiple: 'Trigger Multiple Times',
+        })}`
       },
       onMount: (trigger, updateTrigger) => {
         $('#selector').on('change', e => {
           updateTrigger({
             selector: e.target.value,
+          })
+        })
+        $('#trigger_multiple').on('change', e => {
+          updateTrigger({
+            trigger_multiple: e.target.value,
           })
         })
       },

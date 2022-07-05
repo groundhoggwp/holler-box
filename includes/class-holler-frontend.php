@@ -69,6 +69,7 @@ class Holler_Frontend {
 
                 // Do shortcodes where relevant
                 $popup['post_content'] = do_shortcode( $popup[ 'post_content' ] );
+                $popup['success_message'] = do_shortcode( $popup[ 'success_message' ] );
 
                 return $popup;
             }, $this->active ),

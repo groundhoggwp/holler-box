@@ -135,6 +135,9 @@ body.hollerbox_page_hollerbox_reports #holler-app .span-half {
 body.hollerbox_page_hollerbox_reports #holler-app .span-third {
   grid-column: span 2;
 }
+body.hollerbox_page_hollerbox_reports #holler-app canvas {
+  height: 500px;
+}
 body.hollerbox_page_hollerbox_reports #holler-app .holler-panel .holler-panel-header h2 {
   font-size: 18px;
   padding: 16px;

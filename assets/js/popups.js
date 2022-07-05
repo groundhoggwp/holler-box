@@ -1209,9 +1209,16 @@
     on_page_load: ({ delay = 1 }, show) => {
       setTimeout(show, delay * 1000)
     },
-    element_click: ({ selector = '' }, show) => {
+    element_click: ({ selector = '', trigger_multiple = 'once' }, show, popup ) => {
       document.querySelectorAll(selector).forEach(el => {
-        el.addEventListener('click', show)
+        el.addEventListener('click', () => {
+
+          if ( trigger_multiple === 'multiple' ){
+            popup._triggered = false;
+          }
+
+          show()
+        })
       })
     },
     scroll_detection: ({ depth = 50 }, show) => {
@@ -1454,11 +1461,12 @@
 
     init () {
 
+      const show = () => this.maybeOpen()
+
       Object.keys(TriggerCallbacks).forEach(_t => {
+
         if (this.triggers[_t]?.enabled) {
-          TriggerCallbacks[_t](this.triggers[_t], () => {
-            this.maybeOpen()
-          })
+          TriggerCallbacks[_t](this.triggers[_t], show, this )
         }
       })
     },
