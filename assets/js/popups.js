@@ -14,15 +14,15 @@
     pageViews: 'holler-page-views',
     sessions: 'holler-sessions',
 
-    addClosedPopup ( id ){
-      let allClosed = this.getCookie( this.closedPopups, '' ).split( ',' )
-      allClosed.push( id )
-      this.setCookie( this.closedPopups, allClosed.join(), this.MONTH_IN_SECONDS )
+    addClosedPopup (id) {
+      let allClosed = this.getCookie(this.closedPopups, '').split(',')
+      allClosed.push(id)
+      this.setCookie(this.closedPopups, allClosed.join(), this.MONTH_IN_SECONDS)
     },
 
-    isClosed( id ){
-      let allClosed = this.getCookie( this.closedPopups, '' ).split( ',' ).map( id => parseInt(id) )
-      return allClosed.includes( id )
+    isClosed (id) {
+      let allClosed = this.getCookie(this.closedPopups, '').split(',').map(id => parseInt(id))
+      return allClosed.includes(id)
     },
 
     addPopupCount (cookie, id) {
@@ -73,7 +73,7 @@
 
     setCookie (name, value, duration) {
 
-      if ( isBuilderPreview() ){
+      if (isBuilderPreview()) {
         return
       }
 
@@ -116,6 +116,15 @@
           lastSession: now.toString(),
         }), Cookies.MONTH_IN_SECONDS)
       }
+    },
+
+    hasAccepted () {
+
+      if (!HollerBox.settings.cookie_compliance) {
+        return true
+      }
+
+      return this.getCookie(HollerBox.settings.cookie_name) === HollerBox.settings.cookie_value
     },
   }
 
@@ -176,6 +185,21 @@
     //language=HTML
     return `
         <div class="holler-box-credit"><a href="https://hollerwp.com/">⚡ by HollerBox</a></div>`
+  }
+
+  const createHTML = (HTML) => {
+    let div = document.createElement('div')
+    div.innerHTML = HTML
+    return div.firstElementChild
+  }
+
+  const gdprInput = () => {
+
+    const HTML = createHTML(HollerBox.settings.gdpr_text)
+
+    //language=HTML
+    return `<label class="holler-gdpr-consent"><input type="checkbox" name="gdpr_consent" value="yes" required>
+        <span>${ HTML.innerHTML }</span></label>`
   }
 
   const nameInput = (placeholder = 'Your name') => {
@@ -373,6 +397,10 @@
     },
   }
 
+  const isGDPREnabled = () => {
+    return HollerBox.settings?.gdpr_enabled ?? false
+  }
+
   const form = ({
     email = true,
     name = true,
@@ -381,12 +409,17 @@
     name_placeholder = 'Email',
     button_text = 'Subscribe',
   }) => {
+
     //language=HTML
     return `
-        <form class="holler-box-form ${ direction }">
-            ${ name ? nameInput(name_placeholder) : '' }
-            ${ email ? emailInput(email_placeholder) : '' }
-            ${ submitButton(button_text) }
+        <form class="holler-box-form ${ direction } ${ isGDPREnabled() ? 'has-gdpr' : '' }">
+            <div class="fields">
+                ${ name ? nameInput(name_placeholder) : '' }
+                ${ email ? emailInput(email_placeholder) : '' }
+                ${ direction === 'vertical' && isGDPREnabled() ? gdprInput() : '' }
+                ${ submitButton(button_text) }
+            </div>
+            ${ direction === 'horizontal' && isGDPREnabled() ? gdprInput() : '' }
         </form>`
   }
 
@@ -947,7 +980,6 @@
         id = '',
         position = 'center-center',
         animation = 'appear',
-        title = '',
         post_content = '',
         image_src = '',
         button_text = 'Subscribe',
@@ -1209,12 +1241,12 @@
     on_page_load: ({ delay = 1 }, show) => {
       setTimeout(show, delay * 1000)
     },
-    element_click: ({ selector = '', trigger_multiple = 'once' }, show, popup ) => {
+    element_click: ({ selector = '', trigger_multiple = 'once' }, show, popup) => {
       document.querySelectorAll(selector).forEach(el => {
         el.addEventListener('click', () => {
 
-          if ( trigger_multiple === 'multiple' ){
-            popup._triggered = false;
+          if (trigger_multiple === 'multiple') {
+            popup._triggered = false
           }
 
           show()
@@ -1240,7 +1272,7 @@
 
   const AdvancedDisplayRules = {
     hide_if_converted: ({}, popup) => popup.getConversions() === 0,
-    hide_if_closed: ({}, popup) => ! Cookies.isClosed( popup.ID ),
+    hide_if_closed: ({}, popup) => !Cookies.isClosed(popup.ID),
     show_up_to_x_times: ({ times = 1 }, popup) => parseInt(times) > popup.getViews(),
     show_after_x_page_views: ({ views }) => parseInt(views) < Cookies.getPageViews(),
     show_to_new_or_returning: ({ visitor = 'all' }) => {
@@ -1419,7 +1451,7 @@
         return
       }
 
-      Cookies.addClosedPopup( this.ID )
+      Cookies.addClosedPopup(this.ID)
 
       PopupStack.next()
     },
@@ -1466,7 +1498,7 @@
       Object.keys(TriggerCallbacks).forEach(_t => {
 
         if (this.triggers[_t]?.enabled) {
-          TriggerCallbacks[_t](this.triggers[_t], show, this )
+          TriggerCallbacks[_t](this.triggers[_t], show, this)
         }
       })
     },
@@ -1476,7 +1508,14 @@
   // we are on the site frontend
   if (HollerBox.is_frontend) {
 
-    window.addEventListener('load', () => {
+    const initHollerBox = () => {
+
+      if (HollerBox._initialized) {
+        return
+      }
+
+      HollerBox._initialized = true
+
       HollerBox.active = HollerBox.active.map(p => Popup(p))
 
       HollerBox.active.forEach(popup => {
@@ -1485,6 +1524,25 @@
 
       Cookies.addPageView()
       Cookies.maybeAddSession()
+    }
+
+    window.addEventListener('load', () => {
+
+      // Consent was given
+      if (Cookies.hasAccepted()) {
+        initHollerBox()
+        return
+      }
+
+      // Add a click listener to wait for cookie consent
+      document.addEventListener('click', () => {
+        setTimeout(() => {
+          if (Cookies.hasAccepted()) {
+            initHollerBox()
+          }
+        }, 100)
+      })
+
     })
 
   }

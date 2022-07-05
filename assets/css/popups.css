@@ -275,6 +275,7 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 }
 .holler-box .holler-box-modal {
   min-width: 300px;
+  width: min-content;
   max-width: calc(100vw - 40px);
   background: #ffffff;
   padding: 30px;
@@ -309,9 +310,6 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   line-height: 1;
   font-size: 36px;
   font-weight: bold;
-}
-.holler-box .holler-box-modal .holler-box-modal-content {
-  max-width: 500px;
 }
 .holler-box .holler-box-modal .holler-box-modal-content p, .holler-box .holler-box-modal .holler-box-modal-content li, .holler-box .holler-box-modal .holler-box-modal-content ul, .holler-box .holler-box-modal .holler-box-modal-content ol {
   font-size: 18px;
@@ -481,12 +479,11 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 }
 .holler-box.holler-notification-box.with-form form.holler-box-form {
   margin-top: 10px;
-  display: flex;
-  width: 100%;
-  min-width: 0;
+}
+.holler-box.holler-notification-box.with-form form.holler-box-form .fields {
   gap: 0;
 }
-.holler-box.holler-notification-box.with-form form.holler-box-form input {
+.holler-box.holler-notification-box.with-form form.holler-box-form input[type=email] {
   width: 100%;
   background: rgba(16, 38, 64, 0.05);
   border: none;
@@ -530,8 +527,17 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 .holler-box.holler-notification-box .holler-box-modal .holler-box-modal-content p:last-child {
   margin-bottom: 0;
 }
+.holler-box.holler-popup-custom .holler-box-modal-content {
+  width: 400px;
+}
+.holler-box.holler-popup-standard .holler-box-modal-content {
+  width: 400px;
+}
 .holler-box.holler-popup-image-left .holler-box-modal {
   padding: 0;
+}
+.holler-box.holler-popup-image-left .holler-box-modal .holler-box-modal-content {
+  width: 330px;
 }
 .holler-box.holler-popup-image-left .display-flex {
   display: flex;
@@ -542,7 +548,7 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   flex-shrink: 0;
   background-size: cover;
   background-position: center center;
-  min-width: 200px;
+  width: 300px;
 }
 .holler-box.holler-popup-image-left .display-flex .right {
   align-self: flex-start;
@@ -550,6 +556,9 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 }
 .holler-box.holler-popup-image-right .holler-box-modal {
   padding: 0;
+}
+.holler-box.holler-popup-image-right .holler-box-modal .holler-box-modal-content {
+  width: 330px;
 }
 .holler-box.holler-popup-image-right .display-flex {
   display: flex;
@@ -560,7 +569,7 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   flex-shrink: 0;
   background-size: cover;
   background-position: center center;
-  min-width: 200px;
+  width: 300px;
 }
 .holler-box.holler-popup-image-right .display-flex .left {
   align-self: flex-start;
@@ -569,20 +578,19 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 .holler-box.holler-popup-form-below .holler-box-modal {
   padding: 0;
 }
+.holler-box.holler-popup-form-below .holler-box-modal .holler-box-modal-content {
+  width: 330px;
+}
 .holler-box.holler-popup-form-below .display-flex {
   align-items: stretch;
-  justify-content: space-between;
   gap: 0;
 }
 .holler-box.holler-popup-form-below .display-flex .left {
   padding: 30px;
 }
-.holler-box.holler-popup-form-below .display-flex .left .holler-box-modal-content {
-  min-width: 300px;
-}
 .holler-box.holler-popup-form-below .display-flex .right {
   flex-shrink: 0;
-  min-width: 200px;
+  width: 300px;
   background-size: cover;
   background-position: center center;
 }
@@ -620,6 +628,9 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   border-radius: 5px;
   overflow: hidden;
 }
+.holler-box.holler-popup-progress-bar .holler-box-modal .holler-box-modal-content {
+  width: 330px;
+}
 .holler-box.holler-popup-progress-bar .holler-box-modal button.holler-box-modal-close {
   z-index: 999;
   top: 25px;
@@ -633,7 +644,7 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   flex-shrink: 0;
   background-size: cover;
   background-position: center center;
-  min-width: 200px;
+  width: 300px;
 }
 .holler-box.holler-popup-progress-bar .display-flex .right {
   align-self: flex-start;
@@ -653,15 +664,19 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   flex-shrink: 0;
   background-size: cover;
   background-position: center center;
-  min-width: 200px;
+  width: 250px;
 }
 .holler-box.holler-popup-image-beside-text-top .display-flex .holler-box-form {
   padding: 30px;
+  width: 250px;
   background-color: rgba(0, 117, 255, 0.07);
 }
 .holler-box.holler-popup-full-image-background .holler-box-modal {
   background-size: cover;
   background-position: center center;
+}
+.holler-box.holler-popup-full-image-background .holler-box-modal .holler-box-modal-content {
+  width: 400px;
 }
 .holler-box button.holler-box-button {
   font-size: 20px;
@@ -687,16 +702,28 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   position: relative;
   animation: holler-rotation 1s linear infinite;
 }
-.holler-box form.holler-box-form {
+.holler-box form.holler-box-form .fields {
   display: flex;
   gap: 10px;
   align-items: stretch;
-  min-width: 550px;
 }
-.holler-box form.holler-box-form.vertical {
+.holler-box form.holler-box-form.vertical .fields {
   display: grid;
-  grid-auto-rows: 1fr 1fr 1fr;
-  min-width: 300px;
+  grid-auto-rows: 1fr;
+}
+.holler-box form.holler-box-form.vertical.has-gdpr .fields {
+  grid-template-rows: 1fr 1fr min-content 1fr;
+}
+.holler-box form.holler-box-form label.holler-gdpr-consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.holler-box form.holler-box-form label.holler-gdpr-consent span {
+  line-height: 1.1;
+}
+.holler-box form.holler-box-form.horizontal label.holler-gdpr-consent {
+  margin-top: 10px;
 }
 .holler-box form.holler-box-form input.holler-box-input {
   border-radius: 0;
@@ -763,10 +790,9 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
     min-height: 300px;
     width: 100% !important;
   }
-  .holler-box:not(.holler-notification-box) .holler-box-modal form.holler-box-form.horizontal {
+  .holler-box:not(.holler-notification-box) .holler-box-modal form.holler-box-form.horizontal .fields {
     display: grid;
     grid-auto-rows: 1fr;
-    min-width: 0;
     width: 100%;
   }
   .holler-box:not(.holler-notification-box) .holler-box-modal form.holler-box-form.horizontal .holler-box-input {

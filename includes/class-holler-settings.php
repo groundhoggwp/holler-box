@@ -35,12 +35,24 @@ class Holler_Settings {
 	/**
 	 * Get a setting
 	 *
-	 * @param string $setting
+	 * @param string|array $setting
 	 * @param mixed  $default
 	 *
 	 * @return mixed
 	 */
-	public function get( string $setting, $default = false ) {
+	public function get( $setting, $default = false ) {
+
+		if ( is_array( $setting ) ) {
+
+			$settings = [];
+
+			foreach ( $setting as $key ) {
+				$settings[ $key ] = $this->settings[ $key ] ?? ( is_array( $default ) && isset( $default[ $key ] ) ? $default[ $key ] : false );
+			}
+
+			return $settings;
+		}
+
 		return $this->settings[ $setting ] ?? $default;
 	}
 
@@ -54,6 +66,28 @@ class Holler_Settings {
 	 * @return void
 	 */
 	public function update( string $name, $value, bool $commit = true ) {
+		$this->settings[ $name ] = $value;
+
+		switch ( $name ) {
+			case 'cookie_compliance':
+			case 'gdpr_enabled':
+			case 'credit_disabled':
+			case 'disable_all':
+			case 'delete_all_data':
+			case 'telemetry_subscribed':
+			case 'is_licensed':
+				$value = boolval( $value );
+				break;
+			case 'gdpr_text':
+				$value = wp_kses_post( $value );
+				break;
+			case 'cookie_name':
+			case 'cookie_value':
+			default:
+				$value = sanitize_text_field( $value );
+				break;
+		}
+
 		$this->settings[ $name ] = $value;
 
 		if ( $commit ) {

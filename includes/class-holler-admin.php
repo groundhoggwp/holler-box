@@ -261,6 +261,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				'user'                => wp_get_current_user(),
 				'assets'              => [
 					'groundhogg_banner' => Holler_Box_URL . 'assets/img/groundhogg-banner.png',
+					'root'              => Holler_Box_URL . 'assets',
 				],
 				'css_editor_settings' => $settings,
 				'currentUser'         => $user,

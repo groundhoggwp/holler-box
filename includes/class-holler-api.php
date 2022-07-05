@@ -402,28 +402,11 @@ class Holler_Api {
 	public function update_settings( WP_REST_Request $request ) {
 		$settings = $request->get_param( 'settings' );
 
-		$sanitized_settings = [];
-
 		foreach ( $settings as $option_name => $option_value ) {
-			switch ( $option_name ) {
-				case 'gdpr_enabled':
-				case 'credit_disabled':
-				case 'disable_all':
-				case 'delete_all_data':
-				case 'telemetry_subscribed':
-				case 'is_licensed':
-					$sanitized_settings[ sanitize_key( $option_name ) ] = boolval( $option_value );
-					break;
-				case 'gdpr_text':
-					$sanitized_settings[ sanitize_key( $option_name ) ] = wp_kses_post( $option_value );
-					break;
-				default:
-					$sanitized_settings[ sanitize_key( $option_name ) ] = sanitize_text_field( $option_value );
-					break;
-			}
+			Holler_Settings::instance()->update( $option_name, $option_value, false );
 		}
 
-		update_option( 'hollerbox_settings', $sanitized_settings );
+		Holler_Settings::instance()->commit();
 
 		return rest_ensure_response( [ 'success' => true ] );
 	}

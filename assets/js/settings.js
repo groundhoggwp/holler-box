@@ -150,6 +150,9 @@
   } )
 
   let settings = {
+    cookie_name: 'viewed_cookie_policy',
+    cookie_value: 'yes',
+    cookie_compliance: false,
     license: '',
     is_licensed: false,
     credit_disabled: false,
@@ -293,6 +296,41 @@
                                 id: 'gdpr-text',
                                 value: settings.gdpr_text,
                             }) }
+                        </div>
+                    </div>
+                    <div class="holler-panel">
+                        <div class="holler-panel-header">
+                            <h2>${ __('Cookie Compliance') }</h2>
+                        </div>
+                        <div class="inside">
+                            <label class="display-flex gap-20"><b>${ __('Enable Cookie Compliance') }</b>
+                                ${ toggle({
+                                    name: 'gdpr_enabled',
+                                    className: 'setting-toggle',
+                                    checked: settings.gdpr_enabled,
+                                }) }</label>
+                            <p>${ __('If you are using a cookie consent plugin such as <b>CookieYes</b> then this will prevent popups until consent is given.', 'holler-box') }</p>
+                            <div class="display-flex gap-20">
+                                <div>
+                                    <p><b><label>${__('Cookie Name')}</label></b></p>
+                                    ${ input({
+                                        id: 'cookie-name',
+                                        className: 'full-width',
+                                        value: settings.cookie_name,
+                                    }) }
+                                    <p>${ __('Name of the cookie where consent is stored.', 'holler-box') }</p>
+                                </div>
+                                <div>
+                                    <p><b><label>${__('Cookie Value')}</label></b></p>
+                                    ${ input({
+                                        id: 'cookie-value',
+                                        className: 'full-width',
+                                        value: settings.cookie_value,
+                                    }) }
+                                    <p>${ __('Value of the cookie indicating consent was given.', 'holler-box') }</p>
+                                </div>
+                            </div>
+                            
                         </div>
                     </div>
                     <div class="holler-panel danger-zone">

@@ -2094,8 +2094,9 @@
       defaults: {
         post_content: standardPopupContent,
         button_text: 'Subscribe',
-        image_src: 'https://via.placeholder.com/200x600',
         position: 'center-center',
+        image_src: `${HollerBox.assets.root}/img/default/woman-yellow.png`,
+        image_width: 200,
       },
     },
     popup_image_right: {
@@ -2115,8 +2116,9 @@
       defaults: {
         post_content: standardPopupContent,
         button_text: 'Subscribe',
-        image_src: 'https://via.placeholder.com/200x600',
         position: 'center-center',
+        image_src: `${HollerBox.assets.root}/img/default/man-thumbs-up.png`,
+        image_width: 200,
       },
     },
     popup_form_below: {
@@ -2138,8 +2140,10 @@
         post_content: standardPopupContent,
         button_text: 'Subscribe',
         form_color: '#e8eff9',
-        image_src: 'https://via.placeholder.com/200',
         position: 'center-center',
+        close_button_color: '#ffffff',
+        image_src: `${HollerBox.assets.root}/img/default/woman-working.png`,
+        image_width: 300,
       },
     },
     popup_progress_bar: {
@@ -2159,8 +2163,9 @@
       defaults: {
         post_content: standardPopupContent,
         button_text: 'Subscribe',
-        image_src: 'https://via.placeholder.com/150x300',
         position: 'center-center',
+        image_src: `${HollerBox.assets.root}/img/default/shopping.png`,
+        image_width: 300,
       },
     },
     popup_image_beside_text_top: {
@@ -2180,7 +2185,8 @@
       defaults: {
         post_content: standardPopupContent,
         button_text: 'Subscribe',
-        image_src: 'https://via.placeholder.com/200',
+        image_src: `${HollerBox.assets.root}/img/default/man-working.png`,
+        image_width: 300,
         position: 'center-center',
         form_color: '#e8eff9',
       },
@@ -2201,27 +2207,7 @@
       defaults: {
         post_content: standardPopupContent,
         button_text: 'Subscribe',
-        image_src: 'https://via.placeholder.com/200',
-        position: 'center-center',
-      },
-    },
-    popup_text_top_with_color_background: {
-      id: 'popup_text_top_with_color_background',
-      name: __('Popup with Background Color Text'),
-      controls: [
-        Controls.position,
-        Controls.image,
-        Controls.content,
-        Controls.fields,
-        Controls.button,
-        Controls.modal,
-        Controls.close_button,
-        Controls.overlay,
-      ],
-      defaults: {
-        post_content: standardPopupContent,
-        button_text: 'Subscribe',
-        image_src: 'https://via.placeholder.com/200',
+        image_src: `${HollerBox.assets.root}/img/default/yellow-gradient.png`,
         position: 'center-center',
       },
     },

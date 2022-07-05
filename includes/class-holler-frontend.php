@@ -62,17 +62,17 @@ class Holler_Frontend {
 
 		$l10n = [
 			'active'             => array_map( function ( $popup ) {
-                $popup = $popup->jsonSerialize();
+				$popup = $popup->jsonSerialize();
 
-                // Remove secret properties
-                unset( $popup[ 'integrations' ] );
+				// Remove secret properties
+				unset( $popup['integrations'] );
 
-                // Do shortcodes where relevant
-                $popup['post_content'] = do_shortcode( $popup[ 'post_content' ] );
-                $popup['success_message'] = do_shortcode( $popup[ 'success_message' ] );
+				// Do shortcodes where relevant
+				$popup['post_content']    = do_shortcode( $popup['post_content'] );
+				$popup['success_message'] = do_shortcode( $popup['success_message'] );
 
-                return $popup;
-            }, $this->active ),
+				return $popup;
+			}, $this->active ),
 			'home_url'           => home_url(),
 			'is_preview'         => is_preview(),
 			'is_frontend'        => ! is_admin(),
@@ -86,11 +86,21 @@ class Holler_Frontend {
 			'nonces'             => [
 				'_wprest' => wp_create_nonce( 'wp_rest' )
 			],
-			'settings'           => [
-				'credit_disabled' => Holler_Settings::instance()->get( 'credit_disabled' ),
-				'gdpr_enabled'    => Holler_Settings::instance()->get( 'gdpr_enabled' ),
-				'gdpr_text'       => Holler_Settings::instance()->get( 'gdpr_text' ),
-			]
+			'settings'           => Holler_Settings::instance()->get( [
+				'credit_disabled',
+				'gdpr_enabled',
+				'gdpr_text',
+				'cookie_compliance',
+				'name',
+				'cookie_value',
+			], [
+				'credit_disabled'   => false,
+				'gdpr_enabled'      => false,
+				'gdpr_text'         => '',
+				'cookie_compliance' => false,
+				'name'              => 'view_cookie_policy',
+				'cookie_value'      => 'yes',
+			] )
 		];
 
 		do_action( 'hollerbox/scripts' );

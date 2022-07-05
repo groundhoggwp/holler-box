@@ -393,6 +393,7 @@ body:not(.wp-admin) {
   .holler-box-modal {
 
     min-width: 300px;
+    width: min-content;
     max-width: calc(100vw - 40px);
     background: #ffffff;
     padding: 30px;
@@ -433,8 +434,6 @@ body:not(.wp-admin) {
     }
 
     .holler-box-modal-content {
-
-      max-width: 500px;
 
       p, li, ul, ol {
         font-size: 18px;
@@ -651,12 +650,12 @@ body:not(.wp-admin) {
 
       form.holler-box-form {
         margin-top: 10px;
-        display: flex;
-        width: 100%;
-        min-width: 0;
-        gap: 0;
 
-        input {
+        .fields {
+          gap: 0;
+        }
+
+        input[type=email] {
           width: 100%;
           background: $primary-dark-5;
           border: none;
@@ -715,17 +714,25 @@ body:not(.wp-admin) {
   }
 
   &.holler-popup-custom {
-
+    .holler-box-modal-content{
+      width: 400px;
+    }
   }
 
   &.holler-popup-standard {
-
+    .holler-box-modal-content{
+      width: 400px;
+    }
   }
 
   &.holler-popup-image-left {
 
     .holler-box-modal {
       padding: 0;
+
+      .holler-box-modal-content{
+        width: 330px;
+      }
     }
 
     .display-flex {
@@ -737,7 +744,7 @@ body:not(.wp-admin) {
         flex-shrink: 0;
         background-size: cover;
         background-position: center center;
-        min-width: 200px;
+        width: 300px;
       }
 
       .right {
@@ -751,6 +758,10 @@ body:not(.wp-admin) {
 
     .holler-box-modal {
       padding: 0;
+
+      .holler-box-modal-content{
+        width: 330px;
+      }
     }
 
     .display-flex {
@@ -762,7 +773,7 @@ body:not(.wp-admin) {
         flex-shrink: 0;
         background-size: cover;
         background-position: center center;
-        min-width: 200px;
+        width: 300px;
       }
 
       .left {
@@ -776,24 +787,24 @@ body:not(.wp-admin) {
 
     .holler-box-modal {
       padding: 0;
+
+      .holler-box-modal-content{
+        width: 330px;
+      }
     }
 
     .display-flex {
       align-items: stretch;
-      justify-content: space-between;
+      //justify-content: space-between;
       gap: 0;
 
       .left {
         padding: 30px;
-
-        .holler-box-modal-content {
-          min-width: 300px;
-        }
       }
 
       .right {
         flex-shrink: 0;
-        min-width: 200px;
+        width: 300px;
         background-size: cover;
         background-position: center center;
       }
@@ -844,6 +855,11 @@ body:not(.wp-admin) {
     }
 
     .holler-box-modal {
+
+      .holler-box-modal-content{
+        width: 330px;
+      }
+
       padding: 0;
       border-radius: 5px;
       overflow: hidden;
@@ -864,7 +880,7 @@ body:not(.wp-admin) {
         flex-shrink: 0;
         background-size: cover;
         background-position: center center;
-        min-width: 200px;
+        width: 300px;
       }
 
       .right {
@@ -893,11 +909,12 @@ body:not(.wp-admin) {
         flex-shrink: 0;
         background-size: cover;
         background-position: center center;
-        min-width: 200px;
+        width: 250px;
       }
 
       .holler-box-form {
         padding: 30px;
+        width: 250px;
         background-color: $primary-blue-7;
       }
     }
@@ -909,6 +926,12 @@ body:not(.wp-admin) {
     .holler-box-modal {
       background-size: cover;
       background-position: center center;
+
+      .holler-box-modal-content {
+        width: 400px;
+        //padding: 30px;
+        //background: rgba( 255, 255, 255, 0.8);
+      }
     }
 
   }
@@ -946,15 +969,39 @@ body:not(.wp-admin) {
 
   form.holler-box-form {
 
-    display: flex;
-    gap: 10px;
-    align-items: stretch;
-    min-width: 550px;
+
+    .fields {
+      display: flex;
+      gap: 10px;
+      align-items: stretch;
+    }
 
     &.vertical {
-      display: grid;
-      grid-auto-rows: 1fr 1fr 1fr;
-      min-width: 300px;
+
+      .fields {
+        display: grid;
+        grid-auto-rows: 1fr;
+      }
+
+      &.has-gdpr .fields {
+        grid-template-rows: 1fr 1fr min-content 1fr;
+      }
+    }
+
+    label.holler-gdpr-consent{
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+
+      span {
+        line-height: 1.1;
+      }
+    }
+
+    &.horizontal {
+      label.holler-gdpr-consent{
+        margin-top: 10px;
+      }
     }
 
     input.holler-box-input {
@@ -1067,10 +1114,12 @@ body:not(.wp-admin) {
       }
 
       form.holler-box-form.horizontal {
-        display: grid;
-        grid-auto-rows: 1fr;
-        min-width: 0;
-        width: 100%;
+
+        .fields {
+          display: grid;
+          grid-auto-rows: 1fr;
+          width: 100%;
+        }
 
         .holler-box-input {
           max-width: 100% !important;
