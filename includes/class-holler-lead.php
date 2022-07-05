@@ -13,6 +13,7 @@ class Holler_Lead {
 	public $last_name = '';
 	public $location = '';
 	public $referrer = '';
+	public $gdpr_consent = false;
 
 	public function __construct( WP_REST_Request $request ) {
 		$this->name  = sanitize_text_field( $request->get_param( 'name' ) );
@@ -23,6 +24,7 @@ class Holler_Lead {
 		$this->last_name = trim( $parts[1] );
 		$this->location = $request->get_param('location');
 		$this->referrer = $request->get_param('referer');
+		$this->gdpr_consent = $request->get_param('gdpr_consent') === 'yes';
 	}
 
 	/**

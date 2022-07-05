@@ -72,7 +72,6 @@ class Holler_Integrations {
 		self::register( 'email', [ $this, 'email' ] );
 		self::register( 'groundhogg', [ $this, 'groundhogg' ] );
 		self::register( 'webhook', [ $this, 'webhook' ] );
-//		self::register( 'user', [ $this, 'user' ] );
 
 		do_action( 'hollerbox/register_integrations' );
 	}
@@ -166,6 +165,7 @@ class Holler_Integrations {
 			'last_name'  => $lead->get_last_name(),
 			'email'      => $lead->get_email(),
 			'ip4'        => $lead->get_ip(),
+			'gdpr_consent' => $lead->gdpr_consent,
 		];
 
 		if ( $props['method'] === 'get' ) {
@@ -205,11 +205,12 @@ class Holler_Integrations {
 		] );
 
 		$body = [
-			'full_name'  => $lead->get_name(),
-			'first_name' => $lead->get_first_name(),
-			'last_name'  => $lead->get_last_name(),
-			'email'      => $lead->get_email(),
-			'ip4'        => $lead->get_ip(),
+			'full_name'    => $lead->get_name(),
+			'first_name'   => $lead->get_first_name(),
+			'last_name'    => $lead->get_last_name(),
+			'email'        => $lead->get_email(),
+			'ip4'          => $lead->get_ip(),
+			'gdpr_consent' => $lead->gdpr_consent,
 		];
 
 		$headers                 = [];
@@ -255,6 +256,13 @@ class Holler_Integrations {
 		}
 
 		$contact->add_tag( map_deep( $props['tags'], 'sanitize_text_field' ) );
+
+		// Gave consent
+		if ( $lead->gdpr_consent ) {
+			$contact->set_marketing_consent();
+			$contact->set_gdpr_consent();
+			$contact->set_terms_agreement();
+		}
 
 		\Groundhogg\after_form_submit_handler( $contact );
 
