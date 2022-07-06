@@ -425,15 +425,9 @@ body:not(.wp-admin) {
       max-width: 500px;
     }
 
-    .holler-box-modal-title {
-      width: max-content;
-      margin: 0;
-      line-height: 1;
-      font-size: 36px;
-      font-weight: bold;
-    }
-
     .holler-box-modal-content {
+
+      box-sizing: border-box;
 
       p, li, ul, ol {
         font-size: 18px;
@@ -672,8 +666,7 @@ body:not(.wp-admin) {
     }
 
     .holler-box-modal {
-      width: 330px;
-      min-width: 330px;
+      width: 400px;
       padding: 20px 10px 10px 10px;
       box-shadow: $box-shadow;
       border-radius: 5px;
@@ -914,7 +907,7 @@ body:not(.wp-admin) {
 
       .holler-box-form {
         padding: 30px;
-        width: 250px;
+        min-width: 250px;
         background-color: $primary-blue-7;
       }
     }
@@ -929,8 +922,6 @@ body:not(.wp-admin) {
 
       .holler-box-modal-content {
         width: 400px;
-        //padding: 30px;
-        //background: rgba( 255, 255, 255, 0.8);
       }
     }
 
@@ -1032,6 +1023,14 @@ body:not(.wp-admin) {
 
 @media (max-width: 600px) {
 
+
+  .holler-box.holler-popup {
+    .holler-box-modal {
+      width: calc( 100vw - 60px );
+      max-height: calc( 100vw - 60px );
+    }
+  }
+
   .holler-box.holler-notification-box {
     .positioner {
       left: 0;
@@ -1100,6 +1099,10 @@ body:not(.wp-admin) {
   .holler-box:not(.holler-notification-box) {
 
     .holler-box-modal {
+
+      .holler-box-modal-content {
+        width: 100%;
+      }
 
       overflow: auto !important;
       max-height: calc(100vh - 40px);

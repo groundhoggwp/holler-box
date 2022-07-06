@@ -26,7 +26,7 @@ class Holler_Popup implements JsonSerializable {
 	 * @return array|mixed
 	 */
 	public function __get( $key ) {
-		return $this->post->$key ?? $this->settings[ $key ];
+		return $this->post->$key ?? ( $this->settings[ $key ] ?? false );
 	}
 
 	/**

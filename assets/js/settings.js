@@ -869,6 +869,12 @@
       onSkip: (p, setPage) => setPage('/settings/'),
       onMount: (params, setPage) => {
 
+        settings.set({
+          setup_complete: true
+        })
+
+        saveSettings()
+
         $('#new-popup').on('click', e => {
 
           window.open(HollerBox.admin_url + '/post-new.php?post_type=hollerbox', '_self')
@@ -900,8 +906,15 @@
         this.initFromSlug()
       }
       else {
-        history.pushState({}, '', `#/settings/`)
-        this.initFromSlug()
+
+        if ( settings.setup_complete ){
+          history.pushState({}, '', `#/settings/`)
+          this.initFromSlug()
+        } else {
+          history.pushState({}, '', `#/s/start`)
+          this.initFromSlug()
+        }
+
       }
 
       window.addEventListener('popstate', (e) => {

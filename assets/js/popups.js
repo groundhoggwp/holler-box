@@ -802,7 +802,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup-custom">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-custom">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -836,7 +836,7 @@
         if (submitted) {
           // language=HTML
           return `
-              <div id="${ id }" class="holler-box holler-popup-standard">
+              <div id="${ id }" class="holler-box holler-popup holler-popup-standard">
                   ${ overlay_enabled ? overlay() : '' }
                   <div class="positioner ${ position }">
                       <div class="holler-box-modal">
@@ -850,7 +850,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup-standard">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-standard">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -893,7 +893,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup-image-left">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-image-left">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -943,7 +943,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup-image-right">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-image-right">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -992,7 +992,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup-form-below">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-form-below">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -1040,7 +1040,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup-progress-bar">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-progress-bar">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -1094,7 +1094,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup-image-beside-text-top">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-image-beside-text-top">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -1140,7 +1140,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup-full-image-background">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-full-image-background">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -1158,50 +1158,6 @@
                     </div>
                 </div>
             </div>`
-      },
-      onOpen: popup => {
-        CommonActions.formSubmitted(popup)
-        CommonActions.maybeDisableScrolling(popup)
-      },
-      onClose: CommonActions.enableScrolling,
-    },
-    popup_text_top_with_color_background: {
-      render: ({
-        id = '',
-        position = 'center-center',
-        animation = 'appear',
-        post_content = '',
-        button_text = 'Subscribe',
-        name_placeholder = 'Name',
-        email_placeholder = 'Email',
-        overlay_enabled = true,
-        submitted = false,
-        success_message = '',
-      }) => {
-
-        // language=HTML
-        return `
-            <div id="${ id }" class="holler-box holler-popup-text-with-color-background">
-                ${ overlay_enabled ? overlay() : '' }
-                <div class="positioner ${ position }">
-                    <div class="animation ${ animation }">
-                        <div class="holler-box-modal">
-                            ${ closeButton() }
-                            <div class="holler-box-modal-title-wrap">
-                                ${ __content(submitted ? success_message : post_content) }
-                            </div>
-                            ${ submitted ? '' : form({
-                                direction: 'vertical',
-                                button_text,
-                                name_placeholder,
-                                email_placeholder,
-                            }) }
-                        </div>
-                        ${ credit() }
-                    </div>
-                </div>
-            </div>
-        `
       },
       onOpen: popup => {
         CommonActions.formSubmitted(popup)

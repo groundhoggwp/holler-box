@@ -304,12 +304,8 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   display: block;
   max-width: 500px;
 }
-.holler-box .holler-box-modal .holler-box-modal-title {
-  width: max-content;
-  margin: 0;
-  line-height: 1;
-  font-size: 36px;
-  font-weight: bold;
+.holler-box .holler-box-modal .holler-box-modal-content {
+  box-sizing: border-box;
 }
 .holler-box .holler-box-modal .holler-box-modal-content p, .holler-box .holler-box-modal .holler-box-modal-content li, .holler-box .holler-box-modal .holler-box-modal-content ul, .holler-box .holler-box-modal .holler-box-modal-content ol {
   font-size: 18px;
@@ -495,8 +491,7 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   font-size: 18px;
 }
 .holler-box.holler-notification-box .holler-box-modal {
-  width: 330px;
-  min-width: 330px;
+  width: 400px;
   padding: 20px 10px 10px 10px;
   box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.15);
   border-radius: 5px;
@@ -668,7 +663,7 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 }
 .holler-box.holler-popup-image-beside-text-top .display-flex .holler-box-form {
   padding: 30px;
-  width: 250px;
+  min-width: 250px;
   background-color: rgba(0, 117, 255, 0.07);
 }
 .holler-box.holler-popup-full-image-background .holler-box-modal {
@@ -745,6 +740,11 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 }
 
 @media (max-width: 600px) {
+  .holler-box.holler-popup .holler-box-modal {
+    width: calc( 100vw - 60px );
+    max-height: calc( 100vw - 60px );
+  }
+
   .holler-box.holler-notification-box .positioner {
     left: 0;
     right: 0;
@@ -782,6 +782,9 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   .holler-box:not(.holler-notification-box) .holler-box-modal {
     overflow: auto !important;
     max-height: calc(100vh - 40px);
+  }
+  .holler-box:not(.holler-notification-box) .holler-box-modal .holler-box-modal-content {
+    width: 100%;
   }
   .holler-box:not(.holler-notification-box) .holler-box-modal .display-flex {
     flex-direction: column;
