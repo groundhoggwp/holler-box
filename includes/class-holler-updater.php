@@ -20,9 +20,27 @@ class Holler_Updater {
 	public function v_2_0() {
 
 		// Migrate some settings over
-		Holler_Settings::instance()->update( 'license', get_option( 'hwp_pro_edd_license' ) );
-		Holler_Settings::instance()->update( 'is_licensed', get_option( 'hwp_pro_edd_license_status' ) === 'valid' );
-		Holler_Settings::instance()->update( 'credit_disabled', get_option( 'hwp_powered_by' ) );
+		Holler_Settings::instance()->update( 'license', get_option( 'hwp_pro_edd_license' ), false );
+		Holler_Settings::instance()->update( 'is_licensed', get_option( 'hwp_pro_edd_license_status' ) === 'valid', false );
+		Holler_Settings::instance()->update( 'credit_disabled', get_option( 'hwp_powered_by' ), false );
+
+		$options = [
+			'hwp_ac_api_key',
+			'hwp_ck_api_key',
+			'hwp_mc_api_key',
+			'hwp_powered_by',
+		];
+
+		// If any of the settings were set and are not empty, this person is a legacy user
+		foreach ( $options as $option ){
+			$val = get_option($option);
+			if ( ! empty($val)){
+				Holler_Settings::instance()->update( 'is_legacy_user', true, false );
+				break;
+			}
+		}
+
+		Holler_Settings::instance()->commit();
 
 		// Create the reports table
 		Holler_Reporting::instance()->maybe_create_table();

@@ -153,6 +153,8 @@
     cookie_name: 'viewed_cookie_policy',
     cookie_value: 'yes',
     cookie_compliance: false,
+    is_legacy_user: false,
+    setup_complete: false,
     license: '',
     is_licensed: false,
     credit_disabled: false,
@@ -186,10 +188,6 @@
   const saveSettings = () => {
     return apiPost(HollerBox.routes.settings, {
       settings,
-    }).then(r => {
-      dialog({
-        message: 'Settings saved!',
-      })
     })
   }
 
@@ -206,6 +204,7 @@
           ['https://hollerwp.com/pricing/', 'dashicons dashicons-store', 'Pricing'],
           ['https://hollerwp.com/account/support/', 'dashicons dashicons-sos', 'Support'],
           ['https://hollerwp.com/account/', 'dashicons dashicons-admin-users', 'My Account'],
+          ['https://hollerwp.com/account/', 'dashicons dashicons-star-filled', 'What\'s new in 2.0?'],
         ]
 
         let expiry
@@ -309,10 +308,12 @@
                                     className: 'setting-toggle',
                                     checked: settings.gdpr_enabled,
                                 }) }</label>
-                            <p>${ __('If you are using a cookie consent plugin such as <b>CookieYes</b> then this will prevent popups until consent is given.', 'holler-box') }</p>
+                            <p>
+                                ${ __('If you are using a cookie consent plugin such as <b>CookieYes</b> then this will prevent popups until consent is given.',
+                                        'holler-box') }</p>
                             <div class="display-flex gap-20">
                                 <div>
-                                    <p><b><label>${__('Cookie Name')}</label></b></p>
+                                    <p><b><label>${ __('Cookie Name') }</label></b></p>
                                     ${ input({
                                         id: 'cookie-name',
                                         className: 'full-width',
@@ -321,7 +322,7 @@
                                     <p>${ __('Name of the cookie where consent is stored.', 'holler-box') }</p>
                                 </div>
                                 <div>
-                                    <p><b><label>${__('Cookie Value')}</label></b></p>
+                                    <p><b><label>${ __('Cookie Value') }</label></b></p>
                                     ${ input({
                                         id: 'cookie-value',
                                         className: 'full-width',
@@ -330,7 +331,7 @@
                                     <p>${ __('Value of the cookie indicating consent was given.', 'holler-box') }</p>
                                 </div>
                             </div>
-                            
+
                         </div>
                     </div>
                     <div class="holler-panel danger-zone">
@@ -435,7 +436,11 @@
         $('#license').on('input', e => license = e.target.value)
 
         $('#save-settings').on('click', e => {
-          saveSettings()
+          saveSettings().then(r => {
+            dialog({
+              message: 'Settings saved!',
+            })
+          })
         })
 
         $('.setting-toggle').on('change', e => {
@@ -465,6 +470,180 @@
       },
       onMount: (params, setPage) => {
         $('#start').on('click', e => setPage('/s/role/'))
+      },
+    }),
+
+    setupPage({
+      title: __('Changes in HollerBox 2.0'),
+      slug: /legacy-user/,
+      showButtons: false,
+      render: () => {
+        // language=HTML
+        return `
+            <p>
+                ${ __('Hi there, we have made some big changes to HollerBox in 2.0 that might affect you! Please read the changes to make sure your popups continue to function as expected.') }</p>
+            <h2>🍾 ${ __('WHAT\'S NEW IN HOLLERBOX 2.0?') }</h2>
+            <p>
+                ${ __('For a full breakdown, we recommend reading our <a href="https://hollerwp.com/improvements-are-coming-with-hollerbox-2-0-new-editor-new-features-reporting-and-more/" target="_blank">2.0 press release</a>.') }</p>
+            <ul>
+                <li>${ __('New visual popup builder') }</li>
+                <li>${ __('New visibility controls') }</li>
+                <li>${ __('More/New layouts and templates') }</li>
+                <li>${ __('Groundhogg Integration') }</li>
+                <li>${ __('Zapier Integration') }</li>
+                <li>${ __('Webhook Integration') }</li>
+                <li>${ __('Better emails') }</li>
+                <li>${ __('And more!') }</li>
+            </ul>
+            <h2>⚠️ BREAKING CHANGES</h2>
+            <p>
+                ${ __('The underlying architecture of HollerBox has changed drastically, so we recommend reviewing your active popups to ensure that they were migrated successfully.') }</p>
+            <p>
+                ${ __('Some features have been removed from the <b>free</b> version of HollerBox and moved to <b>Pro</b>.') }</p>
+            <p><b>${ __('What was moved to Pro?') }</b></p>
+            <ul>
+                <li>${ __('ActiveCampaign integration') }</li>
+                <li>${ __('ConvertKit integration') }</li>
+                <li>${ __('MailChimp Integration') }</li>
+                <li>${ __('MailPoet Integration') }</li>
+            </ul>
+            <p><b>${ __('Legacy users & Pro users') }</b></p>
+            <p>
+                ${ __('If you have a pro license, <a href="#" target="_blank"><u>install or update HollerBox Pro</u></a> to regain access to these integrations immediately (if you not have already done so).') }</p>
+            <p>
+                ${ __('If you do not have a Pro license, but are dependent on these integrations you can obtain a <a href="#" class="legacy-license"><u>Legacy License</u></a> for free until <b>August 31st, 2022</b>.') }</p>
+            <p><b>${ __('Why were these features removed from the free version?') }</b></p>
+            <p>
+                ${ __('We want HollerBox to be a sustainable business, so we added some features to the free version, while moving others to paid.') }</p>
+            <p style="margin-top: 30px">
+                <button class="holler-button primary" id="continue">${ __('Sounds good! Continue to HollerBox') }
+                </button>
+                <button class="holler-button secondary text legacy-license" >${ __('Apply for a Legacy License') }
+                </button>
+            </p>
+        `
+      },
+      onMount: (params, setPage) => {
+
+        $('.legacy-license').on('click', e => {
+          e.preventDefault()
+          setPage('/legacy-license/')
+        })
+
+        $('#continue').on('click', e => {
+
+          settings.set({
+            legacy_user_agreed: true,
+          })
+
+          saveSettings()
+
+          setPage('/s/start/')
+        })
+      },
+    }),
+
+    setupPage({
+      title: __('Obtain a Legacy license'),
+      slug: /legacy-license\/?$/,
+      showButtons: false,
+      render: () => {
+        // language=HTML
+        return `
+            <p>
+                ${ __('We want to make obtaining a Legacy License as simple as possible so you can continue to be successful with HollerBox!') }</p>
+            <h2>${ __('WHAT IS A LEGACY LICENSE?') }</h2>
+            <p>
+                ${ __('A Legacy license will give you access to features that used to be free but are now part of the Pro version, specifically...') }</p>
+            <ul>
+                <li>${ __('ActiveCampaign integration') }</li>
+                <li>${ __('ConvertKit integration') }</li>
+                <li>${ __('MailChimp Integration') }</li>
+                <li>${ __('MailPoet Integration') }</li>
+            </ul>
+            <p>${__('The Legacy License...')}</p>
+            <ul>
+                <li>${ __('Does not expire') }</li>
+                <li>${ __('Can be used on up to 3 sites') }</li>
+            </ul>
+            <h2>What is NOT included with a Legacy License</h2>
+            <p>With a Legacy license you will not receive other Pro features such as...</p>
+            <ul>
+                <li>${ __('Premium support') }</li>
+                <li>${ __('Advanced layouts and templates') }</li>
+                <li>${ __('Popup Scheduling') }</li>
+                <li>${ __('Inactivity Trigger') }</li>
+                <li>${ __('And more...') }</li>
+            </ul>
+            <h2>${ __('Obtain your license') }</h2>
+            <p>Obtain a license by filling out the details below.</p>
+            <div class="inside display-flex column gap-10">
+                <div class="holler-rows-and-columns">
+                    <div class="row">
+                        <div class="col">
+                            <label>Your Name</label>
+                            ${input({
+                                placeholder: 'John Doe',
+                                name: 'name',
+                                className: 'holler-input'
+                            })}
+                        </div>
+                        <div class="col">
+                            <label>Your Email Address</label>
+                            ${input({
+                                type: 'email',
+                                placeholder: 'Your email address',
+                                value: setup_answers.email,
+                                name: 'email',
+                                className: 'holler-input'
+                            })}
+                        </div>
+                    </div>
+                </div>
+                <button id="apply" class="holler-button primary medium">${__('Apply Now')}</button>
+            </div>
+            ${skipButton('Actually, I don\'t need a legacy license')}
+        `
+      },
+      onSkip: (p, setPage) => setPage('/s/start/'),
+      onMount: (params, setPage) => {
+
+        let data = {
+          name: '',
+          email: setup_answers.email,
+        }
+
+        $('.holler-input').on('change input', e => {
+          data[e.target.name] = e.target.value
+        })
+
+        $('#apply').on('click', e => {
+
+          apiPost( HollerBox.routes.root + '/telemetry/legacy', data )
+
+          setPage('/legacy-license/next/')
+
+        })
+
+      },
+    }),
+
+    setupPage({
+      title: __('Use Your Legacy license'),
+      slug: /legacy-license\/next/,
+      showButtons: false,
+      render: () => {
+        // language=HTML
+        return `
+            <p>${ __('We are sending you an email to your inbox with instructions on how to obtain your legacy license and use it!') }</p>
+            <p>${ __('The subject line is <b>"[HollerBox] Legacy License Next Steps"</b>') }</p>
+            <p>${ __('You have until <b>August 31st, 2022</b> to claim and activate your Legacy License.') }</p>
+            ${skipButton('✅ I understand')}
+        `
+      },
+      onSkip: (p, setPage) => setPage('/s/start/'),
+      onMount: (params, setPage) => {
+
       },
     }),
 
@@ -870,7 +1049,7 @@
       onMount: (params, setPage) => {
 
         settings.set({
-          setup_complete: true
+          setup_complete: true,
         })
 
         saveSettings()
@@ -907,14 +1086,21 @@
       }
       else {
 
-        if ( settings.setup_complete ){
+        // Setup was complete
+        if (settings.setup_complete) {
           history.pushState({}, '', `#/settings/`)
           this.initFromSlug()
-        } else {
+        }
+        // Legacy user, send to legacy setup
+        else if ( settings.is_legacy_user ) {
+          history.pushState({}, '', `#/legacy-user/`)
+          this.initFromSlug()
+        }
+        // Start guided setup
+        else {
           history.pushState({}, '', `#/s/start`)
           this.initFromSlug()
         }
-
       }
 
       window.addEventListener('popstate', (e) => {

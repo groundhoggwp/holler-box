@@ -76,6 +76,8 @@ class Holler_Settings {
 			case 'delete_all_data':
 			case 'telemetry_subscribed':
 			case 'is_licensed':
+			case 'is_legacy_user':
+			case 'legacy_user_agreed':
 				$value = boolval( $value );
 				break;
 			case 'gdpr_text':

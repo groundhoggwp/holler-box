@@ -1,150 +1,232 @@
-=== Holler Box - Lightweight popup plugin ===
+=== Fast & Effective Popups & Lead-Generation for WordPress - HollerBox ===
 
-Contributors: scottopolis
-Tags: popup, optin, lead generation, email opt-in, pop up
-Requires at least: 4.5
-Tested up to: 5.8.2
-Stable tag: 1.5.8
+Contributors: trainingbusinesspros, groundhogg
+Tags: popups, optin, popup, email, marketing
+Requires at least: 5.0
+Tested up to: 6.0
+Stable tag: 2.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Popups with lead generation forms that won't slow down your site.
+Get more leads and sales with effective popups that convert! HollerBox is the fastest and easiest to use popup plugin for WordPress.
 
 == Description ==
 
-Holler Box is a popup plugin focused on being lightweight and easy to use.
+WordPress Popups, Lead-Generation, & Analytics
 
-## Included for free
+👉 [Official Site](https://hollerwp.com/) | 📃 [Documentation](https://hollerbox.helpscoutdocs.com/) | 💳 [Pricing](https://hollerwp.com/pricing/)
 
-- Add unlimited popups
-- Exit-intent popups
-- Choose between subtle notification bubble or lightbox popup
-- Integrate with MailChimp, ConvertKit, MailPoet, Drip, Active Campaign, or a custom form
-- Limit to certain pages
-- Time delay
-- Scroll triggers
-- Show to logged in/out and new or returning visitors
-- Choose between 3 customizable popup template designs
-- Use shortcodes and WordPress content in your popups
-- Conversion rate analytics
-- Add forms and shortcodes to your popups
-- Bonus! Faux chat email capture
-- Plugin integrations: Restrict Content Pro, Paid Memberships Pro, MemberPress, and most membership plugins
-- Forms plugins like Ninja Forms, Gravity Forms, WPForms, Contact Form 7, etc.
-- eCommerce buy buttons
-- Lots more
+## Join 6,000+ Small Businesses in 50+ Countries!
 
-Holler Box is trusted by some of the best brands in WordPress, like Memberpress, SearchWP, Slocum Studio, Pixel Jar, and more.
+HollerBox Popups & Lead-Generation for WordPress will help you generate more leads and sales with easy to implement popups!
 
-## Holler Box Pro
+Our popup builder is the perfect alternative for *OptinMonster*, *PopupMaker*, *MailOptin*, and more!
 
-Here's a short list of features available only in Pro:
+HollerBox is fully self-hosted, meaning no limits on the number of popups, leads, or impressions.
 
-- <a href="https://hollerwp.com/downloads/sale-notification-popup/" target="_blank">Sale notification popups</a> (Scott just bought Holler Box Pro)
-- Content upgrades
-- More popup designs
-- Advanced targeting filters, like choose a post or page to display the popup
-- Scheduling
-- Header banner
-- Support and updates
-- Lots more...
+If you are an Agency, e-Commerce Store, or Small Business that needs highly effective popups, then HollerBox is for you!
 
-<a href="http://hollerwp.com/pro" target="_blank">Get the Pro version here</a>.
+## 💸 Eliminating the "Success Tax"
 
-== Installation ==
+Other SaaS (Software as a Service) Popup tools will charge you more as your grow.
 
-Install and activate this plugin.
+But not us!
 
-Visit the Holler Box menu item, and add a new box. Give it a title (not displayed on the front end), and add your content.
+When using the HollerBox popups free or with any of our paid plans, _we'll never charge you more_!
 
-Content can be pretty much anything, but keep your message short.
+### 🚫 There are *no limits* on:
 
-**Display**
+* Number of popups
+* Number of impressions
+* Number of leads
 
-- Activate: Choose to activate this item on publish.
-- Position: the notification position, or banner
-- Choose your colors
-- Show email opt-in: default sends to your email address, or choose a provider or custom HTML form. Details below.
-- Default: sends to the email address you enter in the settings.
-- MailChimp integration: add your API key in the settings, then your list ID (Get your list ID in your MailChimp account under Lists => Settings => List name and defaults => List ID on right side of screen) 
-- ConvertKit: visit Holler Box => Settings, enter <a href="https://app.convertkit.com/account/edit" target="_blank">your API key</a>. Choose ConvertKit when creating your new Holler Box, then enter your form ID. Find your form ID by visiting your signup form, then copy the numbers in the url (or in the embed code).
-- Show chat: show the (fake) live chat
+When using HollerBox you will **never** be limited on the amount of **anything**! Unlike other popup plugins.
 
-**Advanced Settings**
+## 🔎 At A Glance
 
-- Pages: choose all pages, or select certain pages and begin typing a page title. It will automatically populate a drop down list, simply click the page title or enter page titles comma separated like this: Home, Features, Pricing
-- New or returning: show to only new visitors (since you activated the plugin), or returning visitors. Tracked with the hwp_visit cookie.
-- When should we show: after the page loads, show immediately, with a delay, or based on user scroll.
-- When should it disappear: if you want the notification to show briefly and then disappear automatically, enter a delay here.
-- How often show we show it: a visitor will be shown your message, then you can choose to continue showing it, or hide it based on number of days or user interaction. Interaction is either submitting an email, or clicking a link with a class of hwp-interaction.
-- Hide the button: the button appears when the notification is hidden, you can choose to not display the button. If the notification is hidden, the user will not be able to reopen it.
-- Gravatar email: enter an email associated with a Gravatar account, or leave blank to hide the avatar.
+* Easy to master visual popup builder.
+* Integrate with Groundhogg, Zapier, Webhooks, and send emails.
+* Trigger popups based on user behavior.
+* Conditionally display popups based on page and behavior.
+* Create the perfect popup for any occasion
+* Own your data so you’ll never be at the mercy of a SaaS company again.
+* Control your expenses! There are NO LIMITS on the number of impressions or leads you get! HollerBox grows with you! Your costs do NOT increase when you grow. We don’t tax you for scaling up!
+* Translate & configure into any language.
 
-Developers can contribute on [Github](https://github.com/scottopolis/holler-box)
+## 🤷‍♂️ Who can benefit from HollerBox Popups?
 
-== FAQ ==
+The HollerBox Popup suite is being used by a wide variety of 6,000+ businesses in over 50+ countries. The diversity of use cases is huge!
 
-*Are there any limitations?*
+If you're business is using WordPress, you can use HollerBox.
 
-No, you can create unlimited forms using all of the features described on this page. The <a href="http://hollerwp.com/pro" target="_blank">Pro version</a> offers optional extended functionality.
+These kinds of businesses are using HollerBox right now...
 
-*Does it use the wp_mail() function to send mail?* 
+* Digital Marketing Agencies
+* WordPress Freelancers
+* LifterLMS, LearnDash, or TutorLMS sites
+* WooCommerce Sites
+* WaaS Multisite Platforms
+* Blogs and News Sites
+* Coaches and Trainers
+* Educators and Public Speakers
+* Business Directories
+* And many more!
 
-Yes, if you have an SMTP plugin like Postman, Mailgun, or other mail plugin it will automatically use that to send mail.
+## Features
 
-*How do I setup MailChimp?*
+Here are the tools you can use to launch your popup, grow your list, and scale your business faster with HollerBox Popups!
 
-First, add your API key under Holler Box => Settings.
+### 🕺 Straightforward Popup Builder
 
-You can find your API key in your MailChimp account under Account => Extras => API Keys. Generate a new one if it doesn't exist.
+* Select from a wide variety of popup layouts and templates
+ * Slide in notifications (with/without optin)
+ * Fake chat conversation (simple chatbot)
+ * Lightboxes
+ * Progress bar
+ * Opt-in Forms
+* Create your unique offer
+* Style your popup with our color and font settings
+* Get exactly what you want with custom CSS
 
-Save your API key.
+### 📧 Quick & Easy Integrations
 
-Next, in your Holler Box, choose Mailchimp as the opt-in provider. Add your list ID. You can find this under Lists => Your List => Settings => List name and defaults. Look on the right side of the screen for List ID.
+* Integrate with your Groundhogg, or other CRMs
+* Send email when leads convert
+* Integrate with Zapier & Webhooks
 
-Copy/paste that into the MailChimp list ID field and save.
+### 👀 Robust Visibility Controls
 
-<strong>How do I find my ConvertKit form ID and API key?</strong>
+* Conditionally display your popup on posts, pages, and custom post types
+* Add as many display rules as necessary
+* Both *Include* & *Exclude* rules
+* Filter out visibility based on user behaviour
 
-Your API key is on your account page.
+### 🚀 Trigger Your Popups
 
-To get your form ID, visit Forms => your form. Look in the browser address bar, it should be something like this:
+* Trigger popups from element click
+* Trigger popups from time on page
+* Trigger popups from scroll percentage
+* Trigger popups from exit intent
 
-https://app.convertkit.com/landing_pages/445667/edit
+### 📈 Analytics & Reporting
 
-That number is the form ID, in this case it's 445667. Enter that number as the ConvertKit form ID.
+* Track your popups in realtime
+* See conversion rates, and the number of impressions over time
+* Filter reports based on date
+* See which pages convert highest
 
-*How do I setup MailPoet?*
+### 🇪🇺 GDPR Ready
 
-Install MailPoet, version 3 or later. Create a new Holler Box, and select MailPoet as the email provider. Choose your list and save, new subscribers will be added to this list.
+* Simple GDPR features to keep you compliant.
+* Hide popups and prevent cookies until cookie consent is given.
+* Compatible with CookieYes plugin.
 
-**Troubleshooting**
+## 🙌 Get more with HollerBox PRO!
 
-*Emails are not sending*
+HollerBox Pro adds more popups, more triggers, and more integrations!
 
-The wp_mail() function is unreliable on many hosts. Install <a href="https://wordpress.org/plugins/postman-smtp/" target="_blank">Postman</a> or another SMTP plugin to use a more reliable mail service.
+Get all Pro features at one [yearly flat rate price](https://hollerwp.com/pricing/).
 
-*Email signups are not working* 
+* Trigger popups based on inactivity
+* Banner and Footer Bar layout
+* FOMO (sale notifications)
+* Sidebar layout
+* Popup Scheduling _(Date Scheduling)_
+* CRM Integrations
+ * ActiveCampaign
+ * ConvertKit
+ * Drip
+ * HubSpot
+ * Mailchimp
+ * MailPoet
 
-Make sure your email form does not have a required field that is not displayed. For example, if you required first and last name, it will not work. Change your form to only require email, the rest of the fields optional. If you need extra fields, use the custom HTML form option.
+## Milestones
+
+* Serving 6,000+ businesses in 50+ countries.
+* ⭐⭐⭐⭐⭐ rated software and support!
+* Acquired by [Groundhogg Inc.](https://www.groundhogg.io/press/groundhogg-acquires-hollerbox/)
 
 == Screenshots ==
 
-1. Notification box
+1. Our Visual Popup Builder makes it fast and easy to create high converting popups!
 
-2. Popup
+2. Conditionally display your popups based on site location and behaviour
 
-3. (Fake) Live chat with email capture
+3. Trigger popups based on exit intent, time on page, element click, or scroll percentage
 
-4. Purchase notification (Pro)
+4. Integrate with Groundhogg, Webhooks, Zapier, or send emails
 
-5. Settings 1
+5. Lightbox popup with Optin-Form
 
-6. Settings 2
+6. (Fake) Live chat with email capture
 
-7. Conversion Analytics
+7. Slide-in notification with email capture
+
+8. Analytics dashboard shows how effective your popups are
+
+9. Settings for GDPR & Cookie consent
+
+== Installation ==
+= Plugin Repo =
+
+* Install HollerBox
+* Activate
+* Complete the guided setup
+* Start creating popups!
+
+= FTP =
+
+* Upload the zip archive
+* Unzip
+* Activate through the plugins page
+* Complete guided setup
+* Start creating popups!
+
+== Frequently Asked Questions ==
+
+= Can I connect HollerBox to my CRM? =
+Yes, by default you can connect to Groundhogg for free, or to any CRM via Zapier.
+
+In [HollerBox Pro](https://hollerwp.com/pricing/) you can connect to...
+
+* ActiveCampaign
+* ConvertKit
+* Drip
+* HubSpot
+* Mailchimp
+* MailPoet
+
+= Does HollerBox recommend a CRM? =
+We recommend [Groundhogg](https://groundhogg.io), and open-source CRM built for WordPress.
+
+= Does HollerBox recommend an SMTP Service? =
+We recommend [MailHawk](https://mailhawk.io), the SMTP service built for WordPress.
+
+= Does HollerBox work with my theme? =
+Yes, HollerBox will work with any WordPress theme!
+
+= Does HollerBox require a monthly fee or upgrades? =
+No, you can use HollerBox for free, forever. HollerBox is a Open Source project designed to democratize popups and provide simple easy to use tools to new and none tech savvy business owners.
+That being said, our [premium upgrades](https://www.hollerwp.com/pricing/) can seriously help your business! Use our proven tools and strategies to supercharge your marketing and WordPress site!
+
+= Does HollerBox connect to Woocommerce or other plugins? =
+Yes, HollerBox can [integrated with many of the most popular WordPress plugins](https://www.hollerwp.io/pricing/) around to create an even more powerful popup experience.
+
+= Is HollerBox secure? =
+Yes, HollerBox does not store any subscriber data locally and sends all data to your CRM of choice. We follow all best WordPress security practices. Plus it's open source, so we have a large community looking out for potential weaknesses when it comes to your data.
+
+= Is HollerBox GDPR compliant? =
+Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & privacy legislation.
+
+= Where can I upgrade to Pro? =
+You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.0 =
+
+* Complete overhaul post [acquisition by Groundhogg Inc.](https://www.groundhogg.io/press/groundhogg-acquires-hollerbox/)
+* [Click here for full release notes](https://hollerwp.com/improvements-are-coming-with-hollerbox-2-0-new-editor-new-features-reporting-and-more/).
 
 = 1.5.8 =
 
@@ -219,14 +301,14 @@ Make sure your email form does not have a required field that is not displayed. 
 
 * Hide popup after user hides by default
 * Support for url redirect after submission (Pro)
-* Bug fixes 
+* Bug fixes
 
 = 1.2.0 =
 
 * Feature: Preview boxes before publishing by clicking "Preview"
 * Feature: Choose devices setting: mobile, desktop, or both
 * FOMO popup updates and new integrations
-* Bug fixes 
+* Bug fixes
 
 = 1.1.1 =
 
@@ -313,6 +395,6 @@ This is a major update, everything is backwards compatible but you may need to r
 * Email title setting
 * Various fixes
 
-= 0.4 = 
+= 0.4 =
 
 * Initial release

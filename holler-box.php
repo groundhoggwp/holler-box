@@ -66,9 +66,10 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 			new Holler_Admin();
 			new Holler_Api();
 			new Holler_Frontend();
-			new Holler_Licensing();
 			new Holler_Telemetry();
 			new Holler_Updater();
+
+			Holler_Licensing::instance();
 		}
 
 		/**
@@ -80,7 +81,7 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 		 */
 		private function setup_constants() {
 			// Plugin version
-			define( 'Holler_Box_VER', '1.5.8' );
+			define( 'Holler_Box_VER', '2.0' );
 
 			// Plugin path
 			define( 'Holler_Box_DIR', plugin_dir_path( __FILE__ ) );

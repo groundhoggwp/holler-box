@@ -167,9 +167,7 @@
     onMount()
   }
 
-  const lineChart = (id, {
-    query = {},
-  }) => {
+  const lineChart = (id, query = {}) => {
     const dates = getDatesInRange(after, before)
     const labels = dates.map(m => m.format('MMM D'))
     const data = {

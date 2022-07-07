@@ -9,8 +9,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 class Holler_Licensing {
 
 	const PRO_ITEM_ID = 132;
+	const STORE_URL = 'https://hollerwp.com';
 
-	public function __construct() {
+	public function __construct(){
+
+		if ( self::$instance ){
+			return;
+		}
+
 		add_action( 'rest_api_init', [ $this, 'init' ] );
 	}
 
@@ -29,6 +35,55 @@ class Holler_Licensing {
 			],
 		] );
 
+	}
+
+	/**
+	 * @since       0.1.0
+	 * @var         Holler_Licensing $instance
+	 */
+	private static $instance;
+
+	/**
+	 * Get active instance
+	 *
+	 * @access      public
+	 * @since       0.1.0
+	 * @return      self The one true Holler_Box
+	 */
+	public static function instance() {
+		if ( ! self::$instance ) {
+			self::$instance = new Holler_Licensing();
+		}
+
+		return self::$instance;
+	}
+
+	/**
+	 * Create an EDD updater for the pro version
+	 *
+	 * @param $file
+	 * @param $version
+	 *
+	 * @return Holler_EDD_SL_Plugin_Updater
+	 */
+	public function edd_updater( $file, $version ){
+
+		// EDD Stuff
+		return new \Holler_EDD_SL_Plugin_Updater( self::STORE_URL, $file, [
+			'version' => $version,
+			'license' => Holler_Settings::instance()->get( 'license' ),
+			'item_id' => $this->get_pro_item_id(),
+			'url'     => home_url(),
+		] );
+	}
+
+	/**
+	 * Get the ID of the item to license in the store
+	 *
+	 * @return mixed|void
+	 */
+	public function get_pro_item_id(){
+		return apply_filters( 'hollerbox/pro_item_id', self::PRO_ITEM_ID );
 	}
 
 	/**
@@ -98,10 +153,10 @@ class Holler_Licensing {
 			}
 		}
 
-		$response = wp_remote_post( 'https://hollerwp.com', [
+		$response = wp_remote_post( self::STORE_URL, [
 			'body' => [
 				'edd_action' => 'activate_license',
-				'item_id'    => self::PRO_ITEM_ID,
+				'item_id'    => $this->get_pro_item_id(),
 				'license'    => $license,
 				'url'        => home_url(),
 			]
@@ -141,10 +196,10 @@ class Holler_Licensing {
 			return true;
 		}
 
-		$response = wp_remote_post( 'https://hollerwp.com', [
+		$response = wp_remote_post( self::STORE_URL, [
 			'body' => [
 				'edd_action' => 'deactivate_license',
-				'item_id'    => self::PRO_ITEM_ID,
+				'item_id'    => $this->get_pro_item_id(),
 				'license'    => $existing_license,
 				'url'        => home_url(),
 			]

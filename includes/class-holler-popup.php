@@ -14,8 +14,12 @@ class Holler_Popup implements JsonSerializable {
 	 * @param int|WP_Post $id
 	 */
 	public function __construct( $id = false ) {
+
 		$this->setup( $id );
-		$this->maybe_upgrade_to_2_0();
+
+		// Upgrades
+		$this->maybe_upgrade_2_0();
+		$this->maybe_upgrade_2_0_integrations();
 	}
 
 	/**
@@ -345,6 +349,11 @@ class Holler_Popup implements JsonSerializable {
 		return [];
 	}
 
+	/**
+	 * Echo the CSS for this popup
+	 *
+	 * @return void
+	 */
 	public function output_css() {
 		echo $this->_get_meta( 'css' );
 	}
@@ -605,7 +614,7 @@ class Holler_Popup implements JsonSerializable {
 	 *
 	 * @return void
 	 */
-	public function maybe_upgrade_to_2_0() {
+	public function maybe_upgrade_2_0() {
 
 		// Already upgraded or is new version
 		if ( $this->_get_meta( 'template' ) || $this->is_new() ) {
@@ -898,11 +907,179 @@ class Holler_Popup implements JsonSerializable {
 		$this->update_setting( 'exclude_rules', $exclude_rules );
 		$this->update_setting( 'advanced_rules', $advanced_rules );
 
-		$integrations = [];
+		$this->_commit_post_args();
+	}
 
+	/**
+	 * Integrations upgrade path
+	 *
+	 * @throws Exception
+	 * @return void
+	 */
+	public function maybe_upgrade_2_0_integrations() {
+
+		$integrations = $this->_get_meta( 'integrations' );
+
+		// If there are existing integrations, bugger off
+		if ( ! empty( $integrations ) ){
+			return;
+		}
+
+		// Get the legacy email provider
 		$email_provider = $this->_get_meta( 'email_provider' );
 
-		if ( $email_provider === 'default' ) {
+		if ( empty( $email_provider ) ){
+			return;
+		}
+
+		$integrations = [];
+
+		if ( in_array( $email_provider, [ 'ac', 'mc', 'drip', 'mailpoet', 'ck' ] ) ) {
+
+			if ( ! class_exists( 'Holler_Pro_CRMs' ) ) {
+
+				// Pro not installed but using PRO integration
+				// Remember this site is a legacy user
+				Holler_Settings::instance()->update( 'is_legacy_user', true );
+
+				// Quit now
+				return;
+
+			} else {
+
+				switch ( $email_provider ) {
+					case 'drip':
+						// There were never any settings for Drip, kinda weird
+						$integrations[] = [
+							'type'    => 'drip',
+							'account' => '',
+							'key'     => '',
+							'tags'    => []
+						];
+						break;
+					case 'ac':
+
+						$ac_key = get_option( 'hwp_ac_api_key' );
+						$ac_url = get_option( 'hwp_ac_url' );
+						$ac_acc = explode( '.', parse_url( $ac_url, PHP_URL_HOST ) )[0];
+
+						$list_id = $this->_get_meta( 'ac_list_id' );
+
+						$res = Holler_Pro_CRMs::activecampaign_v1( [
+							'account'  => $ac_acc,
+							'key'      => $ac_key,
+							'endpoint' => 'list_view',
+							'body'     => [
+								'id' => $list_id
+							]
+						] );
+
+						if ( is_wp_error( $res ) ) {
+							break;
+						}
+
+						$integrations[] = [
+							'type'    => 'activecampaign',
+							'key'     => $ac_key,
+							'account' => $ac_acc,
+							'lists'   => [
+								[
+									'id'   => $list_id,
+									'text' => $res->name
+								]
+							],
+							'tags'    => []
+						];
+						break;
+					case 'ck':
+
+						$ck_key  = get_option( 'hwp_ck_api_key' );
+						$form_id = $this->_get_meta( 'ck_id' );
+						$res     = Holler_Pro_CRMs::convertkit( [
+							'endpoint' => 'forms',
+							'key'      => $ck_key,
+							'method'   => 'GET',
+						] );
+
+						if ( is_wp_error( $res ) ) {
+							break;
+						}
+
+						$forms = $res->forms;
+
+						$form = array_filter( $forms, function ( $form ) use ( $form_id ) {
+							return $form->id == $form_id;
+						} );
+
+						$integrations[] = [
+							'type'  => 'convertkit',
+							'key'   => $ck_key,
+							'forms' => [
+								[
+									'id'   => $form_id,
+									'text' => $form[0]->name
+								]
+							]
+						];
+						break;
+					case 'mc':
+						$mc_key = get_option( 'hwp_mc_api_key' );
+
+						$list_id = $this->_get_meta( 'mc_list_id' );
+
+						$res = Holler_Pro_CRMs::mailchimp( [
+							'key'      => $mc_key,
+							'endpoint' => 'lists/' . $list_id,
+							'body'     => [
+								'fields' => 'id,name'
+							]
+						] );
+
+						if ( is_wp_error( $res ) ) {
+							break;
+						}
+
+						$integrations[] = [
+							'type'  => 'mailchimp',
+							'key'   => $mc_key,
+							'lists' => [
+								[
+									'id'   => $list_id,
+									'text' => $res->name
+								]
+							],
+							'tags'  => []
+						];
+						break;
+					case 'mailpoet':
+
+						if ( ! class_exists( '\MailPoet\API\API' ) ) {
+							break;
+						}
+
+						$list_id = $this->_get_meta( 'mailpoet_list_id' );
+
+						$api   = \MailPoet\API\API::MP( 'v1' );
+						$lists = $api->getLists();
+
+						$list = array_filter( $lists, function ( $list ) use ( $list_id ) {
+							return $list['id'] == $list_id;
+						} );
+
+						$integrations[] = [
+							'type'  => 'mailpoet',
+							'lists' => [
+								[
+									'id'   => $list_id,
+									'text' => $list[0]['name']
+								]
+							],
+						];
+
+						break;
+				}
+			}
+		} else {
 
 			$integrations[] = [
 				'type'     => 'email',
@@ -913,138 +1090,10 @@ class Holler_Popup implements JsonSerializable {
 				'content'  => "
 <p>Form: <b>{$this->post_title}</b></p>
 <p>Name: <b>{{name}}</b></p>
-<p>Email: <b>{{email}}</b></p>
-",
+<p>Email: <b>{{email}}</b></p>",
 			];
-
-		} else if ( class_exists( 'Holler_Pro_CRMs' ) ) {
-
-			switch ( $email_provider ) {
-				case 'ac':
-
-					$ac_key = get_option( 'hwp_ac_api_key' );
-					$ac_url = get_option( 'hwp_ac_url' );
-					$ac_acc = explode( '.', parse_url( $ac_url, PHP_URL_HOST ) )[0];
-
-					$list_id = $this->_get_meta( 'ac_list_id' );
-
-					$res = Holler_Pro_CRMs::activecampaign_v1( [
-						'account'  => $ac_acc,
-						'key'      => $ac_key,
-						'endpoint' => 'list_view',
-						'body'     => [
-							'id' => $list_id
-						]
-					] );
-
-					if ( is_wp_error( $res ) ) {
-						break;
-					}
-
-					$integrations[] = [
-						'type'    => 'activecampaign',
-						'key'     => $ac_key,
-						'account' => $ac_acc,
-						'lists'   => [
-							[
-								'id'   => $list_id,
-								'text' => $res->name
-							]
-						],
-						'tags'    => []
-					];
-					break;
-				case 'ck':
-
-					$ck_key  = get_option( 'hwp_ck_api_key' );
-					$form_id = $this->_get_meta( 'ck_id' );
-					$res     = Holler_Pro_CRMs::convertkit( [
-						'endpoint' => 'forms',
-						'key'      => $ck_key,
-						'method'   => 'GET',
-					] );
-
-					if ( is_wp_error( $res ) ) {
-						break;
-					}
-
-					$forms = $res->forms;
-
-					$form = array_filter( $forms, function ( $form ) use ( $form_id ) {
-						return $form->id == $form_id;
-					} );
-
-					$integrations[] = [
-						'type'  => 'convertkit',
-						'key'   => $ck_key,
-						'forms' => [
-							[
-								'id'   => $form_id,
-								'text' => $form[0]->name
-							]
-						]
-					];
-					break;
-				case 'mc':
-					$mc_key = get_option( 'hwp_mc_api_key' );
-
-					$list_id = $this->_get_meta( 'mc_list_id' );
-
-					$res = Holler_Pro_CRMs::mailchimp( [
-						'key'      => $mc_key,
-						'endpoint' => 'lists/' . $list_id,
-						'body'     => [
-							'fields' => 'id,name'
-						]
-					] );
-
-					if ( is_wp_error( $res ) ) {
-						break;
-					}
-
-					$integrations[] = [
-						'type'  => 'mailchimp',
-						'key'   => $mc_key,
-						'lists' => [
-							[
-								'id'   => $list_id,
-								'text' => $res->name
-							]
-						],
-						'tags'  => []
-					];
-					break;
-				case 'mailpoet':
-
-					if ( ! class_exists( '\MailPoet\API\API' ) ) {
-						break;
-					}
-
-					$list_id = $this->_get_meta( 'mailpoet_list_id' );
-
-					$api   = \MailPoet\API\API::MP( 'v1' );
-					$lists = $api->getLists();
-
-					$list = array_filter( $lists, function ( $list ) use ( $list_id ) {
-						return $list['id'] == $list_id;
-					} );
-
-					$integrations[] = [
-						'type'  => 'mailpoet',
-						'lists' => [
-							[
-								'id'   => $list_id,
-								'text' => $list[0]['name']
-							]
-						],
-					];
-
-					break;
-			}
 		}
 
 		$this->update_setting( 'integrations', $integrations );
-
-		$this->_commit_post_args();
 	}
 }

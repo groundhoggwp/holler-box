@@ -40,6 +40,14 @@ class Holler_Telemetry {
 			],
 		] );
 
+		register_rest_route( 'hollerbox', '/telemetry/legacy', [
+			[
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'optin_legacy' ],
+				'permission_callback' => [ $this, 'permission_callback' ]
+			],
+		] );
+
 	}
 
 	/**
@@ -128,7 +136,34 @@ class Holler_Telemetry {
 			];
 		}
 
-		$response = wp_remote_post( 'https://hollerwp.com/wp-json/gh/v3/webhook-listener?auth_token=JVq8f3u&step_id=34', [
+		wp_remote_post( 'https://hollerwp.com/wp-json/gh/v3/webhook-listener?auth_token=JVq8f3u&step_id=34', [
+			'body'    => wp_json_encode( $request ),
+			'headers' => [
+				'Content-Type' => 'application/json'
+			],
+		] );
+
+		return rest_ensure_response( [ 'success' => true ] );
+	}
+
+	/**
+	 * Optin top telemetry
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public function optin_legacy( WP_REST_Request $request ) {
+
+		$email = sanitize_email( $request->get_param( 'email' ) );
+		$name  = sanitize_text_field( $request->get_param( 'name' ) );
+
+		$request = [
+			'email'     => $email,
+			'name'      => $name,
+		];
+
+		wp_remote_post( 'https://hollerwp.com/wp-json/gh/v3/webhook-listener?auth_token=NdZ6FeU&step_id=44', [
 			'body'    => wp_json_encode( $request ),
 			'headers' => [
 				'Content-Type' => 'application/json'
