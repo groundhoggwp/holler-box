@@ -63,6 +63,9 @@ body.hollerbox_page_hollerbox #page #settings .danger-zone .holler-panel-header 
 body.hollerbox_page_hollerbox #page #right {
   width: 260px;
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
 }
 body.hollerbox_page_hollerbox #page #right .holler-menu a {
   padding: 16px;
@@ -73,6 +76,9 @@ body.hollerbox_page_hollerbox #page #right .holler-menu a {
 body.hollerbox_page_hollerbox #page #right .holler-menu a:hover {
   background: rgba(16, 38, 64, 0.05);
   text-decoration: none;
+}
+body.hollerbox_page_hollerbox #page #right .holler-menu a svg {
+  width: 20px;
 }
 body.hollerbox_page_hollerbox .setup-page {
   max-width: 600px;

@@ -204,7 +204,12 @@
           ['https://hollerwp.com/pricing/', 'dashicons dashicons-store', 'Pricing'],
           ['https://hollerwp.com/account/support/', 'dashicons dashicons-sos', 'Support'],
           ['https://hollerwp.com/account/', 'dashicons dashicons-admin-users', 'My Account'],
-          ['https://hollerwp.com/account/', 'dashicons dashicons-star-filled', 'What\'s new in 2.0?'],
+          ['https://hollerwp.com/improvements-are-coming-with-hollerbox-2-0-new-editor-new-features-reporting-and-more/', 'dashicons dashicons-star-filled', 'What\'s new in 2.0?'],
+        ]
+
+        const links2 = [
+          ['https://groundhogg.io', icons.groundhogg, 'Groundhogg - CRM'],
+          ['https://mailhawk.io', icons.mailhawk_bird, 'MailHawk - SMTP'],
         ]
 
         let expiry
@@ -234,7 +239,7 @@
                         <div class="inside">
                             <p>${ settings.is_licensed ? sprintf(__('🎉 Your license is valid and expires %s.'),
                                     expiry.toLocaleDateString()) : __(
-                                    'Enter your license key to receive updates and support for HollerBox Pro.') }</p>
+                                    'Enter your license key to receive updates and support for HollerBox - Pro.') }</p>
                             <div class="display-flex gap-10">
                                 ${ input({
                                     id: 'license',
@@ -368,6 +373,17 @@
                             ${ links.map(
                                     ([href, dashicon, text]) => `<a href="${ href +
                                     utmSource }" target="_blank"><span class="${ dashicon }"></span> ${ text }</a>`).
+                                    join('') }
+                        </div>
+                    </div>
+                    <div class="holler-panel">
+                        <div class="holler-panel-header">
+                            <h2>${ __('Recommend Plugins') }</h2>
+                        </div>
+                        <div class="display-flex column holler-menu">
+                            ${ links2.map(
+                                    ([href, icon, text]) => `<a href="${ href +
+                                    utmSource }" target="_blank">${icon} ${ text }</a>`).
                                     join('') }
                         </div>
                     </div>
@@ -638,7 +654,7 @@
             <p>${ __('We are sending you an email to your inbox with instructions on how to obtain your legacy license and use it!') }</p>
             <p>${ __('The subject line is <b>"[HollerBox] Legacy License Next Steps"</b>') }</p>
             <p>${ __('You have until <b>August 31st, 2022</b> to claim and activate your Legacy License.') }</p>
-            ${skipButton('✅ I understand')}
+            ${skipButton('✅ I understand, continue setup')}
         `
       },
       onSkip: (p, setPage) => setPage('/s/start/'),

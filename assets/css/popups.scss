@@ -227,6 +227,17 @@ body:not(.wp-admin) {
 
     &.top {
 
+      top: 20px;
+      left: 20px;
+
+      .slide-in {
+        animation-name: holler-slide-in-down;
+      }
+
+      .slide-out {
+        animation-name: holler-slide-out-up;
+      }
+
       &-left {
         top: 20px;
         left: 20px;
@@ -317,6 +328,17 @@ body:not(.wp-admin) {
     }
 
     &.bottom {
+
+      bottom: 20px;
+      left: 20px;
+
+      .slide-in {
+        animation-name: holler-slide-in-up;
+      }
+
+      .slide-out {
+        animation-name: holler-slide-out-down;
+      }
 
       &-left {
         bottom: 20px;

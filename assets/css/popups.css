@@ -154,6 +154,16 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   position: fixed;
   z-index: 1000;
 }
+.holler-box .positioner.top {
+  top: 20px;
+  left: 20px;
+}
+.holler-box .positioner.top .slide-in {
+  animation-name: holler-slide-in-down;
+}
+.holler-box .positioner.top .slide-out {
+  animation-name: holler-slide-out-up;
+}
 .holler-box .positioner.top-left {
   top: 20px;
   left: 20px;
@@ -217,6 +227,16 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 }
 .holler-box .positioner.center-right .slide-out {
   animation-name: holler-slide-out-right;
+}
+.holler-box .positioner.bottom {
+  bottom: 20px;
+  left: 20px;
+}
+.holler-box .positioner.bottom .slide-in {
+  animation-name: holler-slide-in-up;
+}
+.holler-box .positioner.bottom .slide-out {
+  animation-name: holler-slide-out-down;
 }
 .holler-box .positioner.bottom-left {
   bottom: 20px;

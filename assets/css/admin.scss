@@ -112,6 +112,9 @@ body.hollerbox_page_hollerbox {
     #right {
       width: 260px;
       flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
 
       .holler-menu {
         a {
@@ -123,6 +126,10 @@ body.hollerbox_page_hollerbox {
           &:hover{
             background: $primary-dark-5;
             text-decoration: none;
+          }
+
+          svg {
+            width: 20px;
           }
         }
       }
