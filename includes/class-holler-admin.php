@@ -131,6 +131,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 						],
 						'installed'   => [
 							'hollerBoxPro' => defined( 'Holler_Box_Pro_VER' ),
+							'legacy'       => defined( 'Holler_Box_Legacy_VER' ),
 							'groundhogg'   => defined( 'GROUNDHOGG_VERSION' ),
 							'mailhawk'     => defined( 'MAILHAWK_VERSION' ),
 						],

@@ -204,7 +204,11 @@
           ['https://hollerwp.com/pricing/', 'dashicons dashicons-store', 'Pricing'],
           ['https://hollerwp.com/account/support/', 'dashicons dashicons-sos', 'Support'],
           ['https://hollerwp.com/account/', 'dashicons dashicons-admin-users', 'My Account'],
-          ['https://hollerwp.com/improvements-are-coming-with-hollerbox-2-0-new-editor-new-features-reporting-and-more/', 'dashicons dashicons-star-filled', 'What\'s new in 2.0?'],
+          [
+            'https://hollerwp.com/improvements-are-coming-with-hollerbox-2-0-new-editor-new-features-reporting-and-more/',
+            'dashicons dashicons-star-filled',
+            'What\'s new in 2.0?',
+          ],
         ]
 
         const links2 = [
@@ -214,11 +218,19 @@
 
         let expiry
 
-        try {
-          expiry = new Date(settings.license_expiry)
-        }
-        catch (e) {
-          expiry = new Date()
+        if ( settings.license_expiry === 'lifetime' ){
+          expiry = 'never'
+        } else {
+
+          try {
+            expiry = new Date(settings.license_expiry)
+          }
+          catch (e) {
+            expiry = new Date()
+          }
+
+          expiry = expiry.toLocaleDateString()
+
         }
 
         // language=HTML
@@ -237,9 +249,8 @@
                             <h2>${ __('License') }</h2>
                         </div>
                         <div class="inside">
-                            <p>${ settings.is_licensed ? sprintf(__('🎉 Your license is valid and expires %s.'),
-                                    expiry.toLocaleDateString()) : __(
-                                    'Enter your license key to receive updates and support for HollerBox - Pro.') }</p>
+                            <p>${ settings.is_licensed ? ( sprintf(__('🎉 Your license is valid and expires %s.'), expiry ) ) :
+                                    sprintf( __('Enter your license key to receive updates and support for HollerBox - %s.'), HollerBox.installed.legacy ? 'Legacy' : 'Pro' ) }</p>
                             <div class="display-flex gap-10">
                                 ${ input({
                                     id: 'license',
@@ -383,7 +394,7 @@
                         <div class="display-flex column holler-menu">
                             ${ links2.map(
                                     ([href, icon, text]) => `<a href="${ href +
-                                    utmSource }" target="_blank">${icon} ${ text }</a>`).
+                                    utmSource }" target="_blank">${ icon } ${ text }</a>`).
                                     join('') }
                         </div>
                     </div>
@@ -534,7 +545,7 @@
             <p style="margin-top: 30px">
                 <button class="holler-button primary" id="continue">${ __('Sounds good! Continue to HollerBox') }
                 </button>
-                <button class="holler-button secondary text legacy-license" >${ __('Apply for a Legacy License') }
+                <button class="holler-button secondary text legacy-license">${ __('Apply for a Legacy License') }
                 </button>
             </p>
         `
@@ -577,7 +588,7 @@
                 <li>${ __('MailChimp Integration') }</li>
                 <li>${ __('MailPoet Integration') }</li>
             </ul>
-            <p>${__('The Legacy License...')}</p>
+            <p>${ __('The Legacy License...') }</p>
             <ul>
                 <li>${ __('Does not expire') }</li>
                 <li>${ __('Can be used on up to 3 sites') }</li>
@@ -598,27 +609,27 @@
                     <div class="row">
                         <div class="col">
                             <label>Your Name</label>
-                            ${input({
+                            ${ input({
                                 placeholder: 'John Doe',
                                 name: 'name',
-                                className: 'holler-input'
-                            })}
+                                className: 'holler-input',
+                            }) }
                         </div>
                         <div class="col">
                             <label>Your Email Address</label>
-                            ${input({
+                            ${ input({
                                 type: 'email',
                                 placeholder: 'Your email address',
                                 value: setup_answers.email,
                                 name: 'email',
-                                className: 'holler-input'
-                            })}
+                                className: 'holler-input',
+                            }) }
                         </div>
                     </div>
                 </div>
-                <button id="apply" class="holler-button primary medium">${__('Apply Now')}</button>
+                <button id="apply" class="holler-button primary medium">${ __('Apply Now') }</button>
             </div>
-            ${skipButton('Actually, I don\'t need a legacy license')}
+            ${ skipButton('Actually, I don\'t need a legacy license') }
         `
       },
       onSkip: (p, setPage) => setPage('/s/start/'),
@@ -635,7 +646,7 @@
 
         $('#apply').on('click', e => {
 
-          apiPost( HollerBox.routes.root + '/telemetry/legacy', data )
+          apiPost(HollerBox.routes.root + '/telemetry/legacy', data)
 
           setPage('/legacy-license/next/')
 
@@ -651,10 +662,11 @@
       render: () => {
         // language=HTML
         return `
-            <p>${ __('We are sending you an email to your inbox with instructions on how to obtain your legacy license and use it!') }</p>
+            <p>
+                ${ __('We are sending you an email to your inbox with instructions on how to obtain your legacy license and use it!') }</p>
             <p>${ __('The subject line is <b>"[HollerBox] Legacy License Next Steps"</b>') }</p>
             <p>${ __('You have until <b>August 31st, 2022</b> to claim and activate your Legacy License.') }</p>
-            ${skipButton('✅ I understand, continue setup')}
+            ${ skipButton('✅ I understand, continue setup') }
         `
       },
       onSkip: (p, setPage) => setPage('/s/start/'),
@@ -1108,7 +1120,7 @@
           this.initFromSlug()
         }
         // Legacy user, send to legacy setup
-        else if ( settings.is_legacy_user ) {
+        else if (settings.is_legacy_user) {
           history.pushState({}, '', `#/legacy-user/`)
           this.initFromSlug()
         }
