@@ -591,14 +591,14 @@ table.display-conditions-grid {
             flex-direction: column;
             gap: 10px;
 
+            label {
+              font-size: 14px;
+            }
+
             .control {
               display: flex;
               justify-content: space-between;
               align-items: center;
-
-              label {
-                font-size: 14px;
-              }
             }
 
 

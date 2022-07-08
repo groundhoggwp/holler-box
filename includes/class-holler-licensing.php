@@ -74,6 +74,7 @@ class Holler_Licensing {
 			'license' => Holler_Settings::instance()->get( 'license' ),
 			'item_id' => $this->get_pro_item_id(),
 			'url'     => home_url(),
+			'author'  => 'Groundhogg Inc.'
 		] );
 	}
 

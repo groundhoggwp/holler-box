@@ -1678,6 +1678,8 @@
             control: input({
               type: 'number',
               step: '0.01',
+              max: 1,
+              min: 0,
               id: 'overlay-opacity',
               value: overlay_opacity,
             }),
