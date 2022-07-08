@@ -1656,6 +1656,7 @@
     nameInput,
     emailInput,
     __content,
+    overlay,
     submitButton,
     TriggerCallbacks,
   }

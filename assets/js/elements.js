@@ -1795,6 +1795,32 @@
     return `<b>${ text }</b>`
   }
 
+  const mediaPicker = ({
+    onSelect = ( media ) => {}
+  }) => {
+
+    // Create the media frame.
+    let file_frame = wp.media.frames.file_frame = wp.media({
+      title: __('Select a image to upload'),
+      button: {
+        text: __('Use this image'),
+      },
+      multiple: false,	// Set to true to allow multiple files to be selected
+
+    })
+    // When an image is selected, run a callback.
+    file_frame.on('select', function () {
+      // We set multiple to false so only get one image from the uploader
+      var attachment = file_frame.state().get('selection').first().toJSON()
+
+      $('#image-src').val(attachment.url)
+
+      onSelect(attachment)
+    })
+    // Finally, open the modal
+    file_frame.open()
+  }
+
   HollerBox.elements = {
     icons,
     ...Elements,
@@ -1839,6 +1865,7 @@
     el,
     codeEditor,
     isNumeric,
+    mediaPicker,
   }
 
 } )(jQuery)

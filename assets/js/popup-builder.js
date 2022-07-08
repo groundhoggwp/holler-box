@@ -21,10 +21,18 @@
     objectEquals,
     loadingDots,
     confirmationModal,
+    mediaPicker,
   } = HollerBox.elements
 
   const { sprintf, __, _x, _n } = wp.i18n
-  const { createFilters } = Groundhogg.filters.functions
+
+  const isGroundhoggInstalled = () => {
+    return HollerBox.installed.groundhogg && typeof Groundhogg !== 'undefined'
+  }
+
+  if ( isGroundhoggInstalled() ){
+    const { createFilters } = Groundhogg.filters.functions
+  }
 
   const isPro = () => {
     return typeof HollerBoxPro !== 'undefined'
@@ -1794,49 +1802,23 @@
           })
         })
 
-        $('#image-src').on('change', e => {
+        let $src = $('#image-src')
+
+        $src.on('change', e => {
           updateSetting({
             image_src: e.target.value,
           })
         })
 
-        // Uploading files
-        var file_frame
-
         $('#select-image').on('click', (event) => {
-
-          var picker = $(this)
-
-          event.preventDefault()
-          // If the media frame already exists, reopen it.
-          if (file_frame) {
-            // Open frame
-            file_frame.open()
-            return
-          }
-          // Create the media frame.
-          file_frame = wp.media.frames.file_frame = wp.media({
-            title: __('Select a image to upload'),
-            button: {
-              text: __('Use this image'),
-            },
-            multiple: false,	// Set to true to allow multiple files to be selected
-
+          mediaPicker({
+            onSelect: ( attachment ) => {
+              $src.val(attachment.url)
+              updateSetting({
+                image_src: attachment.url
+              })
+            }
           })
-          // When an image is selected, run a callback.
-          file_frame.on('select', function () {
-            // We set multiple to false so only get one image from the uploader
-            var attachment = file_frame.state().get('selection').first().toJSON()
-
-            $('#image-src').val(attachment.url)
-
-            updateSetting({
-              image_src: attachment.url,
-              // height: height,
-            })
-          })
-          // Finally, open the modal
-          file_frame.open()
         })
 
       },
@@ -1868,49 +1850,23 @@
       },
       onMount: (settings, updateSetting) => {
 
-        $('#image-src').on('change', e => {
+        let $src = $('#image-src')
+
+        $src.on('change', e => {
           updateSetting({
             avatar: e.target.value,
           })
         })
 
-        // Uploading files
-        var file_frame
-
         $('#select-image').on('click', (event) => {
-
-          var picker = $(this)
-
-          event.preventDefault()
-          // If the media frame already exists, reopen it.
-          if (file_frame) {
-            // Open frame
-            file_frame.open()
-            return
-          }
-          // Create the media frame.
-          file_frame = wp.media.frames.file_frame = wp.media({
-            title: __('Select a image to upload'),
-            button: {
-              text: __('Use this image'),
-            },
-            multiple: false,	// Set to true to allow multiple files to be selected
-
+          mediaPicker({
+            onSelect: ( attachment ) => {
+              $src.val(attachment.url)
+              updateSetting({
+                avatar: attachment.url
+              })
+            }
           })
-          // When an image is selected, run a callback.
-          file_frame.on('select', function () {
-            // We set multiple to false so only get one image from the uploader
-            var attachment = file_frame.state().get('selection').first().toJSON()
-
-            $('#image-src').val(attachment.url)
-
-            updateSetting({
-              avatar: attachment.url,
-              // height: height,
-            })
-          })
-          // Finally, open the modal
-          file_frame.open()
         })
       },
     },
@@ -3180,7 +3136,7 @@
     },
   }
 
-  if (HollerBox.installed.groundhogg) {
+  if ( isGroundhoggInstalled() ) {
     AdvancedDisplayRules.groundhogg = {
       name: __('Show only to Groundhogg contacts'),
       controls: ({ filters = [] }) => {

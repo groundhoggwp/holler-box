@@ -149,6 +149,10 @@ class Holler_Frontend {
 	 */
 	public function get_active_popups() {
 
+		// Do not run in admin
+		if ( is_admin() ){
+			return;
+		}
 
 		if ( $this->is_builder_preview() ) {
 

@@ -992,16 +992,18 @@
         })
 
         $('#install').on('click', e => {
-          Promise.all([
-            apiPost(HollerBox.routes.install, {
-              slug: 'mailhawk',
-            }),
+
+          // Install async, no need to wait
+          apiPost(HollerBox.routes.install, {
+            slug: 'mailhawk',
+          }).then( () => {
             apiPost(HollerBox.routes.install, {
               slug: 'groundhogg',
-            }),
-          ]).then(() => {
-            setPage(setup_answers.subscribed ? '/s/next-steps/' : '/s/subscribe/')
+            })
           })
+
+          setPage(setup_answers.subscribed ? '/s/next-steps/' : '/s/subscribe/')
+          
         })
       },
     }),
