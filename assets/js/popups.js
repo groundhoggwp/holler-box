@@ -1211,7 +1211,7 @@
     },
     scroll_detection: ({ depth = 50 }, show) => {
       document.addEventListener('scroll', () => {
-        if (getScrollPercent() >= depth) {
+        if (getScrollPercent() >= parseInt( depth )) {
           show()
         }
       })

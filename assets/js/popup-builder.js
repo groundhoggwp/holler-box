@@ -3441,14 +3441,14 @@
             min: 0,
             max: 100,
             placeholder: '50',
-            id: 'selector',
+            id: 'scroll-depth',
             value: depth,
         })) } %`
       },
       onMount: (trigger, updateTrigger) => {
-        $('#selector').on('change', e => {
+        $('#scroll-depth').on('change', e => {
           updateTrigger({
-            selector: e.target.value,
+            depth: e.target.value,
           })
         })
       },
