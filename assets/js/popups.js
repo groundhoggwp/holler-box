@@ -1412,6 +1412,10 @@
       PopupStack.next()
     },
 
+    isBlocking () {
+      return true;
+    },
+
     maybeOpen () {
 
       // do not open if already opened
@@ -1439,7 +1443,7 @@
       }
 
       // If another popup is open, push top the stack
-      if (HollerBox.active.some(p => p.isOpen())) {
+      if (HollerBox.active.some(p => p.isOpen() && p.isBlocking())) {
         PopupStack.add(this)
         return
       }

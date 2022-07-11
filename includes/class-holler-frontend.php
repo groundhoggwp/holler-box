@@ -57,8 +57,10 @@ class Holler_Frontend {
 
 	public function enqueue_scripts() {
 
+		$dot_min = Holler_Settings::instance()->get( 'script_debug_mode' ) ? '' : '.min';
+
 		wp_enqueue_style( 'hollerbox-popups', Holler_Box_URL . 'assets/css/popups.css', [], time() );
-		wp_enqueue_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups.js', [], time(), true );
+		wp_enqueue_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups' . $dot_min . '.js', [], time(), true );
 
 		$l10n = [
 			'active'             => array_map( function ( $popup ) {
@@ -150,7 +152,7 @@ class Holler_Frontend {
 	public function get_active_popups() {
 
 		// Do not run in admin
-		if ( is_admin() ){
+		if ( is_admin() ) {
 			return;
 		}
 

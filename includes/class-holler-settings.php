@@ -73,6 +73,7 @@ class Holler_Settings {
 			case 'gdpr_enabled':
 			case 'credit_disabled':
 			case 'disable_all':
+			case 'script_debug_mode':
 			case 'delete_all_data':
 			case 'telemetry_subscribed':
 			case 'is_licensed':

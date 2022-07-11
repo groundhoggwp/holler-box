@@ -3,7 +3,7 @@
  * Plugin Name:     HollerBox
  * Plugin URI:      https://hollerwp.com
  * Description:     A lightweight popup plugin with lead generation opt-in forms.
- * Version:         2.0
+ * Version:         2.0.1
  * Author:          Groundhogg Inc.
  * Author URI:      https://groundhogg.io
  * Text Domain:     holler-box
@@ -19,20 +19,18 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HOLLERBOX_VERSION', '2.0' );
+define( 'HOLLERBOX_VERSION', '2.0.1' );
 
 if ( ! class_exists( 'Holler_Box' ) ) {
 
 	/**
 	 * Main Holler_Box class
 	 *
-	 * @since       0.1.0
 	 */
 	class Holler_Box {
 
 		/**
-		 * @since       0.1.0
-		 * @var         Holler_Box $instance The one true Holler_Box
+		 * @var Holler_Box $instance The one true Holler_Box
 		 */
 		private static $instance;
 
@@ -54,7 +52,7 @@ if ( ! class_exists( 'Holler_Box' ) ) {
 
 		public function __construct() {
 
-			if ( self::$instance ){
+			if ( self::$instance ) {
 				return;
 			}
 

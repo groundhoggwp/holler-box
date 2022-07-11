@@ -223,7 +223,13 @@ You can purchase a premium plan for access to support and our premium extensions
 
 == Changelog ==
 
-= 2.0 =
+= 2.0.1 (2022-07-11) =
+
+* ADDED Script debug feature to enable using non-minified scripts
+* TWEAKED Use minified JS files for better performance
+* FIXED Enabling cookie consent also enabled GDPR consent and vice versa
+
+= 2.0 (2022-07-11) =
 
 * Complete overhaul post [acquisition by Groundhogg Inc.](https://www.groundhogg.io/press/groundhogg-acquires-hollerbox/)
 * [Click here for full release notes](https://hollerwp.com/improvements-are-coming-with-hollerbox-2-0-new-editor-new-features-reporting-and-more/).

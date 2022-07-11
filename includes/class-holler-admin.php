@@ -70,27 +70,32 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 
 		public function admin_scripts( $hook ) {
 
+            $dot_min = Holler_Settings::instance()->get( 'script_debug_mode') ? '' : '.min';
+
 			wp_register_style( 'hollerbox-elements', Holler_Box_URL . 'assets/css/elements.css' );
 			wp_register_style( 'baremetrics-calendar', Holler_Box_URL . 'assets/css/calendar.css' );
 			wp_register_style( 'hollerbox-admin', Holler_Box_URL . 'assets/css/admin.css', [
 				'hollerbox-elements',
 				'baremetrics-calendar',
 			] );
-			wp_register_script( 'hollerbox-elements', Holler_Box_URL . 'assets/js/elements.js', [
+
+			wp_register_script( 'hollerbox-elements', Holler_Box_URL . 'assets/js/elements' . $dot_min . '.js', [
 				'jquery',
 				'wp-i18n',
 			] );
-			wp_register_script( 'baremetrics-calendar', Holler_Box_URL . 'assets/js/baremetrics-calendar.js', [
+
+            wp_register_script( 'baremetrics-calendar', Holler_Box_URL . 'assets/js/baremetrics-calendar' . $dot_min . '.js', [
 				'moment'
 			] );
-			wp_register_script( 'hollerbox-chart-js', Holler_Box_URL . 'assets/js/chart.js' );
-			wp_register_script( 'hollerbox-reporting', Holler_Box_URL . 'assets/js/reports.js', [
+
+            wp_register_script( 'hollerbox-chart-js', Holler_Box_URL . 'assets/js/chart.min.js' );
+			wp_register_script( 'hollerbox-reporting', Holler_Box_URL . 'assets/js/reports' . $dot_min . '.js', [
 				'hollerbox-chart-js',
 				'hollerbox-elements',
 				'baremetrics-calendar'
 			] );
 
-			wp_register_script( 'hollerbox-settings', Holler_Box_URL . 'assets/js/settings.js', [
+			wp_register_script( 'hollerbox-settings', Holler_Box_URL . 'assets/js/settings' . $dot_min . '.js', [
 				'hollerbox-elements',
 			] );
 
@@ -192,7 +197,10 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 */
 		public function builder_scripts() {
 
+			$dot_min = Holler_Settings::instance()->get( 'debug_mode') ? '' : '.min';
+
 			global $post;
+
 			$groundhogg_installed = defined( 'GROUNDHOGG_VERSION' );
 
 			wp_enqueue_media();
@@ -215,14 +223,14 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				'wp-color-picker'
 			] );
 
-			wp_register_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups.js' );
-			wp_register_script( 'hollerbox-builder', Holler_Box_URL . 'assets/js/popup-builder.js', [
+			wp_register_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups' . $dot_min . '.js' );
+			wp_register_script( 'hollerbox-builder', Holler_Box_URL . 'assets/js/popup-builder' . $dot_min . '.js', [
 				'hollerbox-elements',
 				'hollerbox-popups',
 				'wp-color-picker',
 			] );
 
-			wp_enqueue_script( 'hollerbox-builder', Holler_Box_URL . 'assets/js/popup-builder.js' );
+			wp_enqueue_script( 'hollerbox-builder' );
 
 			$post_types = get_post_types( [], 'objects' );
 			$post_types = array_filter( $post_types, function ( $pt ) {

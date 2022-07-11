@@ -161,9 +161,10 @@
     telemetry_subscribed: false,
     telemetry_email: HollerBox.currentUser.data.user_email,
     gdpr_enabled: false,
+    script_debug_mode: false,
     delete_all_data: false,
     disable_all: false,
-    gdpr_text: `<p>I consent</p>`,
+    gdpr_text: `<p>I consent to the terms and conditions.</p>`,
     ...HollerBox.settings,
     set (_new) {
       settings = {
@@ -218,9 +219,10 @@
 
         let expiry
 
-        if ( settings.license_expiry === 'lifetime' ){
+        if (settings.license_expiry === 'lifetime') {
           expiry = 'never'
-        } else {
+        }
+        else {
 
           try {
             expiry = new Date(settings.license_expiry)
@@ -249,8 +251,11 @@
                             <h2>${ __('License') }</h2>
                         </div>
                         <div class="inside">
-                            <p>${ settings.is_licensed ? ( sprintf(__('🎉 Your license is valid and expires %s.'), expiry ) ) :
-                                    sprintf( __('Enter your license key to receive updates and support for HollerBox - %s.'), HollerBox.installed.legacy ? 'Legacy' : 'Pro' ) }</p>
+                            <p>${ settings.is_licensed ? ( sprintf(__('🎉 Your license is valid and expires %s.'),
+                                            expiry) ) :
+                                    sprintf(__(
+                                                    'Enter your license key to receive updates and support for HollerBox - %s.'),
+                                            HollerBox.installed.legacy ? 'Legacy' : 'Pro') }</p>
                             <div class="display-flex gap-10">
                                 ${ input({
                                     id: 'license',
@@ -320,9 +325,9 @@
                         <div class="inside">
                             <label class="display-flex gap-20"><b>${ __('Enable Cookie Compliance') }</b>
                                 ${ toggle({
-                                    name: 'gdpr_enabled',
+                                    name: 'cookie_compliance',
                                     className: 'setting-toggle',
-                                    checked: settings.gdpr_enabled,
+                                    checked: settings.cookie_compliance,
                                 }) }</label>
                             <p>
                                 ${ __('If you are using a cookie consent plugin such as <b>CookieYes</b> then this will prevent popups until consent is given.',
@@ -355,6 +360,13 @@
                             <h2>⚠️ ${ __('Danger Zone') }</h2>
                         </div>
                         <div class="inside">
+                            <label class="display-flex gap-20"><b>${ __('Enable Script Debug') }</b>
+                                ${ toggle({
+                                    name: 'script_debug_mode',
+                                    className: 'setting-toggle',
+                                    checked: settings.script_debug_mode,
+                                }) }</label>
+                            <p>${ __('Use non-minified JS files for debugging purposes.', 'holler-box') }</p>
                             <label class="display-flex gap-20"><b>${ __('Delete all data when uninstalling') }</b>
                                 ${ toggle({
                                     name: 'delete_all_data',
@@ -996,14 +1008,14 @@
           // Install async, no need to wait
           apiPost(HollerBox.routes.install, {
             slug: 'mailhawk',
-          }).then( () => {
+          }).then(() => {
             apiPost(HollerBox.routes.install, {
               slug: 'groundhogg',
             })
           })
 
           setPage(setup_answers.subscribed ? '/s/next-steps/' : '/s/subscribe/')
-          
+
         })
       },
     }),
