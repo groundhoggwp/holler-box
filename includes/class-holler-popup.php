@@ -465,6 +465,10 @@ class Holler_Popup implements JsonSerializable {
 			// Single post
 			self::add_display_condition( $post_type->name, function ( $condition ) use ( $post_type ) {
 
+				$condition = wp_parse_args( $condition, [
+					'selected' => []
+				]);
+
 				if ( ! is_singular( $post_type->name ) ) {
 					return false;
 				}
@@ -490,6 +494,10 @@ class Holler_Popup implements JsonSerializable {
 				// Post in Taxonomy
 				self::add_display_condition( $post_type->name . '_in_' . $taxonomy->name, function ( $condition ) use ( $post_type, $taxonomy ) {
 
+					$condition = wp_parse_args( $condition, [
+						'selected' => []
+					]);
+
 					// If not a singular, def false
 					if ( ! is_singular( $post_type->name ) ) {
 						return false;
@@ -507,6 +515,10 @@ class Holler_Popup implements JsonSerializable {
 
 				// Taxonomy Archive
 				self::add_display_condition( $taxonomy->name . '_archive', function ( $condition ) use ( $post_type, $taxonomy ) {
+
+					$condition = wp_parse_args( $condition, [
+						'selected' => []
+					]);
 
 					$term_ids = wp_parse_id_list( wp_list_pluck( $condition['selected'], 'id' ) );
 
