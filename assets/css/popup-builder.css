@@ -434,13 +434,13 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   flex-direction: column;
   gap: 10px;
 }
+#holler-app #editor .control-wrap #controls .control-group .controls label {
+  font-size: 14px;
+}
 #holler-app #editor .control-wrap #controls .control-group .controls .control {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-#holler-app #editor .control-wrap #controls .control-group .controls .control label {
-  font-size: 14px;
 }
 #holler-app #editor .control-wrap #controls .control-group .controls #integrations {
   display: flex;
