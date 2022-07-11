@@ -1457,6 +1457,15 @@
           TriggerCallbacks[_t](this.triggers[_t], show, this)
         }
       })
+
+      // Support for content upgrade legacy
+      document.querySelectorAll(`.holler-upgrade.holler-show[data-id="${this.ID}"]`).forEach(el => {
+        el.addEventListener('click', e => {
+          e.preventDefault()
+          popup._triggered = false
+          show()
+        })
+      })
     },
 
   } )
