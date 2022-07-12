@@ -141,6 +141,12 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
     transform: translateX(-100%);
   }
 }
+.holler-box.no-animation .holler-box-overlay,
+.holler-box.no-animation .holler-box-overlay::before,
+.holler-box.no-animation .holler-box-overlay::after,
+.holler-box.no-animation .animation {
+  animation: none !important;
+}
 .holler-box .animation {
   animation-duration: 0.3s;
   animation-timing-function: ease-in-out;
@@ -280,14 +286,28 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 }
 .holler-box .holler-box-overlay {
   position: fixed;
-  background: #333333;
-  opacity: 0.5;
   top: 0;
-  left: 0;
   right: 0;
+  left: 0;
   bottom: 0;
-  z-index: 999;
+  background-color: transparent;
+  opacity: 1;
+  z-index: 997;
   animation: holler-overlay-appear 0.4s ease-in-out;
+}
+.holler-box .holler-box-overlay::after {
+  content: "";
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: 0;
+  bottom: 0;
+  background-color: #333;
+  opacity: 0.5;
+  z-index: 999;
+}
+.holler-box .holler-box-overlay.no-animation {
+  animation: none;
 }
 .holler-box .display-flex {
   display: flex;

@@ -247,8 +247,11 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   position: relative;
   zoom: 40%;
 }
-#templates .template .preview-wrap .preview .holler-box .holler-box-overlay {
+#templates .template .preview-wrap .preview .holler-box .holler-box-overlay,
+#templates .template .preview-wrap .preview .holler-box .holler-box-overlay::after,
+#templates .template .preview-wrap .preview .holler-box .holler-box-overlay::before {
   position: absolute;
+  display: none;
 }
 #templates .template .preview-wrap .preview .holler-box .positioner {
   position: absolute;
@@ -340,7 +343,9 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
 #holler-app #editor #frame #preview.suppress-animations .animation {
   animation: none !important;
 }
-#holler-app #editor #frame #preview .holler-box .holler-box-overlay {
+#holler-app #editor #frame #preview .holler-box .holler-box-overlay,
+#holler-app #editor #frame #preview .holler-box .holler-box-overlay::after,
+#holler-app #editor #frame #preview .holler-box .holler-box-overlay::before {
   position: absolute;
   border-radius: 5px;
 }

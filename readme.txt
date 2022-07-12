@@ -223,6 +223,12 @@ You can purchase a premium plan for access to support and our premium extensions
 
 == Changelog ==
 
+= 2.0.2 (2022-07-12) =
+* TWEAKED Changed overlay class to use ::after for better compat with HollerBox - pro
+* TWEAKED prevent popup animations when a form is submitted and the success message is shown
+* TWEAKED If script debug is enabled, log errors to console.
+* TWEAKED Added the HollerBox icon to the menu
+
 = 2.0.1 (2022-07-11) =
 
 * ADDED Script debug feature to enable using non-minified scripts

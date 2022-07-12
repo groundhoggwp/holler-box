@@ -95,6 +95,7 @@ class Holler_Frontend {
 				'cookie_compliance',
 				'name',
 				'cookie_value',
+				'script_debug_mode'
 			], [
 				'credit_disabled'   => false,
 				'gdpr_enabled'      => false,
@@ -203,6 +204,22 @@ class Holler_Frontend {
 
 	}
 
+	public static function HollerIcon( $props = [] ) {
+
+		$props = wp_parse_args( $props, [
+			'width'  => '20px',
+			'height' => '20px',
+		] );
+
+		return '<svg ' . self::array_to_atts( $props ) . ' xmlns="http://www.w3.org/2000/svg" viewBox="75.3 55.7 134.4 152.3">
+            <path fill="#e8ad0b" d="m144 137-49-29v53l49 28 50-28v-53Zm0 43-18-10v-7l18 10Zm0-14-18-10v-8l18 11Z"/>
+            <path fill="#e8ad0b" d="m190 102-46-26-45 26 45 26 46-26z"/>
+            <path fill="#000" d="m126 170 18 10v-7l-18-10v7zm18-11-18-11v8l18 10v-7z"/>
+            <path fill="#fff"
+                    d="m190 102-46 26-45-26-9-5 57-33 43 26 7-5-50-29-72 41 20 11 49 29 50-29 8-5v63l-58 33-35-20-11 8v-14l-14-9v-48l-7-5v58l14 8v26l18-15 35 20 66-38V90l-20 12z"/>
+        </svg>';
+	}
+
 	/**
 	 * Add HollerBox menu item to admin bar
 	 *
@@ -218,13 +235,11 @@ class Holler_Frontend {
 
 		$wp_admin_bar->add_node( [
 			'id'    => 'manage-hollerbox',
-			'title' => '<svg width="20" height="20" style="padding-top: 5px;" xmlns="http://www.w3.org/2000/svg" viewBox="75.3 55.7 134.4 152.3">
-            <path fill="#e8ad0b" d="m144 137-49-29v53l49 28 50-28v-53Zm0 43-18-10v-7l18 10Zm0-14-18-10v-8l18 11Z"/>
-            <path fill="#e8ad0b" d="m190 102-46-26-45 26 45 26 46-26z"/>
-            <path fill="" d="m126 170 18 10v-7l-18-10v7zm18-11-18-11v8l18 10v-7z"/>
-            <path fill="#fff"
-                    d="m190 102-46 26-45-26-9-5 57-33 43 26 7-5-50-29-72 41 20 11 49 29 50-29 8-5v63l-58 33-35-20-11 8v-14l-14-9v-48l-7-5v58l14 8v26l18-15 35 20 66-38V90l-20 12z"/>
-        </svg>'
+			'title' => self::HollerIcon( [
+				'style' => [
+					'padding-top' => '5px'
+				]
+			] )
 		] );
 
 		foreach ( $this->active as $popup ) {
@@ -238,6 +253,79 @@ class Holler_Frontend {
 
 		}
 
+	}
+
+	/**
+	 * Convert array to HTML tag attributes
+	 *
+	 * @param $atts
+	 *
+	 * @return string
+	 */
+	static function array_to_atts( $atts ) {
+		$tag = '';
+
+		if ( ! is_array( $atts ) ) {
+			return '';
+		}
+
+		foreach ( $atts as $key => $value ) {
+
+			if ( empty( $value ) ) {
+				continue;
+			}
+
+			$key = strtolower( $key );
+
+			switch ( $key ) {
+				case 'style':
+					$value = self::array_to_css( $value );
+					break;
+				case 'href':
+				case 'action':
+				case 'src':
+					$value = strpos( $value, 'data:image/png;base64,' ) === false ? esc_url( $value ) : $value;
+					break;
+				default:
+					if ( is_array( $value ) ) {
+						$value = implode( ' ', $value );
+					}
+
+					$value = esc_attr( $value );
+					break;
+
+			}
+
+			$tag .= sanitize_key( $key ) . '="' . $value . '" ';
+		}
+
+		return $tag;
+	}
+
+	/**
+	 * Convert array to CSS style attributes
+	 *
+	 * @param $atts
+	 *
+	 * @return string
+	 */
+	static function array_to_css( $atts ) {
+
+		if ( ! is_array( $atts ) ) {
+			return $atts;
+		}
+
+		$css = '';
+		foreach ( $atts as $key => $value ) {
+
+			if ( is_array( $value ) ) {
+				$value = implode( ' ', $value );
+			}
+
+			$css .= sanitize_key( $key ) . ':' . esc_attr( $value ) . ';';
+		}
+
+		return $css;
 	}
 
 

@@ -163,6 +163,12 @@
     return json
   }
 
+  const maybeLog = ( error ) => {
+    if ( HollerBox.settings?.script_debug_mode ){
+      console.debug( error )
+    }
+  }
+
   const overlay = () => {
     //language=HTML
     return `
@@ -514,35 +520,18 @@
           return notificationClosedTemplate({ id, position })
         }
 
-        if (submitted) {
-          // language=HTML
-          return `
-              <div id="${ id }" class="holler-box holler-notification-box with-form">
-                  <div class="positioner ${ position }">
-                      <div class="holler-box-modal ${ position }">
-                          ${ closeButton() }
-                          <div class="display-flex">
-                              <img src="${ avatar }" alt="">
-                              ${ __content(success_message) }
-                          </div>
-                          ${ credit() }
-                      </div>
-                  </div>
-              </div>`
-        }
-
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-notification-box with-form">
+            <div id="${ id }" class="holler-box holler-notification-box with-form ${ submitted ? 'no-animation' : '' }">
                 <div class="positioner ${ position }">
                     <div class="animation slide-in">
                         <div class="holler-box-modal">
                             ${ closeButton() }
                             <div class="display-flex">
                                 <img src="${ avatar }" alt="">
-                                ${ __content(post_content) }
+                                ${ __content(submitted ? success_message: post_content) }
                             </div>
-                            ${ form({
+                            ${ submitted ? '' : form({
                                 direction: 'horizontal',
                                 name: false,
                                 button_text,
@@ -775,7 +764,7 @@
                     break
                 }
 
-              }).catch(e => {})
+              }).catch(e => maybeLog(e))
 
               break
           }
@@ -833,31 +822,16 @@
         overlay_enabled = true,
       }) => {
 
-        if (submitted) {
-          // language=HTML
-          return `
-              <div id="${ id }" class="holler-box holler-popup holler-popup-standard">
-                  ${ overlay_enabled ? overlay() : '' }
-                  <div class="positioner ${ position }">
-                      <div class="holler-box-modal">
-                          ${ closeButton() }
-                          ${ __content(success_message) }
-                      </div>
-                      ${ credit() }
-                  </div>
-              </div>`
-        }
-
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-standard">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-standard ${ submitted ? 'no-animation' : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
                         <div class="holler-box-modal">
                             ${ closeButton() }
-                            ${ __content(post_content) }
-                            ${ form({
+                            ${ __content( submitted ? success_message : post_content) }
+                            ${ submitted ? '' : form({
                                 direction: 'vertical',
                                 button_text,
                                 name_placeholder,
@@ -893,7 +867,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-image-left">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-image-left ${ submitted ? 'no-animation' : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -903,14 +877,13 @@
                                 <div class="left image-width" style="background-image: url('${ image_src }')">
                                 </div>
                                 <div class="right">
-                                    ${ submitted ? `${ __content(success_message) }` : `
-              ${ __content(post_content) }
-							${ form({
+                                    ${ __content(submitted ? success_message : post_content) }
+                                    ${ submitted ? '' : form({
                                         direction: 'vertical',
                                         button_text,
                                         name_placeholder,
                                         email_placeholder,
-                                    }) }` }
+                                    }) }
                                 </div>
                             </div>
                         </div>
@@ -943,7 +916,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-image-right">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-image-right ${ submitted ? 'no-animation' : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -951,14 +924,13 @@
                             ${ closeButton() }
                             <div class="display-flex">
                                 <div class="left">
-                                    ${ submitted ? `${ __content(success_message) }` : `
-              ${ __content(post_content) }
-							${ form({
+                                    ${ __content(submitted ? success_message : post_content) }
+                                    ${ submitted ? '' : form({
                                         direction: 'vertical',
                                         button_text,
                                         name_placeholder,
                                         email_placeholder,
-                                    }) }` }
+                                    }) }
                                 </div>
                                 <div class="right image-width" style="background-image: url('${ image_src }')">
                                 </div>
@@ -992,7 +964,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-form-below">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-form-below ${ submitted ? 'no-animation' : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -1040,7 +1012,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-progress-bar">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-progress-bar ${ submitted ? 'no-animation' : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -1094,7 +1066,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-image-beside-text-top">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-image-beside-text-top ${ submitted ? 'no-animation' : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -1140,7 +1112,7 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-full-image-background">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-full-image-background ${ submitted ? 'no-animation' : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -1211,7 +1183,7 @@
     },
     scroll_detection: ({ depth = 50 }, show) => {
       document.addEventListener('scroll', () => {
-        if (getScrollPercent() >= parseInt( depth )) {
+        if (getScrollPercent() >= parseInt(depth)) {
           show()
         }
       })
@@ -1284,6 +1256,7 @@
         return div.firstElementChild
       }
       catch (e) {
+        maybeLog(e)
         return ''
       }
     },
@@ -1348,6 +1321,7 @@
         PopupTemplates[this.template].cleanup(this)
       }
       catch (e) {
+        maybeLog(e)
       }
     },
 
@@ -1357,6 +1331,7 @@
         await PopupTemplates[this.template].beforeOpen(this)
       }
       catch (e) {
+        maybeLog(e)
       }
 
       this.addToDom()
@@ -1374,6 +1349,7 @@
         PopupTemplates[this.template].onOpen(this)
       }
       catch (e) {
+        maybeLog(e)
       }
 
       this.viewed()
@@ -1385,6 +1361,7 @@
         await PopupTemplates[this.template].onClose(this)
       }
       catch (e) {
+        maybeLog(e)
       }
 
       this.removeFromDom()
@@ -1394,6 +1371,7 @@
         await PopupTemplates[this.template].onClosed(this)
       }
       catch (e) {
+        maybeLog(e)
       }
 
       if (isBuilderPreview()) {
@@ -1413,7 +1391,7 @@
     },
 
     isBlocking () {
-      return true;
+      return true
     },
 
     maybeOpen () {
@@ -1463,7 +1441,7 @@
       })
 
       // Support for content upgrade legacy
-      document.querySelectorAll(`.holler-upgrade.holler-show[data-id="${this.ID}"]`).forEach(el => {
+      document.querySelectorAll(`.holler-upgrade.holler-show[data-id="${ this.ID }"]`).forEach(el => {
         el.addEventListener('click', e => {
           e.preventDefault()
           popup._triggered = false
@@ -1595,6 +1573,7 @@
           url = new URL(el.href)
         }
         catch (e) {
+          maybeLog(e)
           return
         }
 
@@ -1663,6 +1642,7 @@
   HollerBox.templates = PopupTemplates
   HollerBox._frontend = {
     CommonActions,
+    SubmitActions,
     closeButton,
     credit,
     form,
@@ -1672,6 +1652,7 @@
     overlay,
     submitButton,
     TriggerCallbacks,
+    maybeLog
   }
 
 } )()

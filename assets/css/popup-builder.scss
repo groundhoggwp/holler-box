@@ -342,8 +342,12 @@ table.display-conditions-grid {
         zoom: 40%;
 
         .holler-box {
-          .holler-box-overlay {
+          .holler-box-overlay,
+          .holler-box-overlay::after,
+          .holler-box-overlay::before,
+          {
             position: absolute;
+            display: none;
           }
 
           .positioner {
@@ -468,7 +472,10 @@ table.display-conditions-grid {
         }
 
         .holler-box {
-          .holler-box-overlay {
+          .holler-box-overlay,
+          .holler-box-overlay::after,
+          .holler-box-overlay::before
+          {
             position: absolute;
             border-radius: 5px;
           }

@@ -26,6 +26,12 @@
 
   const { sprintf, __, _x, _n } = wp.i18n
 
+  const maybeLog = ( error ) => {
+    if ( HollerBox.settings.script_debug_mode ){
+      console.debug( error )
+    }
+  }
+
   const isGroundhoggInstalled = () => {
     return HollerBox.installed.groundhogg && typeof Groundhogg !== 'undefined'
   }
@@ -1721,7 +1727,7 @@
 
         // language=CSS
         return `
-            #${ id } .holler-box-overlay {
+            #${ id } .holler-box-overlay::after {
                 background-color: ${ overlay_color };
                 opacity: ${ overlay_opacity };
             }
@@ -2303,7 +2309,7 @@
       }
       catch (e) {
 
-        console.log(e)
+        maybeLog(e)
 
         if (!Templates.hasOwnProperty(this.popup.template)) {
           confirmationModal({

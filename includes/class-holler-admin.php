@@ -70,7 +70,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 
 		public function admin_scripts( $hook ) {
 
-            $dot_min = Holler_Settings::instance()->get( 'script_debug_mode') ? '' : '.min';
+			$dot_min = Holler_Settings::instance()->get( 'script_debug_mode' ) ? '' : '.min';
 
 			wp_register_style( 'hollerbox-elements', Holler_Box_URL . 'assets/css/elements.css' );
 			wp_register_style( 'baremetrics-calendar', Holler_Box_URL . 'assets/css/calendar.css' );
@@ -84,11 +84,11 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				'wp-i18n',
 			] );
 
-            wp_register_script( 'baremetrics-calendar', Holler_Box_URL . 'assets/js/baremetrics-calendar' . $dot_min . '.js', [
+			wp_register_script( 'baremetrics-calendar', Holler_Box_URL . 'assets/js/baremetrics-calendar' . $dot_min . '.js', [
 				'moment'
 			] );
 
-            wp_register_script( 'hollerbox-chart-js', Holler_Box_URL . 'assets/js/chart.min.js' );
+			wp_register_script( 'hollerbox-chart-js', Holler_Box_URL . 'assets/js/chart.min.js' );
 			wp_register_script( 'hollerbox-reporting', Holler_Box_URL . 'assets/js/reports' . $dot_min . '.js', [
 				'hollerbox-chart-js',
 				'hollerbox-elements',
@@ -197,7 +197,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 */
 		public function builder_scripts() {
 
-			$dot_min = Holler_Settings::instance()->get( 'debug_mode') ? '' : '.min';
+			$dot_min = Holler_Settings::instance()->get( 'debug_mode' ) ? '' : '.min';
 
 			global $post;
 
@@ -274,6 +274,9 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				],
 				'css_editor_settings' => $settings,
 				'currentUser'         => $user,
+				'settings'            => [
+					'script_debug_mode' => Holler_Settings::instance()->get( 'script_debug_mode' )
+				]
 			] );
 
 			if ( $groundhogg_installed ) {
@@ -389,7 +392,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				'map_meta_cap'       => true,
 				'has_archive'        => false,
 				'hierarchical'       => false,
-				'menu_icon'          => 'dashicons-testimonial',
+				'menu_icon'          => 'data:image/svg+xml;base64,' . base64_encode( self::HollerIcon() ),
 				'supports'           => [ 'title' ],
 				'show_in_customizer' => false,
 			];
@@ -409,6 +412,13 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 					$role->add_cap( $cap );
 				}
 			}
+		}
+
+		public static function HollerIcon( $props = [] ) {
+
+			return '<svg height="20" width="20" viewBox="75.27 55.67 134.43 152.31" xmlns="http://www.w3.org/2000/svg">
+  <path fill="black" d="M 144.47 165.97 L 126.46 155.57 L 126.46 148.31 L 144.47 158.71 Z M 126.46 162.76 L 144.47 173.16 L 144.47 180.42 L 126.46 170.02 Z M 98.66 101.809 L 98.8 101.89 L 144.36 128.2 L 189.92 101.89 L 190.06 101.809 L 144.36 75.428 Z M 193.66 103.887 L 193.66 108.38 L 202.21 103.45 L 202.21 165.92 L 144.36 199.32 L 108.64 178.7 L 98.04 187.35 L 98.04 172.58 L 84.02 164.49 L 84.02 115.62 L 76.53 111.3 L 76.53 168.81 L 90.55 176.91 L 90.55 203.14 L 109.37 187.77 L 144.36 207.98 L 209.7 170.25 L 209.7 90.47 L 190.06 101.809 Z M 193.66 108.38 L 144.36 136.85 L 95.06 108.38 L 95.06 161 L 144.36 189.46 L 193.66 161 Z M 95.06 103.887 L 98.66 101.809 L 90.25 96.96 L 146.73 64.35 L 189.65 89.73 L 197.09 85.43 L 146.78 55.67 L 75.27 96.96 L 95.06 108.38 Z" style=""/>
+</svg>';
 		}
 
 		/**
