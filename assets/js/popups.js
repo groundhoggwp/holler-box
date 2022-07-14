@@ -124,7 +124,9 @@
         return true
       }
 
-      return this.getCookie(HollerBox.settings.cookie_name) === HollerBox.settings.cookie_value
+      let { cookie_name = '', cookie_value = '' } = HollerBox.settings
+
+      return this.getCookie(cookie_name) === cookie_value
     },
   }
 

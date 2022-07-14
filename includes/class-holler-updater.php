@@ -8,7 +8,7 @@ class Holler_Updater {
 
 	public function get_updates() {
 		return [
-			'2.0'
+			'2.0',
 		];
 	}
 

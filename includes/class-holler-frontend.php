@@ -93,7 +93,7 @@ class Holler_Frontend {
 				'gdpr_enabled',
 				'gdpr_text',
 				'cookie_compliance',
-				'name',
+				'cookie_name',
 				'cookie_value',
 				'script_debug_mode'
 			], [
@@ -101,7 +101,7 @@ class Holler_Frontend {
 				'gdpr_enabled'      => false,
 				'gdpr_text'         => '',
 				'cookie_compliance' => false,
-				'name'              => 'view_cookie_policy',
+				'cookie_name'       => 'viewed_cookie_policy',
 				'cookie_value'      => 'yes',
 			] )
 		];
