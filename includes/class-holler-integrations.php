@@ -111,6 +111,7 @@ class Holler_Integrations {
 			'{{location}}'   => $lead->location,
 			'{{referrer}}'   => $lead->referrer,
 			'{{ip_address}}' => $lead->get_ip(),
+			'{{message}}'    => $lead->get_message_formatted(),
 		];
 
 		$message = wp_kses_post( $props['content'] );
@@ -160,13 +161,17 @@ class Holler_Integrations {
 		$headers = [];
 
 		$body = [
-			'full_name'  => $lead->get_name(),
-			'first_name' => $lead->get_first_name(),
-			'last_name'  => $lead->get_last_name(),
-			'email'      => $lead->get_email(),
-			'ip4'        => $lead->get_ip(),
+			'full_name'    => $lead->get_name(),
+			'first_name'   => $lead->get_first_name(),
+			'last_name'    => $lead->get_last_name(),
+			'email'        => $lead->get_email(),
+			'ip4'          => $lead->get_ip(),
 			'gdpr_consent' => $lead->gdpr_consent,
 		];
+
+		if ( $lead->message ){
+			$body['message'] = $lead->message;
+		}
 
 		if ( $props['method'] === 'get' ) {
 			return wp_remote_get( add_query_arg( $body, $props['url'] ), [
@@ -204,26 +209,10 @@ class Holler_Integrations {
 			'url' => '',
 		] );
 
-		$body = [
-			'full_name'    => $lead->get_name(),
-			'first_name'   => $lead->get_first_name(),
-			'last_name'    => $lead->get_last_name(),
-			'email'        => $lead->get_email(),
-			'ip4'          => $lead->get_ip(),
-			'gdpr_consent' => $lead->gdpr_consent,
-		];
+		$props['method']  = 'POST';
+		$props['payload'] = 'json';
 
-		$headers                 = [];
-		$body                    = wp_json_encode( $body );
-		$headers['Content-type'] = sprintf( 'application/json; charset=%s', get_bloginfo( 'charset' ) );
-
-		return wp_remote_post( $props['url'], [
-			'body'        => $body,
-			'headers'     => $headers,
-			'data_format' => 'body',
-			'sslverify'   => is_ssl(),
-			'user-agent'  => 'HollerBox/' . HOLLERBOX_VERSION . '; ' . home_url()
-		] );
+		return $this->webhook( $props, $lead );
 	}
 
 	/**
@@ -262,6 +251,10 @@ class Holler_Integrations {
 			$contact->set_marketing_consent();
 			$contact->set_gdpr_consent();
 			$contact->set_terms_agreement();
+		}
+
+		if ( $lead->message ) {
+			$contact->update_meta( 'hollerbox_chat_message', $lead->message );
 		}
 
 		\Groundhogg\after_form_submit_handler( $contact );

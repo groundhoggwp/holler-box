@@ -26,9 +26,9 @@
 
   const { sprintf, __, _x, _n } = wp.i18n
 
-  const maybeLog = ( error ) => {
-    if ( HollerBox.settings.script_debug_mode ){
-      console.debug( error )
+  const maybeLog = (error) => {
+    if (HollerBox.settings.script_debug_mode) {
+      console.debug(error)
     }
   }
 
@@ -36,7 +36,7 @@
     return HollerBox.installed.groundhogg && typeof Groundhogg !== 'undefined'
   }
 
-  if ( isGroundhoggInstalled() ){
+  if (isGroundhoggInstalled()) {
     const { createFilters } = Groundhogg.filters.functions
   }
 
@@ -506,6 +506,7 @@
           full_name: __('The lead\'s full name (if available)'),
           first_name: __('The lead\'s first name (if available)'),
           last_name: __('The lead\'s last name (if available)'),
+          message: __('The chat message (if available)'),
           location: __('The URL where the form was submitted'),
           referrer: __('The URL where the lead came from'),
           ip_address: __('The lead\'s IP address'),
@@ -1820,12 +1821,12 @@
 
         $('#select-image').on('click', (event) => {
           mediaPicker({
-            onSelect: ( attachment ) => {
+            onSelect: (attachment) => {
               $src.val(attachment.url)
               updateSetting({
-                image_src: attachment.url
+                image_src: attachment.url,
               })
-            }
+            },
           })
         })
 
@@ -1868,12 +1869,12 @@
 
         $('#select-image').on('click', (event) => {
           mediaPicker({
-            onSelect: ( attachment ) => {
+            onSelect: (attachment) => {
               $src.val(attachment.url)
               updateSetting({
-                avatar: attachment.url
+                avatar: attachment.url,
               })
-            }
+            },
           })
         })
       },
@@ -2059,7 +2060,7 @@
         post_content: standardPopupContent,
         button_text: 'Subscribe',
         position: 'center-center',
-        image_src: `${HollerBox.assets.root}/img/default/woman-yellow.png`,
+        image_src: `${ HollerBox.assets.root }/img/default/woman-yellow.png`,
         image_width: 200,
       },
     },
@@ -2081,7 +2082,7 @@
         post_content: standardPopupContent,
         button_text: 'Subscribe',
         position: 'center-center',
-        image_src: `${HollerBox.assets.root}/img/default/man-thumbs-up.png`,
+        image_src: `${ HollerBox.assets.root }/img/default/man-thumbs-up.png`,
         image_width: 200,
       },
     },
@@ -2106,7 +2107,7 @@
         form_color: '#e8eff9',
         position: 'center-center',
         close_button_color: '#ffffff',
-        image_src: `${HollerBox.assets.root}/img/default/woman-working.png`,
+        image_src: `${ HollerBox.assets.root }/img/default/woman-working.png`,
         image_width: 300,
       },
     },
@@ -2128,7 +2129,7 @@
         post_content: standardPopupContent,
         button_text: 'Subscribe',
         position: 'center-center',
-        image_src: `${HollerBox.assets.root}/img/default/shopping.png`,
+        image_src: `${ HollerBox.assets.root }/img/default/shopping.png`,
         image_width: 300,
       },
     },
@@ -2149,7 +2150,7 @@
       defaults: {
         post_content: standardPopupContent,
         button_text: 'Subscribe',
-        image_src: `${HollerBox.assets.root}/img/default/man-working.png`,
+        image_src: `${ HollerBox.assets.root }/img/default/man-working.png`,
         image_width: 300,
         position: 'center-center',
         form_color: '#e8eff9',
@@ -2171,7 +2172,7 @@
       defaults: {
         post_content: standardPopupContent,
         button_text: 'Subscribe',
-        image_src: `${HollerBox.assets.root}/img/default/yellow-gradient.png`,
+        image_src: `${ HollerBox.assets.root }/img/default/yellow-gradient.png`,
         position: 'center-center',
       },
     },
@@ -2272,7 +2273,7 @@
         catch (e) {
           return ''
         }
-      }).join('').replace(/(\r\n|\n|\r)/gm, "");
+      }).join('').replace(/(\r\n|\n|\r)/gm, '')
     },
 
     processShortcodeTimeout: null,
@@ -2560,7 +2561,7 @@
                 break
               case 'trash':
                 window.open(
-                  `${ HollerBox.admin_url }/post.php?post=${this.popup.ID}&action=trash&_wpnonce=${HollerBox.nonces.trash_post}`,
+                  `${ HollerBox.admin_url }/post.php?post=${ this.popup.ID }&action=trash&_wpnonce=${ HollerBox.nonces.trash_post }`,
                   '_self')
                 break
             }
@@ -3144,7 +3145,7 @@
     },
   }
 
-  if ( isGroundhoggInstalled() ) {
+  if (isGroundhoggInstalled()) {
     AdvancedDisplayRules.groundhogg = {
       name: __('Show only to Groundhogg contacts'),
       controls: ({ filters = [] }) => {
@@ -3420,12 +3421,12 @@
             placeholder: '.my-class',
             id: 'selector',
             value: selector,
-        })) } ${select({
-            id: 'trigger_multiple'
+        })) } ${ select({
+            id: 'trigger_multiple',
         }, {
-          once: 'Trigger Once',
-          multiple: 'Trigger Multiple Times',
-        })}`
+            once: 'Trigger Once',
+            multiple: 'Trigger Multiple Times',
+        }) }`
       },
       onMount: (trigger, updateTrigger) => {
         $('#selector').on('change', e => {

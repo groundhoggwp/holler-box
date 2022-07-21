@@ -13,18 +13,20 @@ class Holler_Lead {
 	public $last_name = '';
 	public $location = '';
 	public $referrer = '';
+	public $message = '';
 	public $gdpr_consent = false;
 
 	public function __construct( WP_REST_Request $request ) {
 		$this->name  = sanitize_text_field( $request->get_param( 'name' ) );
 		$this->email = sanitize_email( strtolower( $request->get_param( 'email' ) ) );
 
-		$parts = explode( ' ', $this->name );
-		$this->first_name = trim( $parts[0] );
-		$this->last_name = trim( $parts[1] );
-		$this->location = $request->get_param('location');
-		$this->referrer = $request->get_param('referer');
-		$this->gdpr_consent = $request->get_param('gdpr_consent') === 'yes';
+		$parts              = explode( ' ', $this->name );
+		$this->first_name   = trim( $parts[0] );
+		$this->last_name    = trim( $parts[1] );
+		$this->location     = $request->get_param( 'location' );
+		$this->referrer     = $request->get_param( 'referer' );
+		$this->gdpr_consent = $request->get_param( 'gdpr_consent' ) === 'yes';
+		$this->message      = sanitize_textarea_field( $request->get_param( 'message' ) );
 	}
 
 	/**
@@ -32,7 +34,7 @@ class Holler_Lead {
 	 *
 	 * @return string
 	 */
-	public function get_email(){
+	public function get_email() {
 		return $this->email;
 	}
 
@@ -41,7 +43,7 @@ class Holler_Lead {
 	 *
 	 * @return string
 	 */
-	public function get_name(){
+	public function get_name() {
 		return $this->name;
 	}
 
@@ -50,7 +52,7 @@ class Holler_Lead {
 	 *
 	 * @return string
 	 */
-	public function get_first_name(){
+	public function get_first_name() {
 		return $this->first_name;
 	}
 
@@ -59,8 +61,12 @@ class Holler_Lead {
 	 *
 	 * @return string
 	 */
-	public function get_last_name(){
+	public function get_last_name() {
 		return $this->last_name;
+	}
+
+	public function get_message_formatted(){
+		return wpautop( $this->message );
 	}
 
 	/**
@@ -68,7 +74,7 @@ class Holler_Lead {
 	 *
 	 * @return string
 	 */
-	public function get_ip(){
+	public function get_ip() {
 		if ( ! empty( $_SERVER['HTTP_CLIENT_IP'] ) )   //check ip from share internet
 		{
 			$ip = $_SERVER['HTTP_CLIENT_IP'];
