@@ -36,10 +36,6 @@
     return HollerBox.installed.groundhogg && typeof Groundhogg !== 'undefined'
   }
 
-  if (isGroundhoggInstalled()) {
-    const { createFilters } = Groundhogg.filters.functions
-  }
-
   const isPro = () => {
     return typeof HollerBoxPro !== 'undefined'
   }
@@ -324,7 +320,9 @@
   }
 
   const selectTemplateModal = ({
-    modalSettings = {},
+    modalSettings = {
+      canClose: true
+    },
     onSelect = (t) => {},
   }) => {
 
@@ -334,8 +332,8 @@
       // language=HTML
       content: `
           <div class="holler-header is-sticky">
-              <h3>${ __('Select Template') }</h3>
-              ${ modalSettings.canClose ? '' : `<button class="holler-button secondary text icon holler-modal-button-close"><span
+              <h3>${ __('Select a template') }</h3>
+              ${ ! modalSettings.canClose ? '' : `<button class="holler-button secondary text icon holler-modal-button-close"><span
                       class="dashicons dashicons-no-alt"></span>
               </button>` }
           </div>
@@ -3155,6 +3153,8 @@
       },
       onMount: (trigger, updateTrigger) => {
 
+        let filters = trigger?.filters || []
+
         $('#edit-groundhogg-filters').on('click', e => {
 
           modal({
@@ -3170,7 +3170,8 @@
                 <div id="holler-groundhogg-filters"></div>`,
             dialogClasses: 'overflow-visible has-header',
             onOpen: () => {
-              createFilters('#holler-groundhogg-filters', trigger?.filters || [], (filters) => {
+              Groundhogg.filters.functions.createFilters('#holler-groundhogg-filters', filters, (__filters) => {
+                filters = __filters
                 updateTrigger({
                   filters,
                 })
