@@ -310,20 +310,24 @@ class Holler_Popup implements JsonSerializable {
 	 *
 	 * @param $lead Holler_Lead
 	 *
-	 * @return string[]|false
+	 * @return string[]|WP_Error|WP_Error[]
 	 */
 	public function submit( $lead ) {
 
 		$integrations = $this->_get_meta( 'integrations' );
 
 		if ( empty( $integrations ) ) {
-			return false;
+			return new WP_Error( 'no_integrations', 'You have no configured any integrations for this popup.' );
 		}
 
-		$results = [];
+		$failures = [];
 
 		foreach ( $integrations as $i => $integration ) {
-			$results[ $integration['type'] . '_' . $i ] = Holler_Integrations::_do( $integration, $lead );
+			$result = Holler_Integrations::_do( $integration, $lead );
+
+			if ( is_wp_error( $result ) ) {
+				$failures[] = sprintf( '<b>%s</b>: %s', $integration['type'], $result->get_error_message() );
+			}
 		}
 
 		/**
@@ -334,9 +338,15 @@ class Holler_Popup implements JsonSerializable {
 		 */
 		do_action( 'hollerbox/submitted', $this, $lead );
 
+		if ( current_user_can( 'edit_popups' ) && ! empty( $failures ) ) {
+			return [
+				'status'   => 'failed',
+				'failures' => $failures
+			];
+		}
+
 		return [
-			'status'  => 'success',
-			'results' => $results
+			'status' =>  count( $failures ) < count( $integrations ) ? 'success' : 'failed'
 		];
 	}
 
@@ -467,7 +477,7 @@ class Holler_Popup implements JsonSerializable {
 
 				$condition = wp_parse_args( $condition, [
 					'selected' => []
-				]);
+				] );
 
 				if ( ! is_singular( $post_type->name ) ) {
 					return false;
@@ -496,7 +506,7 @@ class Holler_Popup implements JsonSerializable {
 
 					$condition = wp_parse_args( $condition, [
 						'selected' => []
-					]);
+					] );
 
 					// If not a singular, def false
 					if ( ! is_singular( $post_type->name ) ) {
@@ -518,7 +528,7 @@ class Holler_Popup implements JsonSerializable {
 
 					$condition = wp_parse_args( $condition, [
 						'selected' => []
-					]);
+					] );
 
 					$term_ids = wp_parse_id_list( wp_list_pluck( $condition['selected'], 'id' ) );
 
@@ -933,14 +943,14 @@ class Holler_Popup implements JsonSerializable {
 		$integrations = $this->_get_meta( 'integrations' );
 
 		// If there are existing integrations, bugger off
-		if ( ! empty( $integrations ) ){
+		if ( ! empty( $integrations ) ) {
 			return;
 		}
 
 		// Get the legacy email provider
 		$email_provider = $this->_get_meta( 'email_provider' );
 
-		if ( empty( $email_provider ) ){
+		if ( empty( $email_provider ) ) {
 			return;
 		}
 

@@ -321,7 +321,7 @@
 
   const selectTemplateModal = ({
     modalSettings = {
-      canClose: true
+      canClose: true,
     },
     onSelect = (t) => {},
   }) => {
@@ -333,7 +333,7 @@
       content: `
           <div class="holler-header is-sticky">
               <h3>${ __('Select a template') }</h3>
-              ${ ! modalSettings.canClose ? '' : `<button class="holler-button secondary text icon holler-modal-button-close"><span
+              ${ !modalSettings.canClose ? '' : `<button class="holler-button secondary text icon holler-modal-button-close"><span
                       class="dashicons dashicons-no-alt"></span>
               </button>` }
           </div>
@@ -2028,9 +2028,9 @@
       controls: [
         Controls.position,
         Controls.content,
+        Controls.overlay,
         Controls.fields,
         Controls.button,
-        Controls.overlay,
         Controls.submit,
         Controls.integration,
       ],
@@ -2048,9 +2048,9 @@
         Controls.position,
         Controls.image,
         Controls.content,
+        Controls.overlay,
         Controls.fields,
         Controls.button,
-        Controls.overlay,
         Controls.submit,
         Controls.integration,
       ],
@@ -2069,9 +2069,9 @@
         Controls.position,
         Controls.image,
         Controls.content,
+        Controls.overlay,
         Controls.fields,
         Controls.button,
-        Controls.overlay,
         Controls.submit,
         Controls.integration,
         Controls.close_button,
@@ -2091,11 +2091,11 @@
         Controls.position,
         Controls.image,
         Controls.content,
-        Controls.fields,
-        Controls.button,
-        Controls.form,
         Controls.close_button,
         Controls.overlay,
+        Controls.form,
+        Controls.fields,
+        Controls.button,
         Controls.submit,
         Controls.integration,
       ],
@@ -2117,9 +2117,9 @@
         Controls.image,
         Controls.content,
         Controls.progress,
+        Controls.overlay,
         Controls.fields,
         Controls.button,
-        Controls.overlay,
         Controls.submit,
         Controls.integration,
       ],
@@ -2138,12 +2138,13 @@
         Controls.position,
         Controls.image,
         Controls.content,
-        Controls.fields,
-        Controls.button,
-        Controls.form,
-        Controls.modal,
         Controls.close_button,
         Controls.overlay,
+        Controls.form,
+        Controls.fields,
+        Controls.button,
+        Controls.submit,
+        Controls.integration,
       ],
       defaults: {
         post_content: standardPopupContent,
@@ -2161,11 +2162,12 @@
         Controls.position,
         Controls.image,
         Controls.content,
-        Controls.fields,
-        Controls.button,
-        Controls.modal,
         Controls.close_button,
         Controls.overlay,
+        Controls.fields,
+        Controls.button,
+        Controls.submit,
+        Controls.integration,
       ],
       defaults: {
         post_content: standardPopupContent,
@@ -2537,7 +2539,7 @@
         this.commit()
       })
       $('#enable').on('click', e => {
-        this.enable(updateSettings)
+        this.enable()
       })
       $('#disable').on('click', e => {
         this.disable()
@@ -2570,9 +2572,15 @@
 
     },
 
-    enable (updateSettings) {
+    enable (maybeIgnore = {}) {
 
-      if (!Object.values(this.popup.triggers).some(({ enabled = false }) => enabled)) {
+      const {
+        ignoreTriggers = false,
+        ignoreIntegrations = false,
+        ignoreDisplayRules = false,
+      } = maybeIgnore
+
+      if (!ignoreTriggers && !Object.values(this.popup.triggers).some(({ enabled = false }) => enabled)) {
 
         confirmationModal({
           alert: `<p>${ __('You do not have any triggers enabled, enable a trigger so your popup will display!',
@@ -2580,18 +2588,20 @@
           confirmText: __('Edit Triggers', 'holler-box'),
           closeText: __('Publish Anyway', 'holler-box'),
           onConfirm: () => {
-            editTriggersModal(this.getPopup(), updateSettings)
+            $('#edit-triggers').click()
           },
           onCancel: () => {
-            this.popup.post_status = 'publish'
-            return this.commit()
+            return this.enable({
+              ignoreTriggers: true,
+              ...maybeIgnore,
+            })
           },
         })
 
         return
       }
 
-      if (!this.popup.display_rules.length) {
+      if (!ignoreDisplayRules && !this.popup.display_rules.length) {
 
         confirmationModal({
           alert: `<p>${ __(
@@ -2600,11 +2610,38 @@
           confirmText: __('Add Display Rules', 'holler-box'),
           closeText: __('Publish Anyway', 'holler-box'),
           onConfirm: () => {
-            editDisplayConditionsModal(this.getPopup(), updateSettings)
+            $('#edit-display-conditions').click()
           },
           onCancel: () => {
-            this.popup.post_status = 'publish'
-            return this.commit()
+            return this.enable({
+              ignoreDisplayRules: true,
+              ...maybeIgnore,
+            })
+          },
+        })
+
+        return
+      }
+
+      if (!ignoreIntegrations && this.getTemplate().controls.find(c => c.name === __('Integration', 'holler-box')) &&
+        !this.popup.integrations?.length) {
+
+        confirmationModal({
+          alert: `<p>${ __(
+            'You have not configured any integrations! Add an integration so subscribers\' data is saved.',
+            'holler-box') }</p>`,
+          confirmText: __('Add Integrations', 'holler-box'),
+          closeText: __('Publish Anyway', 'holler-box'),
+          onConfirm: () => {
+            let $addIntegration = $('#add-integration')
+            $addIntegration.closest('.control-group-header').click()
+            $addIntegration.click()
+          },
+          onCancel: () => {
+            return this.enable({
+              ignoreIntegrations: true,
+              ...maybeIgnore,
+            })
           },
         })
 

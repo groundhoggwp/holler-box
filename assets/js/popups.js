@@ -370,7 +370,31 @@
         form.querySelector('button').innerHTML = '<span class="holler-spinner"></span>'
 
         const submit = () => apiPost(`${ HollerBox.routes.submit }/${ popup.ID }`, Object.fromEntries(formData)).
-          then((r) => {
+          then(({ status = 'success', failures = [] }) => {
+
+            if ( status === 'failed' ){
+
+              if ( ! failures.length ){
+                alert( 'Something when wrong, please try again later.' )
+                popup.close()
+                return;
+              }
+
+              console.log(failures)
+
+              popup.querySelector('form').innerHTML = [
+                `<div class="hollerbox-integration-errors">`,
+                `<p>There are issues with some of your integrations:</p>`,
+                `<ul>`,
+                  ...failures.map( f => `<li>${f}</li>` ),
+                `</ul>`,
+                `<p>Only admins see this message.</p>`,
+                `</div>`,
+              ].join('')
+
+              return;
+            }
+
             popup.submitted = true
             popup.converted(false)
 
@@ -382,10 +406,12 @@
             }))
           }).
           catch(e => {
-            alert('Something went wrong, please try again.')
+            alert(e.message)
+            console.log(e)
+            popup.close()
           })
 
-        setTimeout(() => submit(), 500)
+        submit()
       })
     },
     buttonClicked: (popup) => {

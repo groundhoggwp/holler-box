@@ -318,7 +318,13 @@ class Holler_Api {
 
 		$response = $popup->submit( $lead );
 
-		$this->track_conversion( $request );
+		if ( is_wp_error($response) ){
+			return rest_ensure_response( $response );
+		}
+
+		if ( $response['status'] === 'success' ){
+			$this->track_conversion( $request );
+		}
 
 		return rest_ensure_response( $response );
 	}

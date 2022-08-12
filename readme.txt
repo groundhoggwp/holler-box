@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.0
-Stable tag: 2.0.5
+Stable tag: 2.0.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -222,6 +222,11 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.0.6 (2022-08-12) =
+* ADDED Integration failure notice for admins when testing popups
+* ADDED Missing integrations prompt when publishing a popup
+* FIXED Integration & After Submit settings missing from some templates
 
 = 2.0.5 (2022-07-26) =
 * FIXED Groundhogg display filters not working

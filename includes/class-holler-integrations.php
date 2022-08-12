@@ -46,7 +46,7 @@ class Holler_Integrations {
 	 * @param $integration array
 	 * @param $lead        Holler_Lead
 	 *
-	 * @return false|mixed false if the provided integration is not registered
+	 * @return true|WP_Error false if the provided integration is not registered
 	 */
 	public static function _do( $integration, $lead ) {
 
@@ -58,7 +58,7 @@ class Holler_Integrations {
 		$type = $integration['type'];
 
 		if ( ! isset( self::$integrations[ $type ] ) ) {
-			return 'Unknown integration ' . $type;
+			return new WP_Error('unknown_integration', 'Unknown integration type ' . $type );
 		}
 
 		return call_user_func( self::$integrations[ $type ], $integration, $lead );
@@ -74,6 +74,22 @@ class Holler_Integrations {
 		self::register( 'webhook', [ $this, 'webhook' ] );
 
 		do_action( 'hollerbox/register_integrations' );
+	}
+
+	/**
+	 * @var WP_Error
+	 */
+	protected $wp_mail_error;
+
+	/**
+	 * Catch email failed error
+	 *
+	 * @param $wp_error
+	 *
+	 * @return void
+	 */
+	public function catch_mail_failed( $wp_error ) {
+		$this->wp_mail_error = $wp_error;
 	}
 
 	/**
@@ -133,13 +149,18 @@ class Holler_Integrations {
 			$headers[] = sprintf( 'From: %s', $props['from'] );
 		}
 
-		return wp_mail(
+		add_action( 'wp_mail_failed', [ $this, 'catch_mail_failed' ] );
+
+		$result = wp_mail(
 			$to,
 			$subject,
 			$message,
 			$headers
 		);
 
+		remove_action( 'wp_mail_failed', [ $this, 'catch_mail_failed' ] );
+
+		return $result ?: $this->wp_mail_error;
 	}
 
 	/**
@@ -169,7 +190,7 @@ class Holler_Integrations {
 			'gdpr_consent' => $lead->gdpr_consent,
 		];
 
-		if ( $lead->message ){
+		if ( $lead->message ) {
 			$body['message'] = $lead->message;
 		}
 
@@ -185,7 +206,7 @@ class Holler_Integrations {
 			$headers['Content-type'] = sprintf( 'application/json; charset=%s', get_bloginfo( 'charset' ) );
 		}
 
-		return wp_remote_request( $props['url'], [
+		$response = wp_remote_request( $props['url'], [
 			'method'      => strtoupper( $props['method'] ),
 			'body'        => $body,
 			'headers'     => $headers,
@@ -193,6 +214,12 @@ class Holler_Integrations {
 			'sslverify'   => is_ssl(),
 			'user-agent'  => 'HollerBox/' . HOLLERBOX_VERSION . '; ' . home_url()
 		] );
+
+		if ( is_wp_error( $response ) ){
+			return $response;
+		}
+
+		return true;
 	}
 
 	/**

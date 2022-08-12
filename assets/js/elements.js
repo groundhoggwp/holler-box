@@ -398,8 +398,6 @@
     ...rest
   }) => {
 
-    let confirmed = false
-
     //language=html
     const content = `
         <button type="button" class="dashicon-button holler-modal-button-close-top holler-modal-button-close">
@@ -409,7 +407,7 @@
             ${ alert }
         </div>
         <div class="holler-modal-confirmation-buttons">
-            <button type="button" class="holler-button ${ buttonSize } ${ cancelButtonType } holler-modal-button-close">
+            <button type="button" class="holler-button ${ buttonSize } ${ cancelButtonType } holler-modal-button-cancel">
                 ${ closeText }
             </button>
             <button type="button"
@@ -419,10 +417,6 @@
         </div>`
 
     const handleClose = () => {
-      if (!confirmed) {
-        onCancel()
-      }
-
       onClose()
     }
 
@@ -434,16 +428,17 @@
     })
 
     const confirm = () => {
-      confirmed = true
       onConfirm()
       close()
     }
 
-    const handleConfirm = () => {
-      confirm()
+    const cancel = () => {
+      onCancel()
+      close()
     }
 
-    $('.holler-modal-button-confirm').on('click', handleConfirm)
+    $('.holler-modal-button-confirm').on('click', confirm)
+    $('.holler-modal-button-cancel').on('click', cancel)
 
     return {
       close,

@@ -141,6 +141,18 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
     transform: translateX(-100%);
   }
 }
+.holler-box .hollerbox-integration-errors {
+  background: #FFFFFF;
+  color: #e91f4f;
+  padding: 20px;
+  font-size: 16px;
+}
+.holler-box .hollerbox-integration-errors p:first-child {
+  margin-top: 0;
+}
+.holler-box .hollerbox-integration-errors p:last-child {
+  margin-bottom: 0;
+}
 .holler-box.no-animation .holler-box-overlay,
 .holler-box.no-animation .holler-box-overlay::before,
 .holler-box.no-animation .holler-box-overlay::after,

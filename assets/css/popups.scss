@@ -209,6 +209,21 @@ body:not(.wp-admin) {
 
 .holler-box {
 
+  .hollerbox-integration-errors{
+    background: #FFFFFF;
+    color: $error-red;
+    padding: 20px;
+    font-size: 16px;
+
+    p:first-child {
+      margin-top: 0;
+    }
+
+    p:last-child {
+      margin-bottom: 0;
+    }
+  }
+
   &.no-animation {
     .holler-box-overlay,
     .holler-box-overlay::before,
