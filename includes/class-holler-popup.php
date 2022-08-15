@@ -20,6 +20,8 @@ class Holler_Popup implements JsonSerializable {
 		// Upgrades
 		$this->maybe_upgrade_2_0();
 		$this->maybe_upgrade_2_0_integrations();
+
+		do_action( 'hollerbox/popup/__construct', $this );
 	}
 
 	/**
