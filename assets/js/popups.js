@@ -165,9 +165,9 @@
     return json
   }
 
-  const maybeLog = ( error ) => {
-    if ( HollerBox.settings?.script_debug_mode ){
-      console.debug( error )
+  const maybeLog = (error) => {
+    if (HollerBox.settings?.script_debug_mode) {
+      console.debug(error)
     }
   }
 
@@ -372,12 +372,12 @@
         const submit = () => apiPost(`${ HollerBox.routes.submit }/${ popup.ID }`, Object.fromEntries(formData)).
           then(({ status = 'success', failures = [] }) => {
 
-            if ( status === 'failed' ){
+            if (status === 'failed') {
 
-              if ( ! failures.length ){
-                alert( 'Something when wrong, please try again later.' )
+              if (!failures.length) {
+                alert('Something when wrong, please try again later.')
                 popup.close()
-                return;
+                return
               }
 
               console.log(failures)
@@ -386,13 +386,13 @@
                 `<div class="hollerbox-integration-errors">`,
                 `<p>There are issues with some of your integrations:</p>`,
                 `<ul>`,
-                  ...failures.map( f => `<li>${f}</li>` ),
+                ...failures.map(f => `<li>${ f }</li>`),
                 `</ul>`,
                 `<p>Only admins see this message.</p>`,
                 `</div>`,
               ].join('')
 
-              return;
+              return
             }
 
             popup.submitted = true
@@ -557,7 +557,7 @@
                             ${ closeButton() }
                             <div class="display-flex">
                                 <img src="${ avatar }" alt="">
-                                ${ __content(submitted ? success_message: post_content) }
+                                ${ __content(submitted ? success_message : post_content) }
                             </div>
                             ${ submitted ? '' : form({
                                 direction: 'horizontal',
@@ -589,11 +589,24 @@
           message_placeholder = 'Type your message',
           state = 'message',
           closed = false,
-          doAnminations = true,
+          doAnimations = true,
         } = popup
 
         if (closed) {
-          return notificationClosedTemplate({ id, position })
+          // language=HTML
+          return `
+              <div id="${ id }" class="holler-box holler-notification-box">
+                  <div class="positioner ${ position }">
+                      <div class="animation slide-in">
+                          <div class="holler-box-modal notification-closed">
+                              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                  <path fill="#fff" d="M303.4 61.4A207 207 0 0 0 195 31C89 31 0 110 0 211a169 169 0 0 0 32 98.7L2.6 401.4a15 15 0 0 0 21.1 18l88.8-45.2c3.6 1.6 7.3 3 11 4.3A198.2 198.2 0 0 1 92 271c0-114.9 96.7-203.2 211.4-209.6z"/>
+                                  <path fill="#fff" d="M480 369.7a169 169 0 0 0 32-98.7c0-101.1-89-180-195-180s-195 79-195 180c0 101.1 89 180 195 180 28.4 0 56.7-5.8 82.4-16.8l88.8 45.2a15 15 0 0 0 21-18zM256 286a15 15 0 1 1 0-30 15 15 0 0 1 0 30zm60 0a15 15 0 1 1 0-30 15 15 0 0 1 0 30zm60 0a15 15 0 1 1 0-30 15 15 0 0 1 0 30z"/>
+                              </svg>
+                          </div>
+                      </div>
+                  </div>
+              </div>`
         }
 
         if (!popup.messages) {
@@ -629,7 +642,7 @@
           return `
               <div id="${ id }" class="holler-box holler-notification-box with-chat">
                   <div class="positioner ${ position }">
-                      <div class="animation ${ doAnminations ? 'slide-in' : '' }">
+                      <div class="animation ${ doAnimations ? 'slide-in' : '' }">
                           <div class="holler-box-modal ">
                               ${ closeButton() }
                               ${ popup.messages.join('') }
@@ -647,7 +660,7 @@
         return `
             <div id="${ id }" class="holler-box holler-notification-box with-chat">
                 <div class="positioner ${ position }">
-                    <div class="animation ${ doAnminations ? 'slide-in' : '' }">
+                    <div class="animation ${ doAnimations ? 'slide-in' : '' }">
                         <div class="holler-box-modal ">
                             ${ closeButton() }
                             ${ popup.messages.join('') }
@@ -797,7 +810,7 @@
               break
           }
 
-          popup.doAnminations = false
+          popup.doAnimations = false
 
           popup.open()
         })
@@ -805,7 +818,7 @@
       },
       onClosed: (popup) => {
         CommonActions.notificationClosed(popup)
-        popup.doAnminations = true
+        popup.doAnimations = true
       },
     },
     popup_custom: {
@@ -840,7 +853,6 @@
         id = '',
         position = 'center-center',
         animation = 'appear',
-        title = '',
         post_content = '',
         button_text = 'Subscribe',
         name_placeholder = 'Name',
@@ -852,13 +864,14 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-standard ${ submitted ? 'no-animation' : '' }">
+            <div id="${ id }"
+                 class="holler-box holler-popup holler-popup-standard ${ submitted ? 'no-animation' : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
                         <div class="holler-box-modal">
                             ${ closeButton() }
-                            ${ __content( submitted ? success_message : post_content) }
+                            ${ __content(submitted ? success_message : post_content) }
                             ${ submitted ? '' : form({
                                 direction: 'vertical',
                                 button_text,
@@ -895,7 +908,8 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-image-left ${ submitted ? 'no-animation' : '' }">
+            <div id="${ id }"
+                 class="holler-box holler-popup holler-popup-image-left ${ submitted ? 'no-animation' : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -944,7 +958,8 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-image-right ${ submitted ? 'no-animation' : '' }">
+            <div id="${ id }"
+                 class="holler-box holler-popup holler-popup-image-right ${ submitted ? 'no-animation' : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -992,7 +1007,8 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-form-below ${ submitted ? 'no-animation' : '' }">
+            <div id="${ id }"
+                 class="holler-box holler-popup holler-popup-form-below ${ submitted ? 'no-animation' : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -1040,7 +1056,8 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-progress-bar ${ submitted ? 'no-animation' : '' }">
+            <div id="${ id }"
+                 class="holler-box holler-popup holler-popup-progress-bar ${ submitted ? 'no-animation' : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -1094,7 +1111,9 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-image-beside-text-top ${ submitted ? 'no-animation' : '' }">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-image-beside-text-top ${ submitted
+                    ? 'no-animation'
+                    : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -1140,7 +1159,9 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-full-image-background ${ submitted ? 'no-animation' : '' }">
+            <div id="${ id }" class="holler-box holler-popup holler-popup-full-image-background ${ submitted
+                    ? 'no-animation'
+                    : '' }">
                 ${ overlay_enabled ? overlay() : '' }
                 <div class="positioner ${ position }">
                     <div class="animation ${ animation }">
@@ -1419,7 +1440,12 @@
     },
 
     isBlocking () {
-      return true
+      return ![
+        'fake_chat',
+        'notification_box',
+        'notification_box_with_button',
+        'notification_box_with_form',
+      ].includes(this.template)
     },
 
     maybeOpen () {
@@ -1680,7 +1706,7 @@
     overlay,
     submitButton,
     TriggerCallbacks,
-    maybeLog
+    maybeLog,
   }
 
 } )()

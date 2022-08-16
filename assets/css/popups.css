@@ -141,6 +141,9 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
     transform: translateX(-100%);
   }
 }
+.holler-box {
+  z-index: 1000;
+}
 .holler-box .hollerbox-integration-errors {
   background: #FFFFFF;
   color: #e91f4f;
@@ -170,7 +173,6 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 }
 .holler-box .positioner {
   position: fixed;
-  z-index: 1000;
 }
 .holler-box .positioner.top {
   top: 20px;
@@ -304,7 +306,6 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   bottom: 0;
   background-color: transparent;
   opacity: 1;
-  z-index: 997;
   animation: holler-overlay-appear 0.4s ease-in-out;
 }
 .holler-box .holler-box-overlay::after {
@@ -316,7 +317,6 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   bottom: 0;
   background-color: #333;
   opacity: 0.5;
-  z-index: 999;
 }
 .holler-box .holler-box-overlay.no-animation {
   animation: none;
@@ -679,7 +679,6 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   width: 330px;
 }
 .holler-box.holler-popup-progress-bar .holler-box-modal button.holler-box-modal-close {
-  z-index: 999;
   top: 25px;
 }
 .holler-box.holler-popup-progress-bar .display-flex {

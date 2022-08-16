@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.0
-Stable tag: 2.0.7
+Stable tag: 2.0.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -222,6 +222,11 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.0.8 (2022-08-16) =
+* TWEAKED Z-index is now set at the popup root element
+* TWEAKED Changed fake chat closed icon to chat bubble instead of notification bell
+* TWEAKED Chat popups and notification popups are now non-blocking, meaning if open they will not prevent other popups from opening.
 
 = 2.0.7 (2022-08-15) =
 * ADDED developer hook during popup `__construct` method

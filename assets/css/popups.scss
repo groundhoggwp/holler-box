@@ -209,6 +209,8 @@ body:not(.wp-admin) {
 
 .holler-box {
 
+  z-index: 1000;
+
   .hollerbox-integration-errors{
     background: #FFFFFF;
     color: $error-red;
@@ -247,7 +249,6 @@ body:not(.wp-admin) {
   .positioner {
 
     position: fixed;
-    z-index: 1000;
 
     &.top {
 
@@ -427,7 +428,6 @@ body:not(.wp-admin) {
     bottom: 0;
     background-color: transparent;
     opacity: 1;
-    z-index: 997;
 
     &::after {
       content: '';
@@ -438,7 +438,6 @@ body:not(.wp-admin) {
       bottom: 0;
       background-color: #333;
       opacity: 0.5;
-      z-index: 999;
     }
 
     animation: holler-overlay-appear 0.4s ease-in-out;
@@ -921,9 +920,7 @@ body:not(.wp-admin) {
       overflow: hidden;
 
       button.holler-box-modal-close {
-        z-index: 999;
         top: 25px;
-        //right: 13px;
       }
     }
 
