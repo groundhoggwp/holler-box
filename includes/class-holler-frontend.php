@@ -26,6 +26,7 @@ class Holler_Frontend {
 	public function __construct() {
 		add_action( 'wp', [ $this, 'get_active_popups' ] );
 		add_action( 'wp_head', [ $this, 'popup_css' ] );
+		add_action( 'wp_footer', [ $this, 'popup_content' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 		add_filter( 'body_class', [ $this, 'body_classes' ], 10, 2 );
 	}
@@ -55,6 +56,18 @@ class Holler_Frontend {
 		<?php
 	}
 
+    public function popup_content(){
+	    ?>
+        <div id="hollerbox-popup-content">
+            <?php foreach ( $this->active as $popup ):
+
+				$popup->maybe_output_content();
+
+			endforeach;?>
+        </div>
+	    <?php
+    }
+
 	public function enqueue_scripts() {
 
 		$dot_min = Holler_Settings::instance()->get( 'script_debug_mode' ) ? '' : '.min';
@@ -68,10 +81,6 @@ class Holler_Frontend {
 
 				// Remove secret properties
 				unset( $popup['integrations'] );
-
-				// Do shortcodes where relevant
-				$popup['post_content']    = do_shortcode( $popup['post_content'] );
-				$popup['success_message'] = do_shortcode( $popup['success_message'] );
 
 				return $popup;
 			}, $this->active ),

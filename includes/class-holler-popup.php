@@ -148,6 +148,7 @@ class Holler_Popup implements JsonSerializable {
 			case 'id':
 			case 'items':
 			case 'timeout':
+			case 'has_shortcodes':
 				// don't save this!
 				break;
 			case 'post_title':
@@ -287,6 +288,28 @@ class Holler_Popup implements JsonSerializable {
 	}
 
 	/**
+	 * Whether the passed content contains any shortcode
+	 *
+	 * @since 3.6.0
+	 *
+	 * @param string $content Content to search for shortcodes.
+	 *
+	 * @return bool Whether the passed content contains the given shortcode.
+	 * @global array $shortcode_tags
+	 *
+	 */
+	public static function content_has_shortcodes( $content ) {
+		if ( false === strpos( $content, '[' ) ) {
+			return false;
+		}
+
+		preg_match_all( '/' . get_shortcode_regex() . '/', $content, $matches, PREG_SET_ORDER );
+
+		return ! empty( $matches );
+	}
+
+
+	/**
 	 * Serializable version of the post
 	 *
 	 * @return array|mixed|object
@@ -294,7 +317,11 @@ class Holler_Popup implements JsonSerializable {
 	public function jsonSerialize() {
 		return wp_parse_args( $this->post->to_array(), wp_parse_args( $this->settings, [
 			'after_submit'    => 'close',
-			'success_message' => __( 'Thanks for subscribing.' )
+			'success_message' => __( 'Thanks for subscribing.' ),
+			'has_shortcodes'  => [
+				'in_content'         => self::content_has_shortcodes( $this->post_content ),
+				'in_success_message' => self::content_has_shortcodes( $this->success_message )
+			]
 		] ) );
 	}
 
@@ -348,7 +375,7 @@ class Holler_Popup implements JsonSerializable {
 		}
 
 		return [
-			'status' =>  count( $failures ) < count( $integrations ) ? 'success' : 'failed'
+			'status' => count( $failures ) < count( $integrations ) ? 'success' : 'failed'
 		];
 	}
 
@@ -369,6 +396,29 @@ class Holler_Popup implements JsonSerializable {
 	public function output_css() {
 		echo $this->_get_meta( 'css' );
 	}
+
+	/**
+	 * Output popup content in the event it contains shortcodes
+	 *
+	 * @return void
+	 */
+	public function maybe_output_content() {
+
+		if ( self::content_has_shortcodes( $this->post_content ) ){
+			?><div id="holler-<?php echo $this->ID ?>-content">
+				<?php echo do_shortcode( wpautop( $this->post_content ) ) ?>
+			</div><?php
+		}
+
+		if ( self::content_has_shortcodes( $this->success_message ) ){
+			?><div id="holler-<?php echo $this->ID ?>-success-message">
+			<?php echo do_shortcode( wpautop( $this->success_message ) ) ?>
+			</div><?php
+		}
+
+	}
+
+
 
 	/**
 	 * Callbacks for whether we should display a popup

@@ -27,6 +27,10 @@ $background-color: #F6F9FB;
 $admin-bar-height: 32px;
 $holler-yellow: rgb(232, 173, 11);
 
+#hollerbox-popup-content{
+  display: none !important;
+}
+
 body {
   &.holler-box-blurred {
     filter: blur(4px);

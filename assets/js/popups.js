@@ -353,7 +353,12 @@
         })
       }
     },
-    formSubmitted: (popup) => {
+    formSubmitted: (popup, filters = {}) => {
+
+      const {
+        modifyFormData = (fd) => {},
+        modifyPayload = (pl) => {},
+      } = filters
 
       const { id, after_submit = 'close' } = popup
 
@@ -366,10 +371,16 @@
         formData.append('location', window.location.href)
         formData.append('referer', document.referrer)
 
+        modifyFormData( formData )
+
         form.querySelectorAll('input, button').forEach(el => el.disabled = true)
         form.querySelector('button').innerHTML = '<span class="holler-spinner"></span>'
 
-        const submit = () => apiPost(`${ HollerBox.routes.submit }/${ popup.ID }`, Object.fromEntries(formData)).
+        let payload = Object.fromEntries(formData)
+
+        modifyPayload( payload )
+
+        const submit = () => apiPost(`${ HollerBox.routes.submit }/${ popup.ID }`, payload ).
           then(({ status = 'success', failures = [] }) => {
 
             if (status === 'failed') {
@@ -406,12 +417,11 @@
             }))
           }).
           catch(e => {
-            alert(e.message)
-            console.log(e)
+            maybeLog(e)
             popup.close()
           })
 
-        submit()
+        return submit()
       })
     },
     buttonClicked: (popup) => {
@@ -600,8 +610,10 @@
                       <div class="animation slide-in">
                           <div class="holler-box-modal notification-closed">
                               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                                  <path fill="#fff" d="M303.4 61.4A207 207 0 0 0 195 31C89 31 0 110 0 211a169 169 0 0 0 32 98.7L2.6 401.4a15 15 0 0 0 21.1 18l88.8-45.2c3.6 1.6 7.3 3 11 4.3A198.2 198.2 0 0 1 92 271c0-114.9 96.7-203.2 211.4-209.6z"/>
-                                  <path fill="#fff" d="M480 369.7a169 169 0 0 0 32-98.7c0-101.1-89-180-195-180s-195 79-195 180c0 101.1 89 180 195 180 28.4 0 56.7-5.8 82.4-16.8l88.8 45.2a15 15 0 0 0 21-18zM256 286a15 15 0 1 1 0-30 15 15 0 0 1 0 30zm60 0a15 15 0 1 1 0-30 15 15 0 0 1 0 30zm60 0a15 15 0 1 1 0-30 15 15 0 0 1 0 30z"/>
+                                  <path fill="#fff"
+                                        d="M303.4 61.4A207 207 0 0 0 195 31C89 31 0 110 0 211a169 169 0 0 0 32 98.7L2.6 401.4a15 15 0 0 0 21.1 18l88.8-45.2c3.6 1.6 7.3 3 11 4.3A198.2 198.2 0 0 1 92 271c0-114.9 96.7-203.2 211.4-209.6z"/>
+                                  <path fill="#fff"
+                                        d="M480 369.7a169 169 0 0 0 32-98.7c0-101.1-89-180-195-180s-195 79-195 180c0 101.1 89 180 195 180 28.4 0 56.7-5.8 82.4-16.8l88.8 45.2a15 15 0 0 0 21-18zM256 286a15 15 0 1 1 0-30 15 15 0 0 1 0 30zm60 0a15 15 0 1 1 0-30 15 15 0 0 1 0 30zm60 0a15 15 0 1 1 0-30 15 15 0 0 1 0 30z"/>
                               </svg>
                           </div>
                       </div>
@@ -1302,7 +1314,9 @@
       try {
         let div = document.createElement('div')
         div.innerHTML = PopupTemplates[this.template].render(this)
-        return div.firstElementChild
+        let popup = div.firstElementChild
+        popup.setAttribute('tabindex', 0)
+        return popup
       }
       catch (e) {
         maybeLog(e)
@@ -1313,11 +1327,17 @@
     addToDom () {
       let el = document.getElementById(this.id)
 
+      let rendered = this.render()
+
       if (el) {
-        el.replaceWith(this.render())
+        el.replaceWith(rendered)
       }
       else {
-        document.body.append(this.render())
+        document.body.append(rendered)
+      }
+
+      if (!isBuilderPreview()) {
+        rendered.focus()
       }
     },
 
@@ -1374,6 +1394,73 @@
       }
     },
 
+    /**
+     * Special handler functions for popups with shortcode content
+     *
+     * @param when
+     */
+    handleShortcodeContent (when) {
+
+      if (isBuilderPreview()) {
+        return
+      }
+
+      switch (when) {
+        case 'beforeAddToDom':
+          // if the popup content has shortcodes, replace non rendered content with dom target
+
+          if (this.has_shortcodes.in_content) {
+            this.post_content = `<div id="post-content-for-${ this.ID }-goes-here"></div>`
+          }
+
+          if (this.has_shortcodes.in_success_message) {
+            this.success_message = `<div id="success-message-for-${ this.ID }-goes-here"></div>`
+          }
+          break
+        case 'afterAddToDom':
+          // move the content from the container to the popup
+
+          if (this.has_shortcodes.in_content) {
+            let target = this.querySelector(`#post-content-for-${ this.ID }-goes-here`)
+            let content = document.querySelector(`#holler-${ this.ID }-content`)
+            if (target && content) {
+              content.querySelectorAll('p:empty').forEach(el => el.remove())
+              target.replaceWith(content)
+            }
+          }
+
+          if (this.has_shortcodes.in_success_message) {
+            let target = this.querySelector(`#success-message-for-${ this.ID }-goes-here`)
+            let content = document.querySelector(`#holler-${ this.ID }-success-message`)
+            if (target && content) {
+              content.querySelectorAll('p:empty').forEach(el => el.remove())
+              target.replaceWith(content)
+            }
+          }
+          break
+        case 'beforeRemoveFromDom':
+          // move the content back to the container
+
+          let container = document.querySelector('#hollerbox-popup-content')
+
+          // handle shortcode based content
+          if (this.has_shortcodes.in_content) {
+            let content = document.querySelector(`#holler-${ this.ID }-content`)
+            if (content && container) {
+              container.append(content)
+            }
+          }
+
+          if (this.has_shortcodes.in_success_message) {
+            let content = document.querySelector(`#holler-${ this.ID }-success-message`)
+            if (content && container) {
+              container.append(content)
+            }
+          }
+          break
+      }
+    },
+
     async open () {
 
       try {
@@ -1383,15 +1470,38 @@
         maybeLog(e)
       }
 
+      this.handleShortcodeContent('beforeAddToDom')
+
       this.addToDom()
+
+      this.handleShortcodeContent('afterAddToDom')
 
       this._triggered = true
       this._open = true
 
-      document.querySelectorAll(`#${ this.id } .holler-box-modal-close`).forEach(el => {
+      // close button
+      this.querySelectorAll('.holler-box-modal-close').forEach(el => {
         el.addEventListener('click', e => {
           this.close()
         })
+      })
+
+      // after 2 seconds, overlay also acts as escape
+      setTimeout(() => {
+
+        let overlay = this.querySelector('.holler-box-overlay')
+
+        if (overlay) {
+          this.querySelector('.holler-box-overlay').addEventListener('click', e => {
+            this.close()
+          })
+        }
+      }, 2000)
+
+      this.querySelector().addEventListener('keyup', e => {
+        if (e.key === 'Escape') {
+          this.close()
+        }
       })
 
       try {
@@ -1412,6 +1522,8 @@
       catch (e) {
         maybeLog(e)
       }
+
+      this.handleShortcodeContent('beforeRemoveFromDom')
 
       this.removeFromDom()
       this._open = false

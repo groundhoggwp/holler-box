@@ -72,6 +72,7 @@ class Holler_Integrations {
 		self::register( 'email', [ $this, 'email' ] );
 		self::register( 'groundhogg', [ $this, 'groundhogg' ] );
 		self::register( 'webhook', [ $this, 'webhook' ] );
+		self::register( 'zapier', [ $this, 'zapier' ] );
 
 		do_action( 'hollerbox/register_integrations' );
 	}
@@ -285,6 +286,8 @@ class Holler_Integrations {
 		}
 
 		\Groundhogg\after_form_submit_handler( $contact );
+
+		$contact->update_meta( 'source_page', $lead->location );
 
 		return true;
 	}

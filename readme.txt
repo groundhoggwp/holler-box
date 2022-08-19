@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.0
-Stable tag: 2.0.8
+Stable tag: 2.0.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -222,6 +222,12 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.0.9 (2022-08-17) =
+* ADDED Escape key support for closing focused popups.
+* TWEAKED After 2 seconds clicking on a popup overlay will close the popup.
+* FIXED Significantly better support for shortcode content like forms.
+* FIXED Zapier integration not registered in backend.
 
 = 2.0.8 (2022-08-16) =
 * TWEAKED Z-index is now set at the popup root element
