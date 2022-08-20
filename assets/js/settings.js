@@ -337,7 +337,8 @@
                                     <p><b><label>${ __('Cookie Name') }</label></b></p>
                                     ${ input({
                                         id: 'cookie-name',
-                                        className: 'full-width',
+                                        name: 'cookie_name',
+                                        className: 'full-width text-setting',
                                         value: settings.cookie_name,
                                     }) }
                                     <p>${ __('Name of the cookie where consent is stored.', 'holler-box') }</p>
@@ -346,7 +347,8 @@
                                     <p><b><label>${ __('Cookie Value') }</label></b></p>
                                     ${ input({
                                         id: 'cookie-value',
-                                        className: 'full-width',
+                                        name: 'cookie_value',
+                                        className: 'full-width text-setting',
                                         value: settings.cookie_value,
                                     }) }
                                     <p>${ __('Value of the cookie indicating consent was given.', 'holler-box') }</p>
@@ -483,7 +485,15 @@
         })
 
         $('.setting-toggle').on('change', e => {
-          settings[e.target.name] = e.target.checked
+          settings.set({
+            [e.target.name]: e.target.checked
+          })
+        })
+
+        $('.text-setting').on('change', e => {
+          settings.set({
+            [e.target.name]: e.target.value
+          })
         })
 
         wp.editor.remove('gdpr-text')
