@@ -213,6 +213,7 @@ body:not(.wp-admin) {
 
 .holler-box {
 
+  position: fixed;
   z-index: 1000;
 
   .hollerbox-integration-errors{
