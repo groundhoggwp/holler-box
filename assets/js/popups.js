@@ -260,7 +260,7 @@
     //language=HTML
     return `
         <div class="holler-box-chat-message">
-            <img src="${ avatar }" class="avatar" alt="">
+            ${ avatar ? `<img src="${ avatar }" class="avatar" alt="">` : '' }
             ${ content }
         </div>
     `
@@ -489,7 +489,7 @@
                         <div class="holler-box-modal">
                             ${ closeButton() }
                             <div class="display-flex">
-                                <img src="${ avatar }" alt="">
+                                ${ avatar ? `<img src="${ avatar }" alt="">` : '' }
                                 ${ __content(post_content) }
                             </div>
                             ${ credit() }
@@ -523,7 +523,7 @@
                         <div class="holler-box-modal ">
                             ${ closeButton() }
                             <div class="display-flex">
-                                <img src="${ avatar }" alt="">
+                                ${ avatar ? `<img src="${ avatar }" alt="">` : '' }
                                 ${ __content(post_content) }
                             </div>
                             <div class="holler-button-cta">
@@ -566,7 +566,7 @@
                         <div class="holler-box-modal">
                             ${ closeButton() }
                             <div class="display-flex">
-                                <img src="${ avatar }" alt="">
+                                ${ avatar ? `<img src="${ avatar }" alt="">` : '' }
                                 ${ __content(submitted ? success_message : post_content) }
                             </div>
                             ${ submitted ? '' : form({

@@ -57,6 +57,10 @@ body {
 
 body:not(.wp-admin) {
 
+  .holler-box {
+    position: fixed;
+  }
+
   &.admin-bar {
     .positioner {
       &.top {
@@ -212,8 +216,6 @@ body:not(.wp-admin) {
 }
 
 .holler-box {
-
-  position: fixed;
   z-index: 1000;
 
   .hollerbox-integration-errors{

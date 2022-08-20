@@ -19,6 +19,9 @@ body.disable-scrolling {
   overflow: hidden;
 }
 
+body:not(.wp-admin) .holler-box {
+  position: fixed;
+}
 body:not(.wp-admin).admin-bar .positioner.top-left {
   top: calc(20px + 32px);
 }
@@ -146,7 +149,6 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   }
 }
 .holler-box {
-  position: fixed;
   z-index: 1000;
 }
 .holler-box .hollerbox-integration-errors {

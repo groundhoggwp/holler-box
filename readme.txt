@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.0
-Stable tag: 2.0.10
+Stable tag: 2.0.11
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -222,6 +222,11 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.0.11 (2022-08-20) =
+* TWEAKED If avatar image url is empty, do not show the image avatar in the notification.
+* FIXED On click trigger once/multiple setting not showing correct state.
+* FIXED templates showing off-center after last update
 
 = 2.0.10 (2022-08-20) =
 * FIXED Page scrolled to bottom of when popup opens and is focused.

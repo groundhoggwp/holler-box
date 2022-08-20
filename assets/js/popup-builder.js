@@ -3453,7 +3453,7 @@
     },
     element_click: {
       name: __('On Click'),
-      controls: ({ selector }) => {
+      controls: ({ selector, trigger_multiple = 'once' }) => {
         //language=HTML
         return `<label>${ sprintf(__('Clicked element %s'), input({
             placeholder: '.my-class',
@@ -3464,7 +3464,7 @@
         }, {
             once: 'Trigger Once',
             multiple: 'Trigger Multiple Times',
-        }) }`
+        }, trigger_multiple) }`
       },
       onMount: (trigger, updateTrigger) => {
         $('#selector').on('change', e => {
