@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.0
-Stable tag: 2.0.12
+Stable tag: 2.0.13
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -222,6 +222,13 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.0.13 (2022-08-20) =
+* ADDED new setting to force a delay between popups that are triggered at the same time.
+* ADDED Basic support for custom html form code.
+* TWEAKED Controls can be collapsed.
+* TWEAKED Polyfill popup JS methods to avoid excessive console warnings when script debug enabled.
+* FIXED TinyMCE not always updating content when changes are made.
 
 = 2.0.12 (2022-08-20) =
 * FIXED Cookie consent settings not saving

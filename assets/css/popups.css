@@ -731,6 +731,8 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 .holler-box.holler-popup-full-image-background .holler-box-modal .holler-box-modal-content {
   width: 400px;
 }
+.holler-box input[type=submit].holler-box-button,
+.holler-box input[type=button].holler-box-button,
 .holler-box button.holler-box-button {
   font-size: 20px;
   padding: 10px 16px;
@@ -742,9 +744,13 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   white-space: nowrap;
   cursor: pointer;
 }
+.holler-box input[type=submit].holler-box-button:disabled,
+.holler-box input[type=button].holler-box-button:disabled,
 .holler-box button.holler-box-button:disabled {
   opacity: 0.8;
 }
+.holler-box input[type=submit].holler-box-button .holler-spinner,
+.holler-box input[type=button].holler-box-button .holler-spinner,
 .holler-box button.holler-box-button .holler-spinner {
   display: block;
   height: 15px;
@@ -754,6 +760,11 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   border-radius: 50%;
   position: relative;
   animation: holler-rotation 1s linear infinite;
+}
+.holler-box form.holler-box-form.custom-form {
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
 }
 .holler-box form.holler-box-form .fields {
   display: flex;

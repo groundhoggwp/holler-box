@@ -998,6 +998,8 @@ body:not(.wp-admin) {
 
   }
 
+  input[type=submit].holler-box-button,
+  input[type=button].holler-box-button,
   button.holler-box-button {
     font-size: 20px;
     padding: 10px 16px;
@@ -1027,6 +1029,11 @@ body:not(.wp-admin) {
 
   form.holler-box-form {
 
+    &.custom-form {
+      display: flex;
+      gap: 10px;
+      flex-direction: column;
+    }
 
     .fields {
       display: flex;

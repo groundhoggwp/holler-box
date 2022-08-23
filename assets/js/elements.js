@@ -291,7 +291,8 @@
       },
     )
 
-    tinyMCE.get(editor_id).on('keyup keydown mouseup', function (e) {
+    // keyup keydown mouseup
+    tinyMCE.get(editor_id).on('Change keyup', function (e) {
       onChange(tinyMCE.activeEditor.getContent({ format: 'raw' }))
     })
 

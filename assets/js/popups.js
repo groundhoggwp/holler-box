@@ -355,6 +355,67 @@
     },
     formSubmitted: (popup, filters = {}) => {
 
+      if ( popup.use_custom_form ){
+
+        let customForm
+        let customHTML = createHTML( popup.custom_form_html )
+        if ( customHTML.tagName === 'FORM' ){
+          customForm = customHTML
+        } else {
+          customForm = customHTML.querySelector('form')
+          if ( ! customForm ){
+            alert( 'Invalid custom form HTML' )
+            return
+          }
+        }
+
+        let form = popup.querySelector('form.holler-box-form' )
+
+        customForm.classList.add('holler-box-form', 'custom-form')
+
+        Array.from( customForm.elements ).forEach( el => {
+          switch ( el.tagName ){
+            case 'INPUT':
+              switch ( el.type ){
+                default:
+                  el.classList.add( 'holler-box-input' )
+                  break;
+                case 'submit':
+                case 'button':
+                  el.classList.add('holler-box-button')
+                  break;
+                case 'radio':
+                case 'checkbox':
+                  break;
+              }
+              break;
+            case 'TEXTAREA':
+            case 'SELECT':
+              el.classList.add( 'holler-box-input' )
+              break;
+            case 'BUTTON':
+              el.classList.add( 'holler-box-button' )
+              break;
+          }
+        })
+
+        form.replaceWith( customForm )
+
+        customForm.addEventListener( 'submit', e => {
+
+          if ( isBuilderPreview() ){
+            e.preventDefault()
+          }
+
+          customForm.querySelector('button.holler-box-button').innerHTML = '<span class="holler-spinner"></span>'
+          Array.from( customForm.elements ).forEach(el => el.disabled = true)
+
+          popup.converted()
+        } )
+
+        return;
+      }
+
       const {
         modifyFormData = (fd) => {},
         modifyPayload = (pl) => {},
@@ -371,16 +432,16 @@
         formData.append('location', window.location.href)
         formData.append('referer', document.referrer)
 
-        modifyFormData( formData )
+        modifyFormData(formData)
 
         form.querySelectorAll('input, button').forEach(el => el.disabled = true)
         form.querySelector('button').innerHTML = '<span class="holler-spinner"></span>'
 
         let payload = Object.fromEntries(formData)
 
-        modifyPayload( payload )
+        modifyPayload(payload)
 
-        const submit = () => apiPost(`${ HollerBox.routes.submit }/${ popup.ID }`, payload ).
+        const submit = () => apiPost(`${ HollerBox.routes.submit }/${ popup.ID }`, payload).
           then(({ status = 'success', failures = [] }) => {
 
             if (status === 'failed') {
@@ -1221,9 +1282,9 @@
 
       if (p) {
 
-        setTimeout( () => {
+        setTimeout(() => {
           p.maybeOpen()
-        }, HollerBox.settings.stacked_delay * 1000 )
+        }, HollerBox.settings.stacked_delay * 1000)
       }
     },
 
@@ -1296,6 +1357,7 @@
     id: `popup-${ popup.ID }`,
     _triggered: false,
     _open: false,
+    _template: {},
 
     isOpen () {
       return this._open
@@ -1316,9 +1378,10 @@
     render () {
       try {
         let div = document.createElement('div')
-        div.innerHTML = PopupTemplates[this.template].render(this)
+        div.innerHTML = this._template.render(this)
         let popup = div.firstElementChild
         popup.setAttribute('tabindex', 0)
+
         return popup
       }
       catch (e) {
@@ -1390,7 +1453,7 @@
 
     cleanup () {
       try {
-        PopupTemplates[this.template].cleanup(this)
+        this._template.cleanup(this)
       }
       catch (e) {
         maybeLog(e)
@@ -1467,7 +1530,7 @@
     async open () {
 
       try {
-        await PopupTemplates[this.template].beforeOpen(this)
+        await this._template.beforeOpen(this)
       }
       catch (e) {
         maybeLog(e)
@@ -1508,7 +1571,7 @@
       })
 
       try {
-        PopupTemplates[this.template].onOpen(this)
+        this._template.onOpen(this)
       }
       catch (e) {
         maybeLog(e)
@@ -1520,7 +1583,7 @@
     async close () {
 
       try {
-        await PopupTemplates[this.template].onClose(this)
+        await this._template.onClose(this)
       }
       catch (e) {
         maybeLog(e)
@@ -1532,7 +1595,7 @@
       this._open = false
 
       try {
-        await PopupTemplates[this.template].onClosed(this)
+        await this._template.onClosed(this)
       }
       catch (e) {
         maybeLog(e)
@@ -1598,7 +1661,32 @@
       this.open()
     },
 
+    setTemplate () {
+      // Template is unregistered
+      if (!PopupTemplates.hasOwnProperty(this.template)) {
+        return false
+      }
+
+      // polyfill methods
+      this._template = {
+        render: () => '',
+        onOpen: () => {},
+        beforeOpen: () => {},
+        onClose: () => {},
+        onClosed: () => {},
+        cleanup: () => {},
+        ...PopupTemplates[this.template],
+      }
+
+      return true
+
+    },
+
     init () {
+
+      if ( ! this.setTemplate() ){
+        return
+      }
 
       const show = () => this.maybeOpen()
 
@@ -1707,6 +1795,8 @@
 
           // shallow copy
           popup = Popup(event.data.popup)
+
+          popup.setTemplate()
 
           if (event.data.suppressAnimations) {
             document.body.classList.add('holler-suppress-animations')

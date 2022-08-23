@@ -670,6 +670,35 @@
         content: '<p>Hi {{first}}!</p><p>Thanks for subscribing 🙂.</p>',
       },
     },
+    custom_form_code: {
+      id: 'custom_form_code',
+      group: 'basic',
+      icon: icons.form,
+      name: __('Custom Form Code', 'holler-box'),
+      edit: ({
+        html = '',
+      }) => {
+        //language=HTML
+        return `
+            <p>${ __('Paste your form code below.', 'holler-box') }</p>
+            ${ textarea({
+                id: 'custom-form-code',
+                name: 'html',
+                className: 'full-width code',
+                value: html,
+            }) }`
+      },
+      onMount: (settings, { updateIntegration }) => {
+
+        $('#custom-form-code').on('change', e => {
+          updateIntegration({
+            html: e.target.value,
+          })
+        })
+
+      },
+
+    },
     groundhogg: {
       id: 'groundhogg',
       group: 'crm',
@@ -1879,7 +1908,12 @@
     },
     fields: {
       name: __('Fields', 'holler-box'),
-      render: ({ name_placeholder = 'Name', email_placeholder = 'Email' }) => {
+      render: ({
+        name_placeholder = 'Name',
+        email_placeholder = 'Email',
+        custom_form_html = '',
+        use_custom_form = false,
+      }) => {
         return [
           singleControl({
             label: __('Name Placeholder'),
@@ -1897,6 +1931,21 @@
               value: email_placeholder,
             }),
           }),
+          `<p></p>`,
+          singleControl({
+            label: __('Use custom form code?'),
+            control: toggle({
+              id: 'use-custom-form',
+              checked: use_custom_form,
+            }),
+          }),
+          `<label>${ __('Paste your custom for code below.', 'holler-box') }</label>`,
+          textarea({
+            id: 'custom-form-code',
+            name: 'custom_form_html',
+            className: 'full-width code',
+            value: custom_form_html,
+          }),
 
         ].join('')
       },
@@ -1904,6 +1953,18 @@
         $('#email-placeholder,#name-placeholder').on('input change', e => {
           updateSetting({
             [e.target.name]: e.target.value,
+          })
+        })
+
+        $('#use-custom-form').on('change', e => {
+          updateSetting({
+            use_custom_form: e.target.checked,
+          })
+        })
+
+        $('#custom-form-code').on('change', e => {
+          updateSetting({
+            custom_form_html: e.target.value,
           })
         })
       },
@@ -2486,8 +2547,16 @@
       this.getControls().forEach(control => control.onMount(this.getPopup(), updateSettings))
 
       $('.control-group').on('click', '.control-group-header', e => {
-        $('.control-group').removeClass('open')
-        $(e.currentTarget).parent().toggleClass('open')
+
+        let $group = $(e.currentTarget).parent()
+
+        if ($group.is('.open')) {
+          $group.removeClass('open')
+        }
+        else {
+          $('.control-group').removeClass('open')
+          $(e.currentTarget).parent().toggleClass('open')
+        }
       })
 
       $('#edit-triggers').on('click', e => {
