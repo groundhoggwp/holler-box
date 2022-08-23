@@ -56,17 +56,17 @@ class Holler_Frontend {
 		<?php
 	}
 
-    public function popup_content(){
-	    ?>
+	public function popup_content() {
+		?>
         <div id="hollerbox-popup-content">
-            <?php foreach ( $this->active as $popup ):
+			<?php foreach ( $this->active as $popup ):
 
 				$popup->maybe_output_content();
 
-			endforeach;?>
+			endforeach; ?>
         </div>
-	    <?php
-    }
+		<?php
+	}
 
 	public function enqueue_scripts() {
 
@@ -104,7 +104,8 @@ class Holler_Frontend {
 				'cookie_compliance',
 				'cookie_name',
 				'cookie_value',
-				'script_debug_mode'
+				'script_debug_mode',
+				'stacked_delay'
 			], [
 				'credit_disabled'   => false,
 				'gdpr_enabled'      => false,
@@ -112,6 +113,7 @@ class Holler_Frontend {
 				'cookie_compliance' => false,
 				'cookie_name'       => 'viewed_cookie_policy',
 				'cookie_value'      => 'yes',
+				'stacked_delay'     => 5,
 			] )
 		];
 

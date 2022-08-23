@@ -1220,7 +1220,10 @@
       let p = this.stack.pop()
 
       if (p) {
-        p.maybeOpen()
+
+        setTimeout( () => {
+          p.maybeOpen()
+        }, HollerBox.settings.stacked_delay * 1000 )
       }
     },
 

@@ -165,6 +165,7 @@
     delete_all_data: false,
     disable_all: false,
     gdpr_text: `<p>I consent to the terms and conditions.</p>`,
+    stacked_delay: 5,
     ...HollerBox.settings,
     set (_new) {
       settings = {
@@ -278,6 +279,20 @@
                             <h2>${ __('General') }</h2>
                         </div>
                         <div class="inside">
+                            <div class="display-flex gap-20">
+                                <div>
+                                    <p><b><label>${ __('Stacked Popup Delay (in seconds)') }</label></b></p>
+                                    ${ input({
+                                        id: 'stacked-delay',
+                                        name: 'stacked_delay',
+                                        className: 'full-width text-setting',
+                                        value: settings.stacked_delay,
+                                        type: 'number',
+                                        placeholder: 5,
+                                    }) }
+                                    <p>${ __('Force a delay between popups that are triggered at the same time.', 'holler-box') }</p>
+                                </div>
+                            </div>
                             <div class="disable-credit ${ settings.is_licensed ? '' : 'disable-changes' }">
                                 <label class="display-flex gap-20"><b>${ __(
                                         'Hide the <span class="credit">⚡ by HollerBox</span> attribution') }</b>
@@ -486,13 +501,13 @@
 
         $('.setting-toggle').on('change', e => {
           settings.set({
-            [e.target.name]: e.target.checked
+            [e.target.name]: e.target.checked,
           })
         })
 
         $('.text-setting').on('change', e => {
           settings.set({
-            [e.target.name]: e.target.value
+            [e.target.name]: e.target.value,
           })
         })
 

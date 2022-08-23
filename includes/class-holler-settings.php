@@ -69,6 +69,9 @@ class Holler_Settings {
 		$this->settings[ $name ] = $value;
 
 		switch ( $name ) {
+			case 'stacked_delay':
+				$value = absint( $value );
+				break;
 			case 'cookie_compliance':
 			case 'gdpr_enabled':
 			case 'credit_disabled':
