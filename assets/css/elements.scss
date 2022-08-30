@@ -1992,6 +1992,7 @@ ul.holler-form-errors {
     background-color: #ccc;
     -webkit-transition: .4s;
     transition: .4s;
+    margin: 0 !important;
 
     &:before {
       position: absolute;

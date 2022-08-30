@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.0
-Stable tag: 2.0.13
+Stable tag: 2.0.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -222,6 +222,9 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.0.14 (2022-08-30) =
+* FIXED CSS conflict preventing toggle switches from showing.
 
 = 2.0.13 (2022-08-20) =
 * ADDED new setting to force a delay between popups that are triggered at the same time.

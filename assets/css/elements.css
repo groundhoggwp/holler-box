@@ -1816,6 +1816,7 @@ ul.holler-form-errors {
   background-color: #ccc;
   -webkit-transition: 0.4s;
   transition: 0.4s;
+  margin: 0 !important;
 }
 .holler-switch .slider:before {
   position: absolute;
