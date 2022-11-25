@@ -28,7 +28,7 @@ class Holler_Frontend {
 		add_action( 'wp_head', [ $this, 'popup_css' ] );
 		add_action( 'wp_footer', [ $this, 'popup_content' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
-		add_filter( 'body_class', [ $this, 'body_classes' ], 10, 2 );
+		add_filter( 'body_class', [ $this, 'body_classes' ], 10, 1 );
 	}
 
 	public function popup_css() {
@@ -127,11 +127,10 @@ class Holler_Frontend {
 	 * Add popup classes to the main body
 	 *
 	 * @param $classes
-	 * @param $class
 	 *
 	 * @return array|mixed
 	 */
-	public function body_classes( $classes, $class ) {
+	public function body_classes( $classes ) {
 
 		foreach ( $this->active as $popup ) {
 			$classes = array_merge( $classes, $popup->get_body_classes() );

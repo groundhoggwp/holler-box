@@ -10,6 +10,8 @@ class Holler_Reporting {
 	public static $instance;
 	const TABLE_VERSION = '1.0';
 
+	protected $table_name;
+
 	/**
 	 * Get the instance
 	 *
@@ -117,6 +119,7 @@ class Holler_Reporting {
         s_count bigint(20) unsigned NOT NULL,
         popup_id bigint(20) unsigned NOT NULL,
         location text NOT NULL,
+        PRIMARY KEY (popup_id, s_type, s_date),
         KEY s_date (s_date),
         KEY s_type (s_type),
         KEY popup_id (popup_id)
@@ -126,8 +129,6 @@ class Holler_Reporting {
 
 		update_option( $this->table_name . '_table_version', self::TABLE_VERSION );
 	}
-
-	protected $table_name;
 
 	/**
 	 * @throws Exception
