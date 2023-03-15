@@ -35,36 +35,36 @@ class Holler_Frontend {
 
 		if ( $this->is_builder_preview() ):
 			?>
-            <style id="hollerbox-builder-styles"></style>
+			<style id="hollerbox-builder-styles"></style>
 		<?php
 		endif;
 
 		?>
-        <style id="hollerbox-frontend-styles">
+		<style id="hollerbox-frontend-styles">
 
             .no-click {
                 cursor: not-allowed;
                 /*pointer-events: none;*/
             }
 
-            <?php foreach ( $this->active as $popup ):
+			<?php foreach ( $this->active as $popup ):
 
 				$popup->output_css();
 
 			endforeach;?>
-        </style>
+		</style>
 		<?php
 	}
 
 	public function popup_content() {
 		?>
-        <div id="hollerbox-popup-content">
+		<div id="hollerbox-popup-content">
 			<?php foreach ( $this->active as $popup ):
 
 				$popup->maybe_output_content();
 
 			endforeach; ?>
-        </div>
+		</div>
 		<?php
 	}
 
@@ -75,7 +75,10 @@ class Holler_Frontend {
 		wp_enqueue_style( 'hollerbox-popups', Holler_Box_URL . 'assets/css/popups.css', [], time() );
 		wp_enqueue_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups' . $dot_min . '.js', [], time(), true );
 
+		$cookie_lifetime = strtotime( '+' . Holler_Settings::instance()->get( 'cookie_lifetime', 1 ) . ' ' . Holler_Settings::instance()->get( 'cookie_lifetime_period', 'months' ), 0 );
+
 		$l10n = [
+			'cookie_lifetime'    => $cookie_lifetime,
 			'active'             => array_map( function ( $popup ) {
 				$popup = $popup->jsonSerialize();
 

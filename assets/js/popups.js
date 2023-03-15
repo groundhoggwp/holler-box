@@ -17,7 +17,7 @@
     addClosedPopup (id) {
       let allClosed = this.getCookie(this.closedPopups, '').split(',')
       allClosed.push(id)
-      this.setCookie(this.closedPopups, allClosed.join(), this.MONTH_IN_SECONDS)
+      this.setCookie(this.closedPopups, allClosed.join(), HollerBox.cookie_lifetime )
     },
 
     isClosed (id) {
