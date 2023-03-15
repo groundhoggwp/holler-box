@@ -517,6 +517,10 @@
         })
       },
     },
+
+    /**
+     * Start HollerBox Setup
+     */
     setupPage({
       title: __('🎉 Thanks for Choosing HollerBox'),
       slug: /s\/start/,
@@ -537,6 +541,9 @@
       },
     }),
 
+    /**
+     * Explain changes in HollerBox 2.0
+     */
     setupPage({
       title: __('Changes in HollerBox 2.0'),
       slug: /legacy-user/,
@@ -571,28 +578,20 @@
                 <li>${ __('MailChimp Integration') }</li>
                 <li>${ __('MailPoet Integration') }</li>
             </ul>
-            <p><b>${ __('Legacy users & Pro users') }</b></p>
+            <p><b>${ __('Pro users') }</b></p>
             <p>
                 ${ __('If you have a pro license, <a href="#" target="_blank"><u>install or update HollerBox Pro</u></a> to regain access to these integrations immediately (if you not have already done so).') }</p>
             <p>
-                ${ __('If you do not have a Pro license, but are dependent on these integrations you can obtain a <a href="#" class="legacy-license"><u>Legacy License</u></a> for free until <b>August 31st, 2022</b>.') }</p>
             <p><b>${ __('Why were these features removed from the free version?') }</b></p>
             <p>
                 ${ __('We want HollerBox to be a sustainable business, so we added some features to the free version, while moving others to paid.') }</p>
-            <p style="margin-top: 30px">
-                <button class="holler-button primary" id="continue">${ __('Sounds good! Continue to HollerBox') }
+            <div class="display-flex center" style="margin-top: 30px">
+                <button class="holler-button primary big" id="continue">${ __('Sounds good! Continue to HollerBox') }
                 </button>
-                <button class="holler-button secondary text legacy-license">${ __('Apply for a Legacy License') }
-                </button>
-            </p>
+            </div>
         `
       },
       onMount: (params, setPage) => {
-
-        $('.legacy-license').on('click', e => {
-          e.preventDefault()
-          setPage('/legacy-license/')
-        })
 
         $('#continue').on('click', e => {
 
@@ -607,6 +606,9 @@
       },
     }),
 
+    /**
+     * Apply for a legacy-license
+     */
     setupPage({
       title: __('Obtain a Legacy license'),
       slug: /legacy-license\/?$/,
@@ -692,6 +694,9 @@
       },
     }),
 
+    /**
+     * Legacy License Next Steps
+     */
     setupPage({
       title: __('Use Your Legacy license'),
       slug: /legacy-license\/next/,
@@ -845,7 +850,7 @@
     }),
 
     /**
-     * Prompt to enable telemetry
+     * Prompt to enable telemetry with discount
      */
     setupPage({
       title: __('Want 15% OFF HollerBox Pro?'),
@@ -908,6 +913,7 @@
         })
       },
     }),
+
     /**
      * Prompt to enable telemetry
      */
@@ -960,6 +966,10 @@
         })
       },
     }),
+
+    /**
+     * Prompt to install recommended plugins
+     */
     setupPage({
       title: __('Install Recommended Plugins'),
       slug: /s\/plugins/,
@@ -1044,6 +1054,10 @@
         })
       },
     }),
+
+    /**
+     * Prompt to subscribe
+     */
     setupPage({
       title: __('Subscribe!'),
       slug: /s\/subscribe/,

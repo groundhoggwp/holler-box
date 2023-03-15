@@ -404,20 +404,21 @@ class Holler_Popup implements JsonSerializable {
 	 */
 	public function maybe_output_content() {
 
-		if ( self::content_has_shortcodes( $this->post_content ) ){
-			?><div id="holler-<?php echo $this->ID ?>-content">
-				<?php echo do_shortcode( wpautop( $this->post_content ) ) ?>
-			</div><?php
+		if ( self::content_has_shortcodes( $this->post_content ) ) {
+			?>
+            <div id="holler-<?php echo $this->ID ?>-content">
+			<?php echo do_shortcode( wpautop( $this->post_content ) ) ?>
+            </div><?php
 		}
 
-		if ( self::content_has_shortcodes( $this->success_message ) ){
-			?><div id="holler-<?php echo $this->ID ?>-success-message">
+		if ( self::content_has_shortcodes( $this->success_message ) ) {
+			?>
+            <div id="holler-<?php echo $this->ID ?>-success-message">
 			<?php echo do_shortcode( wpautop( $this->success_message ) ) ?>
-			</div><?php
+            </div><?php
 		}
 
 	}
-
 
 
 	/**
@@ -786,7 +787,14 @@ class Holler_Popup implements JsonSerializable {
 		$display_when = $this->_get_meta( 'display_when' );
 
 		switch ( $display_when ) {
-			case 'immediately':
+			case 'link':
+				$triggers['element_click'] = [
+					'enabled'          => true,
+					'trigger_multiple' => 'multiple',
+					'selector'         => sprintf( '.holler-show[data-id="%d"]', $this->ID )
+				];
+                break;
+ 			case 'immediately':
 				$triggers['on_page_load'] = [
 					'enabled' => true,
 					'delay'   => 0
