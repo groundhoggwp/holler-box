@@ -22,6 +22,7 @@
     loadingDots,
     confirmationModal,
     mediaPicker,
+    inputRepeater,
   } = HollerBox.elements
 
   const { sprintf, __, _x, _n } = wp.i18n
@@ -1906,42 +1907,125 @@
         })
       },
     },
-    fields: {
+    fields_email_only: {
       name: __('Fields', 'holler-box'),
       render: ({
-        name_placeholder = 'Name',
         email_placeholder = 'Email',
-        custom_form_html = '',
-        use_custom_form = false,
       }) => {
         return [
+          `<label><b>${ __('Email') }</b></label>`,
           singleControl({
-            label: __('Name Placeholder'),
-            control: input({
-              id: 'name-placeholder',
-              name: 'name_placeholder',
-              value: name_placeholder,
-            }),
-          }),
-          singleControl({
-            label: __('Email Placeholder'),
+            label: __('Placeholder'),
             control: input({
               id: 'email-placeholder',
               name: 'email_placeholder',
               value: email_placeholder,
             }),
           }),
-          `<p></p>`,
+        ].join('')
+      },
+      onMount: (settings, updateSetting) => {
+
+        const inputs = [
+          'email-placeholder',
+        ]
+
+        inputs.forEach(id => {
+          $(`#${ id }`).on('input change', e => {
+            updateSetting({
+              [e.target.name]: e.target.value,
+            })
+          })
+        })
+      },
+    },
+    fields: {
+      name: __('Fields', 'holler-box'),
+      render: ({
+        name_placeholder = 'Name',
+        email_placeholder = 'Email',
+        phone_placeholder = 'Phone',
+        custom_form_html = '',
+        use_custom_form = false,
+        enable_phone = false,
+        phone_required = false,
+        name_required = true,
+        enable_name = true,
+      }) => {
+        return [
+          `<label><b>${ __('Email') }</b></label>`,
+          singleControl({
+            label: __('Placeholder'),
+            control: input({
+              id: 'email-placeholder',
+              name: 'email_placeholder',
+              value: email_placeholder,
+            }),
+          }),
+          `<hr/>`,
+          `<label><b>${ __('Name') }</b></label>`,
+          singleControl({
+            label: __('Enable field?'),
+            control: toggle({
+              id: 'enable-name',
+              name: 'enable_name',
+              checked: enable_name,
+            }),
+          }),
+          singleControl({
+            label: __('Required?'),
+            control: toggle({
+              id: 'name-required',
+              name: 'name_required',
+              checked: name_required,
+            }),
+          }),
+          singleControl({
+            label: __('Placeholder'),
+            control: input({
+              id: 'name-placeholder',
+              name: 'name_placeholder',
+              value: name_placeholder,
+            }),
+          }),
+          `<hr/>`,
+          `<label><b>${ __('Phone') }</b></label>`,
+          singleControl({
+            label: __('Enable field?'),
+            control: toggle({
+              id: 'enable-phone',
+              name: 'enable_phone',
+              checked: enable_phone,
+            }),
+          }),
+          singleControl({
+            label: __('Required?'),
+            control: toggle({
+              id: 'phone-required',
+              name: 'phone_required',
+              checked: phone_required,
+            }),
+          }),
+          singleControl({
+            label: __('Placeholder'),
+            control: input({
+              id: 'phone-placeholder',
+              name: 'phone_placeholder',
+              value: phone_placeholder,
+            }),
+          }),
+          `<hr/>`,
           singleControl({
             label: __('Use custom form code?'),
             control: toggle({
               id: 'use-custom-form',
+              name: 'use_custom_form',
               checked: use_custom_form,
             }),
           }),
-          `<label>${ __('Paste your custom for code below.', 'holler-box') }</label>`,
+          `<label>${ __('Paste your custom HTML form code below.', 'holler-box') }</label>`,
           textarea({
-            id: 'custom-form-code',
+            id: 'custom-form-html',
             name: 'custom_form_html',
             className: 'full-width code',
             value: custom_form_html,
@@ -1950,21 +2034,33 @@
         ].join('')
       },
       onMount: (settings, updateSetting) => {
-        $('#email-placeholder,#name-placeholder').on('input change', e => {
-          updateSetting({
-            [e.target.name]: e.target.value,
+
+        const toggles = [
+          'name-required',
+          'phone-required',
+          'enable-phone',
+        ]
+
+        toggles.forEach(id => {
+          $(`#${ id }`).on('change', e => {
+            updateSetting({
+              [e.target.name]: e.target.checked,
+            })
           })
         })
 
-        $('#use-custom-form').on('change', e => {
-          updateSetting({
-            use_custom_form: e.target.checked,
-          })
-        })
+        const inputs = [
+          'phone-placeholder',
+          'email-placeholder',
+          'name-placeholder',
+          'custom-form-html',
+        ]
 
-        $('#custom-form-code').on('change', e => {
-          updateSetting({
-            custom_form_html: e.target.value,
+        inputs.forEach(id => {
+          $(`#${ id }`).on('input change', e => {
+            updateSetting({
+              [e.target.name]: e.target.value,
+            })
           })
         })
       },
@@ -2038,7 +2134,7 @@
         Controls.position,
         Controls.content,
         Controls.avatar,
-        Controls.fields,
+        Controls.fields_email_only,
         Controls.button,
         Controls.submit,
         Controls.integration,

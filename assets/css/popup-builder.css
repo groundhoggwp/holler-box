@@ -380,6 +380,10 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
 #holler-app #editor .control-wrap #controls .control-group {
   border-bottom: 1px solid rgba(16, 38, 64, 0.1);
 }
+#holler-app #editor .control-wrap #controls .control-group hr {
+  width: calc( 100% + 40px );
+  margin: 10px -20px;
+}
 #holler-app #editor .control-wrap #controls .control-group#codemirror .controls {
   padding: 0;
 }

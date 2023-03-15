@@ -520,6 +520,11 @@ table.display-conditions-grid {
         .control-group {
           border-bottom: 1px solid $primary-dark-10;
 
+          hr {
+            width: calc( 100% + 40px );
+            margin: 10px -20px;
+          }
+
           &#codemirror {
             .controls {
               padding: 0;

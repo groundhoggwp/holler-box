@@ -39,7 +39,7 @@
         counts[id] = 1
       }
 
-      this.setCookie(cookie, JSON.stringify(counts), this.DAY_IN_SECONDS)
+      this.setCookie(cookie, JSON.stringify(counts), HollerBox.cookie_lifetime)
     },
 
     getPopupCount (cookie, id) {
@@ -213,6 +213,11 @@
   const nameInput = (placeholder = 'Your name') => {
     //language=HTML
     return `<input class="holler-box-input" type="text" name="name" placeholder="${ placeholder }" required>`
+  }
+
+  const phoneInput = (placeholder = 'Mobile Number') => {
+    //language=HTML
+    return `<input class="holler-box-input" type="tel" name="phone" placeholder="${ placeholder }" required>`
   }
 
   const emailInput = (placeholder = 'Your email') => {
@@ -509,8 +514,10 @@
   const form = ({
     email = true,
     name = true,
+    phone = false,
     direction = 'vertical',
     email_placeholder = 'Name',
+    phone_placeholder = 'Phone',
     name_placeholder = 'Email',
     button_text = 'Subscribe',
   }) => {
@@ -521,6 +528,7 @@
             <div class="fields">
                 ${ name ? nameInput(name_placeholder) : '' }
                 ${ email ? emailInput(email_placeholder) : '' }
+                ${ phone ? phoneInput(phone_placeholder) : '' }
                 ${ direction === 'vertical' && isGDPREnabled() ? gdprInput() : '' }
                 ${ submitButton(button_text) }
             </div>
