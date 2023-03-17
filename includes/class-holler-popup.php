@@ -168,6 +168,7 @@ class Holler_Popup implements JsonSerializable {
 			case 'button_text':
 			case 'email_placeholder':
 			case 'name_placeholder':
+			case 'phone_placeholder':
 			case 'image_src':
 			case 'position':
 				$this->_update_meta( $setting, sanitize_text_field( $value ) );
