@@ -1046,10 +1046,10 @@ body:not(.wp-admin) {
       .fields {
         display: grid;
         grid-auto-rows: 1fr;
-      }
 
-      &.has-gdpr .fields {
-        grid-template-rows: 1fr 1fr min-content 1fr;
+        label.holler-gdpr-consent {
+          align-self: center;
+        }
       }
     }
 

@@ -11,6 +11,7 @@ class Holler_Lead {
 	public $name = '';
 	public $first_name = '';
 	public $last_name = '';
+	public $phone = '';
 	public $location = '';
 	public $referrer = '';
 	public $message = '';
@@ -23,8 +24,9 @@ class Holler_Lead {
 		$parts              = explode( ' ', $this->name );
 		$this->first_name   = trim( $parts[0] );
 		$this->last_name    = trim( $parts[1] );
-		$this->location     = $request->get_param( 'location' );
-		$this->referrer     = $request->get_param( 'referer' );
+		$this->phone        = sanitize_text_field( $request->get_param( 'phone' ) );
+		$this->location     = sanitize_text_field( $request->get_param( 'location' ) );
+		$this->referrer     = sanitize_text_field( $request->get_param( 'referer' ) );
 		$this->gdpr_consent = $request->get_param( 'gdpr_consent' ) === 'yes';
 		$this->message      = sanitize_textarea_field( $request->get_param( 'message' ) );
 	}
@@ -65,7 +67,21 @@ class Holler_Lead {
 		return $this->last_name;
 	}
 
-	public function get_message_formatted(){
+	/**
+	 * Get the phone number
+	 *
+	 * @return string
+	 */
+	public function get_phone() {
+		return $this->phone;
+	}
+
+	/**
+	 * Get the chat message
+	 *
+	 * @return string
+	 */
+	public function get_message_formatted() {
 		return wpautop( $this->message );
 	}
 

@@ -58,7 +58,7 @@ class Holler_Integrations {
 		$type = $integration['type'];
 
 		if ( ! isset( self::$integrations[ $type ] ) ) {
-			return new WP_Error('unknown_integration', 'Unknown integration type ' . $type );
+			return new WP_Error( 'unknown_integration', 'Unknown integration type ' . $type );
 		}
 
 		return call_user_func( self::$integrations[ $type ], $integration, $lead );
@@ -125,6 +125,7 @@ class Holler_Integrations {
 			'{{full_name}}'  => $lead->name,
 			'{{first_name}}' => $lead->first_name,
 			'{{last_name}}'  => $lead->last_name,
+			'{{phone}}'      => $lead->phone,
 			'{{location}}'   => $lead->location,
 			'{{referrer}}'   => $lead->referrer,
 			'{{ip_address}}' => $lead->get_ip(),
@@ -186,6 +187,7 @@ class Holler_Integrations {
 			'full_name'    => $lead->get_name(),
 			'first_name'   => $lead->get_first_name(),
 			'last_name'    => $lead->get_last_name(),
+			'phone'        => $lead->get_phone(),
 			'email'        => $lead->get_email(),
 			'ip4'          => $lead->get_ip(),
 			'gdpr_consent' => $lead->gdpr_consent,
@@ -216,7 +218,7 @@ class Holler_Integrations {
 			'user-agent'  => 'HollerBox/' . HOLLERBOX_VERSION . '; ' . home_url()
 		] );
 
-		if ( is_wp_error( $response ) ){
+		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
 
@@ -283,6 +285,10 @@ class Holler_Integrations {
 
 		if ( $lead->message ) {
 			$contact->update_meta( 'hollerbox_chat_message', $lead->message );
+		}
+
+		if ( $lead->phone ){
+			$contact->update_meta( 'primary_phone', $lead->phone );
 		}
 
 		\Groundhogg\after_form_submit_handler( $contact );

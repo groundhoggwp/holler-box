@@ -68,7 +68,7 @@ class Holler_Telemetry {
 			'system_info' => [
 				'php_version' => PHP_VERSION,
 				'wp_version'  => get_bloginfo( 'version' ),
-				'hb_version'  => GROUNDHOGG_VERSION,
+				'hb_version'  => HOLLERBOX_VERSION,
 				'site_lang'   => get_bloginfo( 'language' ),
 			],
 			'usage'       => [

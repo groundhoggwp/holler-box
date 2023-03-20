@@ -1988,6 +1988,81 @@
         ];
 
         inputs.forEach(id => {
+          $(`#${ id }`).on('input change', e => {
+            updateSetting({
+              [e.target.name]: e.target.value,
+            })
+          })
+        })
+      },
+    },
+    fields_name_and_email_only: {
+      name: __('Fields', 'holler-box'),
+      render: ({
+        email_placeholder = 'Email',
+        name_placeholder = 'Name',
+        name_required = true,
+        enable_name = true,
+      }) => {
+        return [
+          `<label><b>${ __('Email') }</b></label>`,
+          singleControl({
+            label: __('Placeholder'),
+            control: input({
+              id: 'email-placeholder',
+              name: 'email_placeholder',
+              value: email_placeholder,
+            }),
+          }),
+          `<hr/>`,
+          `<label><b>${ __('Name') }</b></label>`,
+          singleControl({
+            label: __('Enable field?'),
+            control: toggle({
+              id: 'enable-name',
+              name: 'enable_name',
+              checked: enable_name,
+            }),
+          }),
+          singleControl({
+            label: __('Required?'),
+            control: toggle({
+              id: 'name-required',
+              name: 'name_required',
+              checked: name_required,
+            }),
+          }),
+          singleControl({
+            label: __('Placeholder'),
+            control: input({
+              id: 'name-placeholder',
+              name: 'name_placeholder',
+              value: name_placeholder,
+            }),
+          }),
+        ].join('')
+      },
+      onMount: (settings, updateSetting) => {
+
+        const toggles = [
+          'name-required',
+          'enable-name',
+        ]
+
+        toggles.forEach(id => {
+          $(`#${ id }`).on('change', e => {
+            updateSetting({
+              [e.target.name]: e.target.checked,
+            })
+          })
+        })
+
+        const inputs = [
+          'email-placeholder',
+          'name-placeholder',
+        ]
+
+        inputs.forEach(id => {
           $(`#${id}`).on('input change', e => {
             updateSetting({
               [e.target.name]: e.target.value,
@@ -2096,9 +2171,10 @@
       onMount: (settings, updateSetting) => {
 
         const toggles = [
-          'name-required',
           'phone-required',
           'enable-phone',
+          'name-required',
+          'enable-name',
         ];
 
         toggles.forEach(id => {
@@ -2313,7 +2389,7 @@
         Controls.close_button,
         Controls.overlay,
         Controls.form,
-        Controls.fields,
+        Controls.fields_name_and_email_only,
         Controls.button,
         Controls.submit,
         Controls.integration,

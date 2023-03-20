@@ -775,8 +775,8 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   display: grid;
   grid-auto-rows: 1fr;
 }
-.holler-box form.holler-box-form.vertical.has-gdpr .fields {
-  grid-template-rows: 1fr 1fr min-content 1fr;
+.holler-box form.holler-box-form.vertical .fields label.holler-gdpr-consent {
+  align-self: center;
 }
 .holler-box form.holler-box-form label.holler-gdpr-consent {
   display: flex;
