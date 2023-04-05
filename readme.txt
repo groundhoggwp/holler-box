@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.1
-Stable tag: 2.1.1
+Stable tag: 2.1.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,16 +223,19 @@ You can purchase a premium plan for access to support and our premium extensions
 
 == Changelog ==
 
+= 2.1.2 (2023-04-05) =
+* TWEAKED Added `location` to composite primary key in stats the table.
+
 = 2.1.1 (2023-03-20) =
-* ADDED Tracking cookie lifetime setting
+* ADDED Tracking cookie lifetime setting.
 
 = 2.1 (2023-03-20) =
-* ADDED Phone field support in some templates
-* ADDED Make name field options in some templates
+* ADDED Phone field support in some templates.
+* ADDED Make name field options in some templates.
 
 = 2.0.15 (2022-11-25) =
 * FIXED Body class hook removed need for additional arguments.
-* FIXED Added primary key to reporting table
+* FIXED Added primary key to reporting table.
 
 = 2.0.14 (2022-08-30) =
 * FIXED CSS conflict preventing toggle switches from showing.

@@ -45,9 +45,9 @@ class Holler_Reporting {
 	 *
 	 * @return void
 	 */
-	public function maybe_delete_stats( $post_id, $post ){
+	public function maybe_delete_stats( $post_id, $post ) {
 
-		if ( $post->post_type !== 'hollerbox' ){
+		if ( $post->post_type !== 'hollerbox' ) {
 			return;
 		}
 
@@ -113,13 +113,15 @@ class Holler_Reporting {
 
 		$charset_collate = $wpdb->get_charset_collate();
 
+		$max_index_length = $wpdb->charset === 'utf8mb4' ? 191 : 255;
+
 		$sql = "CREATE TABLE " . $this->table_name . " (
         s_type varchar(10) NOT NULL,
         s_date date NOT NULL,
         s_count bigint(20) unsigned NOT NULL,
         popup_id bigint(20) unsigned NOT NULL,
-        location text NOT NULL,
-        PRIMARY KEY (popup_id, s_type, s_date),
+        location varchar($max_index_length) NOT NULL,
+        PRIMARY KEY (popup_id, s_type, s_date, location),
         KEY s_date (s_date),
         KEY s_type (s_type),
         KEY popup_id (popup_id)
@@ -282,6 +284,7 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 	 */
 	public function get_total_impressions_last_30() {
 		$after = new DateTime( '30 days ago' );
+
 		return $this->_get_total_count_for_interval( [
 			's_type' => 'impression',
 			'after'  => $after->format( 'Y-m-d' )
@@ -370,6 +373,20 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 		$query = "SELECT * FROM $this->table_name WHERE $where";
 
 		return $wpdb->get_results( $query );
+	}
+
+	/**
+	 * Change location to varchar 255
+	 * Update primary key to include location
+	 *
+	 * @return void
+	 */
+	public function update_2_1_2() {
+		global $wpdb;
+
+		$max_index_length = $wpdb->charset === 'utf8mb4' ? 191 : 255;
+
+		$wpdb->query( "ALTER TABLE {$this->table_name} MODIFY COLUMN location varchar($max_index_length) NOT NULL, DROP PRIMARY KEY, ADD PRIMARY KEY (popup_id, s_type, s_date, location);" );
 	}
 
 }

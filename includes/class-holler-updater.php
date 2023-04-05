@@ -9,7 +9,17 @@ class Holler_Updater {
 	public function get_updates() {
 		return [
 			'2.0',
+			'2.1.2',
 		];
+	}
+
+	/**
+	 * Updated the stats table
+	 *
+	 * @return void
+	 */
+	public function v_2_1_2(){
+		Holler_Reporting::instance()->update_2_1_2();
 	}
 
 	/**
@@ -40,6 +50,7 @@ class Holler_Updater {
 			}
 		}
 
+		// Commit the settings
 		Holler_Settings::instance()->commit();
 
 		// Create the reports table
