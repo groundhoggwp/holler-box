@@ -330,6 +330,23 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 	}
 
 	/**
+	 * Ensures that a column is valid for SQL queries
+	 *
+	 * @param $column
+	 *
+	 * @return bool
+	 */
+	public function is_valid_column( $column ) {
+		return in_array( $column, [
+			's_type',
+			's_count',
+			'popup_id',
+			'location',
+			's_date',
+		] );
+	}
+
+	/**
 	 * Get rows of report data for the given query
 	 *
 	 * @param array $query
@@ -352,18 +369,24 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 		foreach ( $query as $column => $value ) {
 			switch ( $column ) {
 				case 'before':
-					$clauses[] = "s_date <= '$value'";
+					$clauses[] = $wpdb->prepare( 's_date <= %s', $value );
 					break;
 				case 'after':
-					$clauses[] = "s_date >= '$value'";
+					$clauses[] = $wpdb->prepare( 's_date >= %s', $value );
 					break;
 				case 's_type':
 				case 'location':
 				case 's_date':
-					$clauses[] = "$column = '$value'";
+					$clauses[] = $wpdb->prepare( "$column = %s", $value );
 					break;
 				default:
-					$clauses[] = "$column = $value";
+					if ( $this->is_valid_column( $column ) ) {
+						if ( is_numeric( $column ) ){
+							$clauses[] = $wpdb->prepare( "$column = %d", $value );
+						} else {
+							$clauses[] = $wpdb->prepare( "$column = %s", $value );
+						}
+					}
 					break;
 			}
 		}

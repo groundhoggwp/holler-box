@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.2
-Stable tag: 2.1.3
+Stable tag: 2.1.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -223,6 +223,9 @@ You can purchase a premium plan for access to support and our premium extensions
 
 == Changelog ==
 
+= 2.1.4 (2023-05-02) =
+* FIXED Low-risk vulnerability. Thanks to WPScan for disclosing safely.
+
 = 2.1.3 (2023-04-11) =
 * FIXED Name and email placeholders swapped.
 
@@ -234,7 +237,7 @@ You can purchase a premium plan for access to support and our premium extensions
 
 = 2.1 (2023-03-20) =
 * ADDED Phone field support in some templates.
-* ADDED Make name field options in some templates.
+* ADDED Make name field optional in some templates.
 
 = 2.0.15 (2022-11-25) =
 * FIXED Body class hook removed need for additional arguments.
