@@ -421,13 +421,53 @@ class Holler_Popup implements JsonSerializable {
 
 	}
 
-
 	/**
 	 * Callbacks for whether we should display a popup
 	 *
 	 * @var callable[]
 	 */
 	static $display_conditions = [];
+
+	/**
+	 * Groundhogg integration for displaying of poups
+	 *
+	 * @param $filter
+	 *
+	 * @return bool
+	 */
+	static function groundhogg_display_condition( $filter ){
+		// Groundhogg is not installed
+		if ( ! defined( 'GROUNDHOGG_VERSION' ) ) {
+			return true;
+		}
+
+		$contact = \Groundhogg\get_contactdata();
+
+		if ( ! $contact ) {
+			return false;
+		}
+
+		$filters = $filter['filters'];
+
+		// No filters were defined, so we are going to ignore...
+		if ( empty( $filters ) ) {
+			return true;
+		}
+
+		add_action( 'gh_parse_contact_query', function ( $query ) {
+			unset( $query->query_vars['owner'] );
+		} );
+
+		$query = new \Groundhogg\Contact_Query();
+
+		$count = $query->count( [
+			'filters' => $filters,
+			'include' => [ $contact->get_id() ]
+		] );
+
+		// If 1 or more contacts match, return
+		return $count >= 1;
+	}
 
 	/**
 	 * Initialize the display conditions
@@ -441,39 +481,19 @@ class Holler_Popup implements JsonSerializable {
 		self::add_display_condition( 'show_after_x_page_views', '__return_true' );
 		self::add_display_condition( 'show_on_x_devices', '__return_true' );
 		self::add_display_condition( 'show_to_new_or_returning', '__return_true' );
-		self::add_display_condition( 'groundhogg', function ( $filter ) {
+
+		// Groundhogg integration
+		self::add_display_condition( 'groundhogg', [ self::class, 'groundhogg_display_condition' ] );
+
+		// Groundhogg integration, but negated.
+		self::add_display_condition( 'groundhogg_hide', function ( $filter ) {
 
 			// Groundhogg is not installed
 			if ( ! defined( 'GROUNDHOGG_VERSION' ) ) {
 				return true;
 			}
 
-			$contact = \Groundhogg\get_contactdata();
-
-			if ( ! $contact ) {
-				return false;
-			}
-
-			$filters = $filter['filters'];
-
-			// No filters were defined, so we are going to ignore...
-			if ( empty( $filters ) ) {
-				return true;
-			}
-
-			add_action( 'gh_parse_contact_query', function ( $query ) {
-				unset( $query->query_vars['owner'] );
-			} );
-
-			$query = new \Groundhogg\Contact_Query();
-
-			$count = $query->count( [
-				'filters' => $filters,
-				'include' => [ $contact->get_id() ]
-			] );
-
-			// If 1 or more contacts match, return
-			return $count >= 1;
+			return ! Holler_Popup::groundhogg_display_condition( $filter );
 		} );
 
 		// Check for logged-in/out

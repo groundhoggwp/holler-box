@@ -3520,7 +3520,7 @@
 
   if (isGroundhoggInstalled()) {
     AdvancedDisplayRules.groundhogg = {
-      name: __('Show only to Groundhogg contacts'),
+      name: __('Groundhogg: Show to X contacts', 'holler-box'),
       controls: ({filters = []}) => {
         //language=HTML
         return `
@@ -3555,6 +3555,50 @@
                       filters,
                     });
                   }).init();
+            },
+          });
+
+        });
+
+      },
+    };
+
+    AdvancedDisplayRules.groundhogg_hide = {
+      name: __('Groundhogg: Hide for X contacts', 'holler-box'),
+      controls: ({filters = []}) => {
+        //language=HTML
+        return `
+			<button class="holler-button secondary small"
+			        id="edit-groundhogg-hide-filters">${__('Edit Filters')}
+			</button>`;
+      },
+      onMount: (trigger, updateTrigger) => {
+
+        let filters = trigger?.filters || [];
+
+        $('#edit-groundhogg-hide-filters').on('click', e => {
+
+          modal({
+            width: 500,
+            // language=HTML
+            content: `
+				<div class="holler-header">
+					<h3>${__('Edit Groundhogg Filters')}</h3>
+					<button
+						class="holler-button secondary text icon holler-modal-button-close"><span
+						class="dashicons dashicons-no-alt"></span>
+					</button>
+				</div>
+				<div id="holler-groundhogg-hide-filters"></div>`,
+            dialogClasses: 'overflow-visible has-header',
+            onOpen: () => {
+              Groundhogg.filters.functions.createFilters(
+                '#holler-groundhogg-hide-filters', filters, (__filters) => {
+                  filters = __filters;
+                  updateTrigger({
+                    filters,
+                  });
+                }).init();
             },
           });
 
