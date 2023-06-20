@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.2
-Stable tag: 2.1.5
+Stable tag: 2.1.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -210,7 +210,7 @@ No, you can use HollerBox for free, forever. HollerBox is a Open Source project 
 That being said, our [premium upgrades](https://www.hollerwp.com/pricing/) can seriously help your business! Use our proven tools and strategies to supercharge your marketing and WordPress site!
 
 = Does HollerBox connect to Woocommerce or other plugins? =
-Yes, HollerBox can [integrated with many of the most popular WordPress plugins](https://www.hollerwp.io/pricing/) around to create an even more powerful popup experience.
+Yes, HollerBox can [integrated with many of the most popular WordPress plugins](https://www.hollerwp.com/pricing/) around to create an even more powerful popup experience.
 
 = Is HollerBox secure? =
 Yes, HollerBox does not store any subscriber data locally and sends all data to your CRM of choice. We follow all best WordPress security practices. Plus it's open source, so we have a large community looking out for potential weaknesses when it comes to your data.
@@ -223,16 +223,16 @@ You can purchase a premium plan for access to support and our premium extensions
 
 == Changelog ==
 
+= 2.1.6 (2023-06-20) =
+* ADDED New *Groundhogg Hide* display condition.
+* FIXED The target box for the notification template was the width of whole screen on mobile in its closed state.
+
 = 2.1.5 (2023-05-10) =
 * FIXED Script debug not working in editor area
 * FIXED Some display conditions not editable until after they are enabled and saved
 
 = 2.1.4 (2023-05-02) =
 * FIXED Low-risk vulnerability. Thanks to WPScan for disclosing safely.
-
-= 2.1.4 (2023-06-20) =
-* ADDED New *Groundhogg Hide* display condition.
-* FIXED The target box for the notification template was the width of whole screen on mobile in its closed state.
 
 = 2.1.3 (2023-04-11) =
 * FIXED Name and email placeholders swapped.
