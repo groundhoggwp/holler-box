@@ -3812,11 +3812,10 @@
 
         Object.keys(AdvancedDisplayRules).forEach(t => {
           try {
-            AdvancedDisplayRules[t].onMount(advanced_rules[t], (settings) => {
+            AdvancedDisplayRules[t].onMount(advanced_rules[t] ?? {}, (settings) => {
               updateTrigger(t, settings);
             });
-          } catch (e) {
-          }
+          } catch (e) {}
         });
 
         $('[name="toggle-trigger"]').on('change', e => {

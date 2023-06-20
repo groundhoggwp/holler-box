@@ -197,7 +197,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 */
 		public function builder_scripts() {
 
-			$dot_min = Holler_Settings::instance()->get( 'debug_mode' ) ? '' : '.min';
+			$dot_min = Holler_Settings::instance()->get( 'script_debug_mode' ) ? '' : '.min';
 
 			global $post;
 

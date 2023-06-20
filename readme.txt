@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.2
-Stable tag: 2.1.4
+Stable tag: 2.1.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -222,6 +222,13 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.1.5 (2023-05-10) =
+* FIXED Script debug not working in editor area
+* FIXED Some display conditions not editable until after they are enabled and saved
+
+= 2.1.4 (2023-05-02) =
+* FIXED Low-risk vulnerability. Thanks to WPScan for disclosing safely.
 
 = 2.1.4 (2023-06-20) =
 * ADDED New *Groundhogg Hide* display condition.
