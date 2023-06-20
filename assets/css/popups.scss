@@ -1097,7 +1097,6 @@ body:not(.wp-admin) {
 
 @media (max-width: 600px) {
 
-
   .holler-box.holler-popup {
     .holler-box-modal {
       width: calc( 100vw - 60px );
@@ -1107,8 +1106,11 @@ body:not(.wp-admin) {
 
   .holler-box.holler-notification-box {
     .positioner {
-      left: 0;
-      right: 0;
+
+      &:not(:has(.notification-closed)){
+        left: 0;
+        right: 0;
+      }
 
       &.top-left,
       &.top-center,
@@ -1143,6 +1145,8 @@ body:not(.wp-admin) {
       &.top-left,
       &.center-left,
       &.bottom-left {
+        left: 0;
+
         .notification-closed {
           margin-left: 10px;
         }
@@ -1151,6 +1155,8 @@ body:not(.wp-admin) {
       &.top-right,
       &.center-right,
       &.bottom-right {
+        right: 0;
+
         .notification-closed {
           margin-left: auto;
           margin-right: 10px;
@@ -1158,7 +1164,6 @@ body:not(.wp-admin) {
       }
 
       .holler-box-modal {
-
         border-radius: 0;
 
         &:not(.notification-closed) {

@@ -814,7 +814,7 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
     max-height: calc( 100vw - 60px );
   }
 
-  .holler-box.holler-notification-box .positioner {
+  .holler-box.holler-notification-box .positioner:not(:has(.notification-closed)) {
     left: 0;
     right: 0;
   }
@@ -833,8 +833,14 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   .holler-box.holler-notification-box .positioner.center-right .notification-closed, .holler-box.holler-notification-box .positioner.center-center .notification-closed, .holler-box.holler-notification-box .positioner.center-left .notification-closed, .holler-box.holler-notification-box .positioner.bottom-right .notification-closed, .holler-box.holler-notification-box .positioner.bottom-center .notification-closed, .holler-box.holler-notification-box .positioner.bottom-left .notification-closed {
     margin-bottom: 10px;
   }
+  .holler-box.holler-notification-box .positioner.top-center, .holler-box.holler-notification-box .positioner.center-center, .holler-box.holler-notification-box .positioner.bottom-center, .holler-box.holler-notification-box .positioner.top-left, .holler-box.holler-notification-box .positioner.center-left, .holler-box.holler-notification-box .positioner.bottom-left {
+    left: 0;
+  }
   .holler-box.holler-notification-box .positioner.top-center .notification-closed, .holler-box.holler-notification-box .positioner.center-center .notification-closed, .holler-box.holler-notification-box .positioner.bottom-center .notification-closed, .holler-box.holler-notification-box .positioner.top-left .notification-closed, .holler-box.holler-notification-box .positioner.center-left .notification-closed, .holler-box.holler-notification-box .positioner.bottom-left .notification-closed {
     margin-left: 10px;
+  }
+  .holler-box.holler-notification-box .positioner.top-right, .holler-box.holler-notification-box .positioner.center-right, .holler-box.holler-notification-box .positioner.bottom-right {
+    right: 0;
   }
   .holler-box.holler-notification-box .positioner.top-right .notification-closed, .holler-box.holler-notification-box .positioner.center-right .notification-closed, .holler-box.holler-notification-box .positioner.bottom-right .notification-closed {
     margin-left: auto;
