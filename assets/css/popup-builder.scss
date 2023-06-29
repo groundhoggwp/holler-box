@@ -535,7 +535,8 @@ table.display-conditions-grid {
               }
 
               p {
-                text-align: center;
+                //text-align: center;
+                padding: 0 20px;
               }
             }
           }
@@ -611,6 +612,7 @@ table.display-conditions-grid {
               display: flex;
               justify-content: space-between;
               align-items: center;
+              gap: 10px;
             }
 
 

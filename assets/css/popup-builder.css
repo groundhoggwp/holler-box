@@ -392,7 +392,7 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   border-width: 1px 0 1px 0;
 }
 #holler-app #editor .control-wrap #controls .control-group#codemirror .controls p {
-  text-align: center;
+  padding: 0 20px;
 }
 #holler-app #editor .control-wrap #controls .control-group .control-group-header {
   display: flex;
@@ -450,6 +450,7 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 10px;
 }
 #holler-app #editor .control-wrap #controls .control-group .controls #integrations {
   display: flex;
