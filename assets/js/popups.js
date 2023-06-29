@@ -1,4 +1,4 @@
-( () => {
+(() => {
 
   const Cookies = {
 
@@ -23,8 +23,8 @@
 
     isClosed (id) {
       let allClosed = this.getCookie(this.closedPopups, '').
-        split(',').
-        map(id => parseInt(id))
+      split(',').
+      map(id => parseInt(id))
       return allClosed.includes(id)
     },
 
@@ -37,8 +37,7 @@
 
       if (counts[id]) {
         counts[id] += 1
-      }
-      else {
+      } else {
         counts[id] = 1
       }
 
@@ -82,7 +81,7 @@
       }
 
       let d = new Date()
-      d.setTime(d.getTime() + ( duration * 1000 ))
+      d.setTime(d.getTime() + (duration * 1000))
       let expires = 'expires=' + d.toUTCString()
       document.cookie = name + '=' + value + ';' + expires + ';path=/'
     },
@@ -178,13 +177,20 @@
   const overlay = () => {
     //language=HTML
     return `
-        <div class="holler-box-overlay"></div>`
+		<div class="holler-box-overlay"></div>`
   }
 
   const closeButton = () => {
+
+    let curr = currentPopup()
+
+    if ( curr && !curr.isCloseable()) {
+      return ''
+    }
+
     //language=HTML
     return `
-        <button class="holler-box-modal-close">&times;</button>`
+		<button class="holler-box-modal-close">&times;</button>`
   }
 
   const credit = () => {
@@ -196,8 +202,8 @@
 
     //language=HTML
     return `
-        <div class="holler-box-credit"><a href="https://hollerwp.com/">⚡ by
-            HollerBox</a></div>`
+		<div class="holler-box-credit"><a href="https://hollerwp.com/">⚡ by
+			HollerBox</a></div>`
   }
 
   const createHTML = (HTML) => {
@@ -212,98 +218,98 @@
 
     //language=HTML
     return `<label class="holler-gdpr-consent">
-        <input type="checkbox"
-               name="gdpr_consent"
-               value="yes" required>
-        <span>${ HTML.innerHTML }</span></label>`
+		<input type="checkbox"
+		       name="gdpr_consent"
+		       value="yes" required>
+		<span>${HTML.innerHTML}</span></label>`
   }
 
   const nameInput = (placeholder = 'Your name', required = true) => {
     //language=HTML
     return `<input class="holler-box-input" type="text" name="name"
-                   placeholder="${ placeholder }" ${ required ? 'required' : '' }>`
+	               placeholder="${placeholder}" ${required ? 'required' : ''}>`
   }
 
   const phoneInput = (placeholder = 'Mobile Number', required = false) => {
     //language=HTML
     return `<input class="holler-box-input" type="tel" name="phone"
-                   placeholder="${ placeholder }" ${ required ? 'required' : '' }>`
+	               placeholder="${placeholder}" ${required ? 'required' : ''}>`
   }
 
   const emailInput = (placeholder = 'Your email') => {
     //language=HTML
     return `<input class="holler-box-input" type="email" name="email"
-                   placeholder="${ placeholder }" required>`
+	               placeholder="${placeholder}" required>`
   }
 
   const submitButton = (text, type = 'submit') => {
     //language=HTML
     return `
-        <button type="${ type }" class="holler-box-button">${ text }</button>`
+		<button type="${type}" class="holler-box-button">${text}</button>`
   }
 
   const __title = (title) => {
     //language=HTML
     return `
-        <h2 class="holler-box-modal-title">${ title }</h2>
+		<h2 class="holler-box-modal-title">${title}</h2>
     `
   }
 
   const __content = (content) => {
     //language=HTML
     return `
-        <div class="holler-box-modal-content">
-            ${ content }
-        </div>
+		<div class="holler-box-modal-content">
+			${content}
+		</div>
     `
   }
 
   const __chatResponse = (content) => {
     //language=HTML
     return `
-        <div class="holler-box-chat-response">
-            <div class="content">
-                ${ content }
-            </div>
-        </div>
+		<div class="holler-box-chat-response">
+			<div class="content">
+				${content}
+			</div>
+		</div>
     `
   }
 
   const __chatMessage = ({ content, avatar }) => {
 
-    content = `<div class="content">${ content }</div>`
+    content = `<div class="content">${content}</div>`
 
     //language=HTML
     return `
-        <div class="holler-box-chat-message">
-            ${ avatar ? `<img src="${ avatar }" class="avatar" alt="">` : '' }
-            ${ content }
-        </div>
+		<div class="holler-box-chat-message">
+			${avatar ? `<img src="${avatar}" class="avatar" alt="">` : ''}
+			${content}
+		</div>
     `
   }
 
   const notificationClosedTemplate = ({ id, position }) => {
     // language=HTML
     return `
-        <div id="${ id }" class="holler-box holler-notification-box">
-            <div class="positioner ${ position }">
-                <div class="animation slide-in">
-                    <div class="holler-box-modal notification-closed">
-                        <svg xmlns="http://www.w3.org/2000/svg"
-                             viewBox="0 0 512 512">
-                            <rect width="107.6" height="145.6" x="319.1"
-                                  y="76.6" fill="#fff" rx="5" ry="5"/>
-                            <path fill="#f44336"
-                                  d="M373 0a139 139 0 1 0 1 278 139 139 0 0 0-1-278zm22 187a16 16 0 0 1-32 0v-70h-11a16 16 0 0 1 0-32h27c8 0 16 8 16 16zm0 0"/>
-                            <path fill="#ffa000"
-                                  d="M299 427a85 85 0 1 1-171 0 85 85 0 0 1 171 0zm0 0"/>
-                            <path fill="#ffc107"
-                                  d="M380 320h-7A182 182 0 0 1 220 43h-7c-82 0-149 67-149 149v59c0 43-18 83-51 110a37 37 0 0 0 24 66h352a37 37 0 0 0 24-66c-13-12-24-26-33-41zm0 0"/>
-                        </svg>
-                    </div>
-                </div>
-            </div>
-        </div>`
+		<div id="${id}" class="holler-box holler-notification-box">
+			<div class="positioner ${position}">
+				<div class="animation slide-in">
+					<div class="holler-box-modal notification-closed">
+						<svg xmlns="http://www.w3.org/2000/svg"
+						     viewBox="0 0 512 512">
+							<rect width="107.6" height="145.6" x="319.1"
+							      y="76.6" fill="#fff" rx="5" ry="5"/>
+							<path fill="#f44336"
+							      d="M373 0a139 139 0 1 0 1 278 139 139 0 0 0-1-278zm22 187a16 16 0 0 1-32 0v-70h-11a16 16 0 0 1 0-32h27c8 0 16 8 16 16zm0 0"/>
+							<path fill="#ffa000"
+							      d="M299 427a85 85 0 1 1-171 0 85 85 0 0 1 171 0zm0 0"/>
+							<path fill="#ffc107"
+							      d="M380 320h-7A182 182 0 0 1 220 43h-7c-82 0-149 67-149 149v59c0 43-18 83-51 110a37 37 0 0 0 24 66h352a37 37 0 0 0 24-66c-13-12-24-26-33-41zm0 0"/>
+						</svg>
+					</div>
+				</div>
+			</div>
+		</div>`
   }
 
   const SubmitActions = {
@@ -346,7 +352,7 @@
       '/': '&#x2F;',
     }
     const reg = /[&<>"'/]/ig
-    return string.replace(reg, (match) => ( map[match] ))
+    return string.replace(reg, (match) => (map[match]))
   }
 
   const CommonActions = {
@@ -380,8 +386,7 @@
         let customHTML = createHTML(popup.custom_form_html)
         if (customHTML.tagName === 'FORM') {
           customForm = customHTML
-        }
-        else {
+        } else {
           customForm = customHTML.querySelector('form')
           if (!customForm) {
             alert('Invalid custom form HTML')
@@ -444,83 +449,86 @@
 
       const { id, after_submit = 'close' } = popup
 
-      document.querySelector(`#${ id } form.holler-box-form`).
-        addEventListener('submit', e => {
-          e.preventDefault()
+      document.querySelector(`#${id} form.holler-box-form`).
+      addEventListener('submit', e => {
+        e.preventDefault()
 
-          let form = e.target
-          let formData = new FormData(form)
+        let form = e.target
+        let formData = new FormData(form)
 
-          formData.append('location', window.location.href)
-          formData.append('referer', document.referrer)
+        formData.append('location', window.location.href)
+        formData.append('referer', document.referrer)
 
-          modifyFormData(formData)
+        modifyFormData(formData)
 
-          form.querySelectorAll('input, button').
-            forEach(el => el.disabled = true)
-          form.querySelector(
-            'button').innerHTML = '<span class="holler-spinner"></span>'
+        form.querySelectorAll('input, button').
+        forEach(el => el.disabled = true)
+        form.querySelector(
+          'button').innerHTML = '<span class="holler-spinner"></span>'
 
-          let payload = Object.fromEntries(formData)
+        let payload = Object.fromEntries(formData)
 
-          modifyPayload(payload)
+        modifyPayload(payload)
 
-          const submit = () => apiPost(`${ HollerBox.routes.submit }/${ popup.ID }`,
-            payload).
-            then(({ status = 'success', failures = [] }) => {
+        return popup.submit(payload).
+        then(({ status = 'success', failures = [] }) => {
 
-              if (status === 'failed') {
+          if (status === 'failed') {
 
-                if (!failures.length) {
-                  alert('Something when wrong, please try again later.')
-                  popup.close()
-                  return
-                }
-
-                console.log(failures)
-
-                popup.querySelector('form').innerHTML = [
-                  `<div class="hollerbox-integration-errors">`,
-                  `<p>There are issues with some of your integrations:</p>`,
-                  `<ul>`,
-                  ...failures.map(f => `<li>${ f }</li>`),
-                  `</ul>`,
-                  `<p>Only admins see this message.</p>`,
-                  `</div>`,
-                ].join('')
-
-                return
-              }
-
-              popup.submitted = true
-              popup.converted(false)
-
-              SubmitActions[after_submit](popup)
-
-              document.dispatchEvent(new CustomEvent('holler_submit', {
-                formData,
-                form,
-              }))
-            }).
-            catch(e => {
-              maybeLog(e)
+            if (!failures.length) {
+              alert('Something when wrong, please try again later.')
               popup.close()
-            })
+              return
+            }
 
-          return submit()
+            console.log(failures)
+
+            popup.querySelector('form').innerHTML = [
+              `<div class="hollerbox-integration-errors">`,
+              `<p>There are issues with some of your integrations:</p>`,
+              `<ul>`,
+              ...failures.map(f => `<li>${f}</li>`),
+              `</ul>`,
+              `<p>Only admins see this message.</p>`,
+              `</div>`,
+            ].join('')
+
+            return
+          }
+
+          SubmitActions[after_submit](popup)
+        }).
+        catch(e => {
+          maybeLog(e)
+          popup.close()
         })
+      })
     },
     buttonClicked: (popup) => {
 
       const { id, button_link } = popup
 
-      let button = document.querySelector(`#${ id } button.holler-box-button`)
+      let button = document.querySelector(`#${id} button.holler-box-button`)
+
+      let url = new URL(button_link)
+      let home = new URL(HollerBox.home_url)
 
       button.addEventListener('click', e => {
         e.preventDefault()
         button.innerHTML = '<span class="holler-spinner"></span>'
         popup.converted().then(() => {
-          window.open(button_link, '_self')
+
+          if (isBuilderPreview()) {
+
+            if (url.hostname !== home.hostname) {
+              popup.close()
+              return
+            }
+
+            url.searchParams.append('suppress_hollerbox', 1)
+          }
+
+          window.open(url, '_self')
         })
       })
 
@@ -535,11 +543,11 @@
     enable_name = true,
     enable_phone = false,
     ...props
-  }) => ( {
+  }) => ({
     name: enable_name,
     phone: enable_phone,
     ...props,
-  } )
+  })
 
   const form = props => {
 
@@ -566,18 +574,18 @@
 
     //language=HTML
     return `
-        <form class="${classes.join( ' ' )}">
-            <div class="fields">
-                ${ name ? nameInput(name_placeholder, name_required) : '' }
-                ${ email ? emailInput(email_placeholder) : '' }
-                ${ phone ? phoneInput(phone_placeholder, phone_required) : '' }
-                ${ direction === 'vertical' && isGDPREnabled()
-                        ? gdprInput()
-                        : '' }
-                ${ submitButton(button_text) }
-            </div>
-            ${ direction === 'horizontal' && isGDPREnabled() ? gdprInput() : '' }
-        </form>`
+		<form class="${classes.join(' ')}">
+			<div class="fields">
+				${name ? nameInput(name_placeholder, name_required) : ''}
+				${email ? emailInput(email_placeholder) : ''}
+				${phone ? phoneInput(phone_placeholder, phone_required) : ''}
+				${direction === 'vertical' && isGDPREnabled()
+					? gdprInput()
+					: ''}
+				${submitButton(button_text)}
+			</div>
+			${direction === 'horizontal' && isGDPREnabled() ? gdprInput() : ''}
+		</form>`
   }
 
   const PopupTemplates = {
@@ -596,20 +604,20 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-notification-box">
-                <div class="positioner ${ position }">
-                    <div class="animation slide-in">
-                        <div class="holler-box-modal">
-                            ${ closeButton() }
-                            <div class="display-flex">
-                                ${ avatar ? `<img src="${ avatar }" alt="">` : '' }
-                                ${ __content(post_content) }
-                            </div>
-                            ${ credit() }
-                        </div>
-                    </div>
-                </div>
-            </div>`
+			<div id="${id}" class="holler-box holler-notification-box">
+				<div class="positioner ${position}">
+					<div class="animation slide-in">
+						<div class="holler-box-modal">
+							${closeButton()}
+							<div class="display-flex">
+								${avatar ? `<img src="${avatar}" alt="">` : ''}
+								${__content(post_content)}
+							</div>
+							${credit()}
+						</div>
+					</div>
+				</div>
+			</div>`
       },
       onOpen: CommonActions.notificationOpened,
       onClosed: CommonActions.notificationClosed,
@@ -630,24 +638,24 @@
 
         // language=HTML
         return `
-            <div id="${ id }"
-                 class="holler-box holler-notification-box with-button">
-                <div class="positioner ${ position }">
-                    <div class="animation slide-in">
-                        <div class="holler-box-modal ">
-                            ${ closeButton() }
-                            <div class="display-flex">
-                                ${ avatar ? `<img src="${ avatar }" alt="">` : '' }
-                                ${ __content(post_content) }
-                            </div>
-                            <div class="holler-button-cta">
-                                ${ submitButton(button_text, 'button') }
-                            </div>
-                            ${ credit() }
-                        </div>
-                    </div>
-                </div>
-            </div>`
+			<div id="${id}"
+			     class="holler-box holler-notification-box with-button">
+				<div class="positioner ${position}">
+					<div class="animation slide-in">
+						<div class="holler-box-modal ">
+							${closeButton()}
+							<div class="display-flex">
+								${avatar ? `<img src="${avatar}" alt="">` : ''}
+								${__content(post_content)}
+							</div>
+							<div class="holler-button-cta">
+								${submitButton(button_text, 'button')}
+							</div>
+							${credit()}
+						</div>
+					</div>
+				</div>
+			</div>`
       },
       onOpen: (popup) => {
         CommonActions.notificationOpened(popup)
@@ -674,30 +682,30 @@
 
         // language=HTML
         return `
-            <div id="${ id }"
-                 class="holler-box holler-notification-box with-form ${ submitted
-                         ? 'no-animation'
-                         : '' }">
-                <div class="positioner ${ position }">
-                    <div class="animation slide-in">
-                        <div class="holler-box-modal">
-                            ${ closeButton() }
-                            <div class="display-flex">
-                                ${ avatar ? `<img src="${ avatar }" alt="">` : '' }
-                                ${ __content(
-                                        submitted ? success_message : post_content) }
-                            </div>
-                            ${ submitted ? '' : form({
-                                direction: 'horizontal',
-                                name: false,
-                                button_text,
-                                email_placeholder,
-                            }) }
-                            ${ credit() }
-                        </div>
-                    </div>
-                </div>
-            </div>`
+			<div id="${id}"
+			     class="holler-box holler-notification-box with-form ${submitted
+				     ? 'no-animation'
+				     : ''}">
+				<div class="positioner ${position}">
+					<div class="animation slide-in">
+						<div class="holler-box-modal">
+							${closeButton()}
+							<div class="display-flex">
+								${avatar ? `<img src="${avatar}" alt="">` : ''}
+								${__content(
+									submitted ? success_message : post_content)}
+							</div>
+							${submitted ? '' : form({
+								direction: 'horizontal',
+								name: false,
+								button_text,
+								email_placeholder,
+							})}
+							${credit()}
+						</div>
+					</div>
+				</div>
+			</div>`
       },
       onOpen: (popup) => {
         CommonActions.notificationOpened(popup)
@@ -723,21 +731,21 @@
         if (closed) {
           // language=HTML
           return `
-              <div id="${ id }" class="holler-box holler-notification-box">
-                  <div class="positioner ${ position }">
-                      <div class="animation slide-in">
-                          <div class="holler-box-modal notification-closed">
-                              <svg xmlns="http://www.w3.org/2000/svg"
-                                   viewBox="0 0 512 512">
-                                  <path fill="#fff"
-                                        d="M303.4 61.4A207 207 0 0 0 195 31C89 31 0 110 0 211a169 169 0 0 0 32 98.7L2.6 401.4a15 15 0 0 0 21.1 18l88.8-45.2c3.6 1.6 7.3 3 11 4.3A198.2 198.2 0 0 1 92 271c0-114.9 96.7-203.2 211.4-209.6z"/>
-                                  <path fill="#fff"
-                                        d="M480 369.7a169 169 0 0 0 32-98.7c0-101.1-89-180-195-180s-195 79-195 180c0 101.1 89 180 195 180 28.4 0 56.7-5.8 82.4-16.8l88.8 45.2a15 15 0 0 0 21-18zM256 286a15 15 0 1 1 0-30 15 15 0 0 1 0 30zm60 0a15 15 0 1 1 0-30 15 15 0 0 1 0 30zm60 0a15 15 0 1 1 0-30 15 15 0 0 1 0 30z"/>
-                              </svg>
-                          </div>
-                      </div>
-                  </div>
-              </div>`
+			  <div id="${id}" class="holler-box holler-notification-box">
+				  <div class="positioner ${position}">
+					  <div class="animation slide-in">
+						  <div class="holler-box-modal notification-closed">
+							  <svg xmlns="http://www.w3.org/2000/svg"
+							       viewBox="0 0 512 512">
+								  <path fill="#fff"
+								        d="M303.4 61.4A207 207 0 0 0 195 31C89 31 0 110 0 211a169 169 0 0 0 32 98.7L2.6 401.4a15 15 0 0 0 21.1 18l88.8-45.2c3.6 1.6 7.3 3 11 4.3A198.2 198.2 0 0 1 92 271c0-114.9 96.7-203.2 211.4-209.6z"/>
+								  <path fill="#fff"
+								        d="M480 369.7a169 169 0 0 0 32-98.7c0-101.1-89-180-195-180s-195 79-195 180c0 101.1 89 180 195 180 28.4 0 56.7-5.8 82.4-16.8l88.8 45.2a15 15 0 0 0 21-18zM256 286a15 15 0 1 1 0-30 15 15 0 0 1 0 30zm60 0a15 15 0 1 1 0-30 15 15 0 0 1 0 30zm60 0a15 15 0 1 1 0-30 15 15 0 0 1 0 30z"/>
+							  </svg>
+						  </div>
+					  </div>
+				  </div>
+			  </div>`
         }
 
         if (!popup.messages) {
@@ -757,8 +765,8 @@
           case 'message_2':
             // language=HTML
             input = `<textarea rows="1" name="message"
-                               placeholder="${ message_placeholder }"
-                               class="holler-box-input" required></textarea>`
+			                   placeholder="${message_placeholder}"
+			                   class="holler-box-input" required></textarea>`
             break
           case 'name':
             input = nameInput()
@@ -772,49 +780,49 @@
         if (state === 'done') {
           // language=HTML
           return `
-              <div id="${ id }"
-                   class="holler-box holler-notification-box with-chat">
-                  <div class="positioner ${ position }">
-                      <div class="animation ${ doAnimations ? 'slide-in' : '' }">
-                          <div class="holler-box-modal ">
-                              ${ closeButton() }
-                              ${ popup.messages.join('') }
-                              <div class="close-chat-wrap">
-                                  <button class="close-chat">&times; Close
-                                      chat
-                                  </button>
-                              </div>
-                              ${ credit() }
-                          </div>
-                      </div>
-                  </div>
-              </div>`
+			  <div id="${id}"
+			       class="holler-box holler-notification-box with-chat">
+				  <div class="positioner ${position}">
+					  <div class="animation ${doAnimations ? 'slide-in' : ''}">
+						  <div class="holler-box-modal ">
+							  ${closeButton()}
+							  ${popup.messages.join('')}
+							  <div class="close-chat-wrap">
+								  <button class="close-chat">&times; Close
+									  chat
+								  </button>
+							  </div>
+							  ${credit()}
+						  </div>
+					  </div>
+				  </div>
+			  </div>`
         }
 
         // language=HTML
         return `
-            <div id="${ id }"
-                 class="holler-box holler-notification-box with-chat">
-                <div class="positioner ${ position }">
-                    <div class="animation ${ doAnimations ? 'slide-in' : '' }">
-                        <div class="holler-box-modal ">
-                            ${ closeButton() }
-                            ${ popup.messages.join('') }
-                            <form class="holler-chat-form">
-                                ${ input }
-                                <button type="submit" class="send-message">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
-                                         viewBox="0 0 404.644 404.644">
-                                        <path fill="currentColor"
-                                              d="M5.535 386.177c-3.325 15.279 8.406 21.747 19.291 16.867l367.885-188.638h.037c4.388-2.475 6.936-6.935 6.936-12.08 0-5.148-2.548-9.611-6.936-12.085h-.037L24.826 1.6C13.941-3.281 2.21 3.189 5.535 18.469c.225 1.035 21.974 97.914 33.799 150.603l192.042 33.253-192.042 33.249C27.509 288.26 5.759 385.141 5.535 386.177z"/>
-                                    </svg>
-                                </button>
-                            </form>
-                            ${ credit() }
-                        </div>
-                    </div>
-                </div>
-            </div>`
+			<div id="${id}"
+			     class="holler-box holler-notification-box with-chat">
+				<div class="positioner ${position}">
+					<div class="animation ${doAnimations ? 'slide-in' : ''}">
+						<div class="holler-box-modal ">
+							${closeButton()}
+							${popup.messages.join('')}
+							<form class="holler-chat-form">
+								${input}
+								<button type="submit" class="send-message">
+									<svg xmlns="http://www.w3.org/2000/svg"
+									     viewBox="0 0 404.644 404.644">
+										<path fill="currentColor"
+										      d="M5.535 386.177c-3.325 15.279 8.406 21.747 19.291 16.867l367.885-188.638h.037c4.388-2.475 6.936-6.935 6.936-12.08 0-5.148-2.548-9.611-6.936-12.085h-.037L24.826 1.6C13.941-3.281 2.21 3.189 5.535 18.469c.225 1.035 21.974 97.914 33.799 150.603l192.042 33.253-192.042 33.249C27.509 288.26 5.759 385.141 5.535 386.177z"/>
+									</svg>
+								</button>
+							</form>
+							${credit()}
+						</div>
+					</div>
+				</div>
+			</div>`
       },
       beforeOpen: (popup) => {
         if (!popup.state) {
@@ -839,28 +847,28 @@
         let modal = popup.querySelector('.holler-box-modal')
         modal.scrollTop = modal.scrollHeight
 
-        const form = document.querySelector(`#${ popup.id } form.holler-chat-form`)
+        const form = document.querySelector(`#${popup.id} form.holler-chat-form`)
 
         // auto-focus to input after submit
         if (popup.state !== 'message') {
-          document.querySelector(`#${ popup.id } .holler-box-input`)?.focus()
+          document.querySelector(`#${popup.id} .holler-box-input`)?.focus()
         }
 
         if (['message', 'more'].includes(popup.state)) {
-          document.querySelector(`#${ popup.id } .holler-box-input`).
-            addEventListener('keydown', e => {
-              if (e.key === 'Enter' && !e.shiftKey) {
-                form.dispatchEvent(new Event('submit'))
-              }
-            })
+          document.querySelector(`#${popup.id} .holler-box-input`).
+          addEventListener('keydown', e => {
+            if (e.key === 'Enter' && !e.shiftKey) {
+              form.dispatchEvent(new Event('submit'))
+            }
+          })
         }
 
         if (popup.state === 'done') {
 
-          document.querySelector(`#${ popup.id } .close-chat`).
-            addEventListener('click', () => {
-              popup.close()
-            })
+          document.querySelector(`#${popup.id} .close-chat`).
+          addEventListener('click', () => {
+            popup.close()
+          })
         }
 
         if (!form) {
@@ -919,15 +927,7 @@
 
               popup.state = 'done'
 
-              apiPost(`${ HollerBox.routes.submit }/${ popup.ID }`,
-                popup.responses).
-                then(r => {
-                  popup.submitted = true
-                  popup.converted(false)
-                  document.dispatchEvent(
-                    new CustomEvent('holler_submit', this.responses))
-                }).then(() => {
-
+              popup.submit(popup.responses).then(r => {
                 switch (popup.after_submit) {
                   case 'message':
 
@@ -946,7 +946,6 @@
                     SubmitActions['redirect'](popup)
                     break
                 }
-
               }).catch(e => maybeLog(e))
 
               break
@@ -974,18 +973,18 @@
 
         // language=HTML
         return `
-            <div id="${ id }" class="holler-box holler-popup holler-popup-custom">
-                ${ overlay_enabled ? overlay() : '' }
-                <div class="positioner ${ position }">
-                    <div class="animation ${ animation }">
-                        <div class="holler-box-modal">
-                            ${ closeButton() }
-                            ${ __content(post_content) }
-                        </div>
-                        ${ credit() }
-                    </div>
-                </div>
-            </div>`
+			<div id="${id}" class="holler-box holler-popup holler-popup-custom">
+				${overlay_enabled ? overlay() : ''}
+				<div class="positioner ${position}">
+					<div class="animation ${animation}">
+						<div class="holler-box-modal">
+							${closeButton()}
+							${__content(post_content)}
+						</div>
+						${credit()}
+					</div>
+				</div>
+			</div>`
       },
       onOpen: CommonActions.maybeDisableScrolling,
       onClosed: CommonActions.enableScrolling,
@@ -1006,26 +1005,26 @@
 
         // language=HTML
         return `
-            <div id="${ id }"
-                 class="holler-box holler-popup holler-popup-standard ${ submitted
-                         ? 'no-animation'
-                         : '' }">
-                ${ overlay_enabled ? overlay() : '' }
-                <div class="positioner ${ position }">
-                    <div class="animation ${ animation }">
-                        <div class="holler-box-modal">
-                            ${ closeButton() }
-                            ${ __content(
-                                    submitted ? success_message : post_content) }
-                            ${ submitted ? '' : form({
-                                direction: 'vertical',
-                                ...props,
-                            }) }
-                        </div>
-                        ${ credit() }
-                    </div>
-                </div>
-            </div>`
+			<div id="${id}"
+			     class="holler-box holler-popup holler-popup-standard ${submitted
+				     ? 'no-animation'
+				     : ''}">
+				${overlay_enabled ? overlay() : ''}
+				<div class="positioner ${position}">
+					<div class="animation ${animation}">
+						<div class="holler-box-modal">
+							${closeButton()}
+							${__content(
+								submitted ? success_message : post_content)}
+							${submitted ? '' : form({
+								direction: 'vertical',
+								...props,
+							})}
+						</div>
+						${credit()}
+					</div>
+				</div>
+			</div>`
       },
       onOpen: popup => {
         CommonActions.formSubmitted(popup)
@@ -1050,35 +1049,35 @@
 
         // language=HTML
         return `
-            <div id="${ id }"
-                 class="holler-box holler-popup holler-popup-image-left ${ submitted
-                         ? 'no-animation'
-                         : '' }">
-                ${ overlay_enabled ? overlay() : '' }
-                <div class="positioner ${ position }">
-                    <div class="animation ${ animation }">
-                        <div class="holler-box-modal">
-                            ${ closeButton() }
-                            <div class="display-flex">
-                                <div class="left image-width"
-                                     style="background-image: url('${ image_src }')">
-                                </div>
-                                <div class="right">
-                                    ${ __content(submitted
-                                            ? success_message
-                                            : post_content) }
-                                    ${ submitted ? '' : form({
-                                        direction: 'vertical',
-                                        button_text,
-                                        ...props,
-                                    }) }
-                                </div>
-                            </div>
-                        </div>
-                        ${ credit() }
-                    </div>
-                </div>
-            </div>`
+			<div id="${id}"
+			     class="holler-box holler-popup holler-popup-image-left ${submitted
+				     ? 'no-animation'
+				     : ''}">
+				${overlay_enabled ? overlay() : ''}
+				<div class="positioner ${position}">
+					<div class="animation ${animation}">
+						<div class="holler-box-modal">
+							${closeButton()}
+							<div class="display-flex">
+								<div class="left image-width"
+								     style="background-image: url('${image_src}')">
+								</div>
+								<div class="right">
+									${__content(submitted
+										? success_message
+										: post_content)}
+									${submitted ? '' : form({
+										direction: 'vertical',
+										button_text,
+										...props,
+									})}
+								</div>
+							</div>
+						</div>
+						${credit()}
+					</div>
+				</div>
+			</div>`
       },
       onOpen: popup => {
         CommonActions.formSubmitted(popup)
@@ -1102,34 +1101,34 @@
 
         // language=HTML
         return `
-            <div id="${ id }"
-                 class="holler-box holler-popup holler-popup-image-right ${ submitted
-                         ? 'no-animation'
-                         : '' }">
-                ${ overlay_enabled ? overlay() : '' }
-                <div class="positioner ${ position }">
-                    <div class="animation ${ animation }">
-                        <div class="holler-box-modal">
-                            ${ closeButton() }
-                            <div class="display-flex">
-                                <div class="left">
-                                    ${ __content(submitted
-                                            ? success_message
-                                            : post_content) }
-                                    ${ submitted ? '' : form({
-                                        direction: 'vertical',
-                                        ...props,
-                                    }) }
-                                </div>
-                                <div class="right image-width"
-                                     style="background-image: url('${ image_src }')">
-                                </div>
-                            </div>
-                        </div>
-                        ${ credit() }
-                    </div>
-                </div>
-            </div>`
+			<div id="${id}"
+			     class="holler-box holler-popup holler-popup-image-right ${submitted
+				     ? 'no-animation'
+				     : ''}">
+				${overlay_enabled ? overlay() : ''}
+				<div class="positioner ${position}">
+					<div class="animation ${animation}">
+						<div class="holler-box-modal">
+							${closeButton()}
+							<div class="display-flex">
+								<div class="left">
+									${__content(submitted
+										? success_message
+										: post_content)}
+									${submitted ? '' : form({
+										direction: 'vertical',
+										...props,
+									})}
+								</div>
+								<div class="right image-width"
+								     style="background-image: url('${image_src}')">
+								</div>
+							</div>
+						</div>
+						${credit()}
+					</div>
+				</div>
+			</div>`
       },
       onOpen: popup => {
         CommonActions.formSubmitted(popup)
@@ -1152,35 +1151,35 @@
 
         // language=HTML
         return `
-            <div id="${ id }"
-                 class="holler-box holler-popup holler-popup-form-below ${ submitted
-                         ? 'no-animation'
-                         : '' }">
-                ${ overlay_enabled ? overlay() : '' }
-                <div class="positioner ${ position }">
-                    <div class="animation ${ animation }">
-                        <div class="holler-box-modal">
-                            ${ closeButton() }
-                            <div class="display-flex">
-                                <div class="left">
-                                    ${ __content(submitted
-                                            ? success_message
-                                            : post_content) }
-                                </div>
-                                <div class="right image-width"
-                                     style="background-image: url('${ image_src }')">
-                                </div>
-                            </div>
-                            ${ submitted ? '' : form({
-                                direction: 'horizontal',
-                                ...props,
-                                phone: false,
-                            }) }
-                        </div>
-                        ${ credit() }
-                    </div>
-                </div>
-            </div>`
+			<div id="${id}"
+			     class="holler-box holler-popup holler-popup-form-below ${submitted
+				     ? 'no-animation'
+				     : ''}">
+				${overlay_enabled ? overlay() : ''}
+				<div class="positioner ${position}">
+					<div class="animation ${animation}">
+						<div class="holler-box-modal">
+							${closeButton()}
+							<div class="display-flex">
+								<div class="left">
+									${__content(submitted
+										? success_message
+										: post_content)}
+								</div>
+								<div class="right image-width"
+								     style="background-image: url('${image_src}')">
+								</div>
+							</div>
+							${submitted ? '' : form({
+								direction: 'horizontal',
+								...props,
+								phone: false,
+							})}
+						</div>
+						${credit()}
+					</div>
+				</div>
+			</div>`
       },
       onOpen: popup => {
         CommonActions.formSubmitted(popup)
@@ -1203,42 +1202,42 @@
 
         // language=HTML
         return `
-            <div id="${ id }"
-                 class="holler-box holler-popup holler-popup-progress-bar ${ submitted
-                         ? 'no-animation'
-                         : '' }">
-                ${ overlay_enabled ? overlay() : '' }
-                <div class="positioner ${ position }">
-                    <div class="animation ${ animation }">
-                        <div class="holler-box-modal">
-                            ${ closeButton() }
-                            <div class="holler-box-progress-bar-wrap">
-                                <div class="holler-box-progress-bar">
-                                    <div
-                                            class="holler-box-progress-bar-fill ${ submitted
-                                                    ? 'filled'
-                                                    : '' }"></div>
-                                </div>
-                            </div>
-                            <div class="display-flex">
-                                <div class="left image-width"
-                                     style="background-image: url('${ image_src }')">
-                                </div>
-                                <div class="right">
-                                    ${ __content(submitted
-                                            ? success_message
-                                            : post_content) }
-                                    ${ submitted ? '' : form({
-                                        direction: 'vertical',
-                                        ...props,
-                                    }) }
-                                </div>
-                            </div>
-                        </div>
-                        ${ credit() }
-                    </div>
-                </div>
-            </div>`
+			<div id="${id}"
+			     class="holler-box holler-popup holler-popup-progress-bar ${submitted
+				     ? 'no-animation'
+				     : ''}">
+				${overlay_enabled ? overlay() : ''}
+				<div class="positioner ${position}">
+					<div class="animation ${animation}">
+						<div class="holler-box-modal">
+							${closeButton()}
+							<div class="holler-box-progress-bar-wrap">
+								<div class="holler-box-progress-bar">
+									<div
+										class="holler-box-progress-bar-fill ${submitted
+											? 'filled'
+											: ''}"></div>
+								</div>
+							</div>
+							<div class="display-flex">
+								<div class="left image-width"
+								     style="background-image: url('${image_src}')">
+								</div>
+								<div class="right">
+									${__content(submitted
+										? success_message
+										: post_content)}
+									${submitted ? '' : form({
+										direction: 'vertical',
+										...props,
+									})}
+								</div>
+							</div>
+						</div>
+						${credit()}
+					</div>
+				</div>
+			</div>`
       },
       onOpen: popup => {
         CommonActions.formSubmitted(popup)
@@ -1262,31 +1261,31 @@
 
         // language=HTML
         return `
-            <div id="${ id }"
-                 class="holler-box holler-popup holler-popup-image-beside-text-top ${ submitted
-                         ? 'no-animation'
-                         : '' }">
-                ${ overlay_enabled ? overlay() : '' }
-                <div class="positioner ${ position }">
-                    <div class="animation ${ animation }">
-                        <div class="holler-box-modal">
-                            ${ closeButton() }
-                            ${ __content(
-                                    submitted ? success_message : post_content) }
-                            <div class="display-flex">
-                                <div class="left image-width"
-                                     style="background-image: url('${ image_src }')">
-                                </div>
-                                ${ submitted ? '' : form({
-                                    direction: 'vertical',
-                                    ...props,
-                                }) }
-                            </div>
-                        </div>
-                        ${ credit() }
-                    </div>
-                </div>
-            </div>`
+			<div id="${id}"
+			     class="holler-box holler-popup holler-popup-image-beside-text-top ${submitted
+				     ? 'no-animation'
+				     : ''}">
+				${overlay_enabled ? overlay() : ''}
+				<div class="positioner ${position}">
+					<div class="animation ${animation}">
+						<div class="holler-box-modal">
+							${closeButton()}
+							${__content(
+								submitted ? success_message : post_content)}
+							<div class="display-flex">
+								<div class="left image-width"
+								     style="background-image: url('${image_src}')">
+								</div>
+								${submitted ? '' : form({
+									direction: 'vertical',
+									...props,
+								})}
+							</div>
+						</div>
+						${credit()}
+					</div>
+				</div>
+			</div>`
       },
       onOpen: popup => {
         CommonActions.formSubmitted(popup)
@@ -1309,27 +1308,27 @@
 
         // language=HTML
         return `
-            <div id="${ id }"
-                 class="holler-box holler-popup holler-popup-full-image-background ${ submitted
-                         ? 'no-animation'
-                         : '' }">
-                ${ overlay_enabled ? overlay() : '' }
-                <div class="positioner ${ position }">
-                    <div class="animation ${ animation }">
-                        <div class="holler-box-modal"
-                             style="background-image: url('${ image_src }')">
-                            ${ closeButton() }
-                            ${ __content(
-                                    submitted ? success_message : post_content) }
-                            ${ submitted ? '' : form({
-                                direction: 'vertical',
-                                ...props,
-                            }) }
-                        </div>
-                        ${ credit() }
-                    </div>
-                </div>
-            </div>`
+			<div id="${id}"
+			     class="holler-box holler-popup holler-popup-full-image-background ${submitted
+				     ? 'no-animation'
+				     : ''}">
+				${overlay_enabled ? overlay() : ''}
+				<div class="positioner ${position}">
+					<div class="animation ${animation}">
+						<div class="holler-box-modal"
+						     style="background-image: url('${image_src}')">
+							${closeButton()}
+							${__content(
+								submitted ? success_message : post_content)}
+							${submitted ? '' : form({
+								direction: 'vertical',
+								...props,
+							})}
+						</div>
+						${credit()}
+					</div>
+				</div>
+			</div>`
       },
       onOpen: popup => {
         CommonActions.formSubmitted(popup)
@@ -1338,13 +1337,15 @@
       onClose: CommonActions.enableScrolling,
     },
   }
+  
+  const notificationTemplates = () => [ ...Object.keys( PopupTemplates ).filter( s => s.startsWith('notification_box') ), 'fake_chat' ]
 
   function getScrollPercent () {
     var h = document.documentElement,
       b = document.body,
       st = 'scrollTop',
       sh = 'scrollHeight'
-    return ( h[st] || b[st] ) / ( ( h[sh] || b[sh] ) - h.clientHeight ) * 100
+    return (h[st] || b[st]) / ((h[sh] || b[sh]) - h.clientHeight) * 100
   }
 
   const PopupStack = {
@@ -1434,28 +1435,54 @@
     },
   }
 
-  const Popup = (popup) => ( {
+  const Popup = (popup) => ({
 
     ...popup,
-    id: `popup-${ popup.ID }`,
+    id: `popup-${popup.ID}`,
     _triggered: false,
     _open: false,
+    _converted: false,
     _template: {},
+    submitted: false,
 
     isOpen () {
       return this._open
+    },
+
+    isClosed (){
+      return ! this.isOpen()
+    },
+
+    isSubmitted () {
+      return this.submitted
+    },
+
+    isConverted () {
+      return this._converted
+    },
+
+    isViewed () {
+      return this._viewed
     },
 
     wasTriggered () {
       return this._triggered
     },
 
+    isCloseable () {
+      if ( notificationTemplates().includes(this.template) ){
+        return true;
+      }
+
+      return !this.disable_closing || this.isConverted()
+    },
+
     querySelector (selector = '') {
-      return document.querySelector(`#${ this.id } ${ selector }`)
+      return document.querySelector(`#${this.id} ${selector}`)
     },
 
     querySelectorAll (selector = '') {
-      return document.querySelectorAll(`#${ this.id } ${ selector }`)
+      return document.querySelectorAll(`#${this.id} ${selector}`)
     },
 
     render () {
@@ -1466,8 +1493,7 @@
         popup.setAttribute('tabindex', 0)
 
         return popup
-      }
-      catch (e) {
+      } catch (e) {
         maybeLog(e)
         return ''
       }
@@ -1480,8 +1506,7 @@
 
       if (el) {
         el.replaceWith(rendered)
-      }
-      else {
+      } else {
         document.body.append(rendered)
       }
 
@@ -1496,8 +1521,10 @@
 
     converted (check = true) {
 
+      this._converted = true
+
       if (isBuilderPreview()) {
-        return
+        return Promise.resolve()
       }
 
       Cookies.addPopupConversion(this.ID)
@@ -1513,8 +1540,15 @@
 
     viewed () {
 
+      // Don't double count views
+      if (this.isViewed()) {
+        return Promise.resolve()
+      }
+
+      this._viewed = true
+
       if (isBuilderPreview()) {
-        return
+        return Promise.resolve()
       }
 
       Cookies.addPopupView(this.ID)
@@ -1523,6 +1557,24 @@
         popup_id: this.ID,
         location: window.location.href,
         referer: document.referrer,
+      })
+    },
+
+    submit (data) {
+
+      return apiPost(`${HollerBox.routes.submit}/${this.ID}`, {
+        location: window.location.href,
+        referrer: document.referrer,
+        ...data,
+      }).then(r => {
+        this.submitted = true
+        this.converted(false)
+        document.dispatchEvent(new CustomEvent('holler_submit', {
+          popup: this,
+          data,
+          response: r,
+        }))
+        return r
       })
     },
 
@@ -1537,8 +1589,7 @@
     cleanup () {
       try {
         this._template.cleanup(this)
-      }
-      catch (e) {
+      } catch (e) {
         maybeLog(e)
       }
     },
@@ -1559,19 +1610,19 @@
           // if the popup content has shortcodes, replace non rendered content with dom target
 
           if (this.has_shortcodes.in_content) {
-            this.post_content = `<div id="post-content-for-${ this.ID }-goes-here"></div>`
+            this.post_content = `<div id="post-content-for-${this.ID}-goes-here"></div>`
           }
 
           if (this.has_shortcodes.in_success_message) {
-            this.success_message = `<div id="success-message-for-${ this.ID }-goes-here"></div>`
+            this.success_message = `<div id="success-message-for-${this.ID}-goes-here"></div>`
           }
           break
         case 'afterAddToDom':
           // move the content from the container to the popup
 
           if (this.has_shortcodes.in_content) {
-            let target = this.querySelector(`#post-content-for-${ this.ID }-goes-here`)
-            let content = document.querySelector(`#holler-${ this.ID }-content`)
+            let target = this.querySelector(`#post-content-for-${this.ID}-goes-here`)
+            let content = document.querySelector(`#holler-${this.ID}-content`)
             if (target && content) {
               content.querySelectorAll('p:empty').forEach(el => el.remove())
               target.replaceWith(content)
@@ -1579,8 +1630,8 @@
           }
 
           if (this.has_shortcodes.in_success_message) {
-            let target = this.querySelector(`#success-message-for-${ this.ID }-goes-here`)
-            let content = document.querySelector(`#holler-${ this.ID }-success-message`)
+            let target = this.querySelector(`#success-message-for-${this.ID}-goes-here`)
+            let content = document.querySelector(`#holler-${this.ID}-success-message`)
             if (target && content) {
               content.querySelectorAll('p:empty').forEach(el => el.remove())
               target.replaceWith(content)
@@ -1594,14 +1645,14 @@
 
           // handle shortcode based content
           if (this.has_shortcodes.in_content) {
-            let content = document.querySelector(`#holler-${ this.ID }-content`)
+            let content = document.querySelector(`#holler-${this.ID}-content`)
             if (content && container) {
               container.append(content)
             }
           }
 
           if (this.has_shortcodes.in_success_message) {
-            let content = document.querySelector(`#holler-${ this.ID }-success-message`)
+            let content = document.querySelector(`#holler-${this.ID}-success-message`)
             if (content && container) {
               container.append(content)
             }
@@ -1612,10 +1663,12 @@
 
     async open () {
 
+      this._triggered = true
+      this._open = true
+
       try {
         await this._template.beforeOpen(this)
-      }
-      catch (e) {
+      } catch (e) {
         maybeLog(e)
       }
 
@@ -1625,39 +1678,39 @@
 
       this.handleShortcodeContent('afterAddToDom')
 
-      this._triggered = true
-      this._open = true
+      // Closing is disabled except for conversion
+      if (this.isCloseable()) {
 
-      // close button
-      this.querySelectorAll('.holler-box-modal-close').forEach(el => {
-        el.addEventListener('click', e => {
-          this.close()
+        // close button
+        this.querySelectorAll('.holler-box-modal-close').forEach(el => {
+          el.addEventListener('click', e => {
+            this.close()
+          })
         })
-      })
 
-      // after 2 seconds, overlay also acts as escape
-      setTimeout(() => {
+        // after 2 seconds, overlay also acts as escape
+        setTimeout(() => {
 
-        let overlay = this.querySelector('.holler-box-overlay')
+          let overlay = this.querySelector('.holler-box-overlay')
 
-        if (overlay) {
-          this.querySelector('.holler-box-overlay').
+          if (overlay) {
+            this.querySelector('.holler-box-overlay').
             addEventListener('click', e => {
               this.close()
             })
-        }
-      }, 2000)
+          }
+        }, 2000)
 
-      this.querySelector().addEventListener('keyup', e => {
-        if (e.key === 'Escape') {
-          this.close()
-        }
-      })
+        this.querySelector().addEventListener('keyup', e => {
+          if (e.key === 'Escape') {
+            this.close()
+          }
+        })
+      }
 
       try {
         this._template.onOpen(this)
-      }
-      catch (e) {
+      } catch (e) {
         maybeLog(e)
       }
 
@@ -1668,26 +1721,26 @@
 
       try {
         await this._template.onClose(this)
-      }
-      catch (e) {
+      } catch (e) {
         maybeLog(e)
       }
 
       this.handleShortcodeContent('beforeRemoveFromDom')
 
       this.removeFromDom()
-      this._open = false
 
       try {
         await this._template.onClosed(this)
-      }
-      catch (e) {
+      } catch (e) {
         maybeLog(e)
       }
+
+      this._open = false
 
       if (isBuilderPreview()) {
 
         this.submitted = false
+        this._converted = false
 
         if (!this.isOpen()) {
           setTimeout(() => this.open(), 1000)
@@ -1698,16 +1751,18 @@
 
       Cookies.addClosedPopup(this.ID)
 
+      // We can track the closing of the popup
+      if (HollerBox.is_user_logged_in) {
+        apiPost(HollerBox.routes.closed, {
+          popup_id: this.ID,
+        }).catch( e => console.log( e ) )
+      }
+
       PopupStack.next()
     },
 
     isBlocking () {
-      return ![
-        'fake_chat',
-        'notification_box',
-        'notification_box_with_button',
-        'notification_box_with_form',
-      ].includes(this.template)
+      return !notificationTemplates().includes(this.template)
     },
 
     maybeOpen () {
@@ -1782,17 +1837,17 @@
       })
 
       // Support for content upgrade legacy
-      document.querySelectorAll(`.holler-upgrade.holler-show[data-id="${ this.ID }"]`).
-        forEach(el => {
-          el.addEventListener('click', e => {
-            e.preventDefault()
-            popup._triggered = false
-            show()
-          })
+      document.querySelectorAll(`.holler-upgrade.holler-show[data-id="${this.ID}"]`).
+      forEach(el => {
+        el.addEventListener('click', e => {
+          e.preventDefault()
+          popup._triggered = false
+          show()
         })
+      })
     },
 
-  } )
+  })
 
   // we are on the site frontend
   if (HollerBox.is_frontend) {
@@ -1849,8 +1904,7 @@
 
     if (el && el.matches(selector)) {
       return el
-    }
-    else {
+    } else {
       while (el = el.parentNode) {
         if (typeof el.matches !== 'undefined' && el.matches(selector)) {
           return el
@@ -1863,11 +1917,12 @@
 
   const isBuilderPreview = () => HollerBox.is_builder_preview
 
+  let popup
+
   // We are in the builder preview
   if (isBuilderPreview()) {
 
     let home = new URL(HollerBox.home_url)
-    let popup
 
     window.addEventListener(
       'message',
@@ -1885,8 +1940,7 @@
 
           if (event.data.suppressAnimations) {
             document.body.classList.add('holler-suppress-animations')
-          }
-          else {
+          } else {
             document.body.classList.remove('holler-suppress-animations')
             document.body.style.marginTop = '0'
             document.body.style.marginBottom = '0'
@@ -1916,8 +1970,7 @@
 
         try {
           url = new URL(el.href)
-        }
-        catch (e) {
+        } catch (e) {
           maybeLog(e)
           return
         }
@@ -1932,8 +1985,7 @@
           || url.pathname.match(/wp-admin/)
           || url.pathname.match(/wp-login\.php/)
         ) {
-        }
-        else {
+        } else {
           url.searchParams.append('suppress_hollerbox', 1)
           el.href = url
 
@@ -1955,8 +2007,7 @@
 
         try {
           url = new URL(el.href)
-        }
-        catch (e) {
+        } catch (e) {
           noClick()
           return
         }
@@ -1966,8 +2017,7 @@
           || url.pathname.match(/wp-login\.php/)
         ) {
           noClick()
-        }
-        else {
+        } else {
           url.searchParams.append('suppress_hollerbox', 1)
 
           el.href = url
@@ -1982,6 +2032,27 @@
         })
       })
     })
+  }
+
+  /**
+   * The current Popup
+   *
+   * @return {*}
+   */
+  const currentPopup = () => {
+
+    // Builder Preview
+    if (isBuilderPreview()) {
+      return popup
+    }
+
+    // Editor
+    if ( HollerBox.hasOwnProperty( 'editor' ) ){
+      return Popup(HollerBox.editor.getPopup());
+    }
+
+    // Frontend
+    return HollerBox.active.find(p => p.isOpen())
   }
 
   HollerBox.templates = PopupTemplates
@@ -2000,4 +2071,4 @@
     maybeLog,
   }
 
-} )()
+})()

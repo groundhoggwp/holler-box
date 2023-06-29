@@ -13,6 +13,7 @@
     modal,
     clickedIn,
     adminPageURL,
+    tooltip,
     moreMenu,
     dialog,
     copyObject,
@@ -23,32 +24,32 @@
     confirmationModal,
     mediaPicker,
     inputRepeater,
-  } = HollerBox.elements;
+  } = HollerBox.elements
 
-  const {sprintf, __, _x, _n} = wp.i18n;
+  const { sprintf, __, _x, _n } = wp.i18n
 
   const maybeLog = (error) => {
     if (HollerBox.settings.script_debug_mode) {
-      console.debug(error);
+      console.debug(error)
     }
-  };
-
-  const isGroundhoggInstalled = () => {
-    return HollerBox.installed.groundhogg && typeof Groundhogg !== 'undefined';
-  };
-
-  const isPro = () => {
-    return typeof HollerBoxPro !== 'undefined';
-  };
-
-  improveTinyMCE();
-
-  function ApiError(message) {
-    this.name = 'ApiError';
-    this.message = message;
   }
 
-  ApiError.prototype = Error.prototype;
+  const isGroundhoggInstalled = () => {
+    return HollerBox.installed.groundhogg && typeof Groundhogg !== 'undefined'
+  }
+
+  const isPro = () => {
+    return typeof HollerBoxPro !== 'undefined'
+  }
+
+  improveTinyMCE()
+
+  function ApiError (message) {
+    this.name = 'ApiError'
+    this.message = message
+  }
+
+  ApiError.prototype = Error.prototype
 
   /**
    * Fetch stuff from the API
@@ -56,23 +57,23 @@
    * @param params
    * @param opts
    */
-  async function apiGet(route, params = {}, opts = {}) {
+  async function apiGet (route, params = {}, opts = {}) {
 
     const response = await fetch(route + '?' + $.param(params), {
       headers: {
         'X-WP-Nonce': HollerBox.nonces._wprest,
       },
       ...opts,
-    });
+    })
 
-    let json = await response.json();
+    let json = await response.json()
 
     if (!response.ok) {
-      console.log(json);
-      throw new ApiError(json.message);
+      console.log(json)
+      throw new ApiError(json.message)
     }
 
-    return json;
+    return json
   }
 
   /**
@@ -83,7 +84,7 @@
    * @param opts
    * @returns {Promise<any>}
    */
-  async function apiPost(url = '', data = {}, opts = {}) {
+  async function apiPost (url = '', data = {}, opts = {}) {
     const response = await fetch(url, {
       method: 'POST',
       headers: {
@@ -92,15 +93,15 @@
       },
       body: JSON.stringify(data),
       ...opts,
-    });
+    })
 
-    let json = await response.json();
+    let json = await response.json()
 
     if (!response.ok) {
-      throw new ApiError(json.message);
+      throw new ApiError(json.message)
     }
 
-    return json;
+    return json
   }
 
   /**
@@ -111,7 +112,7 @@
    * @param opts
    * @returns {Promise<any>}
    */
-  async function apiPatch(url = '', data = {}, opts = {}) {
+  async function apiPatch (url = '', data = {}, opts = {}) {
     const response = await fetch(url, {
       ...opts,
       method: 'PATCH',
@@ -120,16 +121,16 @@
         'X-WP-Nonce': HollerBox.nonces._wprest,
       },
       body: JSON.stringify(data),
-    });
+    })
 
-    let json = await response.json();
+    let json = await response.json()
 
     if (!response.ok) {
-      console.log(json);
-      throw new ApiError(json.message);
+      console.log(json)
+      throw new ApiError(json.message)
     }
 
-    return json;
+    return json
   }
 
   /**
@@ -140,7 +141,7 @@
    * @param opts
    * @returns {Promise<any>}
    */
-  async function apiDelete(url = '', data = {}, opts = {}) {
+  async function apiDelete (url = '', data = {}, opts = {}) {
     const response = await fetch(url, {
       ...opts,
       method: 'DELETE',
@@ -149,16 +150,16 @@
         'X-WP-Nonce': HollerBox.nonces._wprest,
       },
       body: JSON.stringify(data),
-    });
+    })
 
-    let json = await response.json();
+    let json = await response.json()
 
     if (!response.ok) {
-      console.log(json);
-      throw new ApiError(json.message);
+      console.log(json)
+      throw new ApiError(json.message)
     }
 
-    return json;
+    return json
   }
 
   /**
@@ -168,18 +169,18 @@
    * @param opts
    * @returns {Promise<any>}
    */
-  async function adminAjax(data = {}, opts = {}) {
+  async function adminAjax (data = {}, opts = {}) {
 
     if (!(data instanceof FormData)) {
-      const fData = new FormData();
+      const fData = new FormData()
 
       for (const key in data) {
         if (data.hasOwnProperty(key)) {
-          fData.append(key, data[key]);
+          fData.append(key, data[key])
         }
       }
 
-      data = fData;
+      data = fData
     }
 
     const response = await fetch(ajaxurl, {
@@ -187,9 +188,9 @@
       credentials: 'same-origin',
       body: data,
       ...opts,
-    });
+    })
 
-    return response.json();
+    return response.json()
   }
 
   const singleControl = ({
@@ -201,8 +202,8 @@
 		<div class="control">
 			<label>${label}</label>
 			${control}
-		</div>`;
-  };
+		</div>`
+  }
 
   const controlGroup = (control, popup) => {
     //language=HTML
@@ -215,8 +216,8 @@
 			<div class="controls">
 				${control.render(popup)}
 			</div>
-		</div>`;
-  };
+		</div>`
+  }
 
   const proFeatureModal = ({
     feature = '',
@@ -245,8 +246,8 @@
 					  ${__('GET PRO')}</a>
 			  </div>
 		  </div>`,
-    });
-  };
+    })
+  }
 
   const proCrmIntegrationsAd = () => {
     // language=HTML
@@ -256,8 +257,8 @@
 			href="https://hollerwp.com/pricing/" target="_blank"><b>HollerBox
 			Pro!</b></a> Including, ActiveCampaign, HubSpot, ConvertKit,
 			MailChimp, and more!
-		</div>`;
-  };
+		</div>`
+  }
 
   const selectIntegrationModal = ({
     onSelect = () => {},
@@ -275,7 +276,7 @@
 		  </div>
 		  <div id="integrations-here"></div>`,
       width: 800,
-      onOpen: ({close}) => {
+      onOpen: ({ close }) => {
 
         $('#integrations-here').
         html(Object.keys(IntegrationGroups).map(group => {
@@ -287,7 +288,7 @@
             i = {
               id: i,
               ...getIntegration(i),
-            };
+            }
 
             //language=HTML
             return `
@@ -296,30 +297,30 @@
 						${i.icon}
 					</div>
 					<p class="integration-name">${i.name}</p>
-				</div>`;
+				</div>`
           }).
-          join('');
+          join('')
 
           // language=HTML
           return `<h2>${IntegrationGroups[group]}</h2>
 		  <div class="integration-group">
 			  ${integrations}
 			  ${!isPro() && group === 'crm' ? proCrmIntegrationsAd() : ''}
-		  </div>`;
+		  </div>`
 
-        }).join(''));
+        }).join(''))
 
         $('.integration').on('click', e => {
 
-          let integration = e.currentTarget.dataset.integration;
+          let integration = e.currentTarget.dataset.integration
 
-          onSelect(integration);
-          close();
-        });
+          onSelect(integration)
+          close()
+        })
 
       },
-    });
-  };
+    })
+  }
 
   const proTemplatesAd = () => {
     // language=HTML
@@ -329,8 +330,8 @@
 			href="https://hollerwp.com/pricing/" target="_blank"><b>HollerBox
 			Pro!</b></a> Including, banners, side-ins, sidebars, FOMO (Sale
 			Notifications), and more!
-		</div>`;
-  };
+		</div>`
+  }
 
   const selectTemplateModal = ({
     modalSettings = {
@@ -353,14 +354,14 @@
 		  ${isPro() ? '' : proTemplatesAd()}
 		  <div id="templates"></div>`,
       width: 1200,
-      onOpen: ({close}) => {
+      onOpen: ({ close }) => {
 
         $('#templates').html(Object.keys(Templates).map(t => {
 
           t = {
             id: t,
             ...Templates[t],
-          };
+          }
 
           //language=HTML
           return `
@@ -375,27 +376,27 @@
 				  <p class="template-name">
 					  ${t.name ? t.name : t.id}
 				  </p>
-			  </div>`;
-        }).join(''));
+			  </div>`
+        }).join(''))
 
         $('.template').on('click', e => {
 
-          let template = e.currentTarget.dataset.template;
+          let template = e.currentTarget.dataset.template
 
-          onSelect(template);
-          close();
-        });
+          onSelect(template)
+          close()
+        })
 
       },
-    });
+    })
 
-  };
+  }
 
   const validateEmail = (email) => {
     return email.match(
-        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-    );
-  };
+      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+    )
+  }
 
   const IntegrationIcons = {
 
@@ -406,7 +407,7 @@
 			<path fill="#ff4a00"
 			      d="M63.2 26.4H44.4l13.2-13.2-3-4a29 29 0 01-4-3.6L37.2 18.8V.5a17.3 17.3 0 00-5-.5 15.6 15.6 0 00-5.1.5v18.8L13.5 5.6a13.7 13.7 0 00-4 3.6c-1 1.5-2.6 2.5-3.6 4L19 26.4H.8l-.5 5a15.6 15.6 0 00.5 5.2h18.8L5.9 50.3a27.2 27.2 0 007.6 7.6l13.2-13.2v18.8a17.3 17.3 0 005 .5 15.6 15.6 0 005.1-.5V44.7L50 57.9a13.7 13.7 0 004-3.6 29 29 0 003.6-4L44.4 37h18.8a17.3 17.3 0 00.5-5.1 19 19 0 00-.5-5.6zm-23.3 5a25.7 25.7 0 01-1 6.7 15.2 15.2 0 01-6.6 1 25.7 25.7 0 01-6.6-1 15.2 15.2 0 01-1-6.6 25.7 25.7 0 011-6.6 15.2 15.2 0 016.6-1 25.7 25.7 0 016.6 1 29.7 29.7 0 011 6.6z"></path>
 		</svg>`,
-  };
+  }
 
   /**
    * Register client with SendWP.
@@ -426,27 +427,27 @@
     partner_id = '',
   }) => {
 
-    const form = document.createElement('form');
-    form.setAttribute('method', 'GET');
-    form.setAttribute('target', '_blank');
-    form.setAttribute('action', register_url);
-    form.classList.add('hidden');
+    const form = document.createElement('form')
+    form.setAttribute('method', 'GET')
+    form.setAttribute('target', '_blank')
+    form.setAttribute('action', register_url)
+    form.classList.add('hidden')
 
     const addInput = (name, value) => {
-      let input = document.createElement('input');
-      input.setAttribute('type', 'hidden');
-      input.setAttribute('name', name);
-      input.setAttribute('value', value);
-      form.appendChild(input);
-    };
+      let input = document.createElement('input')
+      input.setAttribute('type', 'hidden')
+      input.setAttribute('name', name)
+      input.setAttribute('value', value)
+      form.appendChild(input)
+    }
 
-    addInput('mailhawk_plugin_signup', 'yes');
-    addInput('state', client_state);
+    addInput('mailhawk_plugin_signup', 'yes')
+    addInput('state', client_state)
     // Redirect back to current page
-    addInput('redirect_uri', redirect_uri);
-    addInput('partner_id', partner_id);
+    addInput('redirect_uri', redirect_uri)
+    addInput('partner_id', partner_id)
 
-    document.body.appendChild(form);
+    document.body.appendChild(form)
 
     Editor.commit().then(() => {
 
@@ -457,20 +458,20 @@
 		<p>
 			<i>${__('Your work has been saved!')}</i></p>`,
         onConfirm: () => {
-          form.submit();
-          $('#promote-mailhawk').remove();
+          form.submit()
+          $('#promote-mailhawk').remove()
         },
         confirmText: __('Connect!'),
-      });
+      })
 
-    });
-  };
+    })
+  }
 
   const IntegrationGroups = {
     basic: __('Basic'),
     crm: __('CRM (Email Marketing)'),
     advanced: __('Advanced'),
-  };
+  }
 
   const Integrations = {
     email: {
@@ -478,18 +479,18 @@
       group: 'basic',
       icon: icons.email,
       name: __('Send Email', 'holler-box'),
-      _name: ({to = []}) => {
+      _name: ({ to = [] }) => {
 
         if (!to.length) {
-          return __('Send Email', 'holler-box');
+          return __('Send Email', 'holler-box')
         }
 
         if (to.length === 1) {
-          return sprintf(__('Send email to %s', 'holler-box'), to[0]);
+          return sprintf(__('Send email to %s', 'holler-box'), to[0])
         }
 
         return sprintf(__('Send email to %d recipients', 'holler-box'),
-            to.length);
+          to.length)
       },
       edit: ({
         to = ['{{email}}'],
@@ -502,7 +503,7 @@
         const promoteMailHawk = () => {
 
           if (HollerBox.installed.mailhawk) {
-            return '';
+            return ''
           }
 
           //language=HTML
@@ -515,8 +516,8 @@
 				  <button class="holler-button secondary small"
 				          id="connect-mailhawk">${__('Connect!')}
 				  </button>
-			  </p>`;
-        };
+			  </p>`
+        }
 
         const Replacements = {
           email: __('The lead\'s email address'),
@@ -528,7 +529,7 @@
           location: __('The URL where the form was submitted'),
           referrer: __('The URL where the lead came from'),
           ip_address: __('The lead\'s IP address'),
-        };
+        }
 
         // language=HTML
         return `
@@ -591,7 +592,7 @@
 									<table class="replacements">
 										${Object.keys(Replacements).map(r => {
 											// language=HTML
-											return `<tr><td><code>{{${r}}}</code></td><td>${Replacements[r]}</td></tr>`;
+											return `<tr><td><code>{{${r}}}</code></td><td>${Replacements[r]}</td></tr>`
 										}).join('')}
 									</table>
 								</div>
@@ -599,56 +600,56 @@
 						</div>
 					</div>
 				</div>
-			</div>`;
+			</div>`
       },
-      onMount: ({to = []}, {updateIntegration}) => {
+      onMount: ({ to = [] }, { updateIntegration }) => {
 
         $('.replacements code').on('click', e => {
 
-          navigator.clipboard.writeText(e.target.innerText);
+          navigator.clipboard.writeText(e.target.innerText)
 
           dialog({
             message: __('Copied!'),
-          });
-        });
+          })
+        })
 
         $('.holler-modal .holler-panel-header').on('click', e => {
-          $(e.currentTarget).closest('.holler-panel').toggleClass('closed');
-        });
+          $(e.currentTarget).closest('.holler-panel').toggleClass('closed')
+        })
 
         if (!HollerBox.installed.mailhawk) {
-          let $connect = $('#connect-mailhawk');
+          let $connect = $('#connect-mailhawk')
 
           $connect.on('click', e => {
 
-            $connect.html(`<span class="holler-spinner"></span>`);
+            $connect.html(`<span class="holler-spinner"></span>`)
 
             const error = () => dialog({
               message: sprintf(
-                  __('We were unable to install %s, please try again.'),
-                  'MailHawk'),
+                __('We were unable to install %s, please try again.'),
+                'MailHawk'),
               type: 'error',
-            });
+            })
 
             apiPost(`${HollerBox.routes.root}/install`, {
               slug: 'mailhawk',
             }).then(r => {
 
               if (!r.success) {
-                return error();
+                return error()
               }
 
-              sendToMailHawk(r);
-            }).catch(e => error());
+              sendToMailHawk(r)
+            }).catch(e => error())
 
-          });
+          })
         }
 
         $('#from, #reply_to, #subject').on('change', e => {
           updateIntegration({
             [e.target.name]: e.target.value,
-          });
-        });
+          })
+        })
 
         itemPicker('#select-to', {
           placeholder: 'Add a recipient',
@@ -662,25 +663,25 @@
                 id: '{{email}}',
                 text: '{{email}}',
               },
-            ]);
+            ])
           },
-          selected: to.map(v => ({id: v, text: v})),
+          selected: to.map(v => ({ id: v, text: v })),
           isValidSelection: id => id === '{{email}}' || validateEmail(id),
           tags: true,
           noneSelected: '{{email}}',
           onChange: (selected) => {
             updateIntegration({
-              to: selected.map(({id}) => id),
-            });
+              to: selected.map(({ id }) => id),
+            })
           },
-        });
+        })
 
-        wp.editor.remove('email-content');
+        wp.editor.remove('email-content')
         tinymceElement('email-content', {}, (content) => {
           updateIntegration({
             content,
-          });
-        });
+          })
+        })
 
       },
       defaults: {
@@ -726,7 +727,7 @@
       group: 'crm',
       name: __('Groundhogg', 'holler-box'),
       icon: icons.groundhogg,
-      edit: ({tags}) => {
+      edit: ({ tags }) => {
 
         // Groundhogg is not installed
         if (!HollerBox.installed.groundhogg) {
@@ -734,37 +735,37 @@
           return `
 			  <p class="holler-notice">
 				  ${__(
-					  'Groundhogg is not activated. Groundhogg must be activated to use the integration.')}</p>`;
+					  'Groundhogg is not activated. Groundhogg must be activated to use the integration.')}</p>`
         }
 
         // language=HTML
         return `
 			<p>${__('Select which tags to add to the new contact record.')}</p>
-			<div id="groundhogg-tags"></div>`;
+			<div id="groundhogg-tags"></div>`
       },
-      onMount: ({tags = []}, {updateIntegration}) => {
+      onMount: ({ tags = [] }, { updateIntegration }) => {
 
         // Groundhogg is not installed
         if (!HollerBox.installed.groundhogg) {
-          return;
+          return
         }
 
-        let timeout;
+        let timeout
 
         itemPicker('#groundhogg-tags', {
-          selected: tags.map(t => ({id: t, text: t})),
+          selected: tags.map(t => ({ id: t, text: t })),
           placeholder: __('Type to add...'),
           tags: true,
           onChange: (selected) => {
             updateIntegration({
               tags: selected.map(t => t.id),
-            });
+            })
           },
           noneSelected: __('Select some tags...'),
           fetchOptions: (search, resolve) => {
 
             if (timeout) {
-              clearTimeout(timeout);
+              clearTimeout(timeout)
             }
 
             timeout = setTimeout(() => {
@@ -774,24 +775,24 @@
               }).then(r => r.items).then(items => {
 
                 if (!items.length) {
-                  return resolve([{id: search, text: search}]);
+                  return resolve([{ id: search, text: search }])
                 }
 
                 resolve(items.map(
-                    t => ({id: t.data.tag_name, text: t.data.tag_name})));
+                  t => ({ id: t.data.tag_name, text: t.data.tag_name })))
               }).catch(e => {
-                return resolve([{id: search, text: search}]);
-              });
+                return resolve([{ id: search, text: search }])
+              })
 
-            }, 1000);
+            }, 1000)
 
           },
-        });
+        })
       },
       beforeAdd: (add = () => {}) => {
 
         if (HollerBox.installed.groundhogg) {
-          return true;
+          return true
         }
 
         modal({
@@ -841,40 +842,40 @@
 						  ${__('More Info!')}</a>
 				  </div>
 			  </div>`,
-          onOpen: ({close}) => {
-            let $connect = $('#install-groundhogg');
+          onOpen: ({ close }) => {
+            let $connect = $('#install-groundhogg')
 
             $connect.on('click', e => {
 
-              $connect.html(`<span class="holler-spinner"></span>`);
+              $connect.html(`<span class="holler-spinner"></span>`)
 
               const error = () => dialog({
                 message: sprintf(
-                    __('We were unable to install %s, please try again.'),
-                    'Groundhogg'),
+                  __('We were unable to install %s, please try again.'),
+                  'Groundhogg'),
                 type: 'error',
-              });
+              })
 
               apiPost(`${HollerBox.routes.root}/install`, {
                 slug: 'groundhogg',
               }).then(r => {
 
                 if (!r.success) {
-                  return error();
+                  return error()
                 }
 
-                HollerBox.installed.groundhogg = true;
+                HollerBox.installed.groundhogg = true
 
-                add();
-                close();
+                add()
+                close()
 
-              }).catch(e => error());
+              }).catch(e => error())
 
-            });
+            })
           },
-        });
+        })
 
-        return false;
+        return false
       },
     },
     webhook: {
@@ -885,22 +886,22 @@
       defaults: {
         method: 'post',
       },
-      _name: ({method = 'post', url}) => {
+      _name: ({ method = 'post', url }) => {
 
         if (!url) {
-          return __('Webhook', 'holler-box');
+          return __('Webhook', 'holler-box')
         }
 
         try {
-          url = new URL(url);
+          url = new URL(url)
         } catch (e) {
-          return __('Webhook', 'holler-box');
+          return __('Webhook', 'holler-box')
         }
 
         return sprintf(__('%s to %s', 'holler-box'), bold(method.toUpperCase()),
-            bold(url.hostname));
+          bold(url.hostname))
       },
-      edit: ({url, method, payload}) => {
+      edit: ({ url, method, payload }) => {
         // language=HTML
         return `
 			<div class="holler-rows-and-columns">
@@ -940,32 +941,32 @@
 					</div>
 				</div>
 			</div>
-        `;
+        `
       },
-      onMount: ({url, method, payload}, {updateIntegration}) => {
+      onMount: ({ url, method, payload }, { updateIntegration }) => {
 
         $('#method,#url,#payload').on('input change', e => {
 
           switch (e.target.id) {
             case 'method':
-              method = e.target.value;
-              break;
+              method = e.target.value
+              break
             case 'url':
-              url = e.target.value;
-              break;
+              url = e.target.value
+              break
             case 'payload':
-              payload = e.target.value;
-              break;
+              payload = e.target.value
+              break
           }
 
           updateIntegration({
             [e.target.id]: e.target.value,
-          });
-        });
+          })
+        })
 
         $('#test-webhook').on('click', e => {
 
-        });
+        })
       },
     },
     zapier: {
@@ -974,7 +975,7 @@
       name: 'Zapier',
       icon: IntegrationIcons.zapier,
       defaults: {},
-      edit: ({url}) => {
+      edit: ({ url }) => {
         // language=HTML
         return `
 			<div class="holler-rows-and-columns">
@@ -992,26 +993,26 @@
 					</div>
 				</div>
 			</div>
-        `;
+        `
       },
-      onMount: ({url, method, payload}, {updateIntegration}) => {
+      onMount: ({ url, method, payload }, { updateIntegration }) => {
 
         $('#url').on('input change', e => {
           updateIntegration({
             url: e.target.value,
-          });
-        });
+          })
+        })
       },
     },
-  };
+  }
 
   const getIntegration = (type) => {
-    return Integrations[type];
-  };
+    return Integrations[type]
+  }
 
-  const renderIntegration = (id, {type, ...rest}) => {
+  const renderIntegration = (id, { type, ...rest }) => {
 
-    let integration = getIntegration(type);
+    let integration = getIntegration(type)
 
     if (!integration) {
       return `
@@ -1019,15 +1020,15 @@
 			<div class="name">${__('Error')}</div>
 			<button class="holler-button secondary text icon integration-more" data-id="${id}">${icons.verticalDots}
 			</button>
-		</div>`;
+		</div>`
     }
 
-    let name;
+    let name
 
     try {
-      name = integration._name(rest);
+      name = integration._name(rest)
     } catch (e) {
-      name = integration.name;
+      name = integration.name
     }
 
     // language=HTML
@@ -1038,8 +1039,8 @@
 			<button class="holler-button secondary text icon integration-more"
 			        data-id="${id}">${icons.verticalDots}
 			</button>
-		</div>`;
-  };
+		</div>`
+  }
 
   const editIntegrationUI = (integration) => {
     // language=HTML
@@ -1063,8 +1064,8 @@
 					${__('Save Changes')}
 				</button>
 			</div>
-		</div>`;
-  };
+		</div>`
+  }
 
   const Controls = {
     integration: {
@@ -1076,11 +1077,11 @@
         return [
           `<div id="integrations"></div>`,
           `<button class="holler-button secondary" id="add-integration">${__(
-              'Add Integration')}</button>`,
-        ].join('');
+            'Add Integration')}</button>`,
+        ].join('')
 
       },
-      onMount: ({integrations = []}, updateSetting) => {
+      onMount: ({ integrations = [] }, updateSetting) => {
 
         $('#add-integration').on('click', e => {
           selectIntegrationModal({
@@ -1089,31 +1090,31 @@
               const add = () => addIntegration({
                 type: i,
                 ...getIntegration(i).defaults,
-              });
+              })
 
               try {
                 if (Integrations[i].beforeAdd(add)) {
-                  add();
+                  add()
                 }
               } catch (e) {
-                add();
+                add()
               }
 
             },
-          });
-        });
+          })
+        })
 
         const editIntegrationModal = () => {
           modal({
             content: `<div id="edit-here"></div>`,
             dialogClasses: 'no-padding edit-integration',
             width: 500,
-            onOpen: ({close, setContent}) => {
+            onOpen: ({ close, setContent }) => {
 
-              let temp = copyObject(editingIntegration);
+              let temp = copyObject(editingIntegration)
 
               const mount = () => {
-                setContent(editIntegrationUI(temp));
+                setContent(editIntegrationUI(temp))
 
                 try {
                   getIntegration(temp.type).onMount(temp, {
@@ -1122,38 +1123,38 @@
                       temp = {
                         ...temp,
                         ..._new,
-                      };
+                      }
 
                       if (remount) {
-                        mount();
+                        mount()
                       }
                     },
                     reMount: () => mount(),
-                  });
+                  })
                 } catch (e) {
                 }
 
                 $('#commit-integration').on('click', e => {
-                  updateIntegration(temp);
-                  close();
-                });
+                  updateIntegration(temp)
+                  close()
+                })
 
-              };
+              }
 
-              mount();
+              mount()
 
             },
-          });
-        };
+          })
+        }
 
         const mount = () => {
           $('#integrations').
-          html(integrations.map((i, id) => renderIntegration(id, i)).join(''));
+          html(integrations.map((i, id) => renderIntegration(id, i)).join(''))
 
           $('.integration').on('click', e => {
 
-            editingIntegrationId = parseInt(e.currentTarget.dataset.id);
-            editingIntegration = integrations[editingIntegrationId];
+            editingIntegrationId = parseInt(e.currentTarget.dataset.id)
+            editingIntegration = integrations[editingIntegrationId]
 
             if (clickedIn(e, '.integration-more')) {
               moreMenu($(e.currentTarget).find('.integration-more'), {
@@ -1165,78 +1166,78 @@
                   {
                     key: 'delete',
                     text: `<span class="holler-text danger">${__(
-                        'Delete')}</span>`,
+                      'Delete')}</span>`,
                   },
                 ],
                 onSelect: k => {
                   switch (k) {
                     case 'edit':
 
-                      editIntegrationModal();
+                      editIntegrationModal()
 
-                      break;
+                      break
                     case 'delete':
                       dangerConfirmationModal({
                         alert: `<p>${__(
-                            'Are you sure you want to delete this integration?')}</p>`,
+                          'Are you sure you want to delete this integration?')}</p>`,
                         confirmText: __('Delete'),
                         onConfirm: () => {
-                          deleteIntegration();
+                          deleteIntegration()
                         },
-                      });
-                      break;
+                      })
+                      break
                   }
                 },
-              });
-              return;
+              })
+              return
             }
 
-            editIntegrationModal();
-          });
-        };
+            editIntegrationModal()
+          })
+        }
 
-        let editingIntegration, editingIntegrationId;
+        let editingIntegration, editingIntegrationId
 
         const addIntegration = (integration) => {
-          integrations.push(integration);
+          integrations.push(integration)
 
           updateSetting({
             integrations,
-          });
+          })
 
-          editingIntegrationId = integrations.length - 1;
-          editingIntegration = integrations[editingIntegrationId];
+          editingIntegrationId = integrations.length - 1
+          editingIntegration = integrations[editingIntegrationId]
 
-          editIntegrationModal();
+          editIntegrationModal()
 
-          mount();
+          mount()
 
-        };
+        }
 
         const deleteIntegration = () => {
-          integrations.splice(editingIntegrationId, 1);
+          integrations.splice(editingIntegrationId, 1)
 
           updateSetting({
             integrations,
-          });
+          })
 
-          mount();
-        };
+          mount()
+        }
 
         const updateIntegration = (newSettings) => {
           integrations[editingIntegrationId] = {
             ...integrations[editingIntegrationId],
             ...newSettings,
-          };
+          }
 
           updateSetting({
             integrations,
-          });
+          })
 
-          mount();
-        };
+          mount()
+        }
 
-        mount();
+        mount()
 
       },
     },
@@ -1247,10 +1248,10 @@
       }) => {
         return [
           `<label>${__(
-              'Current Template:')} <b>${Templates[template].name}</b></label>`,
+            'Current Template:')} <b>${Templates[template].name}</b></label>`,
           `<button class="holler-button secondary" id="change-template">${__(
-              'Change Template')}</button>`,
-        ].join('');
+            'Change Template')}</button>`,
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
         $('#change-template').on('click', e => {
@@ -1261,10 +1262,10 @@
               }, {
                 reRenderControls: true,
                 suppressAnimations: false,
-              });
+              })
             },
-          });
-        });
+          })
+        })
       },
     },
     submit: {
@@ -1287,9 +1288,9 @@
             }, after_submit),
           }),
           `<div id="dependent-controls"></div>`,
-        ];
+        ]
 
-        return controls.join('');
+        return controls.join('')
       },
       onMount: ({
         after_submit = 'close',
@@ -1300,8 +1301,8 @@
         const mountDependentControls = () => {
 
           const setUI = (ui) => {
-            $('#dependent-controls').html(ui);
-          };
+            $('#dependent-controls').html(ui)
+          }
 
           switch (after_submit) {
             case 'message':
@@ -1311,17 +1312,17 @@
                   value: success_message,
                 }),
                 `<p class="holler-notice info">${__(
-                    'Shortcodes will be rendered on the frontend.')}</p>`,
-              ].join(''));
+                  'Shortcodes will be rendered on the frontend.')}</p>`,
+              ].join(''))
 
-              wp.editor.remove('success-message');
+              wp.editor.remove('success-message')
               tinymceElement('success-message', {}, (success_message) => {
                 updateSetting({
                   success_message,
-                });
-              });
+                })
+              })
 
-              break;
+              break
 
             case 'redirect':
               setUI(input({
@@ -1330,31 +1331,31 @@
                 className: 'full-width',
                 placeholder: 'https://example.com',
                 value: redirect_url,
-              }));
+              }))
 
               $('#redirect_url').on('input change', e => updateSetting({
                 redirect_url: e.target.value,
-              }));
+              }))
 
-              break;
+              break
             default:
             case 'close':
-              setUI('');
-              break;
+              setUI('')
+              break
           }
-        };
+        }
 
         $('#after-submit').on('change', e => {
 
-          after_submit = e.target.value;
+          after_submit = e.target.value
           updateSetting({
             after_submit,
-          });
+          })
 
-          mountDependentControls();
-        });
+          mountDependentControls()
+        })
 
-        mountDependentControls();
+        mountDependentControls()
       },
     },
     position: {
@@ -1379,7 +1380,7 @@
               'bottom-right': __('Bottom Right'),
             }, position),
           }),
-        ].join('');
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
         $('#position').on('change', e => {
@@ -1387,8 +1388,8 @@
             position: e.target.value,
           }, {
             suppressAnimations: false,
-          });
-        });
+          })
+        })
       },
     },
     content: {
@@ -1402,16 +1403,16 @@
             value: post_content,
           }),
           `<p class="holler-notice info">${__(
-              'Shortcodes will be rendered on the frontend.')}</p>`,
-        ].join('');
+            'Shortcodes will be rendered on the frontend.')}</p>`,
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
-        wp.editor.remove('text-content');
+        wp.editor.remove('text-content')
         tinymceElement('text-content', {}, (post_content) => {
           updateSetting({
             post_content,
-          });
-        });
+          })
+        })
       },
     },
     chat_content: {
@@ -1423,7 +1424,7 @@
         message_prompt = '',
       }) => {
 
-        const prompt = ({label, id, value}) => {
+        const prompt = ({ label, id, value }) => {
           // language=HTML
           return `
 			  <div class="holler-panel outlined closed">
@@ -1437,8 +1438,8 @@
 						  value,
 					  })}
 				  </div>
-			  </div>`;
-        };
+			  </div>`
+        }
 
         return [
           prompt({
@@ -1462,30 +1463,30 @@
             id: 'message-prompt',
           }),
           `<p class="holler-notice info">${__(
-              'Shortcodes will <b>not</b> be rendered in chat messages.')}</p>`,
-        ].join('');
+            'Shortcodes will <b>not</b> be rendered in chat messages.')}</p>`,
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
 
         $('.holler-panel-header').on('click', e => {
-          $(e.currentTarget).closest('.holler-panel').toggleClass('closed');
-        });
+          $(e.currentTarget).closest('.holler-panel').toggleClass('closed')
+        })
 
         let editors = [
           'post-content',
           'name-prompt',
           'email-prompt',
           'message-prompt',
-        ];
+        ]
 
         editors.forEach(id => {
-          wp.editor.remove(id);
+          wp.editor.remove(id)
           tinymceElement(id, {}, (content) => {
             updateSetting({
               [id.replace('-', '_')]: content,
-            });
-          });
-        });
+            })
+          })
+        })
 
       },
     },
@@ -1518,30 +1519,30 @@
               value: button_text_color,
             }),
           }),
-        ].join('');
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
         $('#button-text').on('change input', e => {
           updateSetting({
             button_text: e.target.value,
-          });
-        });
+          })
+        })
 
         $('#button-color').wpColorPicker({
           change: (e, ui) => {
             updateSetting({
               button_color: ui.color.toString(),
-            });
+            })
           },
-        });
+        })
 
         $('#button-text-color').wpColorPicker({
           change: (e, ui) => {
             updateSetting({
               button_text_color: ui.color.toString(),
-            });
+            })
           },
-        });
+        })
       },
       css: ({
         id,
@@ -1555,7 +1556,7 @@
                 background-color: ${button_color};
                 color: ${button_text_color};
             }
-        `;
+        `
       },
     },
     form: {
@@ -1572,16 +1573,16 @@
               value: form_color,
             }),
           }),
-        ].join('');
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
         $('#form-color').wpColorPicker({
           change: (e, ui) => {
             updateSetting({
               form_color: ui.color.toString(),
-            });
+            })
           },
-        });
+        })
       },
       css: ({
         id,
@@ -1593,7 +1594,7 @@
             #${id} form.holler-box-form {
                 background-color: ${form_color};
             }
-        `;
+        `
       },
     },
     progress: {
@@ -1618,23 +1619,23 @@
               value: progress_percentage,
             }),
           }),
-        ].join('');
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
 
         $('#progress-percentage').on('change input', e => {
           updateSetting({
             progress_percentage: e.target.value,
-          });
-        });
+          })
+        })
 
         $('#progress-color').wpColorPicker({
           change: (e, ui) => {
             updateSetting({
               progress_bar_color: ui.color.toString(),
-            });
+            })
           },
-        });
+        })
       },
       css: ({
         id,
@@ -1648,7 +1649,7 @@
                 width: ${progress_percentage}%;
                 background-color: ${progress_bar_color};
             }
-        `;
+        `
       },
     },
     link_button: {
@@ -1691,30 +1692,30 @@
               value: button_text_color,
             }),
           }),
-        ].join('');
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
         $('#button-text, #button-link').on('change input', e => {
           updateSetting({
             [e.target.name]: e.target.value,
-          });
-        });
+          })
+        })
 
         $('#button-color').wpColorPicker({
           change: (e, ui) => {
             updateSetting({
               button_color: ui.color.toString(),
-            });
+            })
           },
-        });
+        })
 
         $('#button-text-color').wpColorPicker({
           change: (e, ui) => {
             updateSetting({
               button_text_color: ui.color.toString(),
-            });
+            })
           },
-        });
+        })
       },
       css: ({
         id,
@@ -1728,7 +1729,7 @@
                 background-color: ${button_color};
                 color: ${button_text_color};
             }
-        `;
+        `
       },
     },
     overlay: {
@@ -1772,34 +1773,40 @@
               value: overlay_opacity,
             }),
           }),
-        ].join('');
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
         $('#overlay-color').wpColorPicker({
           change: (e, ui) => {
             updateSetting({
               overlay_color: ui.color.toString(),
-            });
+            })
           },
-        });
+        })
 
         $('#overlay-opacity').on('change input', e => {
           updateSetting({
             overlay_opacity: e.target.value,
-          });
-        });
+          })
+        })
 
         $('#overlay-enabled').on('change', e => {
           updateSetting({
             overlay_enabled: e.target.checked,
-          });
-        });
+          })
+        })
 
         $('#disable-scrolling').on('change', e => {
           updateSetting({
             disable_scrolling: e.target.checked,
-          });
-        });
+          })
+        })
+
+        $('#close-on-click').on('change', e => {
+          updateSetting({
+            close_on_overlay_click: e.target.checked,
+          })
+        })
       },
       css: ({
         id,
@@ -1813,21 +1820,32 @@
                 background-color: ${overlay_color};
                 opacity: ${overlay_opacity};
             }
-        `;
+        `
       },
     },
     modal: {
       name: __('Modal', 'holler-box'),
       render: ({}) => {
-        return [].join('');
+        return [].join('')
       },
       onMount: (settings, updateSetting) => {
       },
     },
     close_button: {
       name: __('Close Button', 'holler-box'),
-      render: ({close_button_color = ''}) => {
+      render: ({
+        close_button_color = '',
+        disable_closing = false,
+      }) => {
         return [
+          singleControl({
+            label: __('Disable closing') +
+              ` <span id="disable-closing-help" class="dashicons dashicons-editor-help"></span>`,
+            control: toggle({
+              id: 'disable-closing',
+              checked: disable_closing,
+            }),
+          }),
           singleControl({
             label: __('Color'),
             control: input({
@@ -1835,16 +1853,29 @@
               value: close_button_color,
             }),
           }),
-        ].join('');
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
+
+        tooltip('#disable-closing-help', {
+          content: __(
+            'Prevent the user from closing the <br/>popup until a conversion event.',
+            'holler-box'),
+        })
+
         $('#close-button-color').wpColorPicker({
           change: (e, ui) => {
             updateSetting({
               close_button_color: ui.color.toString(),
-            });
+            })
           },
-        });
+        })
+
+        $('#disable-closing').on('change', e => {
+          updateSetting({
+            disable_closing: e.target.checked,
+          })
+        })
       },
       css: ({
         id,
@@ -1856,12 +1887,17 @@
             #${id} .holler-box-modal-close {
                 color: ${close_button_color};
             }
-        `;
+        `
       },
     },
     image: {
       name: __('Image', 'holler-box'),
-      render: ({image_src = '', image_width = ''}) => {
+      render: ({
+        image_src = '',
+        image_width = '',
+        image_hide_on_mobile = false,
+        image_swap_on_mobile = false,
+      }) => {
         return [
 
           //language=HTML
@@ -1884,47 +1920,111 @@
               value: image_width,
             }),
           }),
-        ].join('');
+          `<hr/>`,
+          `<label><b>${__('Responsive')}</b></label>`,
+          singleControl({
+            label: __('Hide on mobile'),
+            control: toggle({
+              id: 'image-hide-on-mobile',
+              checked: image_hide_on_mobile,
+            }),
+          }),
+          singleControl({
+            label: __('Swap columns on mobile'),
+            control: toggle({
+              id: 'image-swap-on-mobile',
+              checked: image_swap_on_mobile,
+            }),
+          }),
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
 
         $('#image-width').on('change input', e => {
           updateSetting({
             image_width: e.target.value,
-          });
-        });
+          })
+        })
 
-        let $src = $('#image-src');
+        $('#image-hide-on-mobile').on('change', e => {
+          updateSetting({
+            image_hide_on_mobile: e.target.checked,
+          })
+        })
+
+        $('#image-swap-on-mobile').on('change', e => {
+          updateSetting({
+            image_swap_on_mobile: e.target.checked,
+          })
+        })
+
+        let $src = $('#image-src')
 
         $src.on('change', e => {
           updateSetting({
             image_src: e.target.value,
-          });
-        });
+          })
+        })
 
         $('#select-image').on('click', (event) => {
           mediaPicker({
             onSelect: (attachment) => {
-              $src.val(attachment.url);
+              $src.val(attachment.url)
               updateSetting({
                 image_src: attachment.url,
-              });
+              })
             },
-          });
-        });
+          })
+        })
 
       },
-      css: ({id, image_width}) => {
-        //language=CSS
-        return `#${id} .image-width {
-            width: ${image_width}px;
+      css: ({
+        id,
+        image_width,
+        image_hide_on_mobile = false,
+        image_swap_on_mobile = false
+      }) => {
+
+        let rules = []
+
+        if (image_width) {
+          //language=CSS
+          rules.push(`
+              #${id} .image-width {
+                  width: ${image_width}px;
+              }
+          `)
         }
-        `;
+
+        if (image_hide_on_mobile) {
+          //language=CSS
+          rules.push(`
+              @media (max-width: 600px) {
+                  #${id} .image-width {
+                      display: none;
+                  }
+              }
+          `)
+        }
+
+        if (image_swap_on_mobile) {
+          //language=CSS
+          rules.push(`
+              @media (max-width: 600px) {
+                  #${id} .display-flex {
+                      flex-direction: column-reverse;
+                  }
+              }
+          `)
+        }
+
+        //language=CSS
+        return rules.join('')
       },
     },
     avatar: {
       name: __('Avatar', 'holler-box'),
-      render: ({avatar = ''}) => {
+      render: ({ avatar = '' }) => {
         return [
 
           //language=HTML
@@ -1940,28 +2040,28 @@
 				  </button>
 			  </div>`,
           `<p>${__('Square images work best!', 'holler-box')}</p>`,
-        ].join('');
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
 
-        let $src = $('#image-src');
+        let $src = $('#image-src')
 
         $src.on('change', e => {
           updateSetting({
             avatar: e.target.value,
-          });
-        });
+          })
+        })
 
         $('#select-image').on('click', (event) => {
           mediaPicker({
             onSelect: (attachment) => {
-              $src.val(attachment.url);
+              $src.val(attachment.url)
               updateSetting({
                 avatar: attachment.url,
-              });
+              })
             },
-          });
-        });
+          })
+        })
       },
     },
     fields_email_only: {
@@ -1979,16 +2079,16 @@
               value: email_placeholder,
             }),
           }),
-        ].join('');
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
 
         const inputs = [
           'email-placeholder',
-        ];
+        ]
 
         inputs.forEach(id => {
-          $(`#${ id }`).on('input change', e => {
+          $(`#${id}`).on('input change', e => {
             updateSetting({
               [e.target.name]: e.target.value,
             })
@@ -2005,7 +2105,7 @@
         enable_name = true,
       }) => {
         return [
-          `<label><b>${ __('Email') }</b></label>`,
+          `<label><b>${__('Email')}</b></label>`,
           singleControl({
             label: __('Placeholder'),
             control: input({
@@ -2015,7 +2115,7 @@
             }),
           }),
           `<hr/>`,
-          `<label><b>${ __('Name') }</b></label>`,
+          `<label><b>${__('Name')}</b></label>`,
           singleControl({
             label: __('Enable field?'),
             control: toggle({
@@ -2050,7 +2150,7 @@
         ]
 
         toggles.forEach(id => {
-          $(`#${ id }`).on('change', e => {
+          $(`#${id}`).on('change', e => {
             updateSetting({
               [e.target.name]: e.target.checked,
             })
@@ -2066,9 +2166,9 @@
           $(`#${id}`).on('input change', e => {
             updateSetting({
               [e.target.name]: e.target.value,
-            });
-          });
-        });
+            })
+          })
+        })
       },
     },
     fields: {
@@ -2156,7 +2256,7 @@
             }),
           }),
           `<label>${__('Paste your custom HTML form code below.',
-              'holler-box')}</label>`,
+            'holler-box')}</label>`,
           textarea({
             id: 'custom-form-html',
             name: 'custom_form_html',
@@ -2164,9 +2264,9 @@
             value: custom_form_html,
           }),
           `<i>${__(
-              'When using custom HTML form code other field settings will not apply and integrations may not work.')}</i>`,
+            'When using custom HTML form code other field settings will not apply and integrations may not work.')}</i>`,
 
-        ].join('');
+        ].join('')
       },
       onMount: (settings, updateSetting) => {
 
@@ -2175,30 +2275,30 @@
           'enable-phone',
           'name-required',
           'enable-name',
-        ];
+        ]
 
         toggles.forEach(id => {
           $(`#${id}`).on('change', e => {
             updateSetting({
               [e.target.name]: e.target.checked,
-            });
-          });
-        });
+            })
+          })
+        })
 
         const inputs = [
           'phone-placeholder',
           'email-placeholder',
           'name-placeholder',
           'custom-form-html',
-        ];
+        ]
 
         inputs.forEach(id => {
           $(`#${id}`).on('input change', e => {
             updateSetting({
               [e.target.name]: e.target.value,
-            });
-          });
-        });
+            })
+          })
+        })
       },
     },
     custom_css: {
@@ -2213,26 +2313,27 @@
             value: custom_css,
           }),
           `<p>${__(
-              'Use the <code>popup</code> selector to target elements in your popup.')}</p>`,
-        ].join('');
+            'Use the <code>popup</code> selector to target elements in your popup.',
+            'holler-box')}</p>`,
+        ].join('')
       },
-      onMount: ({custom_css = ''}, updateSetting) => {
+      onMount: ({ custom_css = '' }, updateSetting) => {
         this.codeMirror = codeEditor('#custom-css', {
           onChange: custom_css => {
-            updateSetting({custom_css});
+            updateSetting({ custom_css })
           },
           initialContent: custom_css,
           height: 500,
-        });
+        })
       },
-      css: ({custom_css = '', id = ''}) => custom_css.replaceAll('popup',
-          `#${id}`),
+      css: ({ custom_css = '', id = '' }) => custom_css.replaceAll('popup',
+        `#${id}`),
     },
-  };
+  }
 
-  HollerBox.controls = Controls;
+  HollerBox.controls = Controls
 
-  const standardPopupContent = `<h1>Subscribe!</h1><p>Your information is secure 🔒. We'll never spam you</p>`;
+  const standardPopupContent = `<h1>Subscribe!</h1><p>Your information is secure 🔒. We'll never spam you</p>`
 
   const Templates = {
     notification_box: {
@@ -2311,6 +2412,7 @@
         Controls.position,
         Controls.content,
         Controls.overlay,
+        Controls.close_button,
       ],
       defaults: {
         post_content: standardPopupContent,
@@ -2324,6 +2426,7 @@
         Controls.position,
         Controls.content,
         Controls.overlay,
+        Controls.close_button,
         Controls.fields,
         Controls.button,
         Controls.submit,
@@ -2344,6 +2447,7 @@
         Controls.image,
         Controls.content,
         Controls.overlay,
+        Controls.close_button,
         Controls.fields,
         Controls.button,
         Controls.submit,
@@ -2365,11 +2469,11 @@
         Controls.image,
         Controls.content,
         Controls.overlay,
+        Controls.close_button,
         Controls.fields,
         Controls.button,
         Controls.submit,
         Controls.integration,
-        Controls.close_button,
       ],
       defaults: {
         post_content: standardPopupContent,
@@ -2386,8 +2490,8 @@
         Controls.position,
         Controls.image,
         Controls.content,
-        Controls.close_button,
         Controls.overlay,
+        Controls.close_button,
         Controls.form,
         Controls.fields_name_and_email_only,
         Controls.button,
@@ -2413,6 +2517,7 @@
         Controls.content,
         Controls.progress,
         Controls.overlay,
+        Controls.close_button,
         Controls.fields,
         Controls.button,
         Controls.submit,
@@ -2433,8 +2538,8 @@
         Controls.position,
         Controls.image,
         Controls.content,
-        Controls.close_button,
         Controls.overlay,
+        Controls.close_button,
         Controls.form,
         Controls.fields,
         Controls.button,
@@ -2457,8 +2562,8 @@
         Controls.position,
         Controls.image,
         Controls.content,
-        Controls.close_button,
         Controls.overlay,
+        Controls.close_button,
         Controls.fields,
         Controls.button,
         Controls.submit,
@@ -2471,20 +2576,20 @@
         position: 'center-center',
       },
     },
-  };
+  }
 
-  HollerBox.adminTemplates = Templates;
+  HollerBox.adminTemplates = Templates
 
   const popupTitle = () => {
     return `<h1 class="holler-title" tabindex="0">
             ${sprintf(
-        Editor.getPopup().post_status === 'publish' ? __('Editing %s') : __(
-            'Creating %s'),
-        `<b>${Editor.getPopup().post_title.length
-            ? Editor.getPopup().post_title
-            : __(
-                'Popup title...')}</b>`)}</h1>`;
-  };
+      Editor.getPopup().post_status === 'publish' ? __('Editing %s') : __(
+        'Creating %s'),
+      `<b>${Editor.getPopup().post_title.length
+        ? Editor.getPopup().post_title
+        : __(
+          'Popup title...')}</b>`)}</h1>`
+  }
 
   const renderEditor = () => {
 
@@ -2498,7 +2603,7 @@
 			</button>
 			<button class="holler-button primary" id="save">
 				${__('Save Changes')}
-			</button>`;
+			</button>`
       } else {
         //language=HTML
         return `
@@ -2506,10 +2611,10 @@
 				${__('Save draft')}
 			</button>
 			<button class="holler-button action" id="enable">${__('Publish')}
-			</button>`;
+			</button>`
       }
 
-    };
+    }
 
     //language=HTML
     return `
@@ -2552,9 +2657,9 @@
 				<iframe id="iframe-preview"
 				        src="${HollerBox.home_url}?suppress_hollerbox=1"></iframe>
 			</div>
-		</div>`;
+		</div>`
 
-  };
+  }
 
   const Editor = {
 
@@ -2567,35 +2672,35 @@
     // static version of the popup to compare against
     _popup: {},
 
-    getTemplate() {
-      return Templates[this.popup.template];
+    getTemplate () {
+      return Templates[this.popup.template]
     },
 
-    getPopup() {
+    getPopup () {
       return {
         ...this.getTemplate()?.defaults,
         ...this.popup,
-      };
+      }
     },
 
-    generateCSS() {
+    generateCSS () {
       return this.getControls().map(control => {
         try {
-          return control.css(this.getPopup());
+          return control.css(this.getPopup())
         } catch (e) {
-          return '';
+          return ''
         }
-      }).join('').replace(/(\r\n|\n|\r)/gm, '');
+      }).join('').replace(/(\r\n|\n|\r)/gm, '')
     },
 
     processShortcodeTimeout: null,
     processedContent: '',
 
-    updatePreview(suppressAnimations = true) {
+    updatePreview (suppressAnimations = true) {
 
-      this.popup.css = this.generateCSS();
+      this.popup.css = this.generateCSS()
 
-      let frame = document.getElementById('iframe-preview');
+      let frame = document.getElementById('iframe-preview')
 
       const postPreview = () => {
         frame.contentWindow.postMessage({
@@ -2603,31 +2708,31 @@
             ...this.getPopup(),
           },
           suppressAnimations,
-        }, '*');
-      };
+        }, '*')
+      }
 
-      postPreview();
+      postPreview()
 
     },
 
-    init() {
-      $('head').append(`<style id="holler-box-overrides"></style>`);
+    init () {
+      $('head').append(`<style id="holler-box-overrides"></style>`)
 
-      this.setPopup(HollerBox.popup);
-      this.setControlCopy();
-      this.setTitle();
+      this.setPopup(HollerBox.popup)
+      this.setControlCopy()
+      this.setTitle()
 
       try {
-        this.mount();
+        this.mount()
       } catch (e) {
 
-        maybeLog(e);
+        maybeLog(e)
 
         if (!Templates.hasOwnProperty(this.popup.template)) {
           confirmationModal({
             canClose: false,
             alert: `<p>${__(
-                'We could not load the editor because the defined template is no longer available.')}</p>`,
+              'We could not load the editor because the defined template is no longer available.')}</p>`,
             confirmText: __('Change Template'),
             onConfirm: () => {
               selectTemplateModal({
@@ -2635,14 +2740,14 @@
                   canClose: false,
                 },
                 onSelect: (t) => {
-                  this.popup.template = t;
-                  this.mount();
+                  this.popup.template = t
+                  this.mount()
                 },
-              });
+              })
             },
-          });
+          })
 
-          return;
+          return
         }
 
         confirmationModal({
@@ -2651,63 +2756,63 @@
           onConfirm: () => {
 
           },
-        });
+        })
 
       }
     },
 
     titleSuffix: '',
 
-    setTitle() {
+    setTitle () {
       if (!this.titleSuffix) {
-        this.titleSuffix = document.title;
+        this.titleSuffix = document.title
       }
 
-      document.title = `${this.popup.post_title} ${this.titleSuffix}`;
+      document.title = `${this.popup.post_title} ${this.titleSuffix}`
     },
 
-    setPopup(popup) {
+    setPopup (popup) {
 
       // Force object {}
       if (typeof popup.triggers !== 'object' || Array.isArray(popup.triggers)) {
-        popup.triggers = {};
+        popup.triggers = {}
       }
 
       // Force object {}
       if (typeof popup.advanced_rules !== 'object' ||
-          Array.isArray(popup.advanced_rules)) {
-        popup.advanced_rules = {};
+        Array.isArray(popup.advanced_rules)) {
+        popup.advanced_rules = {}
       }
 
       this.popup = {
         display_rules: [],
         ...popup,
         id: `popup-${popup.ID}`,
-      };
+      }
     },
 
-    setControlCopy() {
+    setControlCopy () {
       // Keep static copy
-      this._popup = copyObject(this.popup, {});
+      this._popup = copyObject(this.popup, {})
     },
 
-    hasChanges() {
-      return !objectEquals(this.popup, this._popup);
+    hasChanges () {
+      return !objectEquals(this.popup, this._popup)
     },
 
-    isAutodraft() {
-      return this.popup.post_status === 'auto-draft';
+    isAutodraft () {
+      return this.popup.post_status === 'auto-draft'
     },
 
-    getControls() {
+    getControls () {
       return [
         Controls.template,
         ...this.getTemplate().controls,
         ...this.globalControls,
-      ];
+      ]
     },
 
-    mount() {
+    mount () {
 
       const renderControls = () => {
         return [
@@ -2723,63 +2828,63 @@
 			  <button id="edit-triggers" class="control-button">
 				  ${__('Triggers')} <span
 				  class="dashicons dashicons-external"></span></button>`,
-        ].join('');
-      };
+        ].join('')
+      }
 
-      $('#holler-app').html(renderEditor());
+      $('#holler-app').html(renderEditor())
 
       if (this.popup.template) {
-        $('#controls').html(renderControls());
+        $('#controls').html(renderControls())
 
         document.getElementById('iframe-preview').
         addEventListener('load', () => {
-          this.updatePreview(false);
-        });
+          this.updatePreview(false)
+        })
       }
 
-      this.onMount();
+      this.onMount()
     },
 
-    onMount() {
+    onMount () {
 
-      const $frame = $('#frame');
+      const $frame = $('#frame')
 
-      const $mobile = $('#preview-mobile');
-      const $desktop = $('#preview-desktop');
+      const $mobile = $('#preview-mobile')
+      const $desktop = $('#preview-desktop')
 
       $mobile.on('click', e => {
-        this.previewMode = 'mobile';
-        $desktop.removeClass('primary').addClass('secondary');
-        $mobile.removeClass('secondary').addClass('primary');
-        $frame.removeClass('desktop').addClass('mobile');
-      });
+        this.previewMode = 'mobile'
+        $desktop.removeClass('primary').addClass('secondary')
+        $mobile.removeClass('secondary').addClass('primary')
+        $frame.removeClass('desktop').addClass('mobile')
+      })
 
       $desktop.on('click', e => {
-        this.previewMode = 'desktop';
-        $desktop.addClass('primary').removeClass('secondary');
-        $mobile.addClass('secondary').removeClass('primary');
-        $frame.addClass('desktop').removeClass('mobile');
-      });
+        this.previewMode = 'desktop'
+        $desktop.addClass('primary').removeClass('secondary')
+        $mobile.addClass('secondary').removeClass('primary')
+        $frame.addClass('desktop').removeClass('mobile')
+      })
 
       const updateSettings = (newSettings, opts = {}) => {
 
         const {
           suppressAnimations = true,
           reRenderControls = false,
-        } = opts;
+        } = opts
 
         this.popup = {
           ...this.popup,
           ...newSettings,
-        };
-
-        if (reRenderControls) {
-          this.mount();
-        } else {
-          this.updatePreview(suppressAnimations);
         }
 
-      };
+        if (reRenderControls) {
+          this.mount()
+        } else {
+          this.updatePreview(suppressAnimations)
+        }
+
+      }
 
       if (!this.popup.template) {
         selectTemplateModal({
@@ -2791,38 +2896,38 @@
               post_title: Templates[template].name,
               template,
               ...Templates[template].defaults,
-            }, {reRenderControls: true, suppressAnimations: false});
+            }, { reRenderControls: true, suppressAnimations: false })
           },
-        });
+        })
 
-        return;
+        return
       }
 
       this.getControls().
-      forEach(control => control.onMount(this.getPopup(), updateSettings));
+      forEach(control => control.onMount(this.getPopup(), updateSettings))
 
       $('.control-group').on('click', '.control-group-header', e => {
 
-        let $group = $(e.currentTarget).parent();
+        let $group = $(e.currentTarget).parent()
 
         if ($group.is('.open')) {
-          $group.removeClass('open');
+          $group.removeClass('open')
         } else {
-          $('.control-group').removeClass('open');
-          $(e.currentTarget).parent().toggleClass('open');
+          $('.control-group').removeClass('open')
+          $(e.currentTarget).parent().toggleClass('open')
         }
-      });
+      })
 
       $('#edit-triggers').on('click', e => {
-        editTriggersModal(this.getPopup(), updateSettings);
-      });
+        editTriggersModal(this.getPopup(), updateSettings)
+      })
 
       $('#edit-display-conditions').on('click', e => {
-        editDisplayConditionsModal(this.getPopup(), updateSettings);
-      });
+        editDisplayConditionsModal(this.getPopup(), updateSettings)
+      })
 
       const titleEdit = () => {
-        const $title = $('.holler-title');
+        const $title = $('.holler-title')
 
         $title.on('click', e => {
 
@@ -2831,48 +2936,48 @@
             id: 'post-title',
             className: 'holler-title',
             value: this.popup.post_title,
-          }));
+          }))
 
-          $title.replaceWith($input);
+          $title.replaceWith($input)
 
-          $input.focus();
+          $input.focus()
 
           $input.on('blur keydown', e => {
 
             if (e.type === 'keydown' && e.key !== 'Enter') {
-              return;
+              return
             }
 
             updateSettings({
               post_title: $input.val(),
-            });
+            })
 
-            $input.replaceWith(popupTitle());
-            this.setTitle();
-            titleEdit();
+            $input.replaceWith(popupTitle())
+            this.setTitle()
+            titleEdit()
 
-          });
+          })
 
-        });
-      };
+        })
+      }
 
-      titleEdit();
+      titleEdit()
 
       $('#save').on('click', e => {
-        this.commit();
-      });
+        this.commit()
+      })
       $('#enable').on('click', e => {
-        this.enable();
-      });
+        this.enable()
+      })
       $('#disable').on('click', e => {
-        this.disable();
-      });
+        this.disable()
+      })
 
-      let $moreButton = $('#popup-more');
+      let $moreButton = $('#popup-more')
       $moreButton.on('click', e => {
         moreMenu(e.currentTarget, {
           items: [
-            {key: 'report', text: __('View Report')},
+            { key: 'report', text: __('View Report') },
             {
               key: 'trash',
               text: `<span class="holler-text danger">${__('Trash')}</span>`,
@@ -2882,150 +2987,150 @@
             switch (k) {
               case 'report':
                 window.open(
-                    `${HollerBox.admin_url}/edit.php?post_type=hollerbox&page=hollerbox_reports#/popup/${this.popup.ID}/`,
-                    '_blank');
-                break;
+                  `${HollerBox.admin_url}/edit.php?post_type=hollerbox&page=hollerbox_reports#/popup/${this.popup.ID}/`,
+                  '_blank')
+                break
               case 'trash':
                 window.open(
-                    `${HollerBox.admin_url}/post.php?post=${this.popup.ID}&action=trash&_wpnonce=${HollerBox.nonces.trash_post}`,
-                    '_self');
-                break;
+                  `${HollerBox.admin_url}/post.php?post=${this.popup.ID}&action=trash&_wpnonce=${HollerBox.nonces.trash_post}`,
+                  '_self')
+                break
             }
           },
-        });
+        })
 
-      });
+      })
 
     },
 
-    enable(maybeIgnore = {}) {
+    enable (maybeIgnore = {}) {
 
       const {
         ignoreTriggers = false,
         ignoreIntegrations = false,
         ignoreDisplayRules = false,
-      } = maybeIgnore;
+      } = maybeIgnore
 
       if (!ignoreTriggers && !Object.values(this.popup.triggers).
-      some(({enabled = false}) => enabled)) {
+      some(({ enabled = false }) => enabled)) {
 
         confirmationModal({
           alert: `<p>${__(
-              'You do not have any triggers enabled, enable a trigger so your popup will display!',
-              'holler-box')}</p>`,
+            'You do not have any triggers enabled, enable a trigger so your popup will display!',
+            'holler-box')}</p>`,
           confirmText: __('Edit Triggers', 'holler-box'),
           closeText: __('Publish Anyway', 'holler-box'),
           onConfirm: () => {
-            $('#edit-triggers').click();
+            $('#edit-triggers').click()
           },
           onCancel: () => {
             return this.enable({
               ignoreTriggers: true,
               ...maybeIgnore,
-            });
+            })
           },
-        });
+        })
 
-        return;
+        return
       }
 
       if (!ignoreDisplayRules && !this.popup.display_rules.length) {
 
         confirmationModal({
           alert: `<p>${__(
-              'You do not have any active display rules! Add a display rule so visitors will see your popup.',
-              'holler-box')}</p>`,
+            'You do not have any active display rules! Add a display rule so visitors will see your popup.',
+            'holler-box')}</p>`,
           confirmText: __('Add Display Rules', 'holler-box'),
           closeText: __('Publish Anyway', 'holler-box'),
           onConfirm: () => {
-            $('#edit-display-conditions').click();
+            $('#edit-display-conditions').click()
           },
           onCancel: () => {
             return this.enable({
               ignoreDisplayRules: true,
               ...maybeIgnore,
-            });
+            })
           },
-        });
+        })
 
-        return;
+        return
       }
 
       if (!ignoreIntegrations && this.getTemplate().
-          controls.
-          find(c => c.name === __('Integration', 'holler-box')) &&
-          !this.popup.integrations?.length) {
+        controls.
+        find(c => c.name === __('Integration', 'holler-box')) &&
+        !this.popup.integrations?.length) {
 
         confirmationModal({
           alert: `<p>${__(
-              'You have not configured any integrations! Add an integration so subscribers\' data is saved.',
-              'holler-box')}</p>`,
+            'You have not configured any integrations! Add an integration so subscribers\' data is saved.',
+            'holler-box')}</p>`,
           confirmText: __('Add Integrations', 'holler-box'),
           closeText: __('Publish Anyway', 'holler-box'),
           onConfirm: () => {
-            let $addIntegration = $('#add-integration');
-            $addIntegration.closest('.control-group-header').click();
-            $addIntegration.click();
+            let $addIntegration = $('#add-integration')
+            $addIntegration.closest('.control-group-header').click()
+            $addIntegration.click()
           },
           onCancel: () => {
             return this.enable({
               ignoreIntegrations: true,
               ...maybeIgnore,
-            });
+            })
           },
-        });
+        })
 
-        return;
+        return
       }
 
-      this.popup.post_status = 'publish';
-      return this.commit().then(() => this.mount());
+      this.popup.post_status = 'publish'
+      return this.commit().then(() => this.mount())
     },
 
-    disable() {
-      this.popup.post_status = 'draft';
-      return this.commit().then(() => this.mount());
+    disable () {
+      this.popup.post_status = 'draft'
+      return this.commit().then(() => this.mount())
     },
 
-    commit() {
+    commit () {
 
       // from auto-draft
       if (this.isAutodraft()) {
-        this.popup.post_status = 'draft';
+        this.popup.post_status = 'draft'
       }
 
       return apiPatch(`${HollerBox.routes.popup}/${this.popup.ID}`, {
         ...this.popup,
       }).then(r => {
 
-        this.setPopup(r);
+        this.setPopup(r)
 
-        this.setControlCopy();
+        this.setControlCopy()
 
         dialog({
           message: __('Popup saved!'),
-        });
+        })
 
         if (window.location.href.match(/post-new\.php/)) {
           window.history.pushState({}, '',
-              `${HollerBox.admin_url}/post.php?post=${this.popup.ID}&action=edit`);
+            `${HollerBox.admin_url}/post.php?post=${this.popup.ID}&action=edit`)
         }
 
-      });
+      })
 
     },
 
-  };
+  }
 
   const isValidRegex = (_r) => {
     try {
-      new RegExp(_r);
+      new RegExp(_r)
     } catch (e) {
-      return false;
+      return false
     }
 
-    return true;
-  };
+    return true
+  }
 
   const DisplayConditions = {
     groups: {
@@ -3062,44 +3167,44 @@
         type: 'regex',
         name: __('Custom Regex'),
         group: 'special',
-        render: ({uuid, regex = ''}) => {
+        render: ({ uuid, regex = '' }) => {
           return input({
             id: `${uuid}-regex`,
             value: regex,
             className: 'full-width',
             placeholder: 'my-page/*',
-            style: {marginTop: 10},
-          });
+            style: { marginTop: 10 },
+          })
         },
-        onMount: ({uuid, regex}, updateRule) => {
+        onMount: ({ uuid, regex }, updateRule) => {
 
-          const $input = $(`#${uuid}-regex`);
+          const $input = $(`#${uuid}-regex`)
 
           const maybeInvalid = (_regex) => {
             if (!isValidRegex(_regex)) {
-              $input.addClass('invalid');
+              $input.addClass('invalid')
             } else {
-              $input.removeClass('invalid');
+              $input.removeClass('invalid')
             }
-          };
+          }
 
           $input.on('input', e => {
 
-            let _regex = e.target.value;
+            let _regex = e.target.value
 
             updateRule({
               regex: _regex,
-            });
+            })
 
-            maybeInvalid(_regex);
+            maybeInvalid(_regex)
 
-          });
+          })
 
-          maybeInvalid(regex);
+          maybeInvalid(regex)
         },
       },
     ],
-  };
+  }
 
   const itemPicker = (selector, {
     placeholder = __('Type to search...'),
@@ -3111,11 +3216,11 @@
     isValidSelection = () => true,
   }) => {
 
-    let $el = $(selector);
-    let search = '';
-    let options = [];
+    let $el = $(selector)
+    let search = ''
+    let options = []
 
-    const renderItem = ({id, text}) => {
+    const renderItem = ({ id, text }) => {
       // language=HTML
       return `
 		  <div class="holler-picker-item ${isValidSelection(id)
@@ -3124,8 +3229,8 @@
 			  <span class="holler-picker-item-text">${text}</span>
 			  <span class="holler-picker-item-delete" tabindex="0"
 			        data-id="${id}">&times;</span>
-		  </div>`;
-    };
+		  </div>`
+    }
 
     const render = () => {
       // language=HTML
@@ -3143,17 +3248,17 @@
 				  })}
 			  </div>
 			  <div class="holler-picker-options"></div>
-		  </div>`;
-    };
+		  </div>`
+    }
 
     const renderOptions = () => {
 
       let _options = options.filter(
-          opt => !selected.some(_opt => opt.id === _opt.id));
+        opt => !selected.some(_opt => opt.id === _opt.id))
 
       if (!_options.length) {
         return `
-		  <div class="holler-picker-no-options">${__('No results found...')}</div>`;
+		  <div class="holler-picker-no-options">${__('No results found...')}</div>`
       }
 
       // language=HTML
@@ -3163,130 +3268,130 @@
       }) => `
 		  <div class="holler-picker-option" tabindex="0" data-id="${id}">
 			  ${text}
-		  </div>`).join('');
-    };
+		  </div>`).join('')
+    }
 
     const showOptions = () => {
-      const $options = $el.find('.holler-picker-options');
+      const $options = $el.find('.holler-picker-options')
 
-      $options.html(renderOptions());
+      $options.html(renderOptions())
 
       $options.find('.holler-picker-option').on('click', e => {
-        selectOption(e.currentTarget.dataset.id);
-      });
+        selectOption(e.currentTarget.dataset.id)
+      })
 
-      placeOptions();
-    };
+      placeOptions()
+    }
 
     const placeOptions = () => {
 
-      const $options = $el.find('.holler-picker-options');
+      const $options = $el.find('.holler-picker-options')
 
       const {
         left,
         right,
         top,
         bottom,
-      } = $el[0].getBoundingClientRect();
+      } = $el[0].getBoundingClientRect()
 
       $options.css({
         maxHeight: window.innerHeight - bottom - 20,
         top: bottom,
         left,
         width: $el.width(),
-      });
-    };
+      })
+    }
 
     const focusSearch = () => {
-      $el.find('.holler-picker-search').focus();
-    };
+      $el.find('.holler-picker-search').focus()
+    }
 
     const createOption = (value) => {
-      let option = {id: value, text: value};
-      options = [];
-      search = '';
-      selected.push(option);
-      onChange(selected);
-      mount();
-      focusSearch();
-    };
+      let option = { id: value, text: value }
+      options = []
+      search = ''
+      selected.push(option)
+      onChange(selected)
+      mount()
+      focusSearch()
+    }
 
     const selectOption = (id) => {
-      let option = {...options.find(opt => opt.id == id)};
-      options = [];
-      search = '';
-      selected.push(option);
-      onChange(selected);
-      mount();
-      focusSearch();
-    };
+      let option = { ...options.find(opt => opt.id == id) }
+      options = []
+      search = ''
+      selected.push(option)
+      onChange(selected)
+      mount()
+      focusSearch()
+    }
 
     const unSelectOption = (id) => {
-      selected = selected.filter(opt => opt.id != id);
-      onChange(selected);
-      mount();
-      focusSearch();
-    };
+      selected = selected.filter(opt => opt.id != id)
+      onChange(selected)
+      mount()
+      focusSearch()
+    }
 
     const setOptions = (opts) => {
       if ($el.is(':focus-within')) {
-        options = opts;
+        options = opts
 
-        showOptions();
+        showOptions()
       }
-    };
+    }
 
     const mount = () => {
-      $el.html(render());
+      $el.html(render())
 
-      let $picker = $el.find('.holler-picker');
+      let $picker = $el.find('.holler-picker')
 
       $picker.find('.holler-picker-search').on('input', e => {
-        search = e.target.value;
+        search = e.target.value
 
-        $picker.addClass('options-visible');
+        $picker.addClass('options-visible')
         $picker.find('.holler-picker-options').
-        html(`<div class="holler-picker-no-options">${__('Searching')}</div>`);
+        html(`<div class="holler-picker-no-options">${__('Searching')}</div>`)
 
-        let {stop} = loadingDots('.holler-picker-no-options');
+        let { stop } = loadingDots('.holler-picker-no-options')
 
-        placeOptions();
+        placeOptions()
 
         fetchOptions(search, (opts) => {
-          stop();
-          setOptions(opts);
-        });
-      });
+          stop()
+          setOptions(opts)
+        })
+      })
 
       if (tags) {
         $picker.find('.holler-picker-search').on('keydown', e => {
           if (e.key !== 'Enter' && e.key !== ',') {
-            return;
+            return
           }
 
-          createOption(e.target.value);
-        });
+          createOption(e.target.value)
+        })
       }
 
       $picker.find('.holler-picker-item-delete').on('click', e => {
-        unSelectOption(e.target.dataset.id);
-      });
+        unSelectOption(e.target.dataset.id)
+      })
 
       $picker.on('focusout', e => {
 
         if (e.relatedTarget && $picker.find(e.relatedTarget)) {
-          return;
+          return
         }
 
-        search = '';
-        options = [];
-        mount();
-      });
-    };
+        search = ''
+        options = []
+        mount()
+      })
+    }
 
-    mount();
+    mount()
 
-  };
+  }
 
   const termPicker = (selector, {
     selected = [],
@@ -3296,7 +3401,7 @@
     updateRule = () => {},
   }) => {
 
-    let timeout;
+    let timeout
 
     itemPicker(selector, {
       selected,
@@ -3304,12 +3409,12 @@
       fetchOptions: (search, resolve) => {
 
         if (SearchesCache[term][search]) {
-          resolve(SearchesCache[term][search]);
-          return;
+          resolve(SearchesCache[term][search])
+          return
         }
 
         if (timeout) {
-          clearTimeout(timeout);
+          clearTimeout(timeout)
         }
 
         timeout = setTimeout(() => {
@@ -3317,37 +3422,37 @@
             search,
             [type]: term,
           }).then(options => {
-            SearchesCache[term][search] = options;
-            resolve(options);
-          });
-        }, 500);
+            SearchesCache[term][search] = options
+            resolve(options)
+          })
+        }, 500)
       },
       onChange: (selected) => {
         updateRule({
           selected,
-        });
+        })
       },
-    });
-  };
+    })
+  }
 
-  const SearchesCache = {};
+  const SearchesCache = {}
 
   Object.values(HollerBox.post_types).forEach(post_type => {
 
-    let pt_key = post_type.name;
-    let label = post_type.label;
+    let pt_key = post_type.name
+    let label = post_type.label
 
-    DisplayConditions.groups[pt_key] = label;
-    SearchesCache[pt_key] = {};
+    DisplayConditions.groups[pt_key] = label
+    SearchesCache[pt_key] = {}
 
     DisplayConditions.conditions.push({
       type: pt_key,
       name: label,
       group: pt_key,
-      render: ({uuid}) => {
-        return `<div id="picker-${uuid}" class="picker-here"></div>`;
+      render: ({ uuid }) => {
+        return `<div id="picker-${uuid}" class="picker-here"></div>`
       },
-      onMount: ({uuid, selected = []}, updateRule) => {
+      onMount: ({ uuid, selected = [] }, updateRule) => {
 
         termPicker(`#picker-${uuid}`, {
           selected,
@@ -3355,33 +3460,33 @@
           term: pt_key,
           type: 'post_type',
           updateRule,
-        });
+        })
       },
-    });
+    })
 
     Object.values(post_type.taxonomies).forEach(tax => {
 
-      SearchesCache[tax.name] = {};
+      SearchesCache[tax.name] = {}
 
       DisplayConditions.conditions.push({
         type: `${pt_key}_in_${tax.name}`,
         name: sprintf(__('In %s'), tax.label),
         group: pt_key,
-        render: ({uuid}) => {
-          return `<div id="picker-${uuid}" class="picker-here"></div>`;
+        render: ({ uuid }) => {
+          return `<div id="picker-${uuid}" class="picker-here"></div>`
         },
-        onMount: ({uuid, selected = []}, updateRule) => {
+        onMount: ({ uuid, selected = [] }, updateRule) => {
           termPicker(`#picker-${uuid}`, {
             selected,
             label: tax.label,
             term: tax.name,
             type: 'taxonomy',
             updateRule,
-          });
+          })
         },
-      });
+      })
 
-    });
+    })
 
     if (post_type.has_archive) {
 
@@ -3390,7 +3495,7 @@
         type: `${pt_key}_archive`,
         name: sprintf(__('%s Archive'), label),
         group: pt_key,
-      });
+      })
     }
 
     Object.values(post_type.taxonomies).forEach(tax => {
@@ -3399,111 +3504,111 @@
         type: `${tax.name}_archive`,
         name: sprintf(__('%s Archive'), tax.label),
         group: pt_key,
-        render: ({uuid}) => {
-          return `<div id="picker-${uuid}" class="picker-here"></div>`;
+        render: ({ uuid }) => {
+          return `<div id="picker-${uuid}" class="picker-here"></div>`
         },
-        onMount: ({uuid, selected = []}, updateRule) => {
+        onMount: ({ uuid, selected = [] }, updateRule) => {
           termPicker(`#picker-${uuid}`, {
             selected,
             label: tax.label,
             term: tax.name,
             type: 'taxonomy',
             updateRule,
-          });
+          })
         },
-      });
+      })
 
-    });
+    })
 
     if (post_type.hierarchical) {
       // child of
     }
 
-  });
+  })
 
   const AdvancedDisplayRules = {
     show_up_to_x_times: {
       name: __('Show up to X times'),
-      controls: ({times = 1}) => {
+      controls: ({ times = 1 }) => {
         //language=HTML
         return `<label>${sprintf(__('Show up to %s times'),
-			input({type: 'number', id: 'times', value: times}))}`;
+			input({ type: 'number', id: 'times', value: times }))}`
       },
       onMount: (trigger, updateTrigger) => {
         $('#times').on('change', e => {
           updateTrigger({
             times: e.target.value,
-          });
-        });
+          })
+        })
       },
     },
     show_after_x_page_views: {
       name: __('Show after X page views'),
-      controls: ({views = 0}) => {
+      controls: ({ views = 0 }) => {
         //language=HTML
         return `<label>${sprintf(__('Show after %s views'),
-			input({type: 'number', id: 'views', value: views}))}`;
+			input({ type: 'number', id: 'views', value: views }))}`
       },
       onMount: (trigger, updateTrigger) => {
         $('#views').on('change', e => {
           updateTrigger({
             views: e.target.value,
-          });
-        });
+          })
+        })
       },
     },
     show_for_x_visitors: {
       name: __('Show for X visitors'),
-      controls: ({visitor = 'all'}) => {
+      controls: ({ visitor = 'all' }) => {
         //language=HTML
-        return select({id: 'visitor'}, {
+        return select({ id: 'visitor' }, {
           all: __('All'),
           logged_in: __('Logged-in only'),
           logged_out: __('Logged-out only'),
-        }, visitor);
+        }, visitor)
       },
       onMount: (trigger, updateTrigger) => {
         $('#visitor').on('change', e => {
           updateTrigger({
             visitor: e.target.value,
-          });
-        });
+          })
+        })
       },
     },
     show_to_new_or_returning: {
       name: __('Show to New or Returning'),
-      controls: ({visitor = 'all'}) => {
+      controls: ({ visitor = 'all' }) => {
         //language=HTML
-        return select({id: 'nor-visitor'}, {
+        return select({ id: 'nor-visitor' }, {
           all: __('All'),
           new: __('New visitors'),
           returning: __('Returning visitors'),
-        }, visitor);
+        }, visitor)
       },
       onMount: (trigger, updateTrigger) => {
         $('#nor-visitor').on('change', e => {
           updateTrigger({
             visitor: e.target.value,
-          });
-        });
+          })
+        })
       },
     },
     show_on_x_devices: {
       name: __('Show on X devices'),
-      controls: ({device = 'all'}) => {
+      controls: ({ device = 'all' }) => {
         //language=HTML
-        return select({id: 'device'}, {
+        return select({ id: 'device' }, {
           all: __('All'),
           desktop: __('Desktop only'),
           mobile: __('Mobile only'),
-        }, device);
+        }, device)
       },
       onMount: (trigger, updateTrigger) => {
         $('#device').on('change', e => {
           updateTrigger({
             device: e.target.value,
-          });
-        });
+          })
+        })
       },
     },
     hide_if_converted: {
@@ -3516,21 +3621,21 @@
       controls: () => '',
       onMount: () => {},
     },
-  };
+  }
 
   if (isGroundhoggInstalled()) {
     AdvancedDisplayRules.groundhogg = {
       name: __('Groundhogg: Show to X contacts', 'holler-box'),
-      controls: ({filters = []}) => {
+      controls: ({ filters = [] }) => {
         //language=HTML
         return `
 			<button class="holler-button secondary small"
 			        id="edit-groundhogg-filters">${__('Edit Filters')}
-			</button>`;
+			</button>`
       },
       onMount: (trigger, updateTrigger) => {
 
-        let filters = trigger?.filters || [];
+        let filters = trigger?.filters || []
 
         $('#edit-groundhogg-filters').on('click', e => {
 
@@ -3549,32 +3654,32 @@
             dialogClasses: 'overflow-visible has-header',
             onOpen: () => {
               Groundhogg.filters.functions.createFilters(
-                  '#holler-groundhogg-filters', filters, (__filters) => {
-                    filters = __filters;
-                    updateTrigger({
-                      filters,
-                    });
-                  }).init();
+                '#holler-groundhogg-filters', filters, (__filters) => {
+                  filters = __filters
+                  updateTrigger({
+                    filters,
+                  })
+                }).init()
             },
-          });
+          })
 
-        });
+        })
 
       },
-    };
+    }
 
     AdvancedDisplayRules.groundhogg_hide = {
       name: __('Groundhogg: Hide for X contacts', 'holler-box'),
-      controls: ({filters = []}) => {
+      controls: ({ filters = [] }) => {
         //language=HTML
         return `
 			<button class="holler-button secondary small"
 			        id="edit-groundhogg-hide-filters">${__('Edit Filters')}
-			</button>`;
+			</button>`
       },
       onMount: (trigger, updateTrigger) => {
 
-        let filters = trigger?.filters || [];
+        let filters = trigger?.filters || []
 
         $('#edit-groundhogg-hide-filters').on('click', e => {
 
@@ -3594,30 +3699,30 @@
             onOpen: () => {
               Groundhogg.filters.functions.createFilters(
                 '#holler-groundhogg-hide-filters', filters, (__filters) => {
-                  filters = __filters;
+                  filters = __filters
                   updateTrigger({
                     filters,
-                  });
-                }).init();
+                  })
+                }).init()
             },
-          });
+          })
 
-        });
+        })
 
       },
-    };
+    }
   }
 
   const renderDisplayRule = (rule, i) => {
 
-    let extraUI = '';
+    let extraUI = ''
 
     try {
       extraUI = DisplayConditions.conditions.find(c => c.type === rule.type).
       render({
         ...rule,
         i,
-      });
+      })
     } catch (e) {
 
     }
@@ -3630,14 +3735,14 @@
 					${Object.keys(DisplayConditions.groups).map(g => {
 
 						let types = DisplayConditions.conditions.filter(
-							t => t.group === g);
+							t => t.group === g)
 						let opts = types.map(
 							t => `<option value="${t.type}" ${rule.type ===
 							t.type
 								? 'selected'
-								: ''}>${t.name}</option>`);
+								: ''}>${t.name}</option>`)
 
-						return `<optgroup label="${DisplayConditions.groups[g]}">${opts}</optgroup>`;
+						return `<optgroup label="${DisplayConditions.groups[g]}">${opts}</optgroup>`
 					})}
 				</select>
 				<button data-i=${i}
@@ -3646,8 +3751,8 @@
 				</button>
 			</div>
 			${extraUI}
-		</div>`;
-  };
+		</div>`
+  }
 
   const editDisplayConditionsModal = ({
     display_rules = [],
@@ -3660,46 +3765,46 @@
       onUpdate = (rules) => {},
     }) => {
 
-      const $el = $(selector);
+      const $el = $(selector)
 
       const commitRules = () => {
-        onUpdate(rules);
-      };
+        onUpdate(rules)
+      }
 
       const updateRule = (i, ruleSettings, reRender = false) => {
         rules[i] = {
           ...rules[i],
           ...ruleSettings,
-        };
+        }
 
-        commitRules();
+        commitRules()
 
         if (reRender) {
-          mountRules();
+          mountRules()
         }
-      };
+      }
 
       const deleteRule = (i) => {
-        rules.splice(i, 1);
-        commitRules();
-      };
+        rules.splice(i, 1)
+        commitRules()
+      }
 
       const mountRules = () => {
         $el.html(`<div class="rules">${rules.map(
-            (rule, i) => renderDisplayRule(rule, i)).join('')}</div>`).
+          (rule, i) => renderDisplayRule(rule, i)).join('')}</div>`).
         append(`<button class="holler-button secondary add-rule">${__(
-            'Add Rule')}</button>`);
+          'Add Rule')}</button>`)
 
         $el.find('.change-type').on('change', e => {
           updateRule(parseInt(e.target.dataset.i), {
             type: e.target.value,
-          }, true);
-        });
+          }, true)
+        })
 
         $el.find('.delete-display-rule').on('click', e => {
-          deleteRule(parseInt(e.currentTarget.dataset.i));
-          mountRules();
-        });
+          deleteRule(parseInt(e.currentTarget.dataset.i))
+          mountRules()
+        })
 
         rules.forEach((rule, i) => {
           try {
@@ -3708,25 +3813,25 @@
               ...rule,
               i,
             }, (settings) => {
-              updateRule(i, settings);
-            });
+              updateRule(i, settings)
+            })
           } catch (e) {}
-        });
+        })
 
         $el.find('.add-rule').on('click', e => {
           rules.push({
             type: 'entire_site',
             uuid: uuid(),
-          });
+          })
 
-          commitRules();
+          commitRules()
 
-          mountRules();
-        });
-      };
+          mountRules()
+        })
+      }
 
-      mountRules();
-    };
+      mountRules()
+    }
 
     const proConditionsAd = () => {
       //language=HTML
@@ -3735,8 +3840,8 @@
 			  Unlock popup <b>Scheduling</b> with <b><a
 			  href="https://hollerwp.com/pricing/" target="_blank">HollerBox
 			  Pro!</a></b>
-		  </div>`;
-    };
+		  </div>`
+    }
 
     modal({
       //language=HTML
@@ -3786,72 +3891,73 @@
           onUpdate: (display_rules) => {
             updateSettings({
               display_rules,
-            });
+            })
           },
-        });
+        })
 
         rulesEditor('#exclude-rules', {
           rules: exclude_rules.filter(r => r?.type),
           onUpdate: (exclude_rules) => {
             updateSettings({
               exclude_rules,
-            });
+            })
           },
-        });
+        })
 
         const updateTrigger = (t, settings) => {
           advanced_rules[t] = {
             ...advanced_rules[t],
             ...settings,
-          };
+          }
 
           updateSettings({
             advanced_rules,
-          });
-        };
+          })
+        }
 
         Object.keys(AdvancedDisplayRules).forEach(t => {
           try {
-            AdvancedDisplayRules[t].onMount(advanced_rules[t] ?? {}, (settings) => {
-              updateTrigger(t, settings);
-            });
+            AdvancedDisplayRules[t].onMount(advanced_rules[t] ?? {},
+              (settings) => {
+                updateTrigger(t, settings)
+              })
           } catch (e) {}
-        });
+        })
 
         $('[name="toggle-trigger"]').on('change', e => {
           if (e.target.checked) {
             $(`.trigger[data-id=${e.target.dataset.trigger}]`).
-            addClass('enabled');
-            updateTrigger(e.target.dataset.trigger, {enabled: true});
+            addClass('enabled')
+            updateTrigger(e.target.dataset.trigger, { enabled: true })
           } else {
             $(`.trigger[data-id=${e.target.dataset.trigger}]`).
-            removeClass('enabled');
-            updateTrigger(e.target.dataset.trigger, {enabled: false});
+            removeClass('enabled')
+            updateTrigger(e.target.dataset.trigger, { enabled: false })
           }
-        });
+        })
       },
-    });
-  };
+    })
+  }
 
   const Triggers = {
     on_page_load: {
       name: __('On Page Load'),
-      controls: ({delay = 0}) => {
+      controls: ({ delay = 0 }) => {
         //language=HTML
         return `<label>${sprintf(__('Show after %s seconds'),
-			input({type: 'number', id: 'delay', value: delay}))}`;
+			input({ type: 'number', id: 'delay', value: delay }))}`
       },
       onMount: (trigger, updateTrigger) => {
         $('#delay').on('change', e => {
           updateTrigger({
             delay: e.target.value,
-          });
-        });
+          })
+        })
       },
     },
     element_click: {
       name: __('On Click'),
-      controls: ({selector, trigger_multiple = 'once'}) => {
+      controls: ({ selector, trigger_multiple = 'once' }) => {
         //language=HTML
         return `<label>${sprintf(__('Clicked element %s'), input({
 			placeholder: '.my-class',
@@ -3862,24 +3968,24 @@
 		}, {
 			once: 'Trigger Once',
 			multiple: 'Trigger Multiple Times',
-		}, trigger_multiple)}`;
+		}, trigger_multiple)}`
       },
       onMount: (trigger, updateTrigger) => {
         $('#selector').on('change', e => {
           updateTrigger({
             selector: e.target.value,
-          });
-        });
+          })
+        })
         $('#trigger_multiple').on('change', e => {
           updateTrigger({
             trigger_multiple: e.target.value,
-          });
-        });
+          })
+        })
       },
     },
     scroll_detection: {
       name: __('On Scroll'),
-      controls: ({depth = 50}) => {
+      controls: ({ depth = 50 }) => {
         //language=HTML
         return `<label>${sprintf(__('Scrolled past %s'), input({
 			type: 'number',
@@ -3888,21 +3994,21 @@
 			placeholder: '50',
 			id: 'scroll-depth',
 			value: depth,
-		}))} %`;
+		}))} %`
       },
       onMount: (trigger, updateTrigger) => {
         $('#scroll-depth').on('change', e => {
           updateTrigger({
             depth: e.target.value,
-          });
-        });
+          })
+        })
       },
     },
     exit_intent: {
       name: __('On Page Exit Intent'),
       controls: () => '',
     },
-  };
+  }
 
   const renderTrigger = (trigger, settings = {}, enabled) => {
     //language=HTML
@@ -3921,8 +4027,8 @@
 				checked: enabled,
 			})}
 			</div>
-		</div>`;
-  };
+		</div>`
+  }
 
   const proTriggersAd = () => {
     //language=HTML
@@ -3931,8 +4037,8 @@
 			Unlock the <b>Inactivity</b> trigger with <b><a
 			href="https://hollerwp.com/pricing/" target="_blank">HollerBox
 			Pro!</a></b>
-		</div>`;
-  };
+		</div>`
+  }
 
   const editTriggersModal = ({
     triggers = {},
@@ -3966,60 +4072,60 @@
           triggers[t] = {
             ...triggers[t],
             ...settings,
-          };
+          }
 
           updateSettings({
             triggers,
-          });
-        };
+          })
+        }
 
         Object.keys(Triggers).forEach(t => {
           try {
             Triggers[t].onMount(triggers[t], (settings) => {
-              updateTrigger(t, settings);
-            });
+              updateTrigger(t, settings)
+            })
           } catch (e) {
           }
-        });
+        })
 
         $('[name="toggle-trigger"]').on('change', e => {
           if (e.target.checked) {
             $(`.trigger[data-id=${e.target.dataset.trigger}]`).
-            addClass('enabled');
-            updateTrigger(e.target.dataset.trigger, {enabled: true});
+            addClass('enabled')
+            updateTrigger(e.target.dataset.trigger, { enabled: true })
           } else {
             $(`.trigger[data-id=${e.target.dataset.trigger}]`).
-            removeClass('enabled');
-            updateTrigger(e.target.dataset.trigger, {enabled: false});
+            removeClass('enabled')
+            updateTrigger(e.target.dataset.trigger, { enabled: false })
           }
-        });
+        })
       },
-    });
+    })
 
-  };
+  }
 
   window.addEventListener('beforeunload', e => {
 
-    event.preventDefault();
+    event.preventDefault()
 
     if (Editor.hasChanges()) {
 
-      console.log(Editor.hasChanges());
+      console.log(Editor.hasChanges())
 
-      let msg = __('You have unsaved changes, are you sure you want to leave?');
-      e.returnValue = msg;
-      return msg;
+      let msg = __('You have unsaved changes, are you sure you want to leave?')
+      e.returnValue = msg
+      return msg
     }
 
-    return null;
+    return null
 
-  });
+  })
 
   $(() => {
-    Editor.init();
-  });
+    Editor.init()
+  })
 
-  HollerBox.editor = Editor;
+  HollerBox.editor = Editor
 
   HollerBox._editor = {
     Controls,
@@ -4028,7 +4134,7 @@
     AdvancedDisplayRules,
     DisplayConditions,
     Triggers,
-  };
+  }
 
   HollerBox._helpers = {
     itemPicker,
@@ -4038,6 +4144,6 @@
     apiGet,
     apiPost,
     singleControl,
-  };
+  }
 
-})(jQuery);
+})(jQuery)
