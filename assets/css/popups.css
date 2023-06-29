@@ -864,6 +864,10 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   .holler-box:not(.holler-notification-box) .holler-box-modal .display-flex {
     flex-direction: column;
   }
+  .holler-box:not(.holler-notification-box) .holler-box-modal .display-flex > * {
+    width: 100%;
+    box-sizing: border-box;
+  }
   .holler-box:not(.holler-notification-box) .holler-box-modal .display-flex .image-width {
     min-height: 300px;
     width: 100% !important;

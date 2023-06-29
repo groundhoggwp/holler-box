@@ -1189,6 +1189,11 @@ body:not(.wp-admin) {
       .display-flex {
         flex-direction: column;
 
+        > * {
+          width: 100%;
+          box-sizing: border-box;
+        }
+
         .image-width {
           min-height: 300px;
           width: 100% !important;
