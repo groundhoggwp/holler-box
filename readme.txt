@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.2
-Stable tag: 2.1.7
+Stable tag: 2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -222,6 +222,11 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.2 (2023-06-29) =
+* ADDED Setting to disable the ability to close a popup until a conversion event (button click/form fill).
+* ADDED Setting to hide popup images on mobile screens.
+* TWEAKED When a user is logged in, closed and converted popups will be stored in the user meta, as well as the cookie, thereby increasing visibility accuracy.
 
 = 2.1.7 (2023-06-21) =
 * FIXED Font color changes in the content editor not saving.
