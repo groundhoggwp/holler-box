@@ -56,6 +56,14 @@ class Holler_Api {
 			]
 		] );
 
+		register_rest_route( 'hollerbox', 'closed', [
+			[
+				'methods'             => WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'track_popup_closed' ],
+				'permission_callback' => 'is_user_logged_in'
+			]
+		] );
+
 		register_rest_route( 'hollerbox', 'conversion', [
 			[
 				'methods'             => WP_REST_Server::CREATABLE,
@@ -122,6 +130,36 @@ class Holler_Api {
 	}
 
 	/**
+	 * When a popup is closed
+	 *
+	 * @param WP_REST_Request $request
+	 *
+	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
+	 */
+	public function track_popup_closed( WP_REST_Request $request ) {
+
+		$id = absint( $request->get_param( 'popup_id' ) );
+
+		$popup = new Holler_Popup( $id );
+
+		if ( ! $popup->exists() ) {
+			return self::ERROR_404();
+		}
+
+		if ( ! is_user_logged_in() ){
+			return self::ERROR_401();
+		}
+
+		$closed_popups   = wp_parse_id_list( get_user_meta( get_current_user_id(), 'hollerbox_closed_popups', true ) );
+		$closed_popups[] = $popup->ID;
+		update_user_meta( get_current_user_id(), 'hollerbox_closed_popups', implode( ',', $closed_popups ) );
+
+		return rest_ensure_response( [
+			'success' => true
+		] );
+	}
+
+	/**
 	 * Track a popup conversion
 	 *
 	 * @param WP_REST_Request $request
@@ -142,6 +180,12 @@ class Holler_Api {
 		$location = parse_url( sanitize_text_field( $request->get_param( 'location' ) ), PHP_URL_PATH );
 
 		Holler_Reporting::instance()->add_conversion( $popup, $location );
+
+		if ( is_user_logged_in() ) {
+			$conversions   = wp_parse_id_list( get_user_meta( get_current_user_id(), 'hollerbox_popup_conversions', true ) );
+			$conversions[] = $popup->ID;
+			update_user_meta( get_current_user_id(), 'hollerbox_popup_conversions', implode( ',', $conversions ) );
+		}
 
 		return rest_ensure_response( [
 			'success' => true
@@ -182,6 +226,15 @@ class Holler_Api {
 	 */
 	public static function ERROR_404() {
 		return new WP_Error( 'missing', 'Popup not found.', [ 'status' => 404 ] );
+	}
+
+	/**
+	 * Standard 401 message
+	 *
+	 * @return WP_Error
+	 */
+	public static function ERROR_401() {
+		return new WP_Error( 'access_denied', 'Insufficient permissions.', [ 'status' => 401 ] );
 	}
 
 	/**
@@ -318,11 +371,11 @@ class Holler_Api {
 
 		$response = $popup->submit( $lead );
 
-		if ( is_wp_error($response) ){
+		if ( is_wp_error( $response ) ) {
 			return rest_ensure_response( $response );
 		}
 
-		if ( $response['status'] === 'success' ){
+		if ( $response['status'] === 'success' ) {
 			$this->track_conversion( $request );
 		}
 

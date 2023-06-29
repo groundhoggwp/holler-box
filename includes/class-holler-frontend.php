@@ -91,11 +91,13 @@ class Holler_Frontend {
 			'is_preview'         => is_preview(),
 			'is_frontend'        => ! is_admin(),
 			'is_builder_preview' => $this->is_builder_preview(),
+			'is_user_logged_in'  => is_user_logged_in(),
 			'routes'             => [
 				'root'       => rest_url( 'hollerbox' ),
 				'conversion' => rest_url( 'hollerbox/conversion' ),
 				'impression' => rest_url( 'hollerbox/impression' ),
 				'submit'     => rest_url( 'hollerbox/submit' ),
+				'closed'     => rest_url( 'hollerbox/closed' ),
 			],
 			'nonces'             => [
 				'_wprest' => wp_create_nonce( 'wp_rest' )

@@ -291,11 +291,11 @@ class Holler_Popup implements JsonSerializable {
 	/**
 	 * Whether the passed content contains any shortcode
 	 *
-	 * @since 3.6.0
-	 *
 	 * @param string $content Content to search for shortcodes.
 	 *
 	 * @return bool Whether the passed content contains the given shortcode.
+	 * @since 3.6.0
+	 *
 	 * @global array $shortcode_tags
 	 *
 	 */
@@ -407,16 +407,16 @@ class Holler_Popup implements JsonSerializable {
 
 		if ( self::content_has_shortcodes( $this->post_content ) ) {
 			?>
-            <div id="holler-<?php echo $this->ID ?>-content">
+		<div id="holler-<?php echo $this->ID ?>-content">
 			<?php echo do_shortcode( wpautop( $this->post_content ) ) ?>
-            </div><?php
+			</div><?php
 		}
 
 		if ( self::content_has_shortcodes( $this->success_message ) ) {
 			?>
-            <div id="holler-<?php echo $this->ID ?>-success-message">
+		<div id="holler-<?php echo $this->ID ?>-success-message">
 			<?php echo do_shortcode( wpautop( $this->success_message ) ) ?>
-            </div><?php
+			</div><?php
 		}
 
 	}
@@ -435,7 +435,7 @@ class Holler_Popup implements JsonSerializable {
 	 *
 	 * @return bool
 	 */
-	static function groundhogg_display_condition( $filter ){
+	static function groundhogg_display_condition( $filter ) {
 		// Groundhogg is not installed
 		if ( ! defined( 'GROUNDHOGG_VERSION' ) ) {
 			return true;
@@ -476,8 +476,31 @@ class Holler_Popup implements JsonSerializable {
 
 		// These are checked on the frontend, so just return true
 		self::add_display_condition( 'show_up_to_x_times', '__return_true' );
-		self::add_display_condition( 'hide_if_converted', '__return_true' );
-		self::add_display_condition( 'hide_if_closed', '__return_true' );
+
+		self::add_display_condition( 'hide_if_converted', function ( $filter, $popup ) {
+
+			// Show if no user
+			if ( ! is_user_logged_in() ) {
+				return true;
+			}
+
+			$conversions = wp_parse_id_list( get_user_meta( get_current_user_id(), 'hollerbox_popup_conversions', true ) );
+
+			return ! in_array( $popup->ID, $conversions );
+		} );
+
+		self::add_display_condition( 'hide_if_closed', function ( $filter, $popup ) {
+
+			// Show if no user
+			if ( ! is_user_logged_in() ) {
+				return true;
+			}
+
+			$closed = wp_parse_id_list( get_user_meta( get_current_user_id(), 'hollerbox_closed_popups', true ) );
+
+			return ! in_array( $popup->ID, $closed );
+		} );
+
 		self::add_display_condition( 'show_after_x_page_views', '__return_true' );
 		self::add_display_condition( 'show_on_x_devices', '__return_true' );
 		self::add_display_condition( 'show_to_new_or_returning', '__return_true' );
@@ -814,8 +837,8 @@ class Holler_Popup implements JsonSerializable {
 					'trigger_multiple' => 'multiple',
 					'selector'         => sprintf( '.holler-show[data-id="%d"]', $this->ID )
 				];
-                break;
- 			case 'immediately':
+				break;
+			case 'immediately':
 				$triggers['on_page_load'] = [
 					'enabled' => true,
 					'delay'   => 0
@@ -1016,8 +1039,8 @@ class Holler_Popup implements JsonSerializable {
 	/**
 	 * Integrations upgrade path
 	 *
-	 * @throws Exception
 	 * @return void
+	 * @throws Exception
 	 */
 	public function maybe_upgrade_2_0_integrations() {
 
