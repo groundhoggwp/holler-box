@@ -1053,6 +1053,7 @@ button .holler-spinner {
   left: 0;
   right: 0;
   padding: 8px 20px;
+  border-radius: 5px 5px 0 0;
 }
 .holler-modal-dialog .holler-header.is-sticky {
   position: sticky;
@@ -1453,8 +1454,9 @@ p.error,
   z-index: 999999;
   padding: 5px 8px;
   border-radius: 5px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: normal;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
 }
 .holler-has-tooltip .holler-tooltip.right {
   left: calc(100% + 5px);
