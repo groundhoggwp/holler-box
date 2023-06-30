@@ -995,7 +995,6 @@
         position = 'center-center',
         animation = 'appear',
         post_content = '',
-        button_text = 'Subscribe',
         submitted = false,
         success_message = '',
         overlay_enabled = true,
@@ -1040,7 +1039,6 @@
         title = '',
         post_content = '',
         image_src = '',
-        button_text = 'Subscribe',
         submitted = false,
         success_message = '',
         overlay_enabled = true,
@@ -1068,7 +1066,6 @@
 										: post_content)}
 									${submitted ? '' : form({
 										direction: 'vertical',
-										button_text,
 										...props,
 									})}
 								</div>
