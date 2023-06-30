@@ -8,6 +8,8 @@
     textarea,
     dialog,
     select,
+    confirmationModal,
+    tooltip
   } = HollerBox.elements
 
   const { __, sprintf } = wp.i18n
@@ -76,6 +78,39 @@
     }
 
     return json
+  }
+
+  /**
+   * Post data
+   *
+   * @param data
+   * @param opts
+   * @returns {Promise<any>}
+   */
+  async function adminAjax (data = {}, opts = {}) {
+
+    if (!(data instanceof FormData)) {
+      const fData = new FormData()
+
+      for (const key in data) {
+        if (data.hasOwnProperty(key)) {
+          fData.append(key, data[key])
+        }
+      }
+
+      data = fData
+    }
+
+    data.append( 'holler_admin_ajax_nonce', HollerBox.nonces._adminajax )
+
+    const response = await fetch(ajaxurl, {
+      method: 'POST',
+      credentials: 'same-origin',
+      body: data,
+      ...opts,
+    })
+
+    return response.json()
   }
 
   /**
@@ -378,7 +413,7 @@
                                     checked: settings.cookie_compliance,
                                 }) }</label>
                             <p>
-                                ${ __('If you are using a cookie consent plugin such as <b>CookieYes</b> then this will prevent popups until consent is given.',
+                                ${ __('If you are using a cookie consent plugin such as <b>CookieYes</b> then this will prevent popups until cookies are accepted.',
                                         'holler-box') }</p>
                             <div class="display-flex gap-20">
                                 <div>
@@ -458,6 +493,14 @@
                                     utmSource }" target="_blank">${ icon } ${ text }</a>`).join('') }
                         </div>
                     </div>
+	                <div class="holler-panel">
+		                <div class="holler-panel-header">
+			                <h2>${ __('Tools') }</h2>
+		                </div>
+		                <div class="display-flex column holler-menu">
+			                <a href="#" id="clear-user-cache"><span class="dashicons dashicons-trash"></span>${__('Clear user stats cache')}</a>
+		                </div>
+	                </div>
                 </div>
             </div>
         `
@@ -545,6 +588,35 @@
         wp.editor.remove('gdpr-text')
         tinymceElement('gdpr-text', {}, (content) => {
           settings.gdpr_text = content
+        })
+
+        tooltip( '#clear-user-cache', {
+          content: __('The IDs of closed and converted popups are<br/> stored in <code>usermeta</code> for logged in users to<br/> improve visibility accuracy. Clear the cache to<br/> reset the stats for all users.'),
+          position: 'left'
+        })
+
+        $('#clear-user-cache').on('click', e => {
+          e.preventDefault()
+          confirmationModal({
+            alert: `<p>${__('Are you sure? This will delete any stats for closed and converted popups for all users.', 'holler-box' )}</p>`,
+            confirmText: __('Clear'),
+            onConfirm: () => {
+              adminAjax({
+                action: 'holler_clear_user_stats_cache'
+              }).then( r => {
+                if ( r.success ){
+                  dialog({
+                    message: __('Cache cleared!', 'holler-box')
+                  })
+                }
+              }).catch( e => {
+                dialog({
+                  type: 'error',
+                  message: e.message
+                })
+              })
+            }
+          })
         })
       },
     },

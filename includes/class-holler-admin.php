@@ -30,8 +30,8 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 * Get active instance
 		 *
 		 * @access      public
-		 * @since       0.2.0
 		 * @return      self self::$instance The one true Holler_Admin
+		 * @since       0.2.0
 		 */
 		public static function instance() {
 			if ( ! self::$instance ) {
@@ -50,10 +50,10 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 * Run action and filter hooks
 		 *
 		 * @access      private
-		 * @since       0.2.0
 		 * @return      void
 		 *
 		 *
+		 * @since       0.2.0
 		 */
 		private function hooks() {
 
@@ -66,6 +66,118 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 			add_filter( 'post_row_actions', [ $this, 'manage_cpt_row_actions' ], 10, 2 );
 
 			add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
+
+			add_action( 'edit_user_profile', [ $this, 'admin_user' ] );
+			add_action( 'show_user_profile', [ $this, 'admin_user' ] );
+			add_action( 'wp_ajax_holler_clear_user_stats_cache', [ $this, 'ajax_clear_user_cache' ] );
+		}
+
+		const CLEAR_CACHE_NONCE = 'holler_clear_cache';
+		const ADMIN_AJAX_NONCE = 'holler_admin_ajax';
+
+		/**
+		 * Helper function to verify nonces easily
+		 *
+		 * @param        $name
+		 * @param string $action
+		 *
+		 * @return bool
+		 */
+		public function verify_nonce( $name, $action = '' ) {
+
+			if ( ! $action ) {
+				$action = $name;
+			}
+
+			return isset( $_REQUEST[ $name ] ) && wp_verify_nonce( $_REQUEST[ $name ], $action );
+		}
+
+		/**
+		 * Wrapper for admin ajax nonce
+		 *
+		 * @return bool
+		 */
+		public function verify_admin_ajax_nonce(){
+			return $this->verify_nonce( 'holler_admin_ajax_nonce', self::ADMIN_AJAX_NONCE );
+		}
+
+		/**
+		 * Clear popup cache for all users
+		 */
+		public function ajax_clear_user_cache() {
+
+			if ( ! current_user_can( 'edit_popups' ) ) {
+				return;
+			}
+
+			if ( ! $this->verify_admin_ajax_nonce() ) {
+				return;
+			}
+
+			global $wpdb;
+
+			$wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key in ('hollerbox_popup_conversions','hollerbox_closed_popups');" );
+
+			if ( wp_doing_ajax() ) {
+				wp_send_json_success();
+			}
+		}
+
+		/**
+		 * Show options for clearing popup cache
+		 *
+		 * @param $user WP_User
+		 */
+		public function admin_user( $user ) {
+
+			if ( ! current_user_can( 'edit_popups' ) ) {
+				return;
+			}
+
+			if ( $this->verify_nonce( 'holler_clear_cache_single_user', self::CLEAR_CACHE_NONCE ) ) {
+				delete_user_meta( $user->ID, 'hollerbox_closed_popups' );
+				delete_user_meta( $user->ID, 'hollerbox_popup_conversions' );
+
+				return;
+			}
+
+			$closed    = wp_parse_id_list( get_user_meta( $user->ID, 'hollerbox_closed_popups', true ) );
+			$converted = wp_parse_id_list( get_user_meta( $user->ID, 'hollerbox_popup_conversions', true ) );
+
+			if ( empty( $closed ) && empty( $converted ) ) {
+				return;
+			}
+
+			$closed = array_map( function ( $id ) {
+				$popup = new Holler_Popup( $id );
+
+				return sprintf( '<a href="%s">%s</a>', get_edit_post_link( $popup->ID ), $popup->post_title );
+			}, $closed );
+
+			$converted = array_map( function ( $id ) {
+				$popup = new Holler_Popup( $id );
+
+				return sprintf( '<a href="%s">%s</a>', get_edit_post_link( $popup->ID ), $popup->post_title );
+			}, $converted );
+
+			?>
+			<h2><?php _e( 'HollerBox' ) ?></h2>
+			<table class="form-table">
+				<tr>
+					<th><?php _e( 'Closed popups', 'holler-box' ); ?></th>
+					<td><?php echo implode( ', ', $closed ) ?></td>
+				</tr>
+				<tr>
+					<th><?php _e( 'Converted popups', 'holler-box' ); ?></th>
+					<td><?php echo implode( ', ', $converted ) ?></td>
+				</tr>
+			</table>
+			<p>
+				<a href="<?php echo esc_url( wp_nonce_url( $_SERVER['REQUEST_URI'], self::CLEAR_CACHE_NONCE, 'holler_clear_cache_single_user' ) ) ?>"
+				   class="button button-secondary"><?php _e( 'Clear user cache' ); ?></a></p>
+			<?php
+
+
 		}
 
 		public function admin_scripts( $hook ) {
@@ -114,7 +226,8 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 						'report' => rest_url( 'hollerbox/report' ),
 					],
 					'nonces'    => [
-						'_wprest' => wp_create_nonce( 'wp_rest' )
+						'_wprest'    => wp_create_nonce( 'wp_rest' ),
+						'_adminajax' => wp_create_nonce( 'holler_admin_ajax' )
 					],
 				] );
 			}
@@ -142,6 +255,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 						],
 						'nonces'      => [
 							'_wprest' => wp_create_nonce( 'wp_rest' ),
+							'_adminajax' => wp_create_nonce( 'holler_admin_ajax' )
 						],
 						'settings'    => get_option( 'hollerbox_settings', [
 							'is_licensed' => false
@@ -176,7 +290,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 */
 		public function settings_page() {
 			?>
-            <div id="holler-app"></div><?php
+			<div id="holler-app"></div><?php
 		}
 
 		/**
@@ -187,7 +301,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		public function reports_page() {
 
 			?>
-            <div id="holler-app"></div><?php
+			<div id="holler-app"></div><?php
 		}
 
 		/**
@@ -351,7 +465,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 			require_once ABSPATH . 'wp-admin/admin-header.php';
 
 			?>
-            <div id="holler-app"></div><?php
+			<div id="holler-app"></div><?php
 		}
 
 		/**

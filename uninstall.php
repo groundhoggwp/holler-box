@@ -45,6 +45,9 @@ if ( \Holler_Settings::instance()->get( 'delete_all_data' ) ) {
         ON (p.ID = pm.post_id)
     WHERE p.post_type = 'hollerbox';" );
 
+	// Delete cached user meta
+	$wpdb->query( "DELETE FROM $wpdb->usermeta WHERE meta_key in ('hollerbox_popup_conversions','hollerbox_closed_popups');" );
+
 	\Holler_Settings::instance()->drop();
 
 	wp_clear_scheduled_hook( 'hollerbox/telemetry' );

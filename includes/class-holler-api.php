@@ -152,7 +152,7 @@ class Holler_Api {
 
 		$closed_popups   = wp_parse_id_list( get_user_meta( get_current_user_id(), 'hollerbox_closed_popups', true ) );
 		$closed_popups[] = $popup->ID;
-		update_user_meta( get_current_user_id(), 'hollerbox_closed_popups', implode( ',', $closed_popups ) );
+		update_user_meta( get_current_user_id(), 'hollerbox_closed_popups', implode( ',', array_unique( $closed_popups ) ) );
 
 		return rest_ensure_response( [
 			'success' => true
@@ -184,7 +184,7 @@ class Holler_Api {
 		if ( is_user_logged_in() ) {
 			$conversions   = wp_parse_id_list( get_user_meta( get_current_user_id(), 'hollerbox_popup_conversions', true ) );
 			$conversions[] = $popup->ID;
-			update_user_meta( get_current_user_id(), 'hollerbox_popup_conversions', implode( ',', $conversions ) );
+			update_user_meta( get_current_user_id(), 'hollerbox_popup_conversions', implode( ',', array_unique( $conversions ) ) );
 		}
 
 		return rest_ensure_response( [
