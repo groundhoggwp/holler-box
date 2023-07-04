@@ -613,6 +613,15 @@ table.display-conditions-grid {
               justify-content: space-between;
               align-items: center;
               gap: 10px;
+
+              .width-control{
+                display: flex;
+
+                input.width-number {
+                  max-width: 60px;
+                  padding-right: 0;
+                }
+              }
             }
 
 

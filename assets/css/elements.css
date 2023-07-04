@@ -1446,6 +1446,7 @@ p.error,
 }
 .holler-has-tooltip .holler-tooltip {
   width: max-content;
+  max-width: 250px;
   display: none;
   position: absolute;
   background-color: #102640;

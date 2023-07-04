@@ -502,6 +502,8 @@ class Holler_Popup implements JsonSerializable {
 		} );
 
 		self::add_display_condition( 'show_after_x_page_views', '__return_true' );
+		self::add_display_condition( 'show_after_x_content_views', '__return_true' );
+		self::add_display_condition( 'show_after_x_potential_views', '__return_true' );
 		self::add_display_condition( 'show_on_x_devices', '__return_true' );
 		self::add_display_condition( 'show_to_new_or_returning', '__return_true' );
 

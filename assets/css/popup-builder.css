@@ -452,6 +452,13 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   align-items: center;
   gap: 10px;
 }
+#holler-app #editor .control-wrap #controls .control-group .controls .control .width-control {
+  display: flex;
+}
+#holler-app #editor .control-wrap #controls .control-group .controls .control .width-control input.width-number {
+  max-width: 60px;
+  padding-right: 0;
+}
 #holler-app #editor .control-wrap #controls .control-group .controls #integrations {
   display: flex;
   flex-direction: column;

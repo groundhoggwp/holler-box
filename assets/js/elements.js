@@ -2007,9 +2007,19 @@
     },
   } )
 
+  const dashicon = ( icon = '', atts = {} ) => {
+    return `<span ${objectToProps(atts)} class="dashicons dashicons-${icon}"></span>`
+  }
+  
+  const tooltipIcon = ( id = '' ) => {
+    return dashicon( 'editor-help', { id } )
+  }
+
   HollerBox.elements = {
     icons,
     ...Elements,
+    dashicon,
+    tooltipIcon,
     adminPageURL,
     specialChars,
     uniqid,

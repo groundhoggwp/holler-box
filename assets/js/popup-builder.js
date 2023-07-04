@@ -24,6 +24,8 @@
     confirmationModal,
     mediaPicker,
     inputRepeater,
+    dashicon,
+    tooltipIcon,
   } = HollerBox.elements
 
   const { sprintf, __, _x, _n } = wp.i18n
@@ -1067,6 +1069,66 @@
 		</div>`
   }
 
+  const widthControl = (selector, {
+    id = '',
+    name = '',
+    value = '',
+    onChange = () => {},
+  }) => {
+
+    const $el = $(selector)
+
+    const mount = () => {
+
+      //language=HTML
+      let html = `
+		  <div class="width-control">
+			  ${input({
+				  type: 'range',
+				  className: 'width-range',
+				  min: 0,
+				  max: 1000,
+				  name,
+				  value,
+				  id: `${id}-range`,
+			  })}
+			  ${input({
+				  type: 'number',
+				  className: 'width-number',
+				  min: 0,
+				  max: 1000,
+				  name,
+				  value,
+				  id: `${id}-number`,
+			  })}
+		  </div>`
+
+      $el.html(html)
+
+      onMount()
+    }
+    const onMount = () => {
+
+      const $range = $(`#${id}-range`)
+      const $input = $(`#${id}-number`)
+
+      $range.on('input change', e => {
+        value = e.target.value
+        onChange(value)
+        $input.val(value)
+      })
+
+      $input.on('input change', e => {
+        value = e.target.value
+        onChange(value)
+        $range.val(value)
+      })
+    }
+
+    mount()
+
+  }
+
   const Controls = {
     integration: {
       name: __('Integration', 'holler-box'),
@@ -1396,6 +1458,7 @@
       name: __('Content', 'holler-box'),
       render: ({
         post_content = '',
+        content_width = '',
       }) => {
         return [
           textarea({
@@ -1404,6 +1467,13 @@
           }),
           `<p class="holler-notice info">${__(
             'Shortcodes will be rendered on the frontend.')}</p>`,
+          ...Editor.supports('content_width') ? [
+            '<hr/>',
+            singleControl({
+              label: __('Content Width'),
+              control: `<div id="content-width"></div>`,
+            }),
+          ] : [],
         ].join('')
       },
       onMount: (settings, updateSetting) => {
@@ -1413,6 +1483,32 @@
             post_content,
           })
         })
+
+        widthControl('#content-width', {
+          id: 'content-width',
+          name: 'content_width',
+          value: settings.content_width,
+          onChange: (content_width) => {
+            updateSetting({
+              content_width,
+            })
+          },
+        })
+      },
+      css ({ id, content_width = 400 }) {
+
+        if (!Editor.supports('content_width')) {
+          return ''
+        }
+
+        //language=CSS
+        return `
+            @media (min-width: 600px) {
+                #${id} .holler-box-modal-content {
+                    width: ${content_width}px;
+                }
+            }
+        `
       },
     },
     chat_content: {
@@ -1914,11 +2010,7 @@
 			  </div>`,
           singleControl({
             label: __('Width'),
-            control: input({
-              type: 'number',
-              id: 'image-width',
-              value: image_width,
-            }),
+            control: '<div id="image-width"></div>',
           }),
           `<hr/>`,
           `<label><b>${__('Responsive')}</b></label>`,
@@ -1940,10 +2032,15 @@
       },
       onMount: (settings, updateSetting) => {
 
-        $('#image-width').on('change input', e => {
-          updateSetting({
-            image_width: e.target.value,
-          })
+        widthControl('#image-width', {
+          id: 'image-width',
+          name: 'image_width',
+          value: settings.image_width,
+          onChange: (image_width) => {
+            updateSetting({
+              image_width,
+            })
+          },
         })
 
         $('#image-hide-on-mobile').on('change', e => {
@@ -1982,7 +2079,7 @@
         id,
         image_width,
         image_hide_on_mobile = false,
-        image_swap_on_mobile = false
+        image_swap_on_mobile = false,
       }) => {
 
         let rules = []
@@ -2669,11 +2766,37 @@
       Controls.custom_css,
     ],
 
-    // static version of the popup to compare against
     _popup: {},
+
+    /**
+     * Function to help with which features are available for templates rather than always
+     * having to create new control groups
+     *
+     * @param feature
+     * @return {false}
+     */
+    supports (feature) {
+      const featureSupports = {
+        /**
+         * Only popups and sidebars support content_width control
+         * @return {boolean}
+         */
+        content_width: () => {
+          return Editor.getTemplateName().startsWith('popup_') ||
+            Editor.getTemplateName().startsWith('sidebar_')
+        },
+      }
+
+      return featureSupports.hasOwnProperty(feature) &&
+        featureSupports[feature]()
+    },
 
     getTemplate () {
       return Templates[this.popup.template]
+    },
+
+    getTemplateName () {
+      return this.popup.template
     },
 
     getPopup () {
@@ -3529,11 +3652,8 @@
   const AdvancedDisplayRules = {
     show_up_to_x_times: {
       name: __('Show up to X times'),
-      controls: ({ times = 1 }) => {
-        //language=HTML
-        return `<label>${sprintf(__('Show up to %s times'),
-			input({ type: 'number', id: 'times', value: times }))}`
-      },
+      controls: ({ times = 1 }) => input(
+        { type: 'number', id: 'times', value: times }),
       onMount: (trigger, updateTrigger) => {
         $('#times').on('change', e => {
           updateTrigger({
@@ -3543,22 +3663,64 @@
       },
     },
     show_after_x_page_views: {
-      name: __('Show after X page views'),
-      controls: ({ views = 0 }) => {
-        //language=HTML
-        return `<label>${sprintf(__('Show after %s views'),
-			input({ type: 'number', id: 'views', value: views }))}`
-      },
+      name: __('Show after X page views') +
+        tooltipIcon('show-after-x-page-views'),
+      controls: ({ views = 0 }) => input(
+        { type: 'number', id: 'views', value: views }),
       onMount: (trigger, updateTrigger) => {
         $('#views').on('change', e => {
           updateTrigger({
             views: e.target.value,
           })
         })
+
+        tooltip('#show-after-x-page-views', {
+          content: __(
+            'A page view is counted as any page, post, archive, etc. that a visitor sees while browsing your site. All pages are counted, not just pages where the popup would display.',
+            'holler-box'),
+        })
+      },
+    },
+    show_after_x_content_views: {
+      name: __('Show after X content views') +
+        tooltipIcon('show-after-x-content-views'),
+      controls: ({ views = 0 }) => input(
+        { type: 'number', id: 'c-views', value: views }),
+      onMount: (trigger, updateTrigger) => {
+        $('#c-views').on('change', e => {
+          updateTrigger({
+            views: e.target.value,
+          })
+        })
+
+        tooltip('#show-after-x-content-views', {
+          content: __(
+            'A content view is counted when a visitor visits any page matching the include/exclude conditions above.',
+            'holler-box'),
+        })
+      },
+    },
+    show_after_x_potential_views: {
+      name: __('Show after X potential popup views') +
+        tooltipIcon('show-after-x-potential-views'),
+      controls: ({ views = 0 }) => input(
+        { type: 'number', id: 'p-views', value: views }),
+      onMount: (trigger, updateTrigger) => {
+        $('#p-views').on('change', e => {
+          updateTrigger({
+            views: e.target.value,
+          })
+        })
+
+        tooltip('#show-after-x-potential-views', {
+          content: __(
+            'A potential popup view is counted when a visitor would have triggered this popup.',
+            'holler-box'),
+        })
       },
     },
     show_for_x_visitors: {
-      name: __('Show for X visitors'),
+      name: __('Show for logged-in/out visitors'),
       controls: ({ visitor = 'all' }) => {
         //language=HTML
         return select({ id: 'visitor' }, {
@@ -3576,7 +3738,7 @@
       },
     },
     show_to_new_or_returning: {
-      name: __('Show to New or Returning'),
+      name: __('Show to new/returning visitors'),
       controls: ({ visitor = 'all' }) => {
         //language=HTML
         return select({ id: 'nor-visitor' }, {

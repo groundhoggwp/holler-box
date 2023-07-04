@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.2
-Stable tag: 2.2.1
+Stable tag: 2.2.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -222,6 +222,14 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.2.2 (2023-07-04) =
+* ADDED New display condition: **Show after X potential popup views**.
+ * A *potential popup view* is counted as when the popup would normally be triggered.
+* ADDED New display condition: **Show after X content views**.
+ * A *content view* is a page where the popup would show, rather than any page.
+* ADDED Content Width setting.
+* TWEAKED Image Width and Content Width now have slider controls.
 
 = 2.2.1 (2023-06-30) =
 * HOT FIX Popup with form template not showing custom button text.

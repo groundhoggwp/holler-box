@@ -12,6 +12,8 @@
     popupConversions: 'holler-popup-conversions',
     popupViews: 'holler-popup-views',
     pageViews: 'holler-page-views',
+    contentViews: 'holler-content-views',
+    potentialViews: 'holler-potential-views',
     sessions: 'holler-sessions',
 
     addClosedPopup (id) {
@@ -28,7 +30,12 @@
       return allClosed.includes(id)
     },
 
-    addPopupCount (cookie, id) {
+    addPopupCount (cookie, id, ttl = false ) {
+
+      if ( ttl === false ){
+        ttl = HollerBox.cookie_lifetime
+      }
+
       let counts = JSON.parse(this.getCookie(cookie, '{}'))
 
       if (!counts) {
@@ -41,7 +48,7 @@
         counts[id] = 1
       }
 
-      this.setCookie(cookie, JSON.stringify(counts), HollerBox.cookie_lifetime)
+      this.setCookie(cookie, JSON.stringify(counts), ttl )
     },
 
     getPopupCount (cookie, id) {
@@ -61,8 +68,24 @@
       this.addPopupCount(this.popupViews, id)
     },
 
+    addContentView(id){
+      this.addPopupCount(this.contentViews, id)
+    },
+
+    addPotentialView(id){
+      this.addPopupCount(this.potentialViews, id)
+    },
+
     getPopupViews (id) {
       return this.getPopupCount(this.popupViews, id)
+    },
+
+    getContentViews(id){
+      return this.getPopupCount(this.contentViews, id)
+    },
+
+    getPotentialViews(id){
+      return this.getPopupCount(this.potentialViews, id)
     },
 
     addPageView () {
@@ -1407,6 +1430,19 @@
       popup.getViews(),
     show_after_x_page_views: ({ views }) => parseInt(views) <
       Cookies.getPageViews(),
+    show_after_x_content_views: ({views}, popup) => {
+      views = parseInt( views )
+      return views < Cookies.getContentViews( popup.ID );
+    },
+    show_after_x_potential_views: ({views}, popup) => {
+      views = parseInt( views )
+      if ( views < Cookies.getPotentialViews( popup.ID ) ){
+        return true;
+      }
+
+      Cookies.addPotentialView( popup.ID )
+      return false;
+    },
     show_to_new_or_returning: ({ visitor = 'all' }) => {
       switch (visitor) {
         default:
@@ -1823,6 +1859,8 @@
       if (!this.setTemplate()) {
         return
       }
+
+      Cookies.addContentView(this.ID)
 
       const show = () => this.maybeOpen()
 
