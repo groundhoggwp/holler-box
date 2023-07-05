@@ -1424,6 +1424,7 @@
       name: __('Position', 'holler-box'),
       render: ({
         position = 'center-center',
+        menu_order = 0,
       }) => {
         return [
           singleControl({
@@ -1442,14 +1443,35 @@
               'bottom-right': __('Bottom Right'),
             }, position),
           }),
+          singleControl({
+            label: __('Priority') + tooltipIcon('priority-help'),
+            control: input({
+              type: 'number',
+              id: 'priority',
+              value: menu_order,
+            }),
+          }),
         ].join('')
       },
       onMount: (settings, updateSetting) => {
+
+        tooltip('#priority-help', {
+          content: __(
+            'If multiple popups are loaded on the same page, this will determine in what order they appear. Lower priorities appear first.'),
+          position: 'right',
+        })
+
         $('#position').on('change', e => {
           updateSetting({
             position: e.target.value,
           }, {
             suppressAnimations: false,
+          })
+        })
+
+        $('#priority').on('change', e => {
+          updateSetting({
+            menu_order: e.target.value,
           })
         })
       },
@@ -1931,6 +1953,8 @@
       name: __('Close Button', 'holler-box'),
       render: ({
         close_button_color = '',
+        close_button_size = 'small',
+        close_button_icon = 'normal',
         disable_closing = false,
       }) => {
         return [
@@ -1949,6 +1973,31 @@
               value: close_button_color,
             }),
           }),
+          singleControl({
+            label: __('Icon'),
+            control: select({
+              id: 'close-button-icon',
+              name: 'close_button_icon',
+              selected: close_button_icon,
+              options: {
+                normal: __('Normal'),
+                filled: __('Filled'),
+              },
+            }),
+          }),
+          singleControl({
+            label: __('Size'),
+            control: select({
+              id: 'close-button-size',
+              name: 'close_button_size',
+              selected: close_button_size,
+              options: {
+                small: __('Small'),
+                medium: __('Medium'),
+                large: __('Large'),
+              },
+            }),
+          }),
         ].join('')
       },
       onMount: (settings, updateSetting) => {
@@ -1965,6 +2014,12 @@
               close_button_color: ui.color.toString(),
             })
           },
+        })
+
+        $('#close-button-size,#close-button-icon').on('change', e => {
+          updateSetting({
+            [e.target.name]: $(e.target).val(),
+          })
         })
 
         $('#disable-closing').on('change', e => {

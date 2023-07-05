@@ -507,7 +507,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				'has_archive'        => false,
 				'hierarchical'       => false,
 				'menu_icon'          => 'data:image/svg+xml;base64,' . base64_encode( self::HollerIcon() ),
-				'supports'           => [ 'title' ],
+				'supports'           => [ 'title', 'page-attributes' ],
 				'show_in_customizer' => false,
 			];
 
@@ -570,15 +570,15 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 
 			switch ( $column ) {
 				case 'conversions':
-					echo number_format_i18n( $popup->get_conversions() );
+					echo number_format_i18n( $popup->get_conversions( 365 ) );
 					break;
 				case 'impressions':
-					echo number_format_i18n( $popup->get_impressions() );
+					echo number_format_i18n( $popup->get_impressions( 365 ) );
 					break;
 				case 'cvr':
 
-					$impressions = $popup->get_impressions();
-					$conversions = $popup->get_conversions();
+					$impressions = $popup->get_impressions( 365 );
+					$conversions = $popup->get_conversions( 365 );
 					$cvr         = ceil( ( $conversions / ( $impressions ?: 1 ) ) * 100 );
 
 					echo $cvr . '%';

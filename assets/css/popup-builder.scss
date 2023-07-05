@@ -614,6 +614,11 @@ table.display-conditions-grid {
               align-items: center;
               gap: 10px;
 
+              input[type=number].input{
+                max-width: 80px;
+                padding-right: 0;
+              }
+
               .width-control{
                 display: flex;
 

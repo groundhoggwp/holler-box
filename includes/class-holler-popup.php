@@ -158,6 +158,9 @@ class Holler_Popup implements JsonSerializable {
 			case 'post_content':
 				$this->_set_post_arg( $setting, wp_kses_post( $value ) );
 				break;
+			case 'menu_order':
+				$this->_set_post_arg( $setting, absint( $value ) );
+				break;
 			case 'success_message':
 			case 'name_prompt':
 			case 'email_prompt':
@@ -309,12 +312,12 @@ class Holler_Popup implements JsonSerializable {
 		return ! empty( $matches );
 	}
 
-
 	/**
 	 * Serializable version of the post
 	 *
-	 * @return array|mixed|object
+	 * @return mixed
 	 */
+	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
 		return wp_parse_args( $this->post->to_array(), wp_parse_args( $this->settings, [
 			'after_submit'    => 'close',

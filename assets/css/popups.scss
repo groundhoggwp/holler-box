@@ -518,16 +518,57 @@ body:not(.wp-admin) {
     button.holler-box-modal-close {
       cursor: pointer;
       padding: 0;
-      line-height: 0.5;
-      font-weight: bold;
-      font-size: 22px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       border: none;
       position: absolute;
       top: 5px;
       right: 5px;
+      height: 12px;
+      width: 12px;
       background-color: transparent !important;
       background: none;
       color: $primary-dark;
+
+      &.medium {
+        top: 7px;
+        right: 7px;
+        height: 16px;
+        width: 16px;
+      }
+
+      &.large {
+        top: 9px;
+        right: 9px;
+        height: 22px;
+        width: 22px;
+      }
+
+      &.filled{
+
+        top: 0;
+        right: 0;
+        height: 18px;
+        width: 18px;
+        transform: translate(50%, -50%);
+
+        &.icon-inside {
+          top: 5px;
+          right: 5px;
+          transform: none;
+        }
+
+        &.medium {
+          height: 24px;
+          width: 24px;
+        }
+
+        &.large {
+          height: 30px;
+          width: 30px;
+        }
+      }
     }
 
   }

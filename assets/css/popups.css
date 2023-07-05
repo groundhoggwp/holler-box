@@ -381,16 +381,50 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 .holler-box .holler-box-modal button.holler-box-modal-close {
   cursor: pointer;
   padding: 0;
-  line-height: 0.5;
-  font-weight: bold;
-  font-size: 22px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: none;
   position: absolute;
   top: 5px;
   right: 5px;
+  height: 12px;
+  width: 12px;
   background-color: transparent !important;
   background: none;
   color: #102640;
+}
+.holler-box .holler-box-modal button.holler-box-modal-close.medium {
+  top: 7px;
+  right: 7px;
+  height: 16px;
+  width: 16px;
+}
+.holler-box .holler-box-modal button.holler-box-modal-close.large {
+  top: 9px;
+  right: 9px;
+  height: 22px;
+  width: 22px;
+}
+.holler-box .holler-box-modal button.holler-box-modal-close.filled {
+  top: 0;
+  right: 0;
+  height: 18px;
+  width: 18px;
+  transform: translate(50%, -50%);
+}
+.holler-box .holler-box-modal button.holler-box-modal-close.filled.icon-inside {
+  top: 5px;
+  right: 5px;
+  transform: none;
+}
+.holler-box .holler-box-modal button.holler-box-modal-close.filled.medium {
+  height: 24px;
+  width: 24px;
+}
+.holler-box .holler-box-modal button.holler-box-modal-close.filled.large {
+  height: 30px;
+  width: 30px;
 }
 .holler-box.holler-notification-box .holler-box-credit {
   margin-top: 10px;

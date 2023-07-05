@@ -270,7 +270,7 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 
 		$query = "SELECT SUM(s_count) FROM $this->table_name WHERE $where";
 
-		$count = $wpdb->get_var( $query );
+		$count = intval( $wpdb->get_var( $query ) );
 
 		wp_cache_set( $cache_key, $count, 'hollerbox:counts' );
 

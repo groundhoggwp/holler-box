@@ -30,9 +30,9 @@
       return allClosed.includes(id)
     },
 
-    addPopupCount (cookie, id, ttl = false ) {
+    addPopupCount (cookie, id, ttl = false) {
 
-      if ( ttl === false ){
+      if (ttl === false) {
         ttl = HollerBox.cookie_lifetime
       }
 
@@ -48,7 +48,7 @@
         counts[id] = 1
       }
 
-      this.setCookie(cookie, JSON.stringify(counts), ttl )
+      this.setCookie(cookie, JSON.stringify(counts), ttl)
     },
 
     getPopupCount (cookie, id) {
@@ -68,11 +68,11 @@
       this.addPopupCount(this.popupViews, id)
     },
 
-    addContentView(id){
+    addContentView (id) {
       this.addPopupCount(this.contentViews, id)
     },
 
-    addPotentialView(id){
+    addPotentialView (id) {
       this.addPopupCount(this.potentialViews, id)
     },
 
@@ -80,11 +80,11 @@
       return this.getPopupCount(this.popupViews, id)
     },
 
-    getContentViews(id){
+    getContentViews (id) {
       return this.getPopupCount(this.contentViews, id)
     },
 
-    getPotentialViews(id){
+    getPotentialViews (id) {
       return this.getPopupCount(this.potentialViews, id)
     },
 
@@ -207,13 +207,48 @@
 
     let curr = currentPopup()
 
-    if ( curr && !curr.isCloseable()) {
+    if (curr && !curr.isCloseable()) {
       return ''
+    }
+
+    let {
+      close_button_size = 'small',
+      close_button_icon = 'normal',
+    } = curr
+
+    // Force notification close button icon
+    if ( curr.isNotification() ){
+      close_button_icon = 'normal'
+    }
+
+    const closeIcons = {
+      //language=HTML
+      normal: `
+		  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 365.7 365.7">
+			  <path fill="currentColor"
+			        d="M243 183 356 70c13-13 13-33 0-46L341 9a32 32 0 0 0-45 0L183 123 70 9a32 32 0 0 0-46 0L9 24a32 32 0 0 0 0 46l114 113L9 296a32 32 0 0 0 0 45l15 15c13 13 33 13 46 0l113-113 113 113c12 13 33 13 45 0l15-15c13-12 13-33 0-45zm0 0"/>
+		  </svg>`,
+      //language=HTML
+      filled: `<svg viewBox="0 0 511.8 511.8" xmlns="http://www.w3.org/2000/svg">
+		      <path d="M 286 256 L 361 180 C 366.359 174.641 368.452 166.83 366.49 159.51 C 362.264 143.736 342.547 138.453 331 150 L 256 226 L 180 150 C 174.641 144.641 166.83 142.548 159.51 144.51 C 143.736 148.736 138.453 168.453 150 180 L 226 256 L 150 331 C 144.641 336.359 142.548 344.17 144.51 351.49 C 148.736 367.264 168.453 372.547 180 361 L 256 286 L 331 361 C 336.359 366.359 344.17 368.452 351.49 366.49 C 367.264 362.264 372.547 342.547 361 331 Z" style="fill: rgb(255, 255, 255);"/>
+		      <path fill="currentColor" d="M 436.9 74.4 C 297.181 -64.934 59.024 -0.768 8.216 189.899 C -15.363 278.388 10.056 372.735 74.9 437.4 C 214.619 576.734 452.776 512.568 503.584 321.901 C 527.163 233.412 501.744 139.065 436.9 74.4 Z M 360.9 330.4 C 372.447 341.947 367.164 361.664 351.39 365.89 C 344.07 367.852 336.259 365.759 330.9 360.4 L 255.9 285.4 L 179.9 360.4 C 168.353 371.947 148.636 366.664 144.41 350.89 C 142.448 343.57 144.541 335.759 149.9 330.4 L 225.9 255.4 L 149.9 179.4 C 138.353 167.853 143.636 148.136 159.41 143.91 C 166.73 141.948 174.541 144.041 179.9 149.4 L 255.9 225.4 L 330.9 149.4 C 342.447 137.853 362.164 143.136 366.39 158.91 C 368.352 166.23 366.259 174.041 360.9 179.4 L 285.9 255.4 L 360.9 330.4 Z"/>
+	      </svg>`,
+    }
+
+    let classes = [
+      close_button_size,
+      close_button_icon
+    ]
+
+    if ( curr.isBanner() || curr.isSidebar() ){
+      classes.push( 'icon-inside' )
     }
 
     //language=HTML
     return `
-		<button class="holler-box-modal-close">&times;</button>`
+		<button class="holler-box-modal-close ${classes.join(' ')}">
+			${closeIcons[close_button_icon]}
+		</button>`
   }
 
   const credit = () => {
@@ -1357,8 +1392,10 @@
       onClose: CommonActions.enableScrolling,
     },
   }
-  
-  const notificationTemplates = () => [ ...Object.keys( PopupTemplates ).filter( s => s.startsWith('notification_box') ), 'fake_chat' ]
+
+  const notificationTemplates = () => [
+    ...Object.keys(PopupTemplates).
+    filter(s => s.startsWith('notification_box')), 'fake_chat']
 
   function getScrollPercent () {
     var h = document.documentElement,
@@ -1430,18 +1467,18 @@
       popup.getViews(),
     show_after_x_page_views: ({ views }) => parseInt(views) <
       Cookies.getPageViews(),
-    show_after_x_content_views: ({views}, popup) => {
-      views = parseInt( views )
-      return views < Cookies.getContentViews( popup.ID );
+    show_after_x_content_views: ({ views }, popup) => {
+      views = parseInt(views)
+      return views < Cookies.getContentViews(popup.ID)
     },
-    show_after_x_potential_views: ({views}, popup) => {
-      views = parseInt( views )
-      if ( views < Cookies.getPotentialViews( popup.ID ) ){
-        return true;
+    show_after_x_potential_views: ({ views }, popup) => {
+      views = parseInt(views)
+      if (views < Cookies.getPotentialViews(popup.ID)) {
+        return true
       }
 
-      Cookies.addPotentialView( popup.ID )
-      return false;
+      Cookies.addPotentialView(popup.ID)
+      return false
     },
     show_to_new_or_returning: ({ visitor = 'all' }) => {
       switch (visitor) {
@@ -1482,8 +1519,8 @@
       return this._open
     },
 
-    isClosed (){
-      return ! this.isOpen()
+    isClosed () {
+      return !this.isOpen()
     },
 
     isSubmitted () {
@@ -1502,9 +1539,25 @@
       return this._triggered
     },
 
+    isNotification () {
+      return notificationTemplates().includes(this.template)
+    },
+
+    isPopup () {
+      return this.template.startsWith( 'popup_' )
+    },
+
+    isBanner () {
+      return this.template.startsWith( 'banner_' )
+    },
+
+    isSidebar () {
+      return this.template.startsWith( 'sidebar_' )
+    },
+
     isCloseable () {
-      if ( notificationTemplates().includes(this.template) ){
-        return true;
+      if (this.isNotification()) {
+        return true
       }
 
       return !this.disable_closing || this.isConverted()
@@ -1762,13 +1815,13 @@
 
       this.removeFromDom()
 
+      this._open = false
+
       try {
         await this._template.onClosed(this)
       } catch (e) {
         maybeLog(e)
       }
-
-      this._open = false
 
       if (isBuilderPreview()) {
 
@@ -1788,14 +1841,28 @@
       if (HollerBox.is_user_logged_in) {
         apiPost(HollerBox.routes.closed, {
           popup_id: this.ID,
-        }).catch( e => console.log( e ) )
+        }).catch(e => console.log(e))
       }
 
       PopupStack.next()
     },
 
-    isBlocking () {
-      return !notificationTemplates().includes(this.template)
+    /**
+     * Checks if a popup that is already open is blocking to the given one
+     *
+     * @param other a popup that is already open
+     * @return {boolean}
+     */
+    isBlocking (other) {
+
+      // Don't show notifications that are in the same position
+      if (other.isNotification() && this.isNotification() && other.position ===
+        this.position) {
+        return true
+      }
+
+      // Usually, notifications are not blocking
+      return !this.isNotification()
     },
 
     maybeOpen () {
@@ -1825,7 +1892,7 @@
       }
 
       // If another popup is open, push top the stack
-      if (HollerBox.active.some(p => p.isOpen() && p.isBlocking())) {
+      if (HollerBox.active.some(p => p.isOpen() && p.isBlocking(this))) {
         PopupStack.add(this)
         return
       }
@@ -1896,6 +1963,8 @@
       HollerBox._initialized = true
 
       HollerBox.active = HollerBox.active.map(p => Popup(p))
+      HollerBox.active.sort(
+        ({ menu_order: a = 10 }, { menu_order: b = 10 }) => a - b)
 
       HollerBox.active.forEach(popup => {
         popup.init()
@@ -2082,8 +2151,8 @@
     }
 
     // Editor
-    if ( HollerBox.hasOwnProperty( 'editor' ) ){
-      return Popup(HollerBox.editor.getPopup());
+    if (HollerBox.hasOwnProperty('editor')) {
+      return Popup(HollerBox.editor.getPopup())
     }
 
     // Frontend
