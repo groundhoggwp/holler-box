@@ -271,6 +271,36 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   transform: scale(1.1);
 }
 
+menu.tab-select {
+  display: flex;
+  padding: 0;
+}
+menu.tab-select li.tab {
+  list-style: none;
+  padding: 5px 13px;
+  font-size: 20px;
+  font-weight: 500;
+  cursor: pointer;
+}
+menu.tab-select li.tab.active {
+  color: #0075ff;
+}
+menu.tab-select li.tab:not(.active) {
+  opacity: 0.8;
+}
+menu.tab-select li.tab:hover {
+  opacity: 1;
+  transition: 0.3s;
+}
+
+#import-popup {
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 #holler-app {
   position: fixed;
   top: 32px;

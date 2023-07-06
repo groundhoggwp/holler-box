@@ -572,9 +572,7 @@
                 ${ canClose ? `	<button type="button" class="dashicon-button holler-modal-button-close-top holler-modal-button-close">
 					<span class="dashicons dashicons-no-alt"></span>
 				</button>` : '' }
-                <div class="holler-modal-dialog-content">
-                    ${ content }
-                </div>
+                <div class="holler-modal-dialog-content"></div>
             </div>
         </div>`
 
@@ -602,11 +600,12 @@
 
     const setContent = (content) => {
       $modal.find('.holler-modal-dialog-content').html(content)
-      onSetContent()
+      onSetContent({close, setContent})
     }
 
     $('body').append($modal).addClass(disableScrolling ? 'modal-open' : '')
 
+    setContent( content )
     onOpen({ close, setContent })
 
     if (canClose) {
@@ -617,6 +616,85 @@
       $modal,
       close,
       setContent,
+    }
+  }
+
+  /**
+   * Custom modal appended to the body.
+   *
+   * options:
+   * (bool) isConfirmation Shows confirmation button if true.
+   * (bool) closeOnOverlayClick Close the modal when the background overlay is clicked.
+   * (bool) showCloseButton Show the close button at the top of the modal.
+   * (string) messageHtml Html to be showed at the top of the modal.
+   * (function) confirmCallBack Called when "confirm" button is clicked.
+   *
+   * @param (object) options Config options to overwrite defaults.
+   */
+  const betterModal = ({
+    render = () => '',
+    onMount = () => {},
+    onClose = () => {},
+    onOpen = () => {},
+    beforeClose = () => true,
+    canClose = true,
+    width = false,
+    className = '',
+    dialogClasses = '',
+    overlay = true,
+    disableScrolling = true,
+  }) => {
+
+    //language=html
+    const html = `
+        <div class="holler-modal ${ className } ${ disableScrolling ? 'disabled-scrolling' : '' }">
+            ${ overlay ? `<div class="holler-modal-overlay"></div>` : '' }
+            <div class="holler-modal-dialog ${ dialogClasses }"
+                 style="width: ${ width ? width + 'px' : 'fit-content' }">
+                ${ canClose ? `	<button type="button" class="dashicon-button holler-modal-button-close-top holler-modal-button-close">
+					<span class="dashicons dashicons-no-alt"></span>
+				</button>` : '' }
+                <div class="holler-modal-dialog-content"></div>
+            </div>
+        </div>`
+
+    const $modal = $(html)
+
+    const close = () => {
+
+      if (!beforeClose(close)) {
+        return
+      }
+
+      $modal.remove()
+
+      // If this modal was disabling scrolling and no other modals exist that also disable scroll.
+      if (disableScrolling && $('.holler-modal.disabled-scrolling').length === 0) {
+        $('body').removeClass('modal-open')
+      }
+
+      onClose()
+    }
+
+    const mount = () => {
+      $modal.find('.holler-modal-dialog-content').html( render() )
+      onMount({close,mount})
+    }
+
+    $('body').append($modal).addClass(disableScrolling ? 'modal-open' : '')
+
+    mount()
+    onOpen({ close, mount, onMount, render })
+
+    if (canClose) {
+      $modal.find('.holler-modal-overlay, .holler-modal-button-close').on('click', close )
+    }
+
+    return {
+      $modal,
+      close,
+      mount,
+      onMount,
     }
   }
 
@@ -2043,6 +2121,7 @@
     dangerConfirmationModal,
     uuid,
     modal,
+    betterModal,
     miniModal,
     setFrameContent,
     copyObject,

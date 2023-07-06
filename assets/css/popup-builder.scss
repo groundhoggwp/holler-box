@@ -383,6 +383,40 @@ table.display-conditions-grid {
 
 }
 
+menu.tab-select{
+  display: flex;
+  padding: 0;
+
+  li.tab {
+    list-style: none;
+    padding: 5px 13px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+
+    &.active {
+      color: $primary-blue;
+    }
+
+    &:not(.active){
+      opacity: 0.8;
+    }
+
+    &:hover{
+      opacity: 1;
+      transition: 0.3s;
+    }
+  }
+}
+
+#import-popup{
+  padding: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
 #holler-app {
 
   position: fixed;

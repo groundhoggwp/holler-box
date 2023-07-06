@@ -729,6 +729,28 @@ class Holler_Popup implements JsonSerializable {
 	}
 
 	/**
+	 * Duplicate this popup and all it's settings
+	 *
+	 * @return Holler_Popup
+	 */
+	public function duplicate() {
+
+		$post_id = wp_insert_post( [
+			'post_content'          => $this->post_content,
+			'post_content_filtered' => $this->post_content_filtered,
+			'post_title'            => $this->post_title . ' - (copy)',
+			'post_status'           => 'draft',
+			'post_type'             => 'hollerbox',
+			'menu_order'            => $this->menu_order,
+		] );
+
+		$popup = new Holler_Popup( $post_id );
+		$popup->update( $this->settings );
+
+		return $popup;
+	}
+
+	/**
 	 * Migrates:
 	 * - display conditions
 	 * - triggers

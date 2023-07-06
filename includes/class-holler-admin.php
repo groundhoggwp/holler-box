@@ -58,6 +58,8 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		private function hooks() {
 
 			add_filter( 'replace_editor', [ $this, 'replace_editor' ], 10, 2 );
+			add_action( 'admin_action_hollerbox_export', [ $this, 'export_popup' ] );
+			add_action( 'admin_action_hollerbox_duplicate', [ $this, 'duplicate_popup' ] );
 
 			add_action( 'admin_menu', [ $this, 'register_admin_pages' ] );
 			add_action( 'init', [ $this, 'register_cpt' ] );
@@ -97,7 +99,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 *
 		 * @return bool
 		 */
-		public function verify_admin_ajax_nonce(){
+		public function verify_admin_ajax_nonce() {
 			return $this->verify_nonce( 'holler_admin_ajax_nonce', self::ADMIN_AJAX_NONCE );
 		}
 
@@ -254,7 +256,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 							'mailhawk'     => defined( 'MAILHAWK_VERSION' ),
 						],
 						'nonces'      => [
-							'_wprest' => wp_create_nonce( 'wp_rest' ),
+							'_wprest'    => wp_create_nonce( 'wp_rest' ),
 							'_adminajax' => wp_create_nonce( 'holler_admin_ajax' )
 						],
 						'settings'    => get_option( 'hollerbox_settings', [
@@ -375,7 +377,9 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				],
 				'nonces'              => [
 					'_wprest'    => wp_create_nonce( 'wp_rest' ),
-					'trash_post' => wp_create_nonce( 'trash-post_' . $popup->ID )
+					'trash_post' => wp_create_nonce( 'trash-post_' . $popup->ID ),
+					'export'     => wp_create_nonce( 'export' ),
+					'duplicate'  => wp_create_nonce( 'duplicate' )
 				],
 				'installed'           => [
 					'groundhogg' => $groundhogg_installed,
@@ -383,8 +387,9 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				],
 				'user'                => wp_get_current_user(),
 				'assets'              => [
-					'groundhogg_banner' => Holler_Box_URL . 'assets/img/groundhogg-banner.png',
-					'root'              => Holler_Box_URL . 'assets',
+					'groundhogg_banner'   => Holler_Box_URL . 'assets/img/groundhogg-banner.png',
+					'library_coming_soon' => Holler_Box_URL . 'assets/img/template-library-coming-soon.png',
+					'root'                => Holler_Box_URL . 'assets',
 				],
 				'css_editor_settings' => $settings,
 				'currentUser'         => $user,
@@ -589,6 +594,63 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		}
 
 		/**
+		 * Export a popup
+		 */
+		public function export_popup() {
+
+			if ( ! current_user_can( 'edit_popups' ) ) {
+				wp_die( 'Insufficient permissions' );
+			}
+
+			if ( ! $this->verify_nonce( '_wpnonce', 'export' ) ) {
+				wp_die( 'Invalid nonce' );
+			}
+
+			$popup = new Holler_Popup( absint( $_GET['popup'] ) );
+
+			if ( ! $popup->exists() ) {
+				wp_die( 'Popup does not exist' );
+			}
+
+			$filename = $popup->post_name . '.json';
+			$content  = wp_json_encode( $popup );
+
+			header( 'Content-Description: File Transfer' );
+			header( 'Content-Type: application/json' );
+			header( 'Content-Disposition: attachment; filename=' . $filename );
+
+			$file = fopen( 'php://output', 'w' );
+			fputs( $file, $content );
+			fclose( $file );
+			exit();
+
+		}
+
+		/**
+		 * Duplicate a popup
+		 */
+		public function duplicate_popup() {
+			if ( ! current_user_can( 'edit_popups' ) ) {
+				wp_die( 'Insufficient permissions' );
+			}
+
+			if ( ! $this->verify_nonce( '_wpnonce', 'duplicate' ) ) {
+				wp_die( 'Invalid nonce' );
+			}
+
+			$popup = new Holler_Popup( absint( $_GET['popup'] ) );
+
+			if ( ! $popup->exists() ) {
+				wp_die( 'Popup does not exist' );
+			}
+
+			$new = $popup->duplicate();
+
+			wp_redirect( get_edit_post_link( $new->ID, 'redirect' ) );
+			die();
+		}
+
+		/**
 		 * Filter the row actions
 		 *
 		 * @param $actions array
@@ -612,6 +674,20 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 			$text = __( 'Report' );
 
 			$actions['report'] = "<a href=\"${url}\">{$text}</a>";
+
+			$url  = esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=hollerbox&action=hollerbox_export&popup=' . $post->ID ), 'export' ) );
+			$text = __( 'Export' );
+
+			$actions['export'] = "<a href=\"${url}\">{$text}</a>";
+
+			$url  = esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=hollerbox&action=hollerbox_duplicate&popup=' . $post->ID ), 'duplicate' ) );
+			$text = __( 'Duplicate' );
+
+			$actions['duplicate'] = "<a href=\"${url}\">{$text}</a>";
+
+			$trash = $actions['trash'];
+			unset( $actions['trash'] );
+			$actions['trash'] = $trash;
 
 			return $actions;
 		}

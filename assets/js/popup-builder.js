@@ -11,6 +11,7 @@
     improveTinyMCE,
     dangerConfirmationModal,
     modal,
+    betterModal,
     clickedIn,
     adminPageURL,
     tooltip,
@@ -335,7 +336,7 @@
 		</div>`
   }
 
-  const selectTemplateModal = ({
+  const changeTemplateModal = ({
     modalSettings = {
       canClose: true,
     },
@@ -387,6 +388,183 @@
 
           onSelect(template)
           close()
+        })
+
+      },
+    })
+
+  }
+
+  const selectTemplateModal = ({
+    modalSettings = {
+      canClose: true,
+    },
+    updateSettings = () => {},
+    onSelect = (t) => {},
+  }) => {
+
+    let tab = 'basic'
+    const tabs = {
+      basic: {
+        // language=HTML
+        render: () => `${isPro() ? '' : proTemplatesAd()}
+		<div id="templates"></div>`,
+        onMount: ({ close }) => {
+          $('#templates').html(Object.keys(Templates).map(t => {
+
+            t = {
+              id: t,
+              ...Templates[t],
+            }
+
+            //language=HTML
+            return `
+				<div class="template" data-template="${t.id}">
+					<div class="preview-wrap">
+						<div class="preview">
+							${HollerBox.templates[t.id].render({
+								...t.defaults,
+							})}
+						</div>
+					</div>
+					<p class="template-name">
+						${t.name ? t.name : t.id}
+					</p>
+				</div>`
+          }).join(''))
+          $('.template').on('click', e => {
+            let template = e.currentTarget.dataset.template
+            onSelect(template)
+            close()
+          })
+        },
+      },
+      library: {
+        // render: () => `${isPro() ? '' : proTemplatesAd()}
+		    //              <div id="templates"></div>`,
+        render: () => `<img class="full-width" src="${HollerBox.assets.library_coming_soon}" alt="Library coming soon!">`,
+        onMount: async ({ close }) => {
+
+          return;
+
+          let templates = await apiGet();
+
+          $('#templates').html(Object.keys(templates).map(t => {
+            //language=HTML
+            return `
+				<div class="template" data-template="${t.ID}">
+					<div class="preview-wrap">
+						<div class="preview">
+							${HollerBox.templates[t.template].render(t)}
+						</div>
+					</div>
+					<p class="template-name">
+						${t.post_title ? t.post_title : Templates[t.template].name}
+					</p>
+				</div>`
+          }).join(''))
+          $('.template').on('click', e => {
+            let template = e.currentTarget.dataset.template
+            let popup = templates.find( p => p.ID == template )
+
+            let { ID, id, post_name, post_date, post_date_gmt, post_status, author, ...settings } = popup
+
+            updateSettings({
+              ...settings,
+            })
+
+            close()
+          })
+
+        },
+      },
+      import: {
+        // language=HTML
+        render: () => `
+			<div id="import-popup">
+				<h1>${__('Import a Popup')}</h1>
+				<p>${__(
+					'If you have a popup JSON file, you can upload it below 👇')}</p>
+				<input type="file" accept="application/json" name="import_file"
+				       id="import-popup-input">
+			</div>`,
+        onMount: ({close}) => {
+          $('#import-popup-input').on('change', e => {
+            let file = e.target.files[0]
+
+            let reader = new FileReader()
+            reader.onload = function(e) {
+              let contents = e.target.result
+              let popup = JSON.parse(contents)
+
+              if ( ! popup ){
+                dialog({
+                  type: 'error',
+                  message: __( 'Invalid import. Choose another file.' )
+                })
+                return;
+              }
+
+              if ( ! popup.post_type || popup.post_type !== 'hollerbox' ){
+                dialog({
+                  type: 'error',
+                  message: __( 'Invalid import. Choose another file.' )
+                })
+                return;
+              }
+
+              let { ID, id, post_name, post_date, post_date_gmt, post_status, author, ...settings } = popup
+
+              updateSettings({
+                ...settings,
+              })
+
+              close()
+            };
+
+            reader.readAsText(file);
+          })
+        },
+      },
+    }
+
+    betterModal({
+      ...modalSettings,
+      width: 1200,
+      dialogClasses: 'select-template no-padding',
+      // language=HTML
+      render: () => `
+		  <div class="holler-header is-sticky">
+			  <menu class="tab-select">
+				  <li class="tab ${tab === 'basic' ? 'active' : ''}"
+				      data-tab="basic">${__('Basic Templates')}
+				  </li>
+				  <li class="tab ${tab === 'library' ? 'active' : ''}"
+				      data-tab="library">${__('Pro Library')}
+				  </li>
+				  <li class="tab ${tab === 'import' ? 'active' : ''}"
+				      data-tab="import">${__('Import')}
+				  </li>
+			  </menu>
+		  </div>
+		  <div id="tab-content"></div>`,
+      onMount: ({ close, mount }) => {
+
+        let currTab = tabs[tab]
+
+        $('#tab-content').html(currTab.render())
+        currTab.onMount({ close })
+
+        $('li.tab[data-tab]').on('click', e => {
+          let _tab = e.currentTarget.dataset.tab
+
+          if (_tab === tab) {
+            return
+          }
+
+          tab = _tab
+
+          mount()
         })
 
       },
@@ -1317,7 +1495,7 @@
       },
       onMount: (settings, updateSetting) => {
         $('#change-template').on('click', e => {
-          selectTemplateModal({
+          changeTemplateModal({
             onSelect: (template) => {
               updateSetting({
                 template,
@@ -2913,7 +3091,7 @@
               'We could not load the editor because the defined template is no longer available.')}</p>`,
             confirmText: __('Change Template'),
             onConfirm: () => {
-              selectTemplateModal({
+              changeTemplateModal({
                 modalSettings: {
                   canClose: false,
                 },
@@ -3069,6 +3247,9 @@
           modalSettings: {
             canClose: false,
           },
+          updateSettings: ( settings ) => {
+            updateSettings( settings, { reRenderControls: true, suppressAnimations: false } )
+          },
           onSelect: (template) => {
             updateSettings({
               post_title: Templates[template].name,
@@ -3156,10 +3337,13 @@
         moreMenu(e.currentTarget, {
           items: [
             { key: 'report', text: __('View Report') },
+            { key: 'export', text: __('Export') },
+            { key: 'duplicate', text: __('Duplicate') },
             {
               key: 'trash',
               text: `<span class="holler-text danger">${__('Trash')}</span>`,
             },
+
           ],
           onSelect: k => {
             switch (k) {
@@ -3167,6 +3351,14 @@
                 window.open(
                   `${HollerBox.admin_url}/edit.php?post_type=hollerbox&page=hollerbox_reports#/popup/${this.popup.ID}/`,
                   '_blank')
+                break
+              case 'export':
+                window.open(
+                  `${HollerBox.admin_url}/edit.php?post_type=hollerbox&action=hollerbox_export&popup=${this.popup.ID}&_wpnonce=${HollerBox.nonces.export}`)
+                break
+              case 'duplicate':
+                window.open(
+                  `${HollerBox.admin_url}/edit.php?post_type=hollerbox&action=hollerbox_duplicate&popup=${this.popup.ID}&_wpnonce=${HollerBox.nonces.duplicate}`)
                 break
               case 'trash':
                 window.open(

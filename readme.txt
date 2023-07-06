@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.2
-Stable tag: 2.2.3
+Stable tag: 2.2.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -222,6 +222,11 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.2.4 (2023-07-06) =
+* ADDED Duplicate popup function.
+* ADDED Feature to import/export popups.
+* FIXED Can't add new popups because of a JavaScript error.
 
 = 2.2.3 (2023-07-05) =
 * ADDED Support for the `menu_order` attribute so that popups that appear on the same page can be prioritized.
