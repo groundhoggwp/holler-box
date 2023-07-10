@@ -374,6 +374,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 					'options' => rest_url( 'hollerbox/options' ),
 					'content' => rest_url( 'hollerbox/content' ),
 					'popup'   => rest_url( 'hollerbox/popup' ),
+					'library' => rest_url( 'hollerbox/library' ),
 				],
 				'nonces'              => [
 					'_wprest'    => wp_create_nonce( 'wp_rest' ),

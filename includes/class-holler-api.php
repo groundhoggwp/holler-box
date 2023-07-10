@@ -96,7 +96,32 @@ class Holler_Api {
 			]
 		] );
 
+		register_rest_route( 'hollerbox', 'library', [
+			[
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'library' ],
+				'permission_callback' => [ $this, 'permission_callback' ]
+			]
+		] );
+	}
 
+	/**
+	 * Do library stuff
+	 *
+	 * @return WP_Error|WP_REST_Response
+	 */
+	public function library(){
+
+		$response = wp_remote_get( 'https://library.groundhogg.io/wp-json/hollerbox/list/' );
+
+		if ( is_wp_error( $response ) ){
+			return $response;
+		}
+
+		$body = wp_remote_retrieve_body( $response );
+		$json = json_decode( $body );
+
+		return rest_ensure_response( $json );
 	}
 
 	/**

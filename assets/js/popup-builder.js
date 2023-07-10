@@ -440,34 +440,53 @@
         },
       },
       library: {
-        // render: () => `${isPro() ? '' : proTemplatesAd()}
-		    //              <div id="templates"></div>`,
-        render: () => `<img class="full-width" src="${HollerBox.assets.library_coming_soon}" alt="Library coming soon!">`,
+        render: () => `${isPro()
+          ? ''
+          : proTemplatesAd()}<div id="templates" class="library"></div>`,
         onMount: async ({ close }) => {
 
-          return;
+          let templates = await apiGet(HollerBox.routes.library)
 
-          let templates = await apiGet();
+          if (!Array.isArray(templates)) {
+            templates = Object.values(templates)
+          }
 
-          $('#templates').html(Object.keys(templates).map(t => {
+          $('#templates').html(templates.map(t => {
+            t.id = `popup-${t.ID}`
+            Editor.current_preview = t
             //language=HTML
             return `
 				<div class="template" data-template="${t.ID}">
+					<style>
+						${t.css}
+					</style>
 					<div class="preview-wrap">
 						<div class="preview">
 							${HollerBox.templates[t.template].render(t)}
 						</div>
 					</div>
 					<p class="template-name">
-						${t.post_title ? t.post_title : Templates[t.template].name}
+						${t.post_title
+							? t.post_title
+							: Templates[t.template].name}
 					</p>
 				</div>`
           }).join(''))
+          Editor.current_preview = null
           $('.template').on('click', e => {
             let template = e.currentTarget.dataset.template
-            let popup = templates.find( p => p.ID == template )
+            let popup = templates.find(p => p.ID == template)
 
-            let { ID, id, post_name, post_date, post_date_gmt, post_status, author, ...settings } = popup
+            let {
+              ID,
+              id,
+              post_name,
+              post_date,
+              post_date_gmt,
+              post_status,
+              author,
+              ...settings
+            } = popup
 
             updateSettings({
               ...settings,
@@ -488,41 +507,50 @@
 				<input type="file" accept="application/json" name="import_file"
 				       id="import-popup-input">
 			</div>`,
-        onMount: ({close}) => {
+        onMount: ({ close }) => {
           $('#import-popup-input').on('change', e => {
             let file = e.target.files[0]
 
             let reader = new FileReader()
-            reader.onload = function(e) {
+            reader.onload = function (e) {
               let contents = e.target.result
               let popup = JSON.parse(contents)
 
-              if ( ! popup ){
+              if (!popup) {
                 dialog({
                   type: 'error',
-                  message: __( 'Invalid import. Choose another file.' )
+                  message: __('Invalid import. Choose another file.'),
                 })
-                return;
+                return
               }
 
-              if ( ! popup.post_type || popup.post_type !== 'hollerbox' ){
+              if (!popup.post_type || popup.post_type !== 'hollerbox') {
                 dialog({
                   type: 'error',
-                  message: __( 'Invalid import. Choose another file.' )
+                  message: __('Invalid import. Choose another file.'),
                 })
-                return;
+                return
               }
 
-              let { ID, id, post_name, post_date, post_date_gmt, post_status, author, ...settings } = popup
+              let {
+                ID,
+                id,
+                post_name,
+                post_date,
+                post_date_gmt,
+                post_status,
+                author,
+                ...settings
+              } = popup
 
               updateSettings({
                 ...settings,
               })
 
               close()
-            };
+            }
 
-            reader.readAsText(file);
+            reader.readAsText(file)
           })
         },
       },
@@ -1556,9 +1584,17 @@
               ].join(''))
 
               wp.editor.remove('success-message')
-              tinymceElement('success-message', {}, (success_message) => {
+              tinymceElement('success-message', {
+                tinymce: {
+                  content_style: Editor.tinymceCSS(),
+                },
+              }, (success_message) => {
                 updateSetting({
                   success_message,
+                }, {
+                  overrides: {
+                    submitted: true,
+                  }
                 })
               })
 
@@ -1659,6 +1695,7 @@
       render: ({
         post_content = '',
         content_width = '',
+        background_color = '#ffffff',
       }) => {
         return [
           textarea({
@@ -1667,8 +1704,15 @@
           }),
           `<p class="holler-notice info">${__(
             'Shortcodes will be rendered on the frontend.')}</p>`,
+          '<hr/>',
+          singleControl({
+            label: __('Background Color'),
+            control: input({
+              id: 'background-color',
+              value: background_color,
+            }),
+          }),
           ...Editor.supports('content_width') ? [
-            '<hr/>',
             singleControl({
               label: __('Content Width'),
               control: `<div id="content-width"></div>`,
@@ -1677,11 +1721,30 @@
         ].join('')
       },
       onMount: (settings, updateSetting) => {
-        wp.editor.remove('text-content')
-        tinymceElement('text-content', {}, (post_content) => {
-          updateSetting({
-            post_content,
+
+        const renderEditor = () => {
+          wp.editor.remove('text-content')
+
+          tinymceElement('text-content', {
+            tinymce: {
+              content_style: Editor.tinymceCSS(),
+            },
+          }, (post_content) => {
+            updateSetting({
+              post_content,
+            })
           })
+        }
+
+        renderEditor()
+
+        $('#background-color').wpColorPicker({
+          change: (e, ui) => {
+            updateSetting({
+              background_color: ui.color.toString(),
+            })
+            renderEditor()
+          },
         })
 
         widthControl('#content-width', {
@@ -1695,20 +1758,27 @@
           },
         })
       },
-      css ({ id, content_width = 400 }) {
+      css ({ id, content_width = 400, background_color = '' }) {
 
-        if (!Editor.supports('content_width')) {
-          return ''
+        let css = [
+          //language=CSS
+          `#${id} .holler-box-modal {
+              background-color: ${background_color};
+          }`,
+        ]
+
+        if (Editor.supports('content_width')) {
+          //language=CSS
+          css.push(`
+              @media (min-width: 600px) {
+                  #${id} .holler-box-modal-content {
+                      width: ${content_width}px;
+                  }
+              }
+          `)
         }
 
-        //language=CSS
-        return `
-            @media (min-width: 600px) {
-                #${id} .holler-box-modal-content {
-                    width: ${content_width}px;
-                }
-            }
-        `
+        return css.join('')
       },
     },
     chat_content: {
@@ -3018,6 +3088,13 @@
           return Editor.getTemplateName().startsWith('popup_') ||
             Editor.getTemplateName().startsWith('sidebar_')
         },
+        /**
+         * Notifications don't support BG color
+         * @return {boolean}
+         */
+        background_color: () => {
+          return ! Editor.getTemplateName().startsWith( 'notification_' )
+        }
       }
 
       return featureSupports.hasOwnProperty(feature) &&
@@ -3049,10 +3126,24 @@
       }).join('').replace(/(\r\n|\n|\r)/gm, '')
     },
 
+    tinymceCSS () {
+
+      let css = [];
+
+      if ( this.supports('background_color') ){
+        //language=CSS
+        css.push(`body {
+            background-color: ${this.popup.background_color};
+        }`)
+      }
+
+      return css.join('')
+    },
+
     processShortcodeTimeout: null,
     processedContent: '',
 
-    updatePreview (suppressAnimations = true) {
+    updatePreview (suppressAnimations = true, overrides = {} ) {
 
       this.popup.css = this.generateCSS()
 
@@ -3063,6 +3154,7 @@
           popup: {
             ...this.getPopup(),
           },
+          overrides,
           suppressAnimations,
         }, '*')
       }
@@ -3227,6 +3319,7 @@
         const {
           suppressAnimations = true,
           reRenderControls = false,
+          overrides = {}
         } = opts
 
         this.popup = {
@@ -3237,7 +3330,7 @@
         if (reRenderControls) {
           this.mount()
         } else {
-          this.updatePreview(suppressAnimations)
+          this.updatePreview(suppressAnimations, overrides)
         }
 
       }
@@ -3247,8 +3340,9 @@
           modalSettings: {
             canClose: false,
           },
-          updateSettings: ( settings ) => {
-            updateSettings( settings, { reRenderControls: true, suppressAnimations: false } )
+          updateSettings: (settings) => {
+            updateSettings(settings,
+              { reRenderControls: true, suppressAnimations: false })
           },
           onSelect: (template) => {
             updateSettings({

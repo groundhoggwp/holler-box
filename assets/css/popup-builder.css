@@ -209,6 +209,12 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   grid-auto-flow: row;
   padding: 30px;
 }
+#templates.library {
+  grid-template-columns: 1fr 1fr;
+}
+#templates.library .template .preview-wrap {
+  height: 300px;
+}
 #templates .template {
   box-sizing: content-box;
   cursor: pointer;
@@ -271,26 +277,31 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   transform: scale(1.1);
 }
 
+.holler-header:has(.tab-select) {
+  padding: 0;
+  min-height: 0;
+}
+
 menu.tab-select {
   display: flex;
   padding: 0;
+  margin: 0;
 }
 menu.tab-select li.tab {
   list-style: none;
-  padding: 5px 13px;
+  padding: 20px;
+  box-sizing: content-box;
   font-size: 20px;
   font-weight: 500;
   cursor: pointer;
+  margin: 0;
 }
 menu.tab-select li.tab.active {
   color: #0075ff;
-}
-menu.tab-select li.tab:not(.active) {
-  opacity: 0.8;
+  border-bottom: #0075ff 3px solid;
 }
 menu.tab-select li.tab:hover {
-  opacity: 1;
-  transition: 0.3s;
+  background-color: rgba(16, 38, 64, 0.05);
 }
 
 #import-popup {
