@@ -2060,8 +2060,8 @@
         //language=HTML
         return `
             <div class="holler-input-repeater-row" data-row="${ rowIndex }">
-                ${ row.map((cell, cellIndex) => cellCallbacks[cellIndex]({
-          value: cell,
+                ${ cellCallbacks.map((cell, cellIndex) => cell({
+          value: row[cellIndex] ?? '',
           dataRow: rowIndex,
           dataCell: cellIndex,
         })).join('') }
