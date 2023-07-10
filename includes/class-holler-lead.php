@@ -16,6 +16,7 @@ class Holler_Lead {
 	public $referrer = '';
 	public $message = '';
 	public $gdpr_consent = false;
+	public $request = null;
 
 	public function __construct( WP_REST_Request $request ) {
 		$this->name  = sanitize_text_field( $request->get_param( 'name' ) );
@@ -29,6 +30,7 @@ class Holler_Lead {
 		$this->referrer     = sanitize_text_field( $request->get_param( 'referer' ) );
 		$this->gdpr_consent = $request->get_param( 'gdpr_consent' ) === 'yes';
 		$this->message      = sanitize_textarea_field( $request->get_param( 'message' ) );
+		$this->request      = $request;
 	}
 
 	/**

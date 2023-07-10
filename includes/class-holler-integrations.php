@@ -43,12 +43,13 @@ class Holler_Integrations {
 	/**
 	 * Do an integration
 	 *
-	 * @param $integration array
-	 * @param $lead        Holler_Lead
+	 * @param $integration  array
+	 * @param $lead         Holler_Lead
+	 * @param $popup        Holler_Popup
 	 *
 	 * @return true|WP_Error false if the provided integration is not registered
 	 */
-	public static function _do( $integration, $lead ) {
+	public static function _do( $integration, $lead, $popup ) {
 
 		// Setup the instance and init integrations
 		if ( empty( self::$integrations ) ) {
@@ -61,7 +62,7 @@ class Holler_Integrations {
 			return new WP_Error( 'unknown_integration', 'Unknown integration type ' . $type );
 		}
 
-		return call_user_func( self::$integrations[ $type ], $integration, $lead );
+		return call_user_func( self::$integrations[ $type ], $integration, $lead, $popup );
 	}
 
 	/**
@@ -132,6 +133,15 @@ class Holler_Integrations {
 			'{{message}}'    => $lead->get_message_formatted(),
 		];
 
+		/**
+		 * Add additional replacements
+		 *
+		 * @param $replacements array
+		 * @param $props array
+		 * @param $lead Holler_Lead
+		 */
+		$replacements = apply_filters( 'hollerbox/integrations/email/replacements', $replacements, $props, $lead );
+
 		$message = wp_kses_post( $props['content'] );
 		$message = str_replace( array_keys( $replacements ), array_values( $replacements ), $message );
 
@@ -168,12 +178,13 @@ class Holler_Integrations {
 	/**
 	 * Process the webhook integration
 	 *
-	 * @param $props array
-	 * @param $lead  Holler_Lead
+	 * @param $props  array
+	 * @param $lead   Holler_Lead
+	 * @param $popup  Holler_Popup
 	 *
 	 * @return bool|mixed|void
 	 */
-	public function webhook( $props, $lead ) {
+	public function webhook( $props, $lead, $popup ) {
 
 		$props = wp_parse_args( $props, [
 			'url'     => '',
@@ -196,6 +207,16 @@ class Holler_Integrations {
 		if ( $lead->message ) {
 			$body['message'] = $lead->message;
 		}
+
+		/**
+		 * Filter the outgoing webhook body
+		 *
+		 * @param $body   array
+		 * @param $props  array
+		 * @param $lead   Holler_Lead
+		 * @param $popup  Holler_Popup
+		 */
+		$body = apply_filters( 'hollerbox/integrations/webhook/body', $body, $props, $lead, $popup );
 
 		if ( $props['method'] === 'get' ) {
 			return wp_remote_get( add_query_arg( $body, $props['url'] ), [
@@ -230,10 +251,11 @@ class Holler_Integrations {
 	 *
 	 * @param $props array
 	 * @param $lead  Holler_Lead
+	 * @param $popup Holler_Popup
 	 *
 	 * @return bool|mixed|void
 	 */
-	public function zapier( $props, $lead ) {
+	public function zapier( $props, $lead, $popup ) {
 
 		$props = wp_parse_args( $props, [
 			'url' => '',
@@ -242,7 +264,7 @@ class Holler_Integrations {
 		$props['method']  = 'POST';
 		$props['payload'] = 'json';
 
-		return $this->webhook( $props, $lead );
+		return $this->webhook( $props, $lead, $popup );
 	}
 
 	/**
@@ -287,7 +309,7 @@ class Holler_Integrations {
 			$contact->update_meta( 'hollerbox_chat_message', $lead->message );
 		}
 
-		if ( $lead->phone ){
+		if ( $lead->phone ) {
 			$contact->update_meta( 'primary_phone', $lead->phone );
 		}
 

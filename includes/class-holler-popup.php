@@ -356,7 +356,7 @@ class Holler_Popup implements JsonSerializable {
 		$failures = [];
 
 		foreach ( $integrations as $i => $integration ) {
-			$result = Holler_Integrations::_do( $integration, $lead );
+			$result = Holler_Integrations::_do( $integration, $lead, $this );
 
 			if ( is_wp_error( $result ) ) {
 				$failures[] = sprintf( '<b>%s</b>: %s', $integration['type'], $result->get_error_message() );
