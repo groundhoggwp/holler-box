@@ -562,6 +562,12 @@
         }).
         catch(e => {
           maybeLog(e)
+
+          if ( isBuilderPreview() ){
+            SubmitActions[after_submit](popup)
+            return;
+          }
+
           popup.close()
         })
       })
@@ -1659,13 +1665,21 @@
       }).then(r => {
         this.submitted = true
         this.converted(false)
-        document.dispatchEvent(new CustomEvent('holler_submit', {
-          popup: this,
+
+        this.dispatchEvent( 'holler_submit', {
           data,
           response: r,
-        }))
+        })
+
         return r
       })
+    },
+
+    dispatchEvent( event, data = {} ){
+      document.dispatchEvent(new CustomEvent(event, {
+        popup: this,
+        ...data
+      }))
     },
 
     getConversions () {
@@ -1805,6 +1819,8 @@
       }
 
       this.viewed()
+
+      this.dispatchEvent( 'holler_open' )
     },
 
     async close () {
@@ -1836,6 +1852,8 @@
           setTimeout(() => this.open(), 1000)
         }
 
+        this.dispatchEvent( 'holler_close' )
+
         return
       }
 
@@ -1847,6 +1865,8 @@
           popup_id: this.ID,
         }).catch(e => console.log(e))
       }
+
+      this.dispatchEvent( 'holler_close' )
 
       PopupStack.next()
     },
@@ -1951,6 +1971,8 @@
           show()
         })
       })
+
+      this.dispatchEvent( 'holler_init' )
     },
 
   })
@@ -2043,6 +2065,11 @@
 
           // shallow copy
           popup = Popup(event.data.popup)
+          let overrides = event.data.overrides
+          popup = {
+            ...popup,
+            ...overrides
+          }
 
           popup.setTemplate()
 
@@ -2156,6 +2183,11 @@
 
     // Editor
     if (HollerBox.hasOwnProperty('editor')) {
+
+      if ( HollerBox.editor.current_preview ){
+        return Popup(HollerBox.editor.current_preview)
+      }
+
       return Popup(HollerBox.editor.getPopup())
     }
 
