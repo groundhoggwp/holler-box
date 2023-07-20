@@ -333,18 +333,20 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 
 			wp_enqueue_script( 'csslint' );
 
-			wp_enqueue_style( 'hollerbox-popups', Holler_Box_URL . 'assets/css/popups.css' );
-			wp_enqueue_style( 'hollerbox-elements', Holler_Box_URL . 'assets/css/elements.css' );
+			wp_enqueue_style( 'hollerbox-popups', Holler_Box_URL . 'assets/css/popups.css', [], HOLLERBOX_VERSION );
+			wp_enqueue_style( 'hollerbox-elements', Holler_Box_URL . 'assets/css/elements.css', [], HOLLERBOX_VERSION );
 			wp_enqueue_style( 'hollerbox-builder', Holler_Box_URL . 'assets/css/popup-builder.css', [
 				'wp-color-picker'
-			] );
+			], HOLLERBOX_VERSION );
 
-			wp_register_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups' . $dot_min . '.js' );
+			wp_register_script( 'hollerbox-morphdom', Holler_Box_URL . 'assets/js/lib/morphdom' . $dot_min . '.js', [], HOLLERBOX_VERSION );
+			wp_register_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups' . $dot_min . '.js', [], HOLLERBOX_VERSION );
 			wp_register_script( 'hollerbox-builder', Holler_Box_URL . 'assets/js/popup-builder' . $dot_min . '.js', [
 				'hollerbox-elements',
 				'hollerbox-popups',
 				'wp-color-picker',
-			] );
+				'hollerbox-morphdom'
+			], HOLLERBOX_VERSION );
 
 			wp_enqueue_script( 'hollerbox-builder' );
 
@@ -513,7 +515,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				'has_archive'        => false,
 				'hierarchical'       => false,
 				'menu_icon'          => 'data:image/svg+xml;base64,' . base64_encode( self::HollerIcon() ),
-				'supports'           => [ 'title', 'page-attributes' ],
+				'supports'           => [ 'title', 'page-attributes', 'author' ],
 				'show_in_customizer' => false,
 			];
 
@@ -551,7 +553,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		public function register_cpt_columns( $columns ) {
 
 			$columns = array_filter( $columns, function ( $colum ) {
-				return in_array( $colum, [ 'cb', 'title' ] );
+				return in_array( $colum, [ 'cb', 'title', 'author' ] );
 			}, ARRAY_FILTER_USE_KEY );
 
 			$columns['impressions'] = __( 'Impressions' );

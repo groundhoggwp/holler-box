@@ -374,6 +374,32 @@
 		</div>`
   }
 
+  /**
+   *
+   * @param string
+   * @return {*}
+   */
+  const removeTrailingSlash = (string) => {
+    return string.replace(/\/$/, '')
+  }
+
+  /**
+   *
+   * @param url
+   * @return {URL}
+   */
+  const makeURL = (url) => {
+    try {
+      return new URL(url)
+    } catch (e) {
+      try {
+        return new URL(`${removeTrailingSlash(HollerBox.nav.home)}${url.startsWith('/') ? '' : '/'}${url}`)
+      } catch (e) {
+        return new URL(HollerBox.nav.home)
+      }
+    }
+  }
+
   const SubmitActions = {
     close: (popup) => {
       popup.close()
@@ -382,7 +408,7 @@
 
       let { redirect_url = '' } = popup
 
-      let url = new URL(redirect_url)
+      let url = new makeURL(redirect_url)
       let home = new URL(HollerBox.home_url)
 
       if (isBuilderPreview()) {
@@ -563,9 +589,9 @@
         catch(e => {
           maybeLog(e)
 
-          if ( isBuilderPreview() ){
+          if (isBuilderPreview()) {
             SubmitActions[after_submit](popup)
-            return;
+            return
           }
 
           popup.close()
@@ -578,7 +604,7 @@
 
       let button = document.querySelector(`#${id} button.holler-box-button`)
 
-      let url = new URL(button_link)
+      let url = makeURL(button_link)
       let home = new URL(HollerBox.home_url)
 
       button.addEventListener('click', e => {
@@ -1581,6 +1607,10 @@
       return document.querySelectorAll(`#${this.id} ${selector}`)
     },
 
+    addEventListener (event, callback) {
+      return this.querySelector().addEventListener(event, callback)
+    },
+
     render () {
       try {
         let div = document.createElement('div')
@@ -1666,7 +1696,7 @@
         this.submitted = true
         this.converted(false)
 
-        this.dispatchEvent( 'holler_submit', {
+        this.dispatchEvent('holler_submit', {
           data,
           response: r,
         })
@@ -1675,11 +1705,22 @@
       })
     },
 
-    dispatchEvent( event, data = {} ){
-      document.dispatchEvent(new CustomEvent(event, {
-        popup: this,
-        ...data
-      }))
+    dispatchEvent (event, data = {}) {
+
+      let customEvent = new CustomEvent(event, {
+        detail: {
+          popup: this,
+          ...data,
+        },
+      })
+
+      // also dispatch from element
+      let el = this.querySelector()
+      if (el) {
+        el.dispatchEvent(customEvent)
+      }
+
+      document.dispatchEvent(customEvent)
     },
 
     getConversions () {
@@ -1820,7 +1861,7 @@
 
       this.viewed()
 
-      this.dispatchEvent( 'holler_open' )
+      this.dispatchEvent('holler_open')
     },
 
     async close () {
@@ -1852,7 +1893,7 @@
           setTimeout(() => this.open(), 1000)
         }
 
-        this.dispatchEvent( 'holler_close' )
+        this.dispatchEvent('holler_close')
 
         return
       }
@@ -1866,7 +1907,7 @@
         }).catch(e => console.log(e))
       }
 
-      this.dispatchEvent( 'holler_close' )
+      this.dispatchEvent('holler_close')
 
       PopupStack.next()
     },
@@ -1972,7 +2013,7 @@
         })
       })
 
-      this.dispatchEvent( 'holler_init' )
+      this.dispatchEvent('holler_init')
     },
 
   })
@@ -2063,17 +2104,30 @@
             popup.cleanup()
           }
 
+          const {
+            cssOnly = false,
+            suppressAnimations = true,
+            overrides = {},
+            popup: _popup = {},
+          } = event.data
+
           // shallow copy
-          popup = Popup(event.data.popup)
-          let overrides = event.data.overrides
+          popup = Popup(_popup)
+
           popup = {
             ...popup,
-            ...overrides
+            ...overrides,
           }
 
           popup.setTemplate()
 
-          if (event.data.suppressAnimations) {
+          if (cssOnly) {
+            document.getElementById(
+              'hollerbox-builder-styles').innerHTML = popup.css
+            return
+          }
+
+          if (suppressAnimations) {
             document.body.classList.add('holler-suppress-animations')
           } else {
             document.body.classList.remove('holler-suppress-animations')
@@ -2184,7 +2238,7 @@
     // Editor
     if (HollerBox.hasOwnProperty('editor')) {
 
-      if ( HollerBox.editor.current_preview ){
+      if (HollerBox.editor.current_preview) {
         return Popup(HollerBox.editor.current_preview)
       }
 
@@ -2209,6 +2263,8 @@
     submitButton,
     TriggerCallbacks,
     maybeLog,
+    isBuilderPreview,
+    makeURL,
   }
 
 })()

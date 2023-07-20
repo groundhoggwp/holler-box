@@ -27,6 +27,7 @@
     inputRepeater,
     dashicon,
     tooltipIcon,
+    specialChars,
   } = HollerBox.elements
 
   const { sprintf, __, _x, _n } = wp.i18n
@@ -199,19 +200,23 @@
   const singleControl = ({
     label = '',
     control = '',
+    hidden = false,
+    stacked = false
   }) => {
     //language=HTML
     return `
-		<div class="control">
+		<div class="control ${stacked ? 'stacked' : ''} ${hidden ? 'hidden' : ''}">
 			<label>${label}</label>
 			${control}
 		</div>`
   }
 
-  const controlGroup = (control, popup) => {
+  const controlGroup = (control, popup, isOpen) => {
     //language=HTML
+
     return `
-		<div class="control-group" ${control.id ? `id="${control.id}"` : ''}>
+		<div class="control-group ${isOpen ? 'open' : ''}"
+		     ${control.uuid ? `id="${control.uuid}"` : ''}>
 			<div class="control-group-header">
 				<div class="control-group-name">${control.name}</div>
 				<button class="toggle-indicator"></button>
@@ -451,7 +456,12 @@
             templates = Object.values(templates)
           }
 
+          // Make sure required base templates are registered
+          templates = templates.filter(
+            t => HollerBox.templates.hasOwnProperty(t.template))
+
           $('#templates').html(templates.map(t => {
+
             t.id = `popup-${t.ID}`
             Editor.current_preview = t
             //language=HTML
@@ -472,7 +482,9 @@
 					</p>
 				</div>`
           }).join(''))
+
           Editor.current_preview = null
+
           $('.template').on('click', e => {
             let template = e.currentTarget.dataset.template
             let popup = templates.find(p => p.ID == template)
@@ -580,8 +592,12 @@
 
         let currTab = tabs[tab]
 
-        $('#tab-content').html(currTab.render())
-        currTab.onMount({ close })
+        try {
+          $('#tab-content').html(currTab.render())
+          currTab.onMount({ close })
+        } catch (e) {
+
+        }
 
         $('li.tab[data-tab]').on('click', e => {
           let _tab = e.currentTarget.dataset.tab
@@ -1594,7 +1610,7 @@
                 }, {
                   overrides: {
                     submitted: true,
-                  }
+                  },
                 })
               })
 
@@ -1686,6 +1702,8 @@
         $('#priority').on('change', e => {
           updateSetting({
             menu_order: e.target.value,
+          }, {
+            cssOnly: true,
           })
         })
       },
@@ -1732,6 +1750,8 @@
           }, (post_content) => {
             updateSetting({
               post_content,
+            }, {
+              contentOnly: true,
             })
           })
         }
@@ -1742,6 +1762,8 @@
           change: (e, ui) => {
             updateSetting({
               background_color: ui.color.toString(),
+            }, {
+              cssOnly: true,
             })
             renderEditor()
           },
@@ -1754,6 +1776,8 @@
           onChange: (content_width) => {
             updateSetting({
               content_width,
+            }, {
+              cssOnly: true,
             })
           },
         })
@@ -1898,6 +1922,8 @@
           change: (e, ui) => {
             updateSetting({
               button_color: ui.color.toString(),
+            }, {
+              cssOnly: true,
             })
           },
         })
@@ -1906,6 +1932,8 @@
           change: (e, ui) => {
             updateSetting({
               button_text_color: ui.color.toString(),
+            }, {
+              cssOnly: true,
             })
           },
         })
@@ -1946,6 +1974,8 @@
           change: (e, ui) => {
             updateSetting({
               form_color: ui.color.toString(),
+            }, {
+              cssOnly: true,
             })
           },
         })
@@ -1992,6 +2022,8 @@
         $('#progress-percentage').on('change input', e => {
           updateSetting({
             progress_percentage: e.target.value,
+          }, {
+            cssOnly: true,
           })
         })
 
@@ -1999,6 +2031,8 @@
           change: (e, ui) => {
             updateSetting({
               progress_bar_color: ui.color.toString(),
+            }, {
+              cssOnly: true,
             })
           },
         })
@@ -2071,6 +2105,8 @@
           change: (e, ui) => {
             updateSetting({
               button_color: ui.color.toString(),
+            }, {
+              cssOnly: true,
             })
           },
         })
@@ -2079,6 +2115,8 @@
           change: (e, ui) => {
             updateSetting({
               button_text_color: ui.color.toString(),
+            }, {
+              cssOnly: true,
             })
           },
         })
@@ -2105,6 +2143,7 @@
         disable_scrolling = false,
         overlay_color,
         overlay_opacity = 0.5,
+        overlay_image_src = ''
       }) => {
         return [
           singleControl({
@@ -2115,6 +2154,7 @@
             }),
           }),
           singleControl({
+            hidden: ! overlay_enabled,
             label: __('Disable Scrolling'),
             control: toggle({
               id: 'disable-scrolling',
@@ -2122,6 +2162,7 @@
             }),
           }),
           singleControl({
+            hidden: ! overlay_enabled,
             label: __('Color'),
             control: input({
               id: 'overlay-color',
@@ -2129,6 +2170,7 @@
             }),
           }),
           singleControl({
+            hidden: ! overlay_enabled,
             label: __('Opacity'),
             control: input({
               type: 'number',
@@ -2139,26 +2181,53 @@
               value: overlay_opacity,
             }),
           }),
+          singleControl({
+            hidden: ! overlay_enabled,
+            stacked: true,
+            label: __('Overlay image'),
+            control: `<div class="holler-input-group">
+          ${input({
+              className: 'full-width',
+              id: 'overlay-image-src',
+              value: overlay_image_src,
+            })}
+          <button id="select-overlay-image" class="holler-button secondary icon">${icons.image}</button>
+        </div>`
+          })
         ].join('')
       },
       onMount: (settings, updateSetting) => {
-        $('#overlay-color').wpColorPicker({
-          change: (e, ui) => {
-            updateSetting({
-              overlay_color: ui.color.toString(),
-            })
-          },
-        })
 
-        $('#overlay-opacity').on('change input', e => {
-          updateSetting({
-            overlay_opacity: e.target.value,
+        const colorPicker = () => {
+          $('#overlay-color').removeData( 'wpWpColorPicker a8cIris' ).wpColorPicker({
+            change: (e, ui) => {
+              updateSetting({
+                overlay_color: ui.color.toString(),
+              }, {
+                cssOnly: true,
+              })
+            },
           })
-        })
+        }
 
         $('#overlay-enabled').on('change', e => {
           updateSetting({
             overlay_enabled: e.target.checked,
+          }, {
+            morph: {
+              childrenOnly: true,
+            },
+            afterMorph: colorPicker
+          })
+        })
+
+        colorPicker()
+
+        $('#overlay-opacity').on('change input', e => {
+          updateSetting({
+            overlay_opacity: e.target.value,
+          }, {
+            cssOnly: true,
           })
         })
 
@@ -2173,15 +2242,39 @@
             close_on_overlay_click: e.target.checked,
           })
         })
+
+        let $src = $('#overlay-image-src')
+
+        $src.on('change', e => {
+          updateSetting({
+            overlay_image_src: e.target.value,
+          })
+        })
+
+        $('#select-overlay-image').on('click', (event) => {
+          mediaPicker({
+            onSelect: (attachment) => {
+              $src.val(attachment.url)
+              updateSetting({
+                overlay_image_src: attachment.url,
+              })
+            },
+          })
+        })
       },
       css: ({
         id,
         overlay_opacity = 0.5,
         overlay_color = '',
+        overlay_image_src = '',
       }) => {
 
         // language=CSS
         return `
+            #${id} .holler-box-overlay::before {
+                background-image: url("${overlay_image_src}");
+            }
+
             #${id} .holler-box-overlay::after {
                 background-color: ${overlay_color};
                 opacity: ${overlay_opacity};
@@ -2260,6 +2353,8 @@
           change: (e, ui) => {
             updateSetting({
               close_button_color: ui.color.toString(),
+            }, {
+              cssOnly: true,
             })
           },
         })
@@ -2342,6 +2437,8 @@
           onChange: (image_width) => {
             updateSetting({
               image_width,
+            }, {
+              cssOnly: true,
             })
           },
         })
@@ -2349,12 +2446,16 @@
         $('#image-hide-on-mobile').on('change', e => {
           updateSetting({
             image_hide_on_mobile: e.target.checked,
+          }, {
+            cssOnly: true,
           })
         })
 
         $('#image-swap-on-mobile').on('change', e => {
           updateSetting({
             image_swap_on_mobile: e.target.checked,
+          }, {
+            cssOnly: true,
           })
         })
 
@@ -2605,6 +2706,7 @@
             }),
           }),
           singleControl({
+            hidden: !enable_name,
             label: __('Required?'),
             control: toggle({
               id: 'name-required',
@@ -2613,6 +2715,7 @@
             }),
           }),
           singleControl({
+            hidden: !enable_name,
             label: __('Placeholder'),
             control: input({
               id: 'name-placeholder',
@@ -2631,6 +2734,7 @@
             }),
           }),
           singleControl({
+            hidden: !enable_phone,
             label: __('Required?'),
             control: toggle({
               id: 'phone-required',
@@ -2639,6 +2743,7 @@
             }),
           }),
           singleControl({
+            hidden: !enable_phone,
             label: __('Placeholder'),
             control: input({
               id: 'phone-placeholder',
@@ -2650,21 +2755,24 @@
           singleControl({
             label: __('Use custom form code?'),
             control: toggle({
-              id: 'use-custom-form',
+              id: 'enable-custom-form',
               name: 'use_custom_form',
               checked: use_custom_form,
             }),
           }),
-          `<label>${__('Paste your custom HTML form code below.',
-            'holler-box')}</label>`,
-          textarea({
-            id: 'custom-form-html',
-            name: 'custom_form_html',
-            className: 'full-width code',
-            value: custom_form_html,
+          singleControl({
+            hidden: ! use_custom_form,
+            stacked: true,
+            label: __('Paste your custom HTML form code below.',
+              'holler-box'),
+            control: textarea({
+              id: 'custom-form-html',
+              name: 'custom_form_html',
+              className: 'full-width code',
+              value: custom_form_html,
+            })
           }),
-          `<i>${__(
-            'When using custom HTML form code other field settings will not apply and integrations may not work.')}</i>`,
+          ! use_custom_form ? '' : `<i>${__('When using custom HTML form code other field settings will not apply and integrations may not work.')}</i>`,
 
         ].join('')
       },
@@ -2675,12 +2783,15 @@
           'enable-phone',
           'name-required',
           'enable-name',
+          'enable-custom-form',
         ]
 
         toggles.forEach(id => {
           $(`#${id}`).on('change', e => {
             updateSetting({
               [e.target.name]: e.target.checked,
+            }, {
+              morph: e.target.id.startsWith('enable'),
             })
           })
         })
@@ -2720,7 +2831,11 @@
       onMount: ({ custom_css = '' }, updateSetting) => {
         this.codeMirror = codeEditor('#custom-css', {
           onChange: custom_css => {
-            updateSetting({ custom_css })
+            updateSetting({
+              custom_css,
+            }, {
+              cssOnly: true,
+            })
           },
           initialContent: custom_css,
           height: 500,
@@ -2810,9 +2925,9 @@
       name: __('Standard Popup'),
       controls: [
         Controls.position,
-        Controls.content,
         Controls.overlay,
         Controls.close_button,
+        Controls.content,
       ],
       defaults: {
         post_content: standardPopupContent,
@@ -2824,9 +2939,9 @@
       name: __('Popup with Form'),
       controls: [
         Controls.position,
-        Controls.content,
         Controls.overlay,
         Controls.close_button,
+        Controls.content,
         Controls.fields,
         Controls.button,
         Controls.submit,
@@ -2844,10 +2959,10 @@
       name: __('Popup with Form, Image Left'),
       controls: [
         Controls.position,
-        Controls.image,
-        Controls.content,
         Controls.overlay,
         Controls.close_button,
+        Controls.image,
+        Controls.content,
         Controls.fields,
         Controls.button,
         Controls.submit,
@@ -2866,10 +2981,10 @@
       name: __('Popup with Form, Image Right'),
       controls: [
         Controls.position,
-        Controls.image,
-        Controls.content,
         Controls.overlay,
         Controls.close_button,
+        Controls.image,
+        Controls.content,
         Controls.fields,
         Controls.button,
         Controls.submit,
@@ -2888,10 +3003,10 @@
       name: __('Popup with Image Right, Horizontal Form'),
       controls: [
         Controls.position,
-        Controls.image,
-        Controls.content,
         Controls.overlay,
         Controls.close_button,
+        Controls.image,
+        Controls.content,
         Controls.form,
         Controls.fields_name_and_email_only,
         Controls.button,
@@ -2913,11 +3028,11 @@
       name: __('Popup with Progress Bar'),
       controls: [
         Controls.position,
-        Controls.image,
-        Controls.content,
-        Controls.progress,
         Controls.overlay,
         Controls.close_button,
+        Controls.progress,
+        Controls.image,
+        Controls.content,
         Controls.fields,
         Controls.button,
         Controls.submit,
@@ -2936,10 +3051,10 @@
       name: __('Popup with Text Above'),
       controls: [
         Controls.position,
-        Controls.image,
-        Controls.content,
         Controls.overlay,
         Controls.close_button,
+        Controls.image,
+        Controls.content,
         Controls.form,
         Controls.fields,
         Controls.button,
@@ -2960,10 +3075,10 @@
       name: __('Popup with Image Background'),
       controls: [
         Controls.position,
-        Controls.image,
-        Controls.content,
         Controls.overlay,
         Controls.close_button,
+        Controls.image,
+        Controls.content,
         Controls.fields,
         Controls.button,
         Controls.submit,
@@ -3093,8 +3208,8 @@
          * @return {boolean}
          */
         background_color: () => {
-          return ! Editor.getTemplateName().startsWith( 'notification_' )
-        }
+          return !Editor.getTemplateName().startsWith('notification_')
+        },
       }
 
       return featureSupports.hasOwnProperty(feature) &&
@@ -3128,9 +3243,9 @@
 
     tinymceCSS () {
 
-      let css = [];
+      let css = []
 
-      if ( this.supports('background_color') ){
+      if (this.supports('background_color')) {
         //language=CSS
         css.push(`body {
             background-color: ${this.popup.background_color};
@@ -3143,7 +3258,7 @@
     processShortcodeTimeout: null,
     processedContent: '',
 
-    updatePreview (suppressAnimations = true, overrides = {} ) {
+    updatePreview (opts, overrides = {}) {
 
       this.popup.css = this.generateCSS()
 
@@ -3155,7 +3270,7 @@
             ...this.getPopup(),
           },
           overrides,
-          suppressAnimations,
+          ...opts,
         }, '*')
       }
 
@@ -3253,11 +3368,19 @@
     },
 
     getControls () {
-      return [
+      let controls = [
         Controls.template,
         ...this.getTemplate().controls,
         ...this.globalControls,
       ]
+
+      controls.forEach(control => {
+        if (!control.hasOwnProperty('uuid')) {
+          control.uuid = uuid()
+        }
+      })
+
+      return controls
     },
 
     mount () {
@@ -3280,13 +3403,18 @@
       }
 
       $('#holler-app').html(renderEditor())
+      // morphdom( document.getElementById( 'holler-app' ), `<div id="holler-app">${renderEditor()}</div>` )
 
       if (this.popup.template) {
+
         $('#controls').html(renderControls())
+        // morphdom( document.getElementById( 'controls' ), `<div id="controls">${renderControls()}</div>` )
 
         document.getElementById('iframe-preview').
         addEventListener('load', () => {
-          this.updatePreview(false)
+          this.updatePreview({
+            suppressAnimations: false,
+          })
         })
       }
 
@@ -3317,9 +3445,11 @@
       const updateSettings = (newSettings, opts = {}) => {
 
         const {
-          suppressAnimations = true,
           reRenderControls = false,
-          overrides = {}
+          morph = false,
+          afterMorph = () => {},
+          overrides = {},
+          ...rest
         } = opts
 
         this.popup = {
@@ -3327,10 +3457,21 @@
           ...newSettings,
         }
 
+        if (morph !== false) {
+
+          let openGroup = document.querySelector('.control-group.open')
+          let openControlGroup = this.getControls().
+          find(c => c.uuid === openGroup.id)
+
+          morphdom(openGroup, controlGroup(openControlGroup, this.popup, true), morph)
+          afterMorph()
+            // openControlGroup.onMount(this.popup, updateSettings)
+        }
+
         if (reRenderControls) {
           this.mount()
         } else {
-          this.updatePreview(suppressAnimations, overrides)
+          this.updatePreview(rest, overrides)
         }
 
       }

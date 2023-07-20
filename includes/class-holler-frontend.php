@@ -72,8 +72,8 @@ class Holler_Frontend {
 
 		$dot_min = Holler_Settings::instance()->get( 'script_debug_mode' ) ? '' : '.min';
 
-		wp_enqueue_style( 'hollerbox-popups', Holler_Box_URL . 'assets/css/popups.css', [], time() );
-		wp_enqueue_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups' . $dot_min . '.js', [], time(), true );
+		wp_enqueue_style( 'hollerbox-popups', Holler_Box_URL . 'assets/css/popups.css', [], HOLLERBOX_VERSION );
+		wp_enqueue_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups' . $dot_min . '.js', [], HOLLERBOX_VERSION, true );
 
 		$cookie_lifetime = strtotime( '+' . Holler_Settings::instance()->get( 'cookie_lifetime', 1 ) . ' ' . Holler_Settings::instance()->get( 'cookie_lifetime_period', 'months' ), 0 );
 
@@ -88,6 +88,13 @@ class Holler_Frontend {
 				return $popup;
 			}, $this->active ),
 			'home_url'           => home_url(),
+			'nav'                => [
+				'home'          => home_url(),
+				'login'         => wp_login_url(),
+				'lost_password' => wp_lostpassword_url(),
+				'register'      => wp_registration_url(),
+				'privacy_page'  => get_privacy_policy_url(),
+			],
 			'is_preview'         => is_preview(),
 			'is_frontend'        => ! is_admin(),
 			'is_builder_preview' => $this->is_builder_preview(),

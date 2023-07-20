@@ -425,14 +425,14 @@ menu.tab-select li.tab:hover {
   width: calc( 100% + 40px );
   margin: 10px -20px;
 }
-#holler-app #editor .control-wrap #controls .control-group#codemirror .controls {
+#holler-app #editor .control-wrap #controls .control-group:has(.CodeMirror) .controls {
   padding: 0;
 }
-#holler-app #editor .control-wrap #controls .control-group#codemirror .controls > .CodeMirror {
+#holler-app #editor .control-wrap #controls .control-group:has(.CodeMirror) .controls > .CodeMirror {
   border: solid rgba(16, 38, 64, 0.1);
   border-width: 1px 0 1px 0;
 }
-#holler-app #editor .control-wrap #controls .control-group#codemirror .controls p {
+#holler-app #editor .control-wrap #controls .control-group:has(.CodeMirror) .controls p {
   padding: 0 20px;
 }
 #holler-app #editor .control-wrap #controls .control-group .control-group-header {
@@ -492,6 +492,13 @@ menu.tab-select li.tab:hover {
   justify-content: space-between;
   align-items: center;
   gap: 10px;
+}
+#holler-app #editor .control-wrap #controls .control-group .controls .control.hidden {
+  display: none;
+}
+#holler-app #editor .control-wrap #controls .control-group .controls .control.stacked {
+  flex-direction: column;
+  align-items: stretch;
 }
 #holler-app #editor .control-wrap #controls .control-group .controls .control input[type=number].input {
   max-width: 80px;

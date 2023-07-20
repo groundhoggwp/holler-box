@@ -568,7 +568,7 @@ menu.tab-select{
             margin: 10px -20px;
           }
 
-          &#codemirror {
+          &:has(.CodeMirror) {
             .controls {
               padding: 0;
 
@@ -656,6 +656,15 @@ menu.tab-select{
               justify-content: space-between;
               align-items: center;
               gap: 10px;
+
+              &.hidden{
+                display: none;
+              }
+
+              &.stacked{
+                flex-direction: column;
+                align-items: stretch;
+              }
 
               input[type=number].input{
                 max-width: 80px;
