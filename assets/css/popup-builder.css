@@ -200,7 +200,11 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   padding: 30px;
 }
 
-#templates {
+#templates .template-filters {
+  padding-top: 30px;
+  padding-left: 30px;
+}
+#templates .template-grid {
   box-sizing: border-box;
   width: 100%;
   display: grid;
@@ -209,13 +213,13 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   grid-auto-flow: row;
   padding: 30px;
 }
-#templates.library {
+#templates .template-grid.library {
   grid-template-columns: 1fr 1fr;
 }
-#templates.library .template .preview-wrap {
+#templates .template-grid.library .template .preview-wrap {
   height: 300px;
 }
-#templates .template {
+#templates .template-grid .template {
   box-sizing: content-box;
   cursor: pointer;
   border-radius: 5px;
@@ -223,7 +227,7 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   overflow: hidden;
   position: relative;
 }
-#templates .template span.pro-template {
+#templates .template-grid .template span.pro-template {
   position: absolute;
   top: 10px;
   right: 10px;
@@ -233,47 +237,51 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   color: #ffffff;
   z-index: 9999;
 }
-#templates .template span.pro-template svg {
+#templates .template-grid .template span.pro-template svg {
   height: 14px;
   width: 14px;
 }
-#templates .template .template-name {
+#templates .template-grid .template .template-name {
   text-align: center;
 }
-#templates .template .preview-wrap {
+#templates .template-grid .template .preview-wrap {
   overflow: hidden;
   height: 250px;
   background: rgba(0, 117, 255, 0.02);
   border-bottom: 1px solid rgba(16, 38, 64, 0.15);
 }
-#templates .template .preview-wrap .preview {
+#templates .template-grid .template .preview-wrap .preview {
   box-sizing: content-box;
   width: 100%;
   height: 100%;
   position: relative;
   zoom: 40%;
 }
-#templates .template .preview-wrap .preview .holler-box .holler-box-overlay,
-#templates .template .preview-wrap .preview .holler-box .holler-box-overlay::after,
-#templates .template .preview-wrap .preview .holler-box .holler-box-overlay::before {
-  position: absolute;
-  display: none;
-}
-#templates .template .preview-wrap .preview .holler-box .positioner {
+#templates .template-grid .template .preview-wrap .preview .holler-box .holler-box-overlay,
+#templates .template-grid .template .preview-wrap .preview .holler-box .holler-box-overlay::after,
+#templates .template-grid .template .preview-wrap .preview .holler-box .holler-box-overlay::before {
   position: absolute;
 }
-#templates .template .preview-wrap .preview .holler-box .holler-box-modal {
+#templates .template-grid .template .preview-wrap .preview .holler-box .positioner {
+  position: absolute;
+}
+#templates .template-grid .template .preview-wrap .preview .holler-box .holler-box-modal {
   transition: 0.3s;
 }
-#templates .template:hover {
+#templates .template-grid .template .preview-wrap .preview:not(.show-overlay) .holler-box .holler-box-overlay,
+#templates .template-grid .template .preview-wrap .preview:not(.show-overlay) .holler-box .holler-box-overlay::after,
+#templates .template-grid .template .preview-wrap .preview:not(.show-overlay) .holler-box .holler-box-overlay::before {
+  display: none;
+}
+#templates .template-grid .template:hover {
   box-shadow: 5px 5px 30px 0 rgba(24, 45, 70, 0.05);
   transition: 0.4s;
 }
-#templates .template:hover .template-name {
+#templates .template-grid .template:hover .template-name {
   font-weight: bold;
   color: #0075ff;
 }
-#templates .template:hover .preview-wrap .preview .holler-box-modal {
+#templates .template-grid .template:hover .preview-wrap .preview .holler-box-modal {
   transform: scale(1.1);
 }
 

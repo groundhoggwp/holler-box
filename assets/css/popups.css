@@ -362,7 +362,14 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 .holler-box .holler-box-modal img {
   max-width: 100%;
 }
-.holler-box .holler-box-modal img:not(.alignnone), .holler-box .holler-box-modal img:not(.alignleft), .holler-box .holler-box-modal img:not(.alignright) {
+.holler-box .holler-box-modal img.alignright {
+  float: right;
+}
+.holler-box .holler-box-modal img.alignleft {
+  float: left;
+}
+.holler-box .holler-box-modal img.aligncenter {
+  margin: 0 auto;
   display: block;
 }
 .holler-box .holler-box-modal .holler-box-modal-content {

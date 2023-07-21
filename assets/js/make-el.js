@@ -85,12 +85,12 @@
         continue
       }
 
-      if ( attributeName.startsWith( 'data' ) ){
-        let dataName = attributeName.replace(/^data(.+)/, "$1")
-        dataName = dataName.charAt(0).toLowerCase() + dataName.slice(1);
+      if (attributeName.startsWith('data')) {
+        let dataName = attributeName.replace(/^data(.+)/, '$1')
+        dataName = dataName.charAt(0).toLowerCase() + dataName.slice(1)
 
         el.dataset[dataName] = attributes[attributeName]
-        continue;
+        continue
       }
 
       el.setAttribute(attributeName, attributes[attributeName])
@@ -106,14 +106,16 @@
 
     children.forEach(child => {
 
-      if ( child === null ){
+      if (child === null) {
         return
       }
 
       // Template literals
       if (isString(child)) {
         let _children = htmlToElements(child)
-        _children.forEach(_child => el.appendChild(_child))
+        while (_children.length) {
+          el.appendChild(_children[0])
+        }
         return
       }
 
@@ -153,7 +155,8 @@
       selected = [selected]
     }
 
-    options = options.map(({ value, text }) => makeEl('option', {
+    options = options.map(opt => typeof opt === 'string' ? { value: opt, text: opt } : opt).
+    map(({ value, text }) => makeEl('option', {
       value,
       selected: selected.includes(value),
     }, text))
@@ -187,7 +190,7 @@
     }, [
       Input({
         ...atts,
-        type: 'checkbox'
+        type: 'checkbox',
       }),
       //language=HTML
       `<span class="slider round"></span>
@@ -196,14 +199,14 @@
     ])
   }
 
-  const Div = ( attributes = {}, children = [] ) => {
-    return makeEl( 'div', attributes, children )
+  const Div = (attributes = {}, children = []) => {
+    return makeEl('div', attributes, children)
   }
-  
-  const Dashicon = ( icon ) => {
-    return makeEl( 'span', {
-      className: `dashicons dashicons-${icon}`
-    } )
+
+  const Dashicon = (icon) => {
+    return makeEl('span', {
+      className: `dashicons dashicons-${icon}`,
+    })
   }
 
   const InputRepeater = ({
@@ -211,55 +214,55 @@
     rows = [],
     cells = [],
     sortable = false,
-    fillRow = () => Array(cells.length).fill('')
+    fillRow = () => Array(cells.length).fill(''),
   }) => {
 
     const changeEvent = () => new CustomEvent()
 
-    const removeRow = ( rowIndex ) => {
-      rows.splice( rowIndex, 1 )
-      onChange( rows )
+    const removeRow = (rowIndex) => {
+      rows.splice(rowIndex, 1)
+      onChange(rows)
     }
 
     const addRow = () => {
-      rows.push( fillRow() )
-      onChange( rows )
+      rows.push(fillRow())
+      onChange(rows)
     }
 
     const onCellChange = (rowIndex, cellIndex, value) => {
       rows[rowIndex][cellIndex] = value
-      onChange( rows )
+      onChange(rows)
     }
 
-    const RepeaterRow = (row, rowIndex) => Div( {
+    const RepeaterRow = (row, rowIndex) => Div({
       className: 'holler-input-repeater-row',
-      dataRow: rowIndex
+      dataRow: rowIndex,
     }, [
       // Cells
-      ...cells.map( (cellCallback, cellIndex) => cellCallback({
+      ...cells.map((cellCallback, cellIndex) => cellCallback({
         value: row[cellIndex] ?? '',
         dataRow: rowIndex,
         dataCell: cellIndex,
-        onChange: e => onCellChange( rowIndex, cellIndex, e.target.value )
-      }, row) ),
+        onChange: e => onCellChange(rowIndex, cellIndex, e.target.value),
+      }, row)),
       // Sortable Handle
-      sortable ? makeEl( 'span', {
+      sortable ? makeEl('span', {
         className: 'handle',
-        dataRow: rowIndex
-      }, Dashicon( 'move' ) ) : null,
+        dataRow: rowIndex,
+      }, Dashicon('move')) : null,
       // Remove Row Button
       Button({
         className: 'holler-button dashicon remove-row',
         dataRow: rowIndex,
-        onClick: e => removeRow( rowIndex )
-      }, Dashicon('no-alt'))
-    ] )
+        onClick: e => removeRow(rowIndex),
+      }, Dashicon('no-alt')),
+    ])
 
-    let repeater = Div( {
+    let repeater = Div({
       className: 'holler-input-repeater',
       onCreate: el => {
 
-        if ( ! sortable ){
+        if (!sortable) {
           return
         }
 
@@ -278,20 +281,20 @@
             onChange(rows, repeater)
           },
         })
-      }
+      },
     }, [
-      ...rows.map( (row, i) => RepeaterRow( row, i ) ),
-      Div( {
-        className: 'holler-input-repeater-row-add'
+      ...rows.map((row, i) => RepeaterRow(row, i)),
+      Div({
+        className: 'holler-input-repeater-row-add',
       }, [
         `<div class="spacer"></div>`,
         // Add Row Button
         Button({
           className: 'add-row holler-button dashicon',
-          onClick: e => addRow()
-        }, Dashicon( 'plus-alt2' ) )
-      ] )
-    ] )
+          onClick: e => addRow(),
+        }, Dashicon('plus-alt2')),
+      ]),
+    ])
 
     return repeater
   }
@@ -304,6 +307,6 @@
     Button,
     Toggle,
     Div,
-    InputRepeater
+    InputRepeater,
   }
 })(jQuery)

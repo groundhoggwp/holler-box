@@ -28,6 +28,7 @@
     dashicon,
     tooltipIcon,
     specialChars,
+    regexp,
   } = HollerBox.elements
 
   const { sprintf, __, _x, _n } = wp.i18n
@@ -201,7 +202,7 @@
     label = '',
     control = '',
     hidden = false,
-    stacked = false
+    stacked = false,
   }) => {
     //language=HTML
     return `
@@ -341,6 +342,290 @@
 		</div>`
   }
 
+  const BasicTemplatePicker = (selector, {
+    onSelect,
+  }) => {
+
+    let search = false
+    let keyword = ''
+
+    const templatesHTML = () => {
+      return Object.keys(Templates).filter(t => {
+        if (!search && !keyword) {
+          return true
+        }
+
+        const matchSearch = () => {
+          return t.name.match(search) || t.keywords.some(k => k.match(search))
+        }
+
+        const matchKeywords = () => {
+          return t.keywords.includes(keyword)
+        }
+
+        if (search && !keyword) {
+          return matchSearch()
+        }
+
+        if (keyword && !search) {
+          return matchKeywords()
+        }
+
+        if (keyword && search) {
+          return matchKeywords() && matchSearch()
+        }
+
+        return false
+
+      }).map(t => {
+
+        t = {
+          id: t,
+          ...Templates[t],
+        }
+
+        //language=HTML
+        return `
+			<div class="template" data-template="${t.id}">
+				<div class="preview-wrap">
+					<div class="preview">
+						${HollerBox.templates[t.id].render({
+							...t.defaults,
+						})}
+					</div>
+				</div>
+				<p class="template-name">
+					${t.name ? t.name : t.id}
+				</p>
+			</div>`
+      }).join('')
+    }
+
+    const mountTemplates = () => {
+
+    }
+
+    $(selector).html()
+
+    $(`${selector} .template`).on('click', e => {
+      let template = e.currentTarget.dataset.template
+      onSelect(template)
+    })
+
+  }
+
+  const { Div, Input, Select } = MakeEl
+
+  const morph = (selector, children) => {
+    morphdom(document.querySelector(selector), Div({}, children), {
+      childrenOnly: true,
+    })
+  }
+
+  const BasicTemplatePickerUsingMakeEl = (selector, {
+    onSelect,
+  }) => {
+
+    let search = null
+    let searchVal = ''
+    let keyword = ''
+
+    const getTemplates = () => Object.keys(Templates).map(t => ({
+      id: t,
+      keywords: [],
+      ...Templates[t],
+    })).filter(t => {
+      if (!search && !keyword) {
+        return true
+      }
+
+      const matchSearch = () => {
+        return t.name.match(search) || t.keywords.some(k => k.match(search))
+      }
+
+      const matchKeywords = () => {
+        return t.keywords.includes(keyword)
+      }
+
+      if (search && !keyword) {
+        return matchSearch()
+      }
+
+      if (keyword && !search) {
+        return matchKeywords()
+      }
+
+      if (keyword && search) {
+        return matchKeywords() && matchSearch()
+      }
+
+      return false
+
+    }).map(t => Div({
+      className: 'template',
+      dataTemplate: t.id,
+      onClick: e => {
+        onSelect(t.id)
+      },
+    }, [
+      //language=HTML
+      `
+		  <div class="preview-wrap">
+			  <div class="preview">
+				  ${HollerBox.templates[t.id].render({
+					  ...t.defaults,
+				  })}
+			  </div>
+		  </div>
+		  <p class="template-name">
+			  ${t.name ? t.name : t.id}
+		  </p>`,
+    ]))
+
+    const mount = () => {
+      morph(selector, Div({}, [
+        Div({
+          className: 'holler-input-group template-filters',
+        }, [
+          Select({
+            options: [
+              { value: '', text: __('Filter') },
+              ...Object.values(Keywords),
+            ],
+            name: 'keyword',
+            selected: keyword,
+            onChange: e => {
+              keyword = e.target.value
+              mount()
+            },
+          }),
+          Input({
+            type: 'search',
+            value: searchVal,
+            name: 'search',
+            placeholder: __('Search'),
+            onInput: e => {
+              searchVal = e.target.value
+              search = regexp(searchVal)
+              mount()
+            },
+          }),
+        ]),
+        Div({
+          className: 'template-grid',
+        }, getTemplates()),
+      ]))
+    }
+
+    mount()
+  }
+
+  const LibraryTemplatePickerUsingMakeEl = (selector, {
+    onSelect,
+    templates = [],
+  }) => {
+
+    let search = null
+    let searchVal = ''
+    let keyword = ''
+
+    const getTemplates = () => templates.filter(t => {
+      if (!search && !keyword) {
+        return true
+      }
+
+      const matchSearch = () => {
+        return t.post_title.match(search) || Templates[t.template]?.keywords?.some(k => k.match(search))
+      }
+
+      const matchKeywords = () => {
+        return Templates[t.template]?.keywords?.includes(keyword)
+      }
+
+      if (search && !keyword) {
+        return matchSearch()
+      }
+
+      if (keyword && !search) {
+        return matchKeywords()
+      }
+
+      if (keyword && search) {
+        return matchKeywords() && matchSearch()
+      }
+
+      return false
+
+    }).map(t => {
+
+      Editor.current_preview = t
+
+      let el = Div({
+        className: 'template',
+        dataTemplate: t.id,
+        onClick: e => {
+          onSelect(t)
+        },
+      }, [
+        //language=HTML
+        `<style>
+	        ${t.css}
+        </style>
+		  <div class="preview-wrap">
+			  <div id="popup-${t.id}" class="preview show-overlay">
+				  ${HollerBox.templates[t.template].render(t)}
+			  </div>
+		  </div>
+		  <p class="template-name">
+		  ${t.post_title
+          ? t.post_title
+          : Templates[t.template].name}
+		  </p>`,
+      ])
+
+      Editor.current_preview = null
+
+      return el
+    })
+
+    const mount = () => {
+      morph(selector, Div({}, [
+        Div({
+          className: 'holler-input-group template-filters',
+        }, [
+          Select({
+            options: [
+              { value: '', text: __('Filter') },
+              ...Object.values(Keywords),
+            ],
+            name: 'keyword',
+            selected: keyword,
+            onChange: e => {
+              keyword = e.target.value
+              mount()
+            },
+          }),
+          Input({
+            type: 'search',
+            value: searchVal,
+            name: 'search',
+            placeholder: __('Search'),
+            onInput: e => {
+              searchVal = e.target.value
+              search = regexp(searchVal)
+              mount()
+            },
+          }),
+        ]),
+        Div({
+          className: 'template-grid library',
+        }, getTemplates()),
+      ]))
+    }
+
+    mount()
+  }
+
   const changeTemplateModal = ({
     modalSettings = {
       canClose: true,
@@ -363,38 +648,12 @@
 		  <div id="templates"></div>`,
       width: 1200,
       onOpen: ({ close }) => {
-
-        $('#templates').html(Object.keys(Templates).map(t => {
-
-          t = {
-            id: t,
-            ...Templates[t],
-          }
-
-          //language=HTML
-          return `
-			  <div class="template" data-template="${t.id}">
-				  <div class="preview-wrap">
-					  <div class="preview">
-						  ${HollerBox.templates[t.id].render({
-							  ...t.defaults,
-						  })}
-					  </div>
-				  </div>
-				  <p class="template-name">
-					  ${t.name ? t.name : t.id}
-				  </p>
-			  </div>`
-        }).join(''))
-
-        $('.template').on('click', e => {
-
-          let template = e.currentTarget.dataset.template
-
-          onSelect(template)
-          close()
+        BasicTemplatePickerUsingMakeEl('#templates', {
+          onSelect: t => {
+            onSelect(t)
+            close()
+          },
         })
-
       },
     })
 
@@ -415,39 +674,20 @@
         render: () => `${isPro() ? '' : proTemplatesAd()}
 		<div id="templates"></div>`,
         onMount: ({ close }) => {
-          $('#templates').html(Object.keys(Templates).map(t => {
-
-            t = {
-              id: t,
-              ...Templates[t],
-            }
-
-            //language=HTML
-            return `
-				<div class="template" data-template="${t.id}">
-					<div class="preview-wrap">
-						<div class="preview">
-							${HollerBox.templates[t.id].render({
-								...t.defaults,
-							})}
-						</div>
-					</div>
-					<p class="template-name">
-						${t.name ? t.name : t.id}
-					</p>
-				</div>`
-          }).join(''))
-          $('.template').on('click', e => {
-            let template = e.currentTarget.dataset.template
-            onSelect(template)
-            close()
+          BasicTemplatePickerUsingMakeEl('#templates', {
+            onSelect: t => {
+              onSelect(t)
+              close()
+            },
           })
         },
       },
       library: {
+        // language=HTML
         render: () => `${isPro()
-          ? ''
-          : proTemplatesAd()}<div id="templates" class="library"></div>`,
+			? ''
+			: proTemplatesAd()}
+		<div id="templates" class="library"></div>`,
         onMount: async ({ close }) => {
 
           let templates = await apiGet(HollerBox.routes.library)
@@ -460,51 +700,31 @@
           templates = templates.filter(
             t => HollerBox.templates.hasOwnProperty(t.template))
 
-          $('#templates').html(templates.map(t => {
+          LibraryTemplatePickerUsingMakeEl('#templates', {
+            onSelect: (template) => {
+              let {
+                ID,
+                id,
+                post_name,
+                post_date,
+                post_date_gmt,
+                post_status,
+                author,
+                ...settings
+              } = template
 
-            t.id = `popup-${t.ID}`
-            Editor.current_preview = t
-            //language=HTML
-            return `
-				<div class="template" data-template="${t.ID}">
-					<style>
-						${t.css}
-					</style>
-					<div class="preview-wrap">
-						<div class="preview">
-							${HollerBox.templates[t.template].render(t)}
-						</div>
-					</div>
-					<p class="template-name">
-						${t.post_title
-							? t.post_title
-							: Templates[t.template].name}
-					</p>
-				</div>`
-          }).join(''))
+              updateSettings({
+                ...settings,
+              })
 
-          Editor.current_preview = null
+              close()
+            },
+            templates,
+          })
 
-          $('.template').on('click', e => {
-            let template = e.currentTarget.dataset.template
-            let popup = templates.find(p => p.ID == template)
-
-            let {
-              ID,
-              id,
-              post_name,
-              post_date,
-              post_date_gmt,
-              post_status,
-              author,
-              ...settings
-            } = popup
-
-            updateSettings({
-              ...settings,
-            })
-
-            close()
+          document.querySelector('#templates').querySelectorAll('img').forEach(el => {
+            // el.removeAttribute('height')
+            // el.removeAttribute('width')
           })
 
         },
@@ -2143,7 +2363,7 @@
         disable_scrolling = false,
         overlay_color,
         overlay_opacity = 0.5,
-        overlay_image_src = ''
+        overlay_image_src = '',
       }) => {
         return [
           singleControl({
@@ -2154,7 +2374,7 @@
             }),
           }),
           singleControl({
-            hidden: ! overlay_enabled,
+            hidden: !overlay_enabled,
             label: __('Disable Scrolling'),
             control: toggle({
               id: 'disable-scrolling',
@@ -2162,7 +2382,7 @@
             }),
           }),
           singleControl({
-            hidden: ! overlay_enabled,
+            hidden: !overlay_enabled,
             label: __('Color'),
             control: input({
               id: 'overlay-color',
@@ -2170,7 +2390,7 @@
             }),
           }),
           singleControl({
-            hidden: ! overlay_enabled,
+            hidden: !overlay_enabled,
             label: __('Opacity'),
             control: input({
               type: 'number',
@@ -2182,7 +2402,7 @@
             }),
           }),
           singleControl({
-            hidden: ! overlay_enabled,
+            hidden: !overlay_enabled,
             stacked: true,
             label: __('Overlay image'),
             control: `<div class="holler-input-group">
@@ -2192,14 +2412,14 @@
               value: overlay_image_src,
             })}
           <button id="select-overlay-image" class="holler-button secondary icon">${icons.image}</button>
-        </div>`
-          })
+        </div>`,
+          }),
         ].join('')
       },
       onMount: (settings, updateSetting) => {
 
         const colorPicker = () => {
-          $('#overlay-color').removeData( 'wpWpColorPicker a8cIris' ).wpColorPicker({
+          $('#overlay-color').removeData('wpWpColorPicker a8cIris').wpColorPicker({
             change: (e, ui) => {
               updateSetting({
                 overlay_color: ui.color.toString(),
@@ -2217,7 +2437,7 @@
             morph: {
               childrenOnly: true,
             },
-            afterMorph: colorPicker
+            afterMorph: colorPicker,
           })
         })
 
@@ -2761,7 +2981,7 @@
             }),
           }),
           singleControl({
-            hidden: ! use_custom_form,
+            hidden: !use_custom_form,
             stacked: true,
             label: __('Paste your custom HTML form code below.',
               'holler-box'),
@@ -2770,9 +2990,10 @@
               name: 'custom_form_html',
               className: 'full-width code',
               value: custom_form_html,
-            })
+            }),
           }),
-          ! use_custom_form ? '' : `<i>${__('When using custom HTML form code other field settings will not apply and integrations may not work.')}</i>`,
+          !use_custom_form ? '' : `<i>${__(
+            'When using custom HTML form code other field settings will not apply and integrations may not work.')}</i>`,
 
         ].join('')
       },
@@ -2850,10 +3071,32 @@
 
   const standardPopupContent = `<h1>Subscribe!</h1><p>Your information is secure 🔒. We'll never spam you</p>`
 
+  const Keywords = {
+    notification: __('Notification', 'holler-box'),
+    basic: __('Basic', 'holler-box'),
+    button: __('Button', 'holler-box'),
+    // link: __('Link', 'holler-box'),
+    chat: __('Chat', 'holler-box'),
+    form: __('Form', 'holler-box'),
+    email_only: __('Email only', 'holler-box'),
+    // opt_in: __('Opt-in', 'holler-box'),
+    // optin: __('Optin', 'holler-box'),
+    // message: __('Message', 'holler-box'),
+    image: __('Image', 'holler-box'),
+    // progress: __('Progress', 'holler-box'),
+    progress_bar: __('Progress bar', 'holler-box'),
+    // media: __('Media', 'holler-box'),
+    // integrations: __('Integrations', 'holler-box'),
+    popup: __('Popup', 'holler-box'),
+    // overlay: __('Has overlay', 'holler-box'),
+    // no_overlay: __('No overlay', 'holler-box'),
+  }
+
   const Templates = {
     notification_box: {
       id: 'notification_box',
       name: __('Notification'),
+      keywords: [Keywords.notification, Keywords.basic],
       controls: [
         Controls.position,
         Controls.content,
@@ -2868,6 +3111,7 @@
     notification_box_with_button: {
       id: 'notification_box_with_button',
       name: __('Notification with Button'),
+      keywords: [Keywords.notification, Keywords.button],
       controls: [
         Controls.position,
         Controls.content,
@@ -2884,6 +3128,7 @@
     notification_box_with_form: {
       id: 'notification_box_with_form',
       name: __('Notification with Form'),
+      keywords: [Keywords.notification, Keywords.form, Keywords.email_only],
       controls: [
         Controls.position,
         Controls.content,
@@ -2905,6 +3150,7 @@
     fake_chat: {
       id: 'fake_chat',
       name: __('Fake Chat'),
+      keywords: [Keywords.notification, Keywords.chat],
       controls: [
         Controls.position,
         Controls.avatar,
@@ -2923,6 +3169,7 @@
     popup_custom: {
       id: 'popup_custom',
       name: __('Standard Popup'),
+      keywords: [Keywords.popup, Keywords.basic],
       controls: [
         Controls.position,
         Controls.overlay,
@@ -2937,6 +3184,7 @@
     popup_standard: {
       id: 'popup_standard',
       name: __('Popup with Form'),
+      keywords: [Keywords.popup, Keywords.form],
       controls: [
         Controls.position,
         Controls.overlay,
@@ -2948,7 +3196,6 @@
         Controls.integration,
       ],
       defaults: {
-
         post_content: standardPopupContent,
         button_text: 'Subscribe',
         position: 'center-center',
@@ -2957,6 +3204,7 @@
     popup_image_left: {
       id: 'popup_image_left',
       name: __('Popup with Form, Image Left'),
+      keywords: [Keywords.popup, Keywords.form, Keywords.media, Keywords.image],
       controls: [
         Controls.position,
         Controls.overlay,
@@ -2979,6 +3227,7 @@
     popup_image_right: {
       id: 'popup_image_right',
       name: __('Popup with Form, Image Right'),
+      keywords: [Keywords.popup, Keywords.form, Keywords.media, Keywords.image],
       controls: [
         Controls.position,
         Controls.overlay,
@@ -3001,6 +3250,7 @@
     popup_form_below: {
       id: 'popup_form_below',
       name: __('Popup with Image Right, Horizontal Form'),
+      keywords: [Keywords.popup, Keywords.form, Keywords.media, Keywords.image],
       controls: [
         Controls.position,
         Controls.overlay,
@@ -3026,6 +3276,14 @@
     popup_progress_bar: {
       id: 'popup_progress_bar',
       name: __('Popup with Progress Bar'),
+      keywords: [
+        Keywords.popup,
+        Keywords.form,
+        Keywords.media,
+        Keywords.image,
+        Keywords.progress,
+        Keywords.progress_bar,
+      ],
       controls: [
         Controls.position,
         Controls.overlay,
@@ -3049,6 +3307,7 @@
     popup_image_beside_text_top: {
       id: 'popup_image_beside_text_top',
       name: __('Popup with Text Above'),
+      keywords: [Keywords.popup, Keywords.form, Keywords.media, Keywords.image],
       controls: [
         Controls.position,
         Controls.overlay,
@@ -3073,6 +3332,7 @@
     popup_full_image_background: {
       id: 'popup_full_image_background',
       name: __('Popup with Image Background'),
+      keywords: [Keywords.popup, Keywords.form, Keywords.media, Keywords.image],
       controls: [
         Controls.position,
         Controls.overlay,
@@ -3465,7 +3725,7 @@
 
           morphdom(openGroup, controlGroup(openControlGroup, this.popup, true), morph)
           afterMorph()
-            // openControlGroup.onMount(this.popup, updateSettings)
+          // openControlGroup.onMount(this.popup, updateSettings)
         }
 
         if (reRenderControls) {
@@ -4778,6 +5038,7 @@
     AdvancedDisplayRules,
     DisplayConditions,
     Triggers,
+    Keywords,
   }
 
   HollerBox._helpers = {

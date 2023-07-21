@@ -289,99 +289,115 @@ table.display-conditions-grid {
 
 #templates {
 
-  box-sizing: border-box;
-
-  width: 100%;
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  gap: 30px 30px;
-  grid-auto-flow: row;
-  padding: 30px;
-
-  &.library {
-    grid-template-columns: 1fr 1fr;
-
-    .template .preview-wrap{
-      height: 300px;
-    }
+  .template-filters{
+    padding-top: 30px;
+    padding-left: 30px;
   }
 
-  .template {
-    box-sizing: content-box;
-    cursor: pointer;
-    border-radius: 5px;
-    border: 1px solid $primary-dark-15;
-    overflow: hidden;
-    position: relative;
+  .template-grid {
+    box-sizing: border-box;
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 30px 30px;
+    grid-auto-flow: row;
+    padding: 30px;
 
-    span.pro-template {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      background: $holler-yellow;
-      padding: 4px 6px;
-      border-radius: 5px;
-      color: #ffffff;
-      z-index: 9999;
+    &.library {
+      grid-template-columns: 1fr 1fr;
 
-      svg {
-        height: 14px;
-        width: 14px;
+      .template .preview-wrap{
+        height: 300px;
       }
     }
 
-    .template-name {
-      text-align: center;
-    }
-
-    .preview-wrap {
+    .template {
+      box-sizing: content-box;
+      cursor: pointer;
+      border-radius: 5px;
+      border: 1px solid $primary-dark-15;
       overflow: hidden;
-      height: 250px;
-      background: $primary-blue-2;
-      border-bottom: 1px solid $primary-dark-15;
+      position: relative;
 
-      .preview {
-        box-sizing: content-box;
+      span.pro-template {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: $holler-yellow;
+        padding: 4px 6px;
+        border-radius: 5px;
+        color: #ffffff;
+        z-index: 9999;
 
-        width: 100%;
-        height: 100%;
-
-        position: relative;
-        zoom: 40%;
-
-        .holler-box {
-          .holler-box-overlay,
-          .holler-box-overlay::after,
-          .holler-box-overlay::before,
-          {
-            position: absolute;
-            display: none;
-          }
-
-          .positioner {
-            position: absolute;
-          }
-
-          .holler-box-modal {
-            transition: .3s;
-          }
+        svg {
+          height: 14px;
+          width: 14px;
         }
       }
-    }
-
-    &:hover {
-
-      box-shadow: $box-shadow;
-      transition: 0.4s;
 
       .template-name {
-        font-weight: bold;
-        color: $primary-blue;
+        text-align: center;
       }
 
       .preview-wrap {
-        .preview .holler-box-modal {
-          transform: scale(1.1);
+        overflow: hidden;
+        height: 250px;
+        background: $primary-blue-2;
+        border-bottom: 1px solid $primary-dark-15;
+
+        .preview {
+          box-sizing: content-box;
+
+          width: 100%;
+          height: 100%;
+
+          position: relative;
+          zoom: 40%;
+
+          .holler-box {
+            .holler-box-overlay,
+            .holler-box-overlay::after,
+            .holler-box-overlay::before,
+            {
+              position: absolute;
+            }
+
+            .positioner {
+              position: absolute;
+            }
+
+            .holler-box-modal {
+              transition: .3s;
+            }
+          }
+
+          &:not(.show-overlay) {
+            .holler-box {
+              .holler-box-overlay,
+              .holler-box-overlay::after,
+              .holler-box-overlay::before,
+              {
+                display: none;
+              }
+            }
+          }
+        }
+      }
+
+      &:hover {
+
+        box-shadow: $box-shadow;
+        transition: 0.4s;
+
+        .template-name {
+          font-weight: bold;
+          color: $primary-blue;
+        }
+
+        .preview-wrap {
+          .preview .holler-box-modal {
+            transform: scale(1.1);
+          }
         }
       }
     }

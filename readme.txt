@@ -223,6 +223,15 @@ You can purchase a premium plan for access to support and our premium extensions
 
 == Changelog ==
 
+= 2.3 (2023-07-20) =
+* ADDED Pro Design Library. Popups with content and designs ready for importing.
+* ADDED New settings for...
+ * Popup Content Width
+ * Popup Background Color
+ * Overlay image (from Pro version)
+ *
+* IMPROVED Conditional settings for basic controls in the editor.
+
 = 2.2.4 (2023-07-06) =
 * ADDED Duplicate popup function.
 * ADDED Feature to import/export popups.

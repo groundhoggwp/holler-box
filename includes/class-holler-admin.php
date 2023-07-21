@@ -340,12 +340,15 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 			], HOLLERBOX_VERSION );
 
 			wp_register_script( 'hollerbox-morphdom', Holler_Box_URL . 'assets/js/lib/morphdom' . $dot_min . '.js', [], HOLLERBOX_VERSION );
+			wp_register_script( 'hollerbox-make-el', Holler_Box_URL . 'assets/js/make-el' . $dot_min . '.js', [
+				'hollerbox-morphdom'
+			], HOLLERBOX_VERSION );
 			wp_register_script( 'hollerbox-popups', Holler_Box_URL . 'assets/js/popups' . $dot_min . '.js', [], HOLLERBOX_VERSION );
 			wp_register_script( 'hollerbox-builder', Holler_Box_URL . 'assets/js/popup-builder' . $dot_min . '.js', [
 				'hollerbox-elements',
 				'hollerbox-popups',
 				'wp-color-picker',
-				'hollerbox-morphdom'
+				'hollerbox-make-el'
 			], HOLLERBOX_VERSION );
 
 			wp_enqueue_script( 'hollerbox-builder' );

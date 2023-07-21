@@ -492,10 +492,23 @@ body:not(.wp-admin) {
     img {
       max-width: 100%;
 
+      &.alignright {
+        float: right;
+      }
+
+      &.alignleft{
+        float: left;
+      }
+
+      &.aligncenter {
+        margin: 0 auto;
+        display: block;
+      }
+
       &:not(.alignnone),
       &:not(.alignleft),
       &:not(.alignright){
-        display: block;
+        //display: block;
       }
     }
 
