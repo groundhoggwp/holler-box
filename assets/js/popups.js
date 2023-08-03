@@ -514,17 +514,30 @@
 
         form.replaceWith(customForm)
 
+        let flag = false
+
         customForm.addEventListener('submit', e => {
 
-          if (isBuilderPreview()) {
-            e.preventDefault()
+          if ( flag ){
+            return true
           }
+
+          e.preventDefault()
 
           customForm.querySelector(
             'button.holler-box-button').innerHTML = '<span class="holler-spinner"></span>'
           Array.from(customForm.elements).forEach(el => el.disabled = true)
 
-          popup.converted()
+          if ( ! isBuilderPreview() ){
+            popup.converted( 'Submitted Custom Form' ).then( () => {
+              flag = true
+              customForm.submit()
+            })
+          } else {
+            setTimeout( () => popup.open(), 1000 )
+          }
+
+          return false
         })
 
         return
@@ -558,7 +571,10 @@
 
         modifyPayload(payload)
 
-        return popup.submit(payload).
+        return popup.submit({
+          ...payload,
+          content: 'Form Submitted'
+        }).
         then(({ status = 'success', failures = [] }) => {
 
           if (status === 'failed') {
@@ -610,7 +626,7 @@
       button.addEventListener('click', e => {
         e.preventDefault()
         button.innerHTML = '<span class="holler-spinner"></span>'
-        popup.converted().then(() => {
+        popup.converted( 'Clicked Button' ).then(() => {
 
           if (isBuilderPreview()) {
 
@@ -1021,7 +1037,10 @@
 
               popup.state = 'done'
 
-              popup.submit(popup.responses).then(r => {
+              popup.submit({
+                ...popup.responses,
+                content: 'Chat'
+              }).then(r => {
                 switch (popup.after_submit) {
                   case 'message':
 
@@ -1645,7 +1664,7 @@
       document.getElementById(this.id)?.remove()
     },
 
-    converted (check = true) {
+    converted (content = '') {
 
       this._converted = true
 
@@ -1655,11 +1674,12 @@
 
       Cookies.addPopupConversion(this.ID)
 
-      if (check) {
+      if (content) {
         return apiPost(HollerBox.routes.conversion, {
           popup_id: this.ID,
           location: window.location.href,
           referer: document.referrer,
+          content
         })
       }
     },

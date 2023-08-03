@@ -23,6 +23,7 @@ class Holler_Settings {
 	}
 
 	protected $settings = [];
+
 	const OPTION_NAME = 'hollerbox_settings';
 
 	/**

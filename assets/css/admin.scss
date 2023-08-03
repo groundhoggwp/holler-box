@@ -233,10 +233,21 @@ body.hollerbox_page_hollerbox_reports {
 
     .holler-panel {
 
+      &.pie .inside{
+        //padding-top: 0;
+        //padding-bottom: 0;
+      }
+
       .holler-panel-header {
         h2 {
           font-size: 18px;
           padding: 16px;
+
+          .dashicons {
+            font-size: 20px;
+            height: 20px;
+            width: 20px;
+          }
         }
       }
 

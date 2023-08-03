@@ -8,9 +8,14 @@ class Holler_Updater {
 
 	public function get_updates() {
 		return [
-			'2.0',
-			'2.1.2',
+			'2.0'   => [ $this, 'v_2_0' ],
+			'2.1.2' => [ $this, 'v_2_1_2' ],
+			'2.2'   => [ $this, 'v_2_2' ],
 		];
+	}
+
+	public function v_2_2() {
+		Holler_Reporting::instance()->update_2_2();
 	}
 
 	/**
@@ -18,7 +23,7 @@ class Holler_Updater {
 	 *
 	 * @return void
 	 */
-	public function v_2_1_2(){
+	public function v_2_1_2() {
 		Holler_Reporting::instance()->update_2_1_2();
 	}
 
@@ -42,9 +47,9 @@ class Holler_Updater {
 		];
 
 		// If any of the settings were set and are not empty, this person is a legacy user
-		foreach ( $options as $option ){
-			$val = get_option($option);
-			if ( ! empty($val)){
+		foreach ( $options as $option ) {
+			$val = get_option( $option );
+			if ( ! empty( $val ) ) {
 				Holler_Settings::instance()->update( 'is_legacy_user', true, false );
 				break;
 			}
@@ -84,8 +89,8 @@ class Holler_Updater {
 	 *
 	 * @return void
 	 */
-	public function update_complete( $version ){
-		$updates = $this->get_previous_updates();
+	public function update_complete( $version ) {
+		$updates   = $this->get_previous_updates();
 		$updates[] = $version;
 		update_option( 'holler_previous_updates', $updates );
 	}
@@ -96,15 +101,13 @@ class Holler_Updater {
 	 * @return void
 	 */
 	public function maybe_upgrade() {
-		foreach ( $this->get_updates() as $update ) {
+		foreach ( $this->get_updates() as $update => $callback ) {
 			if ( $this->did_update( $update ) ) {
 				continue;
 			}
 
-			$method = 'v_' . str_replace( '.', '_', $update );
-
-			if ( method_exists( $this, $method ) ) {
-				call_user_func( [ $this, $method ] );
+			if ( is_callable( $callback ) ) {
+				call_user_func( $callback );
 
 				$this->update_complete( $update );
 			}

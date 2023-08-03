@@ -1,9 +1,11 @@
-( ($) => {
+(($) => {
 
   const { report_data = [] } = HollerBox
   const {
     icons,
     confirmationModal,
+    tooltipIcon,
+    tooltip
   } = HollerBox.elements
 
   const { __ } = wp.i18n
@@ -21,6 +23,25 @@
   }
 
   ApiError.prototype = Error.prototype
+
+  function darkenRGB (rgb, percentage) {
+    // Parse the RGB color string and extract the individual color components
+    const [r, g, b] = rgb.match(/\d+/g).map(Number)
+
+    // Ensure the percentage is within the range of 0 to 100
+    const validPercentage = Math.max(0, Math.min(100, percentage))
+
+    // Calculate the darkening factor based on the percentage
+    const factor = 1 - validPercentage / 100
+
+    // Calculate the new RGB color components after darkening
+    const newR = Math.round(r * factor)
+    const newG = Math.round(g * factor)
+    const newB = Math.round(b * factor)
+
+    // Return the new RGB color string
+    return `rgb(${newR}, ${newG}, ${newB})`
+  }
 
   /**
    * Fetch stuff from the API
@@ -105,7 +126,7 @@
 
     getPopups () {
       return arrayUnique(this.report_data.map(({ popup_id }) => parseInt(popup_id))).
-        map(id => this.popups.find(p => p.ID == id))
+      map(id => this.popups.find(p => p.ID == id))
     },
 
     getPopupIds () {
@@ -116,15 +137,21 @@
       return arrayUnique(this.report_data.map(({ location }) => location))
     },
 
+    getContents ( { popup_id: _popup_id = false } ) {
+      return arrayUnique(this.report_data.filter( ({popup_id, s_type}) => popup_id == _popup_id && s_type === 'conversion' ).map(({ content }) => content))
+    },
+
     sumCount (type, {
       id = false,
       date = false,
       location: _location = false,
+      content: _content = false,
     }) {
       return this.report_data.filter(
-        ({ popup_id, s_type, s_date, location = '' }) => ( id ? popup_id == id : true )
-          && ( date ? s_date === date.format(__YMD) : true )
-          && ( _location ? _location === location : true )
+        ({ popup_id, s_type, s_date, location = '', content = '' }) => (id ? popup_id == id : true)
+          && (date ? s_date === date.format(__YMD) : true)
+          && (_location ? _location === location : true)
+          && (_content ? _content === content : true)
           && s_type === type).reduce((total, { s_count }) => total + parseInt(s_count), 0)
     },
 
@@ -134,6 +161,10 @@
 
     sumImpressions (query) {
       return this.sumCount('impression', query)
+    },
+
+    sumContent (query) {
+      return this.sumCount('conversion', query)
     },
   }
 
@@ -150,16 +181,16 @@
     const renderTable = () => {
       //language=HTML
       return `
-          <table>
-              <thead>
-              ${ headers.map(h => `<th>${ h }</th>`).join('') }
-              </thead>
-              <tbody>
-              ${ rows.slice(0, show).
-                      map(row => `<tr>${ row.map(item => `<td>${ item }</td>`).join('') }</tr>`).
-                      join('') }
-              </tbody>
-          </table>`
+		  <table>
+			  <thead>
+			  ${headers.map(h => `<th>${h}</th>`).join('')}
+			  </thead>
+			  <tbody>
+			  ${rows.slice(0, show).
+			  map(row => `<tr>${row.map(item => `<td>${item}</td>`).join('')}</tr>`).
+			  join('')}
+			  </tbody>
+		  </table>`
     }
 
     $el.html(renderTable())
@@ -195,7 +226,7 @@
       type: 'line',
       data: data,
       options: {
-        maintainAspectRatio: false
+        maintainAspectRatio: false,
       },
     }
     const myChart = new Chart(
@@ -210,61 +241,73 @@
       render: () => {
         // language=HTML
         return `
-            <div class="span-full">
-                <h1 class="popup-title"></h1>
-                <p class="popup-links"><a href="#">&larr; Back</a> | <a href="#" id="edit-popup">${__('Edit')}</a></p>
-            </div>
-            <div class="holler-panel span-full">
-                <div class="holler-panel-header">
-                    <h2>All Activity</h2>
-                </div>
-                <div class="inside">
-                    <canvas id="main-graph"></canvas>
-                </div>
-            </div>
-            <div class="holler-panel span-third">
-                <div class="holler-panel-header">
-                    <h2>Impressions</h2>
-                </div>
-                <div class="inside">
-                    <div class="holler-big-number" id="impressions"></div>
-                </div>
-            </div>
-            <div class="holler-panel span-third">
-                <div class="holler-panel-header">
-                    <h2>Conversions</h2>
-                </div>
-                <div class="inside">
-                    <div class="holler-big-number" id="conversions"></div>
-                </div>
-            </div>
-            <div class="holler-panel span-third">
-                <div class="holler-panel-header">
-                    <h2>Conversion Rate</h2>
-                </div>
-                <div class="inside">
-                    <div class="holler-big-number" id="conversion-rate"></div>
-                </div>
-            </div>
-            <div class="holler-panel span-full">
-                <div class="holler-panel-header">
-                    <h2>Pages</h2>
-                </div>
-                <div id="pages-table">
-                </div>
-            </div>
+			<div class="span-full">
+				<h1 class="popup-title"></h1>
+				<p class="popup-links"><a href="#">&larr; Back</a> | <a href="#" id="edit-popup">${__('Edit')}</a></p>
+			</div>
+			<div class="holler-panel span-full">
+				<div class="holler-panel-header">
+					<h2>All Activity</h2>
+				</div>
+				<div class="inside">
+					<canvas id="main-graph"></canvas>
+				</div>
+			</div>
+			<div class="holler-panel span-third">
+				<div class="holler-panel-header">
+					<h2>Impressions</h2>
+				</div>
+				<div class="inside">
+					<div class="holler-big-number" id="impressions"></div>
+				</div>
+			</div>
+			<div class="holler-panel span-third">
+				<div class="holler-panel-header">
+					<h2>Conversions</h2>
+				</div>
+				<div class="inside">
+					<div class="holler-big-number" id="conversions"></div>
+				</div>
+			</div>
+			<div class="holler-panel span-third">
+				<div class="holler-panel-header">
+					<h2>Conversion Rate</h2>
+				</div>
+				<div class="inside">
+					<div class="holler-big-number" id="conversion-rate"></div>
+				</div>
+			</div>
+			<div class="holler-panel span-half">
+				<div class="holler-panel-header">
+					<h2>Pages</h2>
+				</div>
+				<div id="pages-table">
+				</div>
+			</div>
+			<div class="holler-panel span-half pie">
+				<div class="holler-panel-header">
+					<h2>Conversion Content ${tooltipIcon('conversion-content')}</h2>
+				</div>
+				<div class="inside">
+					<canvas id="content-graph"></canvas>
+				</div>
+			</div>
         `
       },
       onMount: ([name, popup_id], setPage) => {
 
+        tooltip( '#conversion-content', {
+          content: 'The content a user interacted with when a conversion was recorded.'
+        } )
+
         let popup = ReportData.getPopup(popup_id)
 
-        if ( ! popup ){
+        if (!popup) {
           confirmationModal({
             alert: `<p>${__('There is no data for this popup yet. Wait a few days and check again.')}</p>`,
             onConfirm: () => {
               setPage('/')
-            }
+            },
           })
           return
         }
@@ -280,12 +323,54 @@
           id: popup.ID,
         })
 
-        let impressions =  ReportData.sumImpressions( { id: popup.ID } )
-        let conversions =  ReportData.sumConversions( { id: popup.ID } )
+        let contents = ReportData.getContents({
+          popup_id: popup.ID
+        })
 
-        $('#impressions').html( impressions )
-        $('#conversions').html( conversions )
-        $('#conversion-rate').html( Math.floor(( conversions / Math.max(impressions, 1) ) * 100) + '%' )
+        let rgb = 'rgb(0,120,255)'
+
+        new Chart(
+          document.getElementById('content-graph'),
+          {
+            type: 'doughnut',
+            data: {
+              labels: contents.map( c => c ? c : 'Clicked' ),
+              datasets: [
+                {
+                  label: 'Conversion Content',
+                  data: contents.map(content => ReportData.sumContent({
+                    content,
+                    id: popup.ID,
+                  })),
+                  backgroundColor: contents.map((c, i) => {
+
+                    // skip the first one
+                    if (i > 0) {
+                      rgb = darkenRGB(rgb, 20)
+                    }
+
+                    return rgb
+                  }),
+                }],
+            },
+            options: {
+              // maintainAspectRatio: false
+              plugins: {
+                legend: {
+                  position: 'right',
+                },
+              },
+              aspectRatio: 2,
+            },
+          },
+        )
+
+        let impressions = ReportData.sumImpressions({ id: popup.ID })
+        let conversions = ReportData.sumConversions({ id: popup.ID })
+
+        $('#impressions').html(impressions)
+        $('#conversions').html(conversions)
+        $('#conversion-rate').html(Math.floor((conversions / Math.max(impressions, 1)) * 100) + '%')
 
         Table('#pages-table', {
           headers: [
@@ -300,10 +385,10 @@
             let conversions = ReportData.sumConversions({ location: page, id: popup.ID })
 
             return [
-              `<a href="${ page }" target="_blank">${ page }</a>`,
+              `<a href="${page}" target="_blank">${page}</a>`,
               impressions,
               conversions,
-              Math.floor(( conversions / Math.max(impressions, 1) ) * 100) + '%',
+              Math.floor((conversions / Math.max(impressions, 1)) * 100) + '%',
             ]
           }).filter(([link, impressions]) => impressions > 0).sort(([la, ia], [lb, ib]) => ib - ia),
         })
@@ -316,65 +401,64 @@
 
         // language=HTML
         return `
-            <div class="holler-panel span-full">
-                <div class="holler-panel-header">
-                    <h2>All Activity</h2>
-                </div>
-                <div class="inside">
-                    <canvas id="main-graph"></canvas>
-                </div>
-            </div>
-            <div class="holler-panel span-third">
-                <div class="holler-panel-header">
-                    <h2>Impressions</h2>
-                </div>
-                <div class="inside">
-                    <div class="holler-big-number" id="impressions"></div>
-                </div>
-            </div>
-            <div class="holler-panel span-third">
-                <div class="holler-panel-header">
-                    <h2>Conversions</h2>
-                </div>
-                <div class="inside">
-                    <div class="holler-big-number" id="conversions"></div>
-                </div>
-            </div>
-            <div class="holler-panel span-third">
-                <div class="holler-panel-header">
-                    <h2>Conversion Rate</h2>
-                </div>
-                <div class="inside">
-                    <div class="holler-big-number" id="conversion-rate"></div>
-                </div>
-            </div>
-            <div class="holler-panel span-half">
-                <div class="holler-panel-header">
-                    <h2>Popups</h2>
-                </div>
-                <div id="popups-table">
-                </div>
-            </div>
-            <div class="holler-panel span-half">
-                <div class="holler-panel-header">
-                    <h2>Pages</h2>
-                </div>
-                <div id="pages-table">
-                </div>
-            </div>
+			<div class="holler-panel span-full">
+				<div class="holler-panel-header">
+					<h2>All Activity</h2>
+				</div>
+				<div class="inside">
+					<canvas id="main-graph"></canvas>
+				</div>
+			</div>
+			<div class="holler-panel span-third">
+				<div class="holler-panel-header">
+					<h2>Impressions</h2>
+				</div>
+				<div class="inside">
+					<div class="holler-big-number" id="impressions"></div>
+				</div>
+			</div>
+			<div class="holler-panel span-third">
+				<div class="holler-panel-header">
+					<h2>Conversions</h2>
+				</div>
+				<div class="inside">
+					<div class="holler-big-number" id="conversions"></div>
+				</div>
+			</div>
+			<div class="holler-panel span-third">
+				<div class="holler-panel-header">
+					<h2>Conversion Rate</h2>
+				</div>
+				<div class="inside">
+					<div class="holler-big-number" id="conversion-rate"></div>
+				</div>
+			</div>
+			<div class="holler-panel span-half">
+				<div class="holler-panel-header">
+					<h2>Popups</h2>
+				</div>
+				<div id="popups-table">
+				</div>
+			</div>
+			<div class="holler-panel span-half">
+				<div class="holler-panel-header">
+					<h2>Pages</h2>
+				</div>
+				<div id="pages-table">
+				</div>
+			</div>
         `
       },
       onMount: (params, setPage) => {
 
         lineChart('main-graph', {})
 
-        let impressions =  ReportData.sumImpressions({})
-        let conversions =  ReportData.sumConversions({})
+        let impressions = ReportData.sumImpressions({})
+        let conversions = ReportData.sumConversions({})
 
-        $('#impressions').html( impressions )
-        $('#conversions').html( conversions )
-        $('#conversion-rate').html( Math.floor(( conversions / Math.max(impressions, 1) ) * 100) + '%' )
-
+        $('#impressions').html(impressions)
+        $('#conversions').html(conversions)
+        $('#conversion-rate').html(Math.floor((conversions / Math.max(impressions, 1)) * 100) + '%')
 
         Table('#pages-table', {
           headers: [
@@ -389,10 +473,10 @@
             let conversions = ReportData.sumConversions({ location: page })
 
             return [
-              `<a href="${ page }" target="_blank">${ page }</a>`,
+              `<a href="${page}" target="_blank">${page}</a>`,
               impressions,
               conversions,
-              Math.floor(( conversions / impressions ) * 100) + '%',
+              Math.floor((conversions / impressions) * 100) + '%',
             ]
           }).sort(([la, ia], [lb, ib]) => ib - ia),
         })
@@ -402,7 +486,7 @@
             $('.popup-link').on('click', e => {
               e.preventDefault()
 
-              setPage(`/popup/${ e.target.dataset.id }/`)
+              setPage(`/popup/${e.target.dataset.id}/`)
             })
           },
           headers: [
@@ -417,10 +501,10 @@
             let conversions = ReportData.sumConversions({ id: p.ID })
 
             return [
-              `<a href="#" class="popup-link" data-id="${ p.ID }">${ p.post_title }</a>`,
+              `<a href="#" class="popup-link" data-id="${p.ID}">${p.post_title}</a>`,
               impressions,
               conversions,
-              Math.floor(( conversions / impressions ) * 100) + '%',
+              Math.floor((conversions / impressions) * 100) + '%',
             ]
           }).sort(([la, ia], [lb, ib]) => ib - ia),
         })
@@ -448,8 +532,7 @@
     init () {
       if (window.location.hash) {
         this.initFromSlug()
-      }
-      else {
+      } else {
         history.pushState({}, '', `#/`)
         this.initFromSlug()
       }
@@ -463,15 +546,15 @@
 
       // language=HTML
       return `
-          <div class="holler-header is-sticky">
-              <div id="logo">
-                  ${ icons.hollerbox_full }
-              </div>
-              <div id="holler-datepicker" class="daterange daterange--double"></div>
-          </div>
-          <div id="reports-here">
-              ${ this.currentPage.render() }
-          </div>`
+		  <div class="holler-header is-sticky">
+			  <div id="logo">
+				  ${icons.hollerbox_full}
+			  </div>
+			  <div id="holler-datepicker" class="daterange daterange--double"></div>
+		  </div>
+		  <div id="reports-here">
+			  ${this.currentPage.render()}
+		  </div>`
     },
 
     mount () {
@@ -479,7 +562,7 @@
       this.currentPage = pages.find(p => this.slug.match(p.slug))
 
       const setPage = (slug) => {
-        history.pushState({}, '', `#${ slug }`)
+        history.pushState({}, '', `#${slug}`)
         this.initFromSlug()
       }
 
@@ -544,4 +627,4 @@
 
   $(() => ReportData.fetch().then(() => Page.init()))
 
-} )(jQuery)
+})(jQuery)

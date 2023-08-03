@@ -342,78 +342,6 @@
 		</div>`
   }
 
-  const BasicTemplatePicker = (selector, {
-    onSelect,
-  }) => {
-
-    let search = false
-    let keyword = ''
-
-    const templatesHTML = () => {
-      return Object.keys(Templates).filter(t => {
-        if (!search && !keyword) {
-          return true
-        }
-
-        const matchSearch = () => {
-          return t.name.match(search) || t.keywords.some(k => k.match(search))
-        }
-
-        const matchKeywords = () => {
-          return t.keywords.includes(keyword)
-        }
-
-        if (search && !keyword) {
-          return matchSearch()
-        }
-
-        if (keyword && !search) {
-          return matchKeywords()
-        }
-
-        if (keyword && search) {
-          return matchKeywords() && matchSearch()
-        }
-
-        return false
-
-      }).map(t => {
-
-        t = {
-          id: t,
-          ...Templates[t],
-        }
-
-        //language=HTML
-        return `
-			<div class="template" data-template="${t.id}">
-				<div class="preview-wrap">
-					<div class="preview">
-						${HollerBox.templates[t.id].render({
-							...t.defaults,
-						})}
-					</div>
-				</div>
-				<p class="template-name">
-					${t.name ? t.name : t.id}
-				</p>
-			</div>`
-      }).join('')
-    }
-
-    const mountTemplates = () => {
-
-    }
-
-    $(selector).html()
-
-    $(`${selector} .template`).on('click', e => {
-      let template = e.currentTarget.dataset.template
-      onSelect(template)
-    })
-
-  }
-
   const { Div, Input, Select } = MakeEl
 
   const morph = (selector, children) => {
@@ -429,6 +357,7 @@
     let search = null
     let searchVal = ''
     let keyword = ''
+    let timeout = ''
 
     const getTemplates = () => Object.keys(Templates).map(t => ({
       id: t,
@@ -440,7 +369,7 @@
       }
 
       const matchSearch = () => {
-        return t.name.match(search) || t.keywords.some(k => k.match(search))
+        return t.name.match(search) || t.keywords.some(k => k && k.match(search))
       }
 
       const matchKeywords = () => {
@@ -462,6 +391,7 @@
       return false
 
     }).map(t => Div({
+      id: `template-${t.id}`,
       className: 'template',
       dataTemplate: t.id,
       onClick: e => {
@@ -507,7 +437,12 @@
             onInput: e => {
               searchVal = e.target.value
               search = regexp(searchVal)
-              mount()
+
+              if ( timeout ){
+                clearTimeout( timeout )
+              }
+
+              setTimeout( mount, 1000 )
             },
           }),
         ]),
@@ -528,6 +463,7 @@
     let search = null
     let searchVal = ''
     let keyword = ''
+    let timeout = ''
 
     const getTemplates = () => templates.filter(t => {
       if (!search && !keyword) {
@@ -535,7 +471,7 @@
       }
 
       const matchSearch = () => {
-        return t.post_title.match(search) || Templates[t.template]?.keywords?.some(k => k.match(search))
+        return t.post_title.match(search) || Templates[t.template]?.keywords?.some(k => k && k.match(search))
       }
 
       const matchKeywords = () => {
@@ -561,6 +497,7 @@
       Editor.current_preview = t
 
       let el = Div({
+        id: `template-${t.id}`,
         className: 'template',
         dataTemplate: t.id,
         onClick: e => {
@@ -613,7 +550,12 @@
             onInput: e => {
               searchVal = e.target.value
               search = regexp(searchVal)
-              mount()
+
+              if ( timeout ){
+                clearTimeout( timeout )
+              }
+
+              setTimeout( mount, 1000 )
             },
           }),
         ]),
@@ -667,6 +609,7 @@
     onSelect = (t) => {},
   }) => {
 
+    let templates = []
     let tab = 'basic'
     const tabs = {
       basic: {
@@ -687,10 +630,14 @@
         render: () => `${isPro()
 			? ''
 			: proTemplatesAd()}
-		<div id="templates" class="library"></div>`,
+		<div id="templates" class="library">
+		    <div class="lds-facebook"><div></div><div></div><div></div></div>
+    </div>`,
         onMount: async ({ close }) => {
 
-          let templates = await apiGet(HollerBox.routes.library)
+          if ( ! templates.length ){
+            templates = await apiGet(HollerBox.routes.library)
+          }
 
           if (!Array.isArray(templates)) {
             templates = Object.values(templates)
@@ -699,6 +646,20 @@
           // Make sure required base templates are registered
           templates = templates.filter(
             t => HollerBox.templates.hasOwnProperty(t.template))
+
+          templates.sort((a, b) => {
+            const nameA = a.post_title.toUpperCase(); // ignore upper and lowercase
+            const nameB = b.post_title.toUpperCase(); // ignore upper and lowercase
+            if (nameA < nameB) {
+              return -1;
+            }
+            if (nameA > nameB) {
+              return 1;
+            }
+
+            // names must be equal
+            return 0;
+          } )
 
           LibraryTemplatePickerUsingMakeEl('#templates', {
             onSelect: (template) => {
@@ -721,12 +682,6 @@
             },
             templates,
           })
-
-          document.querySelector('#templates').querySelectorAll('img').forEach(el => {
-            // el.removeAttribute('height')
-            // el.removeAttribute('width')
-          })
-
         },
       },
       import: {
@@ -3083,6 +3038,7 @@
     // optin: __('Optin', 'holler-box'),
     // message: __('Message', 'holler-box'),
     image: __('Image', 'holler-box'),
+    media: __('Media', 'holler-box'),
     // progress: __('Progress', 'holler-box'),
     progress_bar: __('Progress bar', 'holler-box'),
     // media: __('Media', 'holler-box'),

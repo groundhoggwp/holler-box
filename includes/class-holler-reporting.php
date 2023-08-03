@@ -72,11 +72,11 @@ class Holler_Reporting {
 	/**
 	 * Check if the stats table exists
 	 *
-	 * @since  2.4
-	 *
 	 * @param string $table The table name
 	 *
 	 * @return bool          If the table name exists
+	 * @since  2.4
+	 *
 	 */
 	public function table_exists() {
 		global $wpdb;
@@ -113,7 +113,7 @@ class Holler_Reporting {
 
 		$charset_collate = $wpdb->get_charset_collate();
 
-		$max_index_length = $wpdb->charset === 'utf8mb4' ? 191 : 255;
+		$max_index_length = $this->max_key_length();
 
 		$sql = "CREATE TABLE " . $this->table_name . " (
         s_type varchar(10) NOT NULL,
@@ -121,11 +121,13 @@ class Holler_Reporting {
         s_count bigint(20) unsigned NOT NULL,
         popup_id bigint(20) unsigned NOT NULL,
         location varchar($max_index_length) NOT NULL,
-        PRIMARY KEY (popup_id, s_type, s_date, location),
+        content varchar($max_index_length) NOT NULL,
+        PRIMARY KEY (popup_id, s_type, s_date, location, content),
         KEY s_date (s_date),
         KEY s_type (s_type),
-        KEY popup_id (popup_id)
-        ) $charset_collate;";
+        KEY popup_id (popup_id),
+        KEY content (content),
+        ) $charset_collate ENGINE=InnoDB;";
 
 		dbDelta( $sql );
 
@@ -133,14 +135,16 @@ class Holler_Reporting {
 	}
 
 	/**
-	 * @throws Exception
-	 *
-	 * @param Holler_Popup $popup
 	 * @param string       $type
 	 *
+	 * @param Holler_Popup $popup
+	 * @param string       $location
+	 * @param string       $content
+	 *
 	 * @return void
+	 * @throws Exception
 	 */
-	protected function increment_stat( string $type, Holler_Popup $popup, $location ) {
+	protected function increment_stat( string $type, Holler_Popup $popup, $location, $content = '' ) {
 		global $wpdb;
 
 		$date = new DateTime( 'now', wp_timezone() );
@@ -148,8 +152,8 @@ class Holler_Reporting {
 		$updated = $wpdb->query( $wpdb->prepare( "
 UPDATE $this->table_name 
 SET s_count = s_count + 1 
-WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
-			$popup->ID, $type, $date->format( 'Y-m-d' ), $location ) );
+WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s AND content = %s",
+			$popup->ID, $type, $date->format( 'Y-m-d' ), $location, $content ) );
 
 		// No rows were effected
 		if ( ! $updated ) {
@@ -160,6 +164,7 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 				's_count'  => 1,
 				'popup_id' => $popup->ID,
 				'location' => $location,
+				'content'  => $content,
 				's_date'   => $date->format( 'Y-m-d' ),
 			], [
 				'%s',
@@ -188,11 +193,12 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 	 *
 	 * @param $popup    Holler_Popup
 	 * @param $location string
+	 * @param $content  string
 	 *
 	 * @return void
 	 */
-	public function add_conversion( Holler_Popup $popup, string $location ) {
-		$this->increment_stat( 'conversion', $popup, $location );
+	public function add_conversion( Holler_Popup $popup, string $location, string $content ) {
+		$this->increment_stat( 'conversion', $popup, $location, $content );
 	}
 
 	/**
@@ -248,20 +254,26 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 		$clauses = [];
 
 		foreach ( $query as $column => $value ) {
+
+			if ( ! $this->is_valid_column( $column ) ){
+				continue;
+			}
+
 			switch ( $column ) {
 				case 'before':
-					$clauses[] = "s_date <= '$value'";
+					$clauses[] = $wpdb->prepare( "s_date <= %s", $value );
 					break;
 				case 'after':
-					$clauses[] = "s_date >= '$value'";
+					$clauses[] = $wpdb->prepare( "s_date >= %s", $value );
 					break;
 				case 's_type':
 				case 'location':
+				case 'content':
 				case 's_date':
-					$clauses[] = "$column = '$value'";
+					$clauses[] = $wpdb->prepare( "$column = %s", $value );
 					break;
 				default:
-					$clauses[] = "$column = $value";
+					$clauses[] = $wpdb->prepare( "$column = %d", $value );
 					break;
 			}
 		}
@@ -343,6 +355,7 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 			'popup_id',
 			'location',
 			's_date',
+			'content'
 		] );
 	}
 
@@ -376,12 +389,13 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 					break;
 				case 's_type':
 				case 'location':
+				case 'content':
 				case 's_date':
 					$clauses[] = $wpdb->prepare( "$column = %s", $value );
 					break;
 				default:
 					if ( $this->is_valid_column( $column ) ) {
-						if ( is_numeric( $column ) ){
+						if ( is_numeric( $column ) ) {
 							$clauses[] = $wpdb->prepare( "$column = %d", $value );
 						} else {
 							$clauses[] = $wpdb->prepare( "$column = %s", $value );
@@ -399,6 +413,17 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 	}
 
 	/**
+	 * Max key length
+	 *
+	 * @return int
+	 */
+	public function max_key_length() {
+		global $wpdb;
+
+		return $wpdb->charset === 'utf8mb4' ? 191 : 255;
+	}
+
+	/**
 	 * Change location to varchar 255
 	 * Update primary key to include location
 	 *
@@ -407,9 +432,35 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s",
 	public function update_2_1_2() {
 		global $wpdb;
 
-		$max_index_length = $wpdb->charset === 'utf8mb4' ? 191 : 255;
+		$max_index_length = $this->max_key_length();
 
 		$wpdb->query( "ALTER TABLE {$this->table_name} MODIFY COLUMN location varchar($max_index_length) NOT NULL, DROP PRIMARY KEY, ADD PRIMARY KEY (popup_id, s_type, s_date, location);" );
+	}
+
+	/**
+	 * Add the new column
+	 *
+	 * @return void
+	 */
+	public function update_2_2() {
+		global $wpdb;
+
+		$max_index_length = $this->max_key_length();
+
+		$commands = [
+			// Change the engine to InnoDB
+			"ALTER TABLE {$this->table_name} ENGINE=InnoDB;",
+			// Add the content columns
+			"ALTER TABLE {$this->table_name} ADD content varchar($max_index_length) NOT NULL;",
+			// Add index
+			"CREATE INDEX content ON {$this->table_name} (content);",
+			// Update the primary key
+			"ALTER TABLE {$this->table_name} DROP PRIMARY KEY, ADD PRIMARY KEY (popup_id, s_type, s_date, location, content);"
+		];
+
+		foreach ( $commands as $command ) {
+			$wpdb->query( $command );
+		}
 	}
 
 }

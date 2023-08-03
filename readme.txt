@@ -4,7 +4,7 @@ Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
 Tested up to: 6.2
-Stable tag: 2.2.4
+Stable tag: 2.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -229,7 +229,6 @@ You can purchase a premium plan for access to support and our premium extensions
  * Popup Content Width
  * Popup Background Color
  * Overlay image (from Pro version)
- *
 * IMPROVED Conditional settings for basic controls in the editor.
 
 = 2.2.4 (2023-07-06) =

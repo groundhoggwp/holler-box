@@ -203,8 +203,9 @@ class Holler_Api {
 
 		// Parse the location
 		$location = parse_url( sanitize_text_field( $request->get_param( 'location' ) ), PHP_URL_PATH );
+		$content  = sanitize_text_field( $request->get_param( 'content' ) );
 
-		Holler_Reporting::instance()->add_conversion( $popup, $location );
+		Holler_Reporting::instance()->add_conversion( $popup, $location, $content );
 
 		if ( is_user_logged_in() ) {
 			$conversions   = wp_parse_id_list( get_user_meta( get_current_user_id(), 'hollerbox_popup_conversions', true ) );

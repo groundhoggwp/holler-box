@@ -148,6 +148,11 @@ body.hollerbox_page_hollerbox_reports #holler-app .holler-panel .holler-panel-he
   font-size: 18px;
   padding: 16px;
 }
+body.hollerbox_page_hollerbox_reports #holler-app .holler-panel .holler-panel-header h2 .dashicons {
+  font-size: 20px;
+  height: 20px;
+  width: 20px;
+}
 body.hollerbox_page_hollerbox_reports #holler-app .holler-panel .holler-big-number {
   font-size: 42px;
   font-weight: 500;

@@ -10,9 +10,12 @@
   }
 
   const AttributeHandlers = {
+    value: ( el, value ) => {
+      el.value = value
+    },
     className: (el, attribute) => {
       if (isString(attribute)) {
-        attribute = attribute.split(' ')
+        attribute = attribute.split(' ').map( c => c.trim() ).filter( c => c )
       }
 
       el.classList.add(...attribute)
@@ -72,7 +75,8 @@
    * @return {*}
    */
   const makeEl = (tagName, attributes, children = null) => {
-    let el = document.createElement(tagName)
+
+    let el = tagName === 'fragment' ? document.createDocumentFragment() : document.createElement(tagName)
 
     for (let attributeName in attributes) {
 
@@ -106,7 +110,7 @@
 
     children.forEach(child => {
 
-      if (child === null) {
+      if (! child) {
         return
       }
 
@@ -209,6 +213,18 @@
     })
   }
 
+  const Fragment = ( children ) => {
+    return makeEl( 'fragment', {}, children )
+  }
+
+  const Span = (attributes = {}, children = []) => {
+    return makeEl('span', attributes, children )
+  }
+
+  const Label = (attributes = {}, children = []) => {
+    return makeEl('label', attributes, children )
+  }
+
   const InputRepeater = ({
     onChange = () => {},
     rows = [],
@@ -307,6 +323,9 @@
     Button,
     Toggle,
     Div,
+    Span,
+    Label,
     InputRepeater,
+    Fragment
   }
 })(jQuery)
