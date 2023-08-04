@@ -223,7 +223,7 @@ You can purchase a premium plan for access to support and our premium extensions
 
 == Changelog ==
 
-= 2.3 (2023-07-20) =
+= 2.3 (2023-08-04) =
 * ADDED Pro Design Library. Popups with content and designs ready for importing.
 * ADDED Search and filtering to popup template library.
 * ADDED New settings for...
