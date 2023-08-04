@@ -225,10 +225,13 @@ You can purchase a premium plan for access to support and our premium extensions
 
 = 2.3 (2023-07-20) =
 * ADDED Pro Design Library. Popups with content and designs ready for importing.
+* ADDED Search and filtering to popup template library.
 * ADDED New settings for...
  * Popup Content Width
  * Popup Background Color
  * Overlay image (from Pro version)
+* ADDED Conversion content tracking to reporting.
+* IMPROVED Exit intent works for mobile devices.
 * IMPROVED Conditional settings for basic controls in the editor.
 
 = 2.2.4 (2023-07-06) =

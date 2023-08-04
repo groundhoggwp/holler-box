@@ -518,7 +518,7 @@
 
         customForm.addEventListener('submit', e => {
 
-          if ( flag ){
+          if (flag) {
             return true
           }
 
@@ -528,13 +528,13 @@
             'button.holler-box-button').innerHTML = '<span class="holler-spinner"></span>'
           Array.from(customForm.elements).forEach(el => el.disabled = true)
 
-          if ( ! isBuilderPreview() ){
-            popup.converted( 'Submitted Custom Form' ).then( () => {
+          if (!isBuilderPreview()) {
+            popup.converted('Submitted Custom Form').then(() => {
               flag = true
               customForm.submit()
             })
           } else {
-            setTimeout( () => popup.open(), 1000 )
+            setTimeout(() => popup.open(), 1000)
           }
 
           return false
@@ -573,7 +573,7 @@
 
         return popup.submit({
           ...payload,
-          content: 'Form Submitted'
+          content: 'Form Submitted',
         }).
         then(({ status = 'success', failures = [] }) => {
 
@@ -626,7 +626,7 @@
       button.addEventListener('click', e => {
         e.preventDefault()
         button.innerHTML = '<span class="holler-spinner"></span>'
-        popup.converted( 'Clicked Button' ).then(() => {
+        popup.converted('Clicked Button').then(() => {
 
           if (isBuilderPreview()) {
 
@@ -1039,7 +1039,7 @@
 
               popup.submit({
                 ...popup.responses,
-                content: 'Chat'
+                content: 'Chat',
               }).then(r => {
                 switch (popup.after_submit) {
                   case 'message':
@@ -1506,6 +1506,54 @@
       })
     },
     exit_intent: (popup, show) => {
+      if ( isMobile() ) {
+
+        // Back Button
+        window.addEventListener('popstate', (event) => {
+
+          // if show is true, the popup is going to open
+          if (show()) {
+            // Prevent the actual page navigation by pushing a new state onto the history stack
+            history.pushState(null, document.title, window.location.href)
+          }
+        })
+
+        // using touch events (scroll up)
+
+        // Wait 1 seconds
+        setTimeout( () => {
+          // Fast scroll up
+          let startY = 0;
+          let startTime = 0;
+          let startScroll = 0;
+
+          window.addEventListener('touchstart', function(event) {
+            startY = event.touches[0].clientY;
+            startTime = Date.now();
+            startScroll = window.scrollY
+          });
+
+          window.addEventListener('touchmove', function(event) {
+            const deltaY = startY - event.touches[0].clientY;
+            const currentTime = Date.now();
+            const timeDiff = currentTime - startTime;
+
+            // Check if the touch movement is upward and the speed is above a certain threshold
+            if (deltaY < 0 && startScroll > window.scrollY && Math.abs(deltaY) / timeDiff > 0.5) {
+              // Fast scroll up detected, perform your desired action here
+              show()
+            }
+          });
+
+          window.addEventListener('touchend', function(event) {
+            startY = 0;
+            startTime = 0;
+            startScroll = 0;
+          });
+        }, 1000 )
+      }
+
+      // Desktop mouseout
       window.addEventListener('mouseout', e => {
         if (!e.toElement && !e.relatedTarget) {
           show()
@@ -1514,6 +1562,16 @@
 
     },
   }
+
+  const isMobile = () => {
+    const screenWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
+    const screenHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
+    const isMobile = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+    return isMobile || (screenWidth < 768 && screenHeight < 1024)
+  }
+
+  const isDesktop = () => !isMobile()
 
   const AdvancedDisplayRules = {
     hide_if_converted: ({}, popup) => popup.getConversions() === 0,
@@ -1551,11 +1609,9 @@
         default:
           return true
         case 'mobile':
-          return Math.max(document.documentElement.clientWidth || 0,
-            window.innerWidth || 0) <= 480
+          return isMobile()
         case 'desktop':
-          return Math.max(document.documentElement.clientWidth || 0,
-            window.innerWidth || 0) > 480
+          return isDesktop()
       }
     },
   }
@@ -1679,7 +1735,7 @@
           popup_id: this.ID,
           location: window.location.href,
           referer: document.referrer,
-          content
+          content,
         })
       }
     },
@@ -1954,7 +2010,7 @@
 
       // do not open if already opened
       if (this.isOpen() || this.wasTriggered()) {
-        return
+        return false
       }
 
       // Loop through advanced frontend rules
@@ -1970,7 +2026,7 @@
 
           // If fails the condition, return and don't show
           if (!AdvancedDisplayRules[rule](this.advanced_rules[rule], this)) {
-            return
+            return false
           }
         }
 
@@ -1979,10 +2035,12 @@
       // If another popup is open, push top the stack
       if (HollerBox.active.some(p => p.isOpen() && p.isBlocking(this))) {
         PopupStack.add(this)
-        return
+        return false
       }
 
       this.open()
+
+      return true
     },
 
     setTemplate () {
