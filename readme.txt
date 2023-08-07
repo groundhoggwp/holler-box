@@ -3,8 +3,8 @@
 Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
-Tested up to: 6.2
-Stable tag: 2.3
+Tested up to: 6.3
+Stable tag: 2.3.1
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -26,7 +26,11 @@ HollerBox is fully self-hosted, meaning no limits on the number of popups, leads
 
 If you are an Agency, e-Commerce Store, or Small Business that needs highly effective popups, then HollerBox is for you!
 
-## 💸 Eliminating the "Success Tax"
+### Create content gate popups and get more subscribers
+
+[youtube https://youtu.be/Dw8izXGbw98
+
+## 💸 Eliminating the "Suc]cess Tax"
 
 Other SaaS (Software as a Service) Popup tools will charge you more as your grow.
 
@@ -107,6 +111,10 @@ Here are the tools you can use to launch your popup, grow your list, and scale y
 * Trigger popups from time on page
 * Trigger popups from scroll percentage
 * Trigger popups from exit intent
+
+### Overview of the new and improved HollerBox
+
+[youtube https://youtu.be/XWyUDlL9zWE]
 
 ### 📈 Analytics & Reporting
 
@@ -222,6 +230,10 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.3.1 (2023-08-07) =
+* ADDED Close button to the modal to select a template when adding a new popup.
+* FIXED PHP Notice in Holler_Lead class when no last name was given.
 
 = 2.3 (2023-08-04) =
 * ADDED Pro Design Library. Popups with content and designs ready for importing.

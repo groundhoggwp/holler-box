@@ -761,9 +761,16 @@
 				      data-tab="import">${__('Import')}
 				  </li>
 			  </menu>
+		  <button
+			  class="holler-button secondary text icon" id="exit-builder"><span
+			  class="dashicons dashicons-no-alt"></span></button>
 		  </div>
 		  <div id="tab-content"></div>`,
       onMount: ({ close, mount }) => {
+
+        $('#exit-builder').on('click', e => {
+          window.open( `${HollerBox.admin_url}/edit.php?post_type=hollerbox`, '_self' )
+        })
 
         let currTab = tabs[tab]
 

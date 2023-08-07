@@ -327,6 +327,9 @@ table.display-conditions-grid tr:not(:last-child) td, table.display-conditions-g
   padding: 0;
   min-height: 0;
 }
+.holler-header:has(.tab-select) .holler-button {
+  margin-right: 10px;
+}
 
 menu.tab-select {
   display: flex;

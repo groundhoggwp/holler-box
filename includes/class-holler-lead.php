@@ -19,12 +19,16 @@ class Holler_Lead {
 	public $request = null;
 
 	public function __construct( WP_REST_Request $request ) {
-		$this->name  = sanitize_text_field( $request->get_param( 'name' ) );
-		$this->email = sanitize_email( strtolower( $request->get_param( 'email' ) ) );
+		$this->name = sanitize_text_field( $request->get_param( 'name' ) );
 
-		$parts              = explode( ' ', $this->name );
-		$this->first_name   = trim( $parts[0] );
-		$this->last_name    = trim( $parts[1] );
+		$parts            = explode( ' ', $this->name );
+		$this->first_name = trim( $parts[0] );
+
+		if ( isset( $parts[1] ) ) {
+			$this->last_name = trim( $parts[1] );
+		}
+
+		$this->email        = sanitize_email( strtolower( $request->get_param( 'email' ) ) );
 		$this->phone        = sanitize_text_field( $request->get_param( 'phone' ) );
 		$this->location     = sanitize_text_field( $request->get_param( 'location' ) );
 		$this->referrer     = sanitize_text_field( $request->get_param( 'referer' ) );
