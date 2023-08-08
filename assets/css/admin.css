@@ -179,5 +179,12 @@ body.hollerbox_page_hollerbox_reports #holler-app .holler-panel table th:first-c
 body.hollerbox_page_hollerbox_reports #holler-app .holler-panel table tbody tr:nth-child(odd) {
   background-color: rgba(0, 117, 255, 0.02);
 }
+body.hollerbox_page_hollerbox_reports #holler-app .holler-panel .pagination {
+  padding: 12px 16px;
+  justify-content: flex-end;
+}
+body.hollerbox_page_hollerbox_reports #holler-app .holler-panel .pagination .ellipsis {
+  font-size: 20px;
+}
 
 /*# sourceMappingURL=admin.css.map */

@@ -5,7 +5,7 @@
     icons,
     confirmationModal,
     tooltipIcon,
-    tooltip
+    tooltip,
   } = HollerBox.elements
 
   const { __ } = wp.i18n
@@ -137,8 +137,10 @@
       return arrayUnique(this.report_data.map(({ location }) => location))
     },
 
-    getContents ( { popup_id: _popup_id = false } ) {
-      return arrayUnique(this.report_data.filter( ({popup_id, s_type}) => popup_id == _popup_id && s_type === 'conversion' ).map(({ content }) => content))
+    getContents ({ popup_id: _popup_id = false }) {
+      return arrayUnique(
+        this.report_data.filter(({ popup_id, s_type }) => popup_id == _popup_id && s_type === 'conversion').
+        map(({ content }) => content))
     },
 
     sumCount (type, {
@@ -168,6 +170,66 @@
     },
   }
 
+  const { Div, Input, Select, Button } = MakeEl
+
+  const Pagination = ({
+    rows = [],
+    itemsPerPage = 10,
+    currentPage = 1,
+    onPageChange = page => {},
+  }) => {
+
+    let numPages = Math.ceil(rows.length / itemsPerPage)
+
+    const PrevButton = () => Button({
+      className: 'holler-button secondary prev-button',
+      // id: 'show-prev',
+      onClick: () => onPageChange(currentPage - 1),
+    }, 'Prev')
+
+    const NextButton = () => Button({
+      className: 'holler-button secondary next-button',
+      // id: 'show-next',
+      onClick: () => onPageChange(currentPage + 1),
+    }, 'Next')
+
+    const PageButton = (page) => Button({
+      className: `holler-button ${currentPage === page ? 'primary' : 'secondary'} paginate page-${page}`,
+      onClick: () => onPageChange(page),
+    }, `${page}`)
+
+    let pageButtons = []
+
+    let start = Math.max(1, currentPage - 2)
+    let end = Math.min(numPages, start + 3)
+
+    if (start > 1) {
+      pageButtons.push(PageButton(1))
+      if (start > 2) {
+        pageButtons.push('<span class="ellipsis">&hellip;</span>')
+      }
+    }
+
+    for (let i = start; i <= end; i++) {
+      pageButtons.push(PageButton(i))
+    }
+
+    if (end < numPages) {
+      if (end < numPages - 1) {
+        pageButtons.push('<span class="ellipsis">&hellip;</span>')
+      }
+      pageButtons.push(PageButton(numPages))
+    }
+
+    return Div({
+      className: 'pagination display-flex gap-10',
+    }, [
+      currentPage > 1 ? PrevButton() : null,
+      ...pageButtons,
+      currentPage < numPages ? NextButton() : null,
+    ])
+  }
+
   const Table = (selector, {
     headers,
     rows,
@@ -176,9 +238,13 @@
 
     const $el = $(selector)
 
-    let show = 10
+    let itemsPerPage = 10
+    let currentPage = 1
 
     const renderTable = () => {
+
+      let offSet = (currentPage - 1) * itemsPerPage
+
       //language=HTML
       return `
 		  <table>
@@ -186,16 +252,34 @@
 			  ${headers.map(h => `<th>${h}</th>`).join('')}
 			  </thead>
 			  <tbody>
-			  ${rows.slice(0, show).
+			  ${rows.slice(offSet, offSet + itemsPerPage).
 			  map(row => `<tr>${row.map(item => `<td>${item}</td>`).join('')}</tr>`).
 			  join('')}
 			  </tbody>
-		  </table>`
+		  </table>
+		  <div class="table-pagination"></div>
+      `
     }
 
-    $el.html(renderTable())
+    const mount = () => {
+      $el.html(renderTable())
 
-    onMount()
+      if (rows.length > itemsPerPage) {
+        morphdom(document.querySelector(`${selector} .table-pagination`), Pagination({
+          rows,
+          itemsPerPage,
+          currentPage,
+          onPageChange: (page) => {
+            currentPage = page
+            mount()
+          },
+        }))
+      }
+
+      onMount()
+    }
+
+    mount()
   }
 
   const lineChart = (id, query = {}) => {
@@ -296,9 +380,9 @@
       },
       onMount: ([name, popup_id], setPage) => {
 
-        tooltip( '#conversion-content', {
-          content: 'The content a user interacted with when a conversion was recorded.'
-        } )
+        tooltip('#conversion-content', {
+          content: 'The content a user interacted with when a conversion was recorded.',
+        })
 
         let popup = ReportData.getPopup(popup_id)
 
@@ -324,7 +408,7 @@
         })
 
         let contents = ReportData.getContents({
-          popup_id: popup.ID
+          popup_id: popup.ID,
         })
 
         let rgb = 'rgb(0,120,255)'
@@ -334,7 +418,7 @@
           {
             type: 'doughnut',
             data: {
-              labels: contents.map( c => c ? c : 'Clicked' ),
+              labels: contents.map(c => c ? c : 'Clicked'),
               datasets: [
                 {
                   label: 'Conversion Content',
@@ -390,7 +474,14 @@
               conversions,
               Math.floor((conversions / Math.max(impressions, 1)) * 100) + '%',
             ]
-          }).filter(([link, impressions]) => impressions > 0).sort(([la, ia], [lb, ib]) => ib - ia),
+          }).filter(([link, impressions]) => impressions > 0).sort(([la, ia, ca], [lb, ib, cb]) => {
+
+            if (ca === cb) {
+              return ib - ia
+            }
+
+            return cb - ca
+          }),
         })
 
       },
@@ -478,7 +569,14 @@
               conversions,
               Math.floor((conversions / impressions) * 100) + '%',
             ]
-          }).sort(([la, ia], [lb, ib]) => ib - ia),
+          }).sort(([la, ia, ca], [lb, ib, cb]) => {
+
+            if (ca === cb) {
+              return ib - ia
+            }
+
+            return cb - ca
+          }),
         })
 
         Table('#popups-table', {
@@ -506,7 +604,14 @@
               conversions,
               Math.floor((conversions / impressions) * 100) + '%',
             ]
-          }).sort(([la, ia], [lb, ib]) => ib - ia),
+          }).sort(([la, ia, ca], [lb, ib, cb]) => {
+
+            if (ca === cb) {
+              return ib - ia
+            }
+
+            return cb - ca
+          }),
         })
 
       },
@@ -527,6 +632,7 @@
       this.slug = this.getCurSlug()
       this.params = this.getCurSlug().split('/').filter(p => p)
       this.mount()
+      window.dispatchEvent( new Event( 'resize' ) )
     },
 
     init () {

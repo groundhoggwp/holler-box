@@ -202,11 +202,17 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 				'moment'
 			] );
 
+			wp_register_script( 'hollerbox-morphdom', Holler_Box_URL . 'assets/js/lib/morphdom' . $dot_min . '.js', [], HOLLERBOX_VERSION );
+			wp_register_script( 'hollerbox-make-el', Holler_Box_URL . 'assets/js/make-el' . $dot_min . '.js', [
+				'hollerbox-morphdom'
+			], HOLLERBOX_VERSION );
+
 			wp_register_script( 'hollerbox-chart-js', Holler_Box_URL . 'assets/js/chart.min.js' );
 			wp_register_script( 'hollerbox-reporting', Holler_Box_URL . 'assets/js/reports' . $dot_min . '.js', [
 				'hollerbox-chart-js',
 				'hollerbox-elements',
-				'baremetrics-calendar'
+				'baremetrics-calendar',
+				'hollerbox-make-el'
 			] );
 
 			wp_register_script( 'hollerbox-settings', Holler_Box_URL . 'assets/js/settings' . $dot_min . '.js', [

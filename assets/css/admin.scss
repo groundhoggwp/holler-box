@@ -285,6 +285,15 @@ body.hollerbox_page_hollerbox_reports {
           background-color: $primary-blue-2;
         }
       }
+
+      .pagination {
+        padding: 12px 16px;
+        justify-content: flex-end;
+
+        .ellipsis {
+          font-size: 20px;
+        }
+      }
     }
 
   }
