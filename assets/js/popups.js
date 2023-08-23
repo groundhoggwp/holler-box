@@ -272,6 +272,17 @@
     let div = document.createElement('div')
     div.innerHTML = HTML
     return div.firstElementChild
+
+  }
+
+  /**
+   * If it's not a string just return the value
+   *
+   * @param string
+   * @returns {*}
+   */
+  const escapeStr = (string) => {
+    return string.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
   }
 
   const gdprInput = () => {
@@ -289,19 +300,19 @@
   const nameInput = (placeholder = 'Your name', required = true) => {
     //language=HTML
     return `<input class="holler-box-input" type="text" name="name"
-	               placeholder="${placeholder}" ${required ? 'required' : ''}>`
+	               placeholder="${escapeStr(placeholder)}" ${required ? 'required' : ''}>`
   }
 
   const phoneInput = (placeholder = 'Mobile Number', required = false) => {
     //language=HTML
     return `<input class="holler-box-input" type="tel" name="phone"
-	               placeholder="${placeholder}" ${required ? 'required' : ''}>`
+	               placeholder="${escapeStr(placeholder)}" ${required ? 'required' : ''}>`
   }
 
   const emailInput = (placeholder = 'Your email') => {
     //language=HTML
     return `<input class="holler-box-input" type="email" name="email"
-	               placeholder="${placeholder}" required>`
+	               placeholder="${escapeStr(placeholder)}" required>`
   }
 
   const submitButton = (text, type = 'submit') => {

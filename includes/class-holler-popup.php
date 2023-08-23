@@ -165,6 +165,8 @@ class Holler_Popup implements JsonSerializable {
 			case 'name_prompt':
 			case 'email_prompt':
 			case 'message_prompt':
+			case 'yes_message':
+			case 'no_message':
 				$this->_update_meta( $setting, wp_kses_post( $value ) );
 				break;
 			case 'fomo_text':
@@ -184,7 +186,7 @@ class Holler_Popup implements JsonSerializable {
 			default:
 
 				$key   = sanitize_key( $setting );
-				$value = apply_filters( 'hollerbox/popup/update_setting', $value, $key );
+				$value = apply_filters( 'hollerbox/popup/update_setting', $value, $key, $this );
 
 				$this->_update_meta( $key, $value );
 				break;
