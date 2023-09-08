@@ -419,7 +419,7 @@
 
       let { redirect_url = '' } = popup
 
-      let url = new makeURL(redirect_url)
+      let url = makeURL(redirect_url)
       let home = new URL(HollerBox.home_url)
 
       if (isBuilderPreview()) {
