@@ -479,25 +479,31 @@
     },
     formSubmitted: (popup, filters = {}) => {
 
-      if (popup.use_custom_form) {
+      const isCustomForm = popup.use_custom_form
+
+      if (isCustomForm) {
 
         let customForm
-        let customHTML = createHTML(popup.custom_form_html)
-        if (customHTML.tagName === 'FORM') {
-          customForm = customHTML
-        } else {
-          customForm = customHTML.querySelector('form')
-          if (!customForm) {
-            alert('Invalid custom form HTML')
-            return
-          }
+        let parser = new DOMParser()
+        let doc = parser.parseFromString(popup.custom_form_html, 'text/html')
+        customForm = doc.querySelector('form')
+
+        if (!customForm) {
+          throw new Error('Invalid form object')
         }
 
         let form = popup.querySelector('form.holler-box-form')
-
         customForm.classList.add('holler-box-form', 'custom-form')
 
+        let newForm = document.createElement('form')
+        newForm.setAttribute('action', customForm.action)
+        newForm.setAttribute('method', customForm.method)
+        newForm.classList.add('holler-box-form', 'custom-form')
+
         Array.from(customForm.elements).forEach(el => {
+
+          el.removeAttribute('style')
+
           switch (el.tagName) {
             case 'INPUT':
               switch (el.type) {
@@ -510,6 +516,28 @@
                   break
                 case 'radio':
                 case 'checkbox':
+
+                  if ( el.parentNode.tagName === 'LABEL' ){
+                    el = el.parentNode;
+                    break;
+                  }
+
+                  if ( ! el.id ){
+                    break;
+                  }
+
+                  let label = customForm.querySelector( `label[for='${el.id}']` )
+
+                  if ( ! label ){
+                    break;
+                  }
+
+                  let div = document.createElement( 'div' )
+                  div.appendChild( label )
+                  div.appendChild( el )
+
+                  el = div
+
                   break
               }
               break
@@ -521,37 +549,13 @@
               el.classList.add('holler-box-button')
               break
           }
+
+          newForm.append(el)
         })
+
+        customForm = newForm
 
         form.replaceWith(customForm)
-
-        let flag = false
-
-        customForm.addEventListener('submit', e => {
-
-          if (flag) {
-            return true
-          }
-
-          e.preventDefault()
-
-          customForm.querySelector(
-            'button.holler-box-button').innerHTML = '<span class="holler-spinner"></span>'
-          Array.from(customForm.elements).forEach(el => el.disabled = true)
-
-          if (!isBuilderPreview()) {
-            popup.converted('Submitted Custom Form').then(() => {
-              flag = true
-              customForm.submit()
-            })
-          } else {
-            setTimeout(() => popup.open(), 1000)
-          }
-
-          return false
-        })
-
-        return
       }
 
       const {
@@ -561,19 +565,53 @@
 
       const { id, after_submit = 'close' } = popup
 
-      document.querySelector(`#${id} form.holler-box-form`).
-      addEventListener('submit', e => {
+      let theForm = document.querySelector(`#${id} form.holler-box-form`)
+
+      /**
+       * Handles the form submit action
+       *
+       * @param e
+       * @return {Promise<T>}
+       */
+      const handleFormSubmit = e => {
         e.preventDefault()
 
         let form = e.target
         let formData = new FormData(form)
+
+        if (isCustomForm) {
+
+          let propertiesMap = {
+            'email': 'email',
+            'name': 'name',
+            'first': 'name',
+            'last': 'name',
+            'phone': 'phone',
+            'tel': 'phone',
+          }
+
+          for (const pair of formData.entries()) {
+            for (const prop in propertiesMap) {
+              if (pair[0].match(new RegExp(prop, 'i'))) {
+
+                let mapTo = propertiesMap[prop]
+
+                if (formData.has(mapTo) && formData.get(mapTo) !== pair[1]) {
+                  formData.set(mapTo, `${formData.get(mapTo)} ${pair[1]}`)
+                } else if (!formData.has(mapTo)) {
+                  formData.append(mapTo, pair[1])
+                }
+              }
+            }
+          }
+        }
 
         formData.append('location', window.location.href)
         formData.append('referer', document.referrer)
 
         modifyFormData(formData)
 
-        form.querySelectorAll('input, button').
+        form.querySelectorAll('input, select, textarea, button').
         forEach(el => el.disabled = true)
         form.querySelector(
           'button').innerHTML = '<span class="holler-spinner"></span>'
@@ -588,7 +626,7 @@
         }).
         then(({ status = 'success', failures = [] }) => {
 
-          if (status === 'failed') {
+          if (status === 'failed' && ! popup.use_custom_form ) {
 
             if (!failures.length) {
               alert('Something when wrong, please try again later.')
@@ -611,7 +649,9 @@
             return
           }
 
-          SubmitActions[after_submit](popup)
+          if (!isCustomForm) {
+            SubmitActions[after_submit](popup)
+          }
         }).
         catch(e => {
           maybeLog(e)
@@ -621,9 +661,21 @@
             return
           }
 
-          popup.close()
+          // Don't close if cusotm form otherwise it won't submit for real
+          if ( !isCustomForm ){
+            popup.close()
+          }
+        }).finally( () => {
+
+          if ( isCustomForm ){
+            theForm.removeEventListener( 'submit', handleFormSubmit )
+            theForm.submit()
+          }
+
         })
-      })
+      }
+
+      theForm.addEventListener('submit', handleFormSubmit)
     },
     buttonClicked: (popup) => {
 
@@ -1517,7 +1569,7 @@
       })
     },
     exit_intent: (popup, show) => {
-      if ( isMobile() ) {
+      if (isMobile()) {
 
         // Back Button
         window.addEventListener('popstate', (event) => {
@@ -1532,36 +1584,36 @@
         // using touch events (scroll up)
 
         // Wait 1 seconds
-        setTimeout( () => {
+        setTimeout(() => {
           // Fast scroll up
-          let startY = 0;
-          let startTime = 0;
-          let startScroll = 0;
+          let startY = 0
+          let startTime = 0
+          let startScroll = 0
 
-          window.addEventListener('touchstart', function(event) {
-            startY = event.touches[0].clientY;
-            startTime = Date.now();
+          window.addEventListener('touchstart', function (event) {
+            startY = event.touches[0].clientY
+            startTime = Date.now()
             startScroll = window.scrollY
-          });
+          })
 
-          window.addEventListener('touchmove', function(event) {
-            const deltaY = startY - event.touches[0].clientY;
-            const currentTime = Date.now();
-            const timeDiff = currentTime - startTime;
+          window.addEventListener('touchmove', function (event) {
+            const deltaY = startY - event.touches[0].clientY
+            const currentTime = Date.now()
+            const timeDiff = currentTime - startTime
 
             // Check if the touch movement is upward and the speed is above a certain threshold
             if (deltaY < 0 && startScroll > window.scrollY && Math.abs(deltaY) / timeDiff > 0.5) {
               // Fast scroll up detected, perform your desired action here
               show()
             }
-          });
+          })
 
-          window.addEventListener('touchend', function(event) {
-            startY = 0;
-            startTime = 0;
-            startScroll = 0;
-          });
-        }, 1000 )
+          window.addEventListener('touchend', function (event) {
+            startY = 0
+            startTime = 0
+            startScroll = 0
+          })
+        }, 1000)
       }
 
       // Desktop mouseout
@@ -1577,7 +1629,7 @@
   const isMobile = () => {
     const screenWidth = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0)
     const screenHeight = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0)
-    const isMobile = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+    const isMobile = /Android|webOS|iPhone|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent)
 
     return isMobile || (screenWidth < 768 && screenHeight < 1024)
   }

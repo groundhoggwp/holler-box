@@ -1,5 +1,38 @@
 <?php
 
+/**
+ * Add form tags to allowed HTML
+ *
+ * @param $tags array
+ *
+ * @return array
+ */
+function holler_box_allow_form_tags( $tags ) {
+
+	$tags['input'] = [
+		'name'        => true,
+		'type'        => true,
+		'value'       => true,
+		'placeholder' => true,
+		'max'         => true,
+		'min'         => true,
+		'step'        => true,
+		'maxlength'   => true,
+		'minlength'   => true,
+	];
+
+	$tags['select'] = [
+		'name'  => true,
+		'value' => true,
+	];
+
+	$tags['option'] = [
+		'value' => true,
+	];
+
+	return $tags;
+}
+
 class Holler_Popup implements JsonSerializable {
 
 	/**
@@ -168,6 +201,13 @@ class Holler_Popup implements JsonSerializable {
 			case 'yes_message':
 			case 'no_message':
 				$this->_update_meta( $setting, wp_kses_post( $value ) );
+				break;
+			case 'custom_form_html':
+
+				add_filter( 'wp_kses_allowed_html', 'holler_box_allow_form_tags' );
+				$this->_update_meta( $setting, wp_kses_post( $value ) );
+				remove_filter( 'wp_kses_allowed_html', 'holler_box_allow_form_tags' );
+
 				break;
 			case 'fomo_text':
 			case 'button_text':
