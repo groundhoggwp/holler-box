@@ -310,6 +310,8 @@
                                     ${ settings.is_licensed ? __('Deactivate') : __('Activate') }
                                 </button>
                             </div>
+                            <!-- If licensed and pro is not installed, prompt to install pro -->
+                            ${ HollerBox.installed.hollerBoxPro || ! settings.is_licensed ? '' : `<p>🚨️ ${__('You can <a href="https://help.hollerwp.com/article/604-pro-how-to-install-the-pro-plugin">install HollerBox Pro</a> and access additional templates and features!')}</p>` }
                         </div>
                     </div>
                     <div class="holler-panel">

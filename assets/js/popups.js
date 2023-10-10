@@ -486,7 +486,7 @@
         let customForm
         let parser = new DOMParser()
         let doc = parser.parseFromString(popup.custom_form_html, 'text/html')
-        customForm = doc.querySelector('form')
+        customForm = document.importNode(doc.querySelector('form'), true)
 
         if (!customForm) {
           throw new Error('Invalid form object')
@@ -496,8 +496,8 @@
         customForm.classList.add('holler-box-form', 'custom-form')
 
         let newForm = document.createElement('form')
-        newForm.setAttribute('action', customForm.action)
-        newForm.setAttribute('method', customForm.method)
+        newForm.setAttribute('action', customForm.getAttribute('action'))
+        newForm.setAttribute('method', customForm.getAttribute('method'))
         newForm.classList.add('holler-box-form', 'custom-form')
 
         Array.from(customForm.elements).forEach(el => {
@@ -517,24 +517,24 @@
                 case 'radio':
                 case 'checkbox':
 
-                  if ( el.parentNode.tagName === 'LABEL' ){
-                    el = el.parentNode;
-                    break;
+                  if (el.parentNode.tagName === 'LABEL') {
+                    el = el.parentNode
+                    break
                   }
 
-                  if ( ! el.id ){
-                    break;
+                  if (!el.id) {
+                    break
                   }
 
-                  let label = customForm.querySelector( `label[for='${el.id}']` )
+                  let label = customForm.querySelector(`label[for='${el.id}']`)
 
-                  if ( ! label ){
-                    break;
+                  if (!label) {
+                    break
                   }
 
-                  let div = document.createElement( 'div' )
-                  div.appendChild( label )
-                  div.appendChild( el )
+                  let div = document.createElement('div')
+                  div.appendChild(label)
+                  div.appendChild(el)
 
                   el = div
 
@@ -553,9 +553,7 @@
           newForm.append(el)
         })
 
-        customForm = newForm
-
-        form.replaceWith(customForm)
+        form.replaceWith(newForm)
       }
 
       const {
@@ -565,7 +563,7 @@
 
       const { id, after_submit = 'close' } = popup
 
-      let theForm = document.querySelector(`#${id} form.holler-box-form`)
+      let theForm = popup.querySelector('form.holler-box-form')
 
       /**
        * Handles the form submit action
@@ -611,10 +609,7 @@
 
         modifyFormData(formData)
 
-        form.querySelectorAll('input, select, textarea, button').
-        forEach(el => el.disabled = true)
-        form.querySelector(
-          'button').innerHTML = '<span class="holler-spinner"></span>'
+        form.querySelector('button').innerHTML = '<span class="holler-spinner"></span>'
 
         let payload = Object.fromEntries(formData)
 
@@ -626,7 +621,12 @@
         }).
         then(({ status = 'success', failures = [] }) => {
 
-          if (status === 'failed' && ! popup.use_custom_form ) {
+          // Ignore if custom form
+          if (isCustomForm) {
+            return
+          }
+
+          if (status === 'failed') {
 
             if (!failures.length) {
               alert('Something when wrong, please try again later.')
@@ -649,9 +649,7 @@
             return
           }
 
-          if (!isCustomForm) {
-            SubmitActions[after_submit](popup)
-          }
+          SubmitActions[after_submit](popup)
         }).
         catch(e => {
           maybeLog(e)
@@ -661,17 +659,20 @@
             return
           }
 
-          // Don't close if cusotm form otherwise it won't submit for real
-          if ( !isCustomForm ){
+          // Don't close if custom form otherwise it won't submit for real
+          if (!isCustomForm) {
             popup.close()
           }
-        }).finally( () => {
+        }).finally(() => {
 
-          if ( isCustomForm ){
-            theForm.removeEventListener( 'submit', handleFormSubmit )
-            theForm.submit()
+          if (isBuilderPreview()) {
+            return
           }
 
+          if (isCustomForm) {
+            form.removeEventListener('submit', handleFormSubmit)
+            form.submit()
+          }
         })
       }
 
