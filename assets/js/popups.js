@@ -1552,13 +1552,15 @@
     element_click: (
       { selector = '', trigger_multiple = 'once' }, show, popup) => {
       document.querySelectorAll(selector).forEach(el => {
-        el.addEventListener('click', () => {
+        el.addEventListener('click', e => {
 
           if (trigger_multiple === 'multiple') {
             popup._triggered = false
           }
 
-          show()
+          if ( show() ){
+            e.preventDefault()
+          }
         })
       })
     },
