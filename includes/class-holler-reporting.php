@@ -32,7 +32,6 @@ class Holler_Reporting {
 	public function __construct() {
 		global $wpdb;
 		$this->table_name = $wpdb->prefix . 'hollerbox_stats';
-		$this->maybe_create_table();
 
 		add_action( 'deleted_post', [ $this, 'maybe_delete_stats' ], 10, 2 );
 	}
@@ -62,21 +61,17 @@ class Holler_Reporting {
 	 * @return void
 	 */
 	public function maybe_create_table() {
-		$table_version = get_option( $this->table_name . '_table_version' );
-
-		if ( ! $table_version || version_compare( $table_version, self::TABLE_VERSION, '<' ) ) {
-			$this->create_table();
-		}
+		$this->create_table();
 	}
 
 	/**
 	 * Check if the stats table exists
 	 *
+	 * @since  2.4
+	 *
 	 * @param string $table The table name
 	 *
 	 * @return bool          If the table name exists
-	 * @since  2.4
-	 *
 	 */
 	public function table_exists() {
 		global $wpdb;
@@ -105,7 +100,7 @@ class Holler_Reporting {
 	 *
 	 * @return void
 	 */
-	protected function create_table() {
+	public function create_table() {
 
 		global $wpdb;
 
@@ -118,7 +113,7 @@ class Holler_Reporting {
 		$sql = "CREATE TABLE " . $this->table_name . " (
         s_type varchar(10) NOT NULL,
         s_date date NOT NULL,
-        s_count bigint(20) unsigned NOT NULL,
+        s_count INT unsigned NOT NULL,
         popup_id bigint(20) unsigned NOT NULL,
         location varchar($max_index_length) NOT NULL,
         content varchar($max_index_length) NOT NULL,
@@ -135,45 +130,26 @@ class Holler_Reporting {
 	}
 
 	/**
-	 * @param string       $type
+	 * @throws Exception
 	 *
 	 * @param Holler_Popup $popup
 	 * @param string       $location
 	 * @param string       $content
 	 *
+	 * @param string       $type
+	 *
 	 * @return void
-	 * @throws Exception
 	 */
 	protected function increment_stat( string $type, Holler_Popup $popup, $location, $content = '' ) {
 		global $wpdb;
 
 		$date = new DateTime( 'now', wp_timezone() );
 
-		$updated = $wpdb->query( $wpdb->prepare( "
-UPDATE $this->table_name 
-SET s_count = s_count + 1 
-WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s AND content = %s",
-			$popup->ID, $type, $date->format( 'Y-m-d' ), $location, $content ) );
-
-		// No rows were effected
-		if ( ! $updated ) {
-
-			// Create a new row
-			$wpdb->insert( $this->table_name, [
-				's_type'   => $type,
-				's_count'  => 1,
-				'popup_id' => $popup->ID,
-				'location' => $location,
-				'content'  => $content,
-				's_date'   => $date->format( 'Y-m-d' ),
-			], [
-				'%s',
-				'%d',
-				'%d',
-				'%s',
-				'%s',
-			] );
-		}
+		$wpdb->query( $wpdb->prepare(
+			"INSERT INTO $this->table_name (s_type, s_count, popup_id, location, content, s_date)
+			VALUES (%s, %d, %d, %s, %s, %s)
+			ON DUPLICATE KEY UPDATE s_count = s_count + 1",
+			$type, 1, $popup->ID, $location, $content, $date->format( 'Y-m-d' ) ) );
 	}
 
 	/**
@@ -255,7 +231,7 @@ WHERE popup_id = %d AND s_type = %s AND s_date = %s AND location = %s AND conten
 
 		foreach ( $query as $column => $value ) {
 
-			if ( ! $this->is_valid_column( $column ) ){
+			if ( ! $this->is_valid_column( $column ) ) {
 				continue;
 			}
 

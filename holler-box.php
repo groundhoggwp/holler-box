@@ -3,7 +3,7 @@
  * Plugin Name:     HollerBox
  * Plugin URI:      https://hollerwp.com
  * Description:     Powerful Popups & Lead Generation for Small Businesses & Agencies using WordPress
- * Version:         2.3.4.2
+ * Version:         2.3.5
  * Author:          Groundhogg Inc.
  * Author URI:      https://groundhogg.io
  * Text Domain:     holler-box
@@ -169,6 +169,10 @@ add_action( 'plugins_loaded', 'holler_box_load' );
  */
 function holler_box_activation() {
 	/* Activation functions here */
+
+	holler_box_load();
+
+	Holler_Reporting::instance()->create_table();
 }
 
 register_activation_hook( __FILE__, 'holler_box_activation' );

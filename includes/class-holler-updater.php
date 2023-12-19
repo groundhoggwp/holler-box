@@ -59,7 +59,7 @@ class Holler_Updater {
 		Holler_Settings::instance()->commit();
 
 		// Create the reports table
-		Holler_Reporting::instance()->maybe_create_table();
+		Holler_Reporting::instance()->create_table();
 	}
 
 	/**
