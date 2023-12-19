@@ -233,6 +233,7 @@ You can purchase a premium plan for access to support and our premium extensions
 
 = 2.3.5 (2023-12-19) =
 * IMPROVED The efficiency of stats tracking
+* TWEAKED Element default action (like links) is prevented when using the on click trigger
 * TWEAKED Spinner works in other buttons
 * TWEAKED Stats table is created during plugin activation
 
