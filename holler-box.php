@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-define( 'HOLLERBOX_VERSION', '2.3.4.2' );
+define( 'HOLLERBOX_VERSION', '2.3.5' );
 
 if ( ! class_exists( 'Holler_Box' ) ) {
 
