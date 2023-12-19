@@ -121,7 +121,7 @@ class Holler_Reporting {
         KEY s_date (s_date),
         KEY s_type (s_type),
         KEY popup_id (popup_id),
-        KEY content (content),
+        KEY content (content)
         ) $charset_collate ENGINE=InnoDB;";
 
 		dbDelta( $sql );

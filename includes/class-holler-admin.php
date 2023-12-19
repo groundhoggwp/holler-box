@@ -685,17 +685,17 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 			$url  = esc_url( admin_url( 'edit.php?post_type=hollerbox&page=hollerbox_reports#/popup/' . $post->ID ) );
 			$text = __( 'Report' );
 
-			$actions['report'] = "<a href=\"${url}\">{$text}</a>";
+			$actions['report'] = "<a href=\"{$url}\">{$text}</a>";
 
 			$url  = esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=hollerbox&action=hollerbox_export&popup=' . $post->ID ), 'export' ) );
 			$text = __( 'Export' );
 
-			$actions['export'] = "<a href=\"${url}\">{$text}</a>";
+			$actions['export'] = "<a href=\"{$url}\">{$text}</a>";
 
 			$url  = esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=hollerbox&action=hollerbox_duplicate&popup=' . $post->ID ), 'duplicate' ) );
 			$text = __( 'Duplicate' );
 
-			$actions['duplicate'] = "<a href=\"${url}\">{$text}</a>";
+			$actions['duplicate'] = "<a href=\"{$url}\">{$text}</a>";
 
 			$trash = $actions['trash'];
 			unset( $actions['trash'] );
