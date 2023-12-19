@@ -3,8 +3,8 @@
 Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
-Tested up to: 6.3
-Stable tag: 2.3.4.1
+Tested up to: 6.4
+Stable tag: 2.3.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -230,6 +230,11 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.3.5 (2023-12-19) =
+* IMPROVED The efficiency of stats tracking
+* TWEAKED Spinner works in other buttons
+* TWEAKED Stats table is created during plugin activation
 
 = 2.3.4.1 (2023-10-10) =
 * FIXED Custom form HTML fields not submitting after sending to server first.
