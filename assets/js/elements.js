@@ -2022,7 +2022,7 @@
         $(`${selector} #add-row`).focus()
       })
 
-      $(`${selector} input`).on('change', (e) => {
+      $(`${selector} input, ${selector} select`).on('change', (e) => {
         const row = parseInt(e.target.dataset.row)
         const cell = parseInt(e.target.dataset.cell)
         this.rows[row][cell] = e.target.value
