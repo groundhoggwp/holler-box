@@ -129,6 +129,10 @@ class Holler_Frontend {
 			] )
 		];
 
+        if ( defined( 'GROUNDHOGG_VERSION' ) ){
+	        $l10n['is_current_contact'] = \Groundhogg\is_a_contact( \Groundhogg\get_current_contact() );
+        }
+
 		do_action( 'hollerbox/scripts' );
 
 		wp_add_inline_script( 'hollerbox-popups', "HollerBox = " . wp_json_encode( $l10n ), 'before' );

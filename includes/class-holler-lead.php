@@ -19,6 +19,7 @@ class Holler_Lead {
 	public $request = null;
 
 	public function __construct( WP_REST_Request $request ) {
+
 		$this->name = sanitize_text_field( $request->get_param( 'name' ) );
 
 		$parts            = explode( ' ', $this->name );
@@ -29,6 +30,41 @@ class Holler_Lead {
 		}
 
 		$this->email        = sanitize_email( strtolower( $request->get_param( 'email' ) ) );
+
+		if ( is_user_logged_in() ){
+
+			$user = wp_get_current_user();
+
+			if ( ! $this->email ){
+				$this->email = $user->user_email;
+			}
+
+			if ( ! $this->first_name ){
+				$this->first_name = $user->first_name;
+			}
+
+			if ( ! $this->last_name ){
+				$this->last_name = $user->last_name;
+			}
+		}
+
+		if ( defined( 'GROUNDHOGG_VERSION' ) && \Groundhogg\is_a_contact( \Groundhogg\get_current_contact() ) ){
+
+			$contact = \Groundhogg\get_current_contact();
+
+			if ( ! $this->email ){
+				$this->email = $contact->get_email();
+			}
+
+			if ( ! $this->first_name ){
+				$this->first_name = $contact->get_first_name();
+			}
+
+			if ( ! $this->last_name ){
+				$this->last_name = $contact->get_last_name();
+			}
+		}
+
 		$this->phone        = sanitize_text_field( $request->get_param( 'phone' ) );
 		$this->location     = sanitize_text_field( $request->get_param( 'location' ) );
 		$this->referrer     = sanitize_text_field( $request->get_param( 'referer' ) );

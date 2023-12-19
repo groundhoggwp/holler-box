@@ -62,7 +62,26 @@ class Holler_Integrations {
 			return new WP_Error( 'unknown_integration', 'Unknown integration type ' . $type );
 		}
 
-		return call_user_func( self::$integrations[ $type ], $integration, $lead, $popup );
+		/**
+		 * Action before the integration
+		 *
+		 * @param $lead Holler_Lead
+		 * @param $popup Holler_Popup
+		 */
+		do_action( "hollerbox/integrations/$type/before", $lead, $popup );
+
+		// Do the integration
+		$result = call_user_func( self::$integrations[ $type ], $integration, $lead, $popup );
+
+		/**
+		 * Action after the integration
+		 *
+		 * @param $lead Holler_Lead
+		 * @param $popup Holler_Popup
+		 */
+		do_action( "hollerbox/integrations/$type/after", $lead, $popup );
+
+		return $result;
 	}
 
 	/**
