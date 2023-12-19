@@ -236,6 +236,7 @@ You can purchase a premium plan for access to support and our premium extensions
 * TWEAKED Element default action (like links) is prevented when using the on click trigger
 * TWEAKED Spinner works in other buttons
 * TWEAKED Stats table is created during plugin activation
+* FIXED DB creation errors in MariaDB 10+
 
 = 2.3.4.1 (2023-10-10) =
 * FIXED Custom form HTML fields not submitting after sending to server first.
