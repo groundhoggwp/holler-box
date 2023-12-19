@@ -1064,7 +1064,10 @@ body:not(.wp-admin) {
 
   input[type=submit].holler-box-button,
   input[type=button].holler-box-button,
-  button.holler-box-button {
+  button.holler-box-button,
+  button.holler-choice,
+  button.holler-survey-next,
+  {
     font-size: 20px;
     padding: 10px 16px;
     border-radius: 0;

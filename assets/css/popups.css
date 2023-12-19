@@ -780,7 +780,9 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 }
 .holler-box input[type=submit].holler-box-button,
 .holler-box input[type=button].holler-box-button,
-.holler-box button.holler-box-button {
+.holler-box button.holler-box-button,
+.holler-box button.holler-choice,
+.holler-box button.holler-survey-next {
   font-size: 20px;
   padding: 10px 16px;
   border-radius: 0;
@@ -793,12 +795,16 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 }
 .holler-box input[type=submit].holler-box-button:disabled,
 .holler-box input[type=button].holler-box-button:disabled,
-.holler-box button.holler-box-button:disabled {
+.holler-box button.holler-box-button:disabled,
+.holler-box button.holler-choice:disabled,
+.holler-box button.holler-survey-next:disabled {
   opacity: 0.8;
 }
 .holler-box input[type=submit].holler-box-button .holler-spinner,
 .holler-box input[type=button].holler-box-button .holler-spinner,
-.holler-box button.holler-box-button .holler-spinner {
+.holler-box button.holler-box-button .holler-spinner,
+.holler-box button.holler-choice .holler-spinner,
+.holler-box button.holler-survey-next .holler-spinner {
   display: block;
   margin: 0 auto;
   height: 15px;
@@ -811,14 +817,18 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
 }
 .holler-box input[type=submit].holler-box-button.inverse,
 .holler-box input[type=button].holler-box-button.inverse,
-.holler-box button.holler-box-button.inverse {
+.holler-box button.holler-box-button.inverse,
+.holler-box button.holler-choice.inverse,
+.holler-box button.holler-survey-next.inverse {
   background-color: transparent;
   color: #2196f3;
   border: 1px solid #2196F3;
 }
 .holler-box input[type=submit].holler-box-button.inverse .holler-spinner,
 .holler-box input[type=button].holler-box-button.inverse .holler-spinner,
-.holler-box button.holler-box-button.inverse .holler-spinner {
+.holler-box button.holler-box-button.inverse .holler-spinner,
+.holler-box button.holler-choice.inverse .holler-spinner,
+.holler-box button.holler-survey-next.inverse .holler-spinner {
   border: 5px solid rgba(33, 150, 243, 0.4);
   border-bottom-color: #2196f3;
 }
