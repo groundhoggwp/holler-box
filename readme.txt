@@ -3,8 +3,8 @@
 Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
-Tested up to: 6.4
-Stable tag: 2.3.5
+Tested up to: 6.5
+Stable tag: 2.3.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -230,6 +230,9 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.3.6 (2024-05-02) =
+* FIXED Groundhogg display conditions not showing if the Groundhogg admin bar widget was hidden.
 
 = 2.3.5 (2023-12-19) =
 * IMPROVED The efficiency of stats tracking

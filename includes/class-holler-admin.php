@@ -325,6 +325,10 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 
 			$groundhogg_installed = defined( 'GROUNDHOGG_VERSION' );
 
+			if ( $groundhogg_installed && function_exists( 'Groundhogg\enqueue_filter_assets' ) ){
+				Groundhogg\enqueue_filter_assets();
+			}
+
 			wp_enqueue_media();
 			wp_enqueue_editor();
 
@@ -411,7 +415,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 			] );
 
 			if ( $groundhogg_installed ) {
-				\Groundhogg\enqueue_filter_assets();
+				enqueue_filter_assets();
 			}
 
 			do_action( 'hollerbox/admin/scripts' );
