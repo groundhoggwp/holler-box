@@ -165,6 +165,7 @@ class Holler_Integrations {
 		$message = str_replace( array_keys( $replacements ), array_values( $replacements ), $message );
 
 		$subject = sanitize_text_field( $props['subject'] );
+		$subject = str_replace( array_keys( $replacements ), array_values( $replacements ), $subject );
 
 		$headers = [
 			'Content-Type: text/html',

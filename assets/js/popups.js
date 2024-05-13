@@ -467,6 +467,7 @@
       document.body.classList.remove('disable-scrolling')
     },
     notificationClosed: (popup) => {
+      localStorage.setItem( `holler_chat_${popup.ID}_status`, 'closed' )
       popup.closed = true
       popup.open()
     },
@@ -474,6 +475,7 @@
       if (popup.closed) {
         document.getElementById(popup.id).addEventListener('click', e => {
           popup.close().then(() => {
+            localStorage.setItem( `holler_chat_${popup.ID}_status`, 'open' )
             popup.closed = false
             popup.open()
           })
@@ -1014,6 +1016,10 @@
         if (!popup.messages) {
           popup.messages = []
         }
+
+        let status = localStorage.getItem( `holler_chat_${popup.ID}_status` )
+
+        popup.closed = status === 'closed';
       },
       onOpen: (popup) => {
 
