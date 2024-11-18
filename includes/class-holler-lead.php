@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class Holler_Lead {
+class Holler_Lead implements ArrayAccess {
 
 	public $email = '';
 	public $name = '';
@@ -18,6 +18,8 @@ class Holler_Lead {
 	public $gdpr_consent = false;
 	public $request = null;
 
+	protected $data = [];
+
 	public function __construct( WP_REST_Request $request ) {
 
 		$this->name = sanitize_text_field( $request->get_param( 'name' ) );
@@ -29,38 +31,38 @@ class Holler_Lead {
 			$this->last_name = trim( $parts[1] );
 		}
 
-		$this->email        = sanitize_email( strtolower( $request->get_param( 'email' ) ) );
+		$this->email = sanitize_email( strtolower( $request->get_param( 'email' ) ) );
 
-		if ( is_user_logged_in() ){
+		if ( is_user_logged_in() ) {
 
 			$user = wp_get_current_user();
 
-			if ( ! $this->email ){
+			if ( ! $this->email ) {
 				$this->email = $user->user_email;
 			}
 
-			if ( ! $this->first_name ){
+			if ( ! $this->first_name ) {
 				$this->first_name = $user->first_name;
 			}
 
-			if ( ! $this->last_name ){
+			if ( ! $this->last_name ) {
 				$this->last_name = $user->last_name;
 			}
 		}
 
-		if ( defined( 'GROUNDHOGG_VERSION' ) && \Groundhogg\is_a_contact( \Groundhogg\get_current_contact() ) ){
+		if ( defined( 'GROUNDHOGG_VERSION' ) && \Groundhogg\is_a_contact( \Groundhogg\get_current_contact() ) ) {
 
 			$contact = \Groundhogg\get_current_contact();
 
-			if ( ! $this->email ){
+			if ( ! $this->email ) {
 				$this->email = $contact->get_email();
 			}
 
-			if ( ! $this->first_name ){
+			if ( ! $this->first_name ) {
 				$this->first_name = $contact->get_first_name();
 			}
 
-			if ( ! $this->last_name ){
+			if ( ! $this->last_name ) {
 				$this->last_name = $contact->get_last_name();
 			}
 		}
@@ -71,6 +73,14 @@ class Holler_Lead {
 		$this->gdpr_consent = $request->get_param( 'gdpr_consent' ) === 'yes';
 		$this->message      = sanitize_textarea_field( $request->get_param( 'message' ) );
 		$this->request      = $request;
+
+		/**
+		 * When a lead is initialized
+		 *
+		 * @param $lead    Holler_Lead
+		 * @param $request WP_REST_Request
+		 */
+		do_action( 'hollerbox/lead_init', $this, $request );
 	}
 
 	/**
@@ -147,4 +157,31 @@ class Holler_Lead {
 	}
 
 
+	public function offsetExists( $offset ) {
+		return isset( $this->$offset ) || isset( $this->data[ $offset ] );
+	}
+
+	public function offsetGet( $offset ) {
+		if ( property_exists( $this, $offset ) ) {
+			return $this->$offset;
+		}
+
+		return $this->data[ $offset ];
+	}
+
+	public function offsetSet( $offset, $value ) {
+		if ( property_exists( $this, $offset ) ) {
+			$this->$offset = $value;
+		}
+
+		$this->data[ $offset ] = $value;
+	}
+
+	public function offsetUnset( $offset ) {
+		if ( property_exists( $this, $offset ) ) {
+			return;
+		}
+
+		unset( $this->data[ $offset ] );
+	}
 }
