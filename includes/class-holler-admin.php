@@ -57,8 +57,9 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 */
 		private function hooks() {
 
-			add_filter( 'replace_editor', [ $this, 'replace_editor' ], 10, 2 );
-			add_action( 'admin_action_hollerbox_export', [ $this, 'export_popup' ] );
+			add_filter( 'replace_editor', [ $this, 'replace_editor' ], 99, 2 );
+
+            add_action( 'admin_action_hollerbox_export', [ $this, 'export_popup' ] );
 			add_action( 'admin_action_hollerbox_duplicate', [ $this, 'duplicate_popup' ] );
 
 			add_action( 'admin_menu', [ $this, 'register_admin_pages' ] );
@@ -432,40 +433,26 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 			}
 
 			if ( did_action( 'load-post-new.php' ) || did_action( 'load-post.php' ) ) {
-				$this->render_builder();
+				$this->maybe_render_builder();
 			}
 
 			return true;
 		}
 
 		/**
-		 * Load the editor on the post-new.php page
+         * Ensure we only output the stuff we need once.
+         *
+		 * @return void
 		 */
-		public function post_new() {
-			$screen = get_current_screen();
+        public function maybe_render_builder() {
 
-			// Only show on edit/add screen
-			if ( $screen->post_type !== 'hollerbox' ) {
-				return;
-			}
+            // only output once
+            if ( has_action( 'in_admin_footer', [ $this, 'builder_scripts' ] ) ){
+                return;
+            }
 
-			$this->render_builder();
-		}
-
-		/**
-		 * Load the editor on the post.php page
-		 */
-		public function post() {
-
-			$screen = get_current_screen();
-
-			// Only show on edit/add screen
-			if ( $screen->post_type !== 'hollerbox' || $_GET['action'] !== 'edit' ) {
-				return;
-			}
-
-			$this->render_builder();
-		}
+            $this->render_builder();
+        }
 
 		/**
 		 * Output HTML to for the builder
@@ -482,7 +469,8 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 			require_once ABSPATH . 'wp-admin/admin-header.php';
 
 			?>
-			<div id="holler-app"></div><?php
+            <div id="holler-app"></div>
+            <?php
 		}
 
 		/**
