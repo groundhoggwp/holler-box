@@ -30,8 +30,8 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 * Get active instance
 		 *
 		 * @access      public
-		 * @return      self self::$instance The one true Holler_Admin
 		 * @since       0.2.0
+		 * @return      self self::$instance The one true Holler_Admin
 		 */
 		public static function instance() {
 			if ( ! self::$instance ) {
@@ -50,16 +50,19 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 * Run action and filter hooks
 		 *
 		 * @access      private
+		 * @since       0.2.0
 		 * @return      void
 		 *
 		 *
-		 * @since       0.2.0
 		 */
 		private function hooks() {
 
+            // Thou shall not pass Yoast!
+            $this->disable_yoast_seo_on_edit_screen();
+
 			add_filter( 'replace_editor', [ $this, 'replace_editor' ], 99, 2 );
 
-            add_action( 'admin_action_hollerbox_export', [ $this, 'export_popup' ] );
+			add_action( 'admin_action_hollerbox_export', [ $this, 'export_popup' ] );
 			add_action( 'admin_action_hollerbox_duplicate', [ $this, 'duplicate_popup' ] );
 
 			add_action( 'admin_menu', [ $this, 'register_admin_pages' ] );
@@ -164,20 +167,20 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 			}, $converted );
 
 			?>
-			<h2><?php _e( 'HollerBox' ) ?></h2>
-			<table class="form-table">
-				<tr>
-					<th><?php _e( 'Closed popups', 'holler-box' ); ?></th>
-					<td><?php echo implode( ', ', $closed ) ?></td>
-				</tr>
-				<tr>
-					<th><?php _e( 'Converted popups', 'holler-box' ); ?></th>
-					<td><?php echo implode( ', ', $converted ) ?></td>
-				</tr>
-			</table>
-			<p>
-				<a href="<?php echo esc_url( wp_nonce_url( $_SERVER['REQUEST_URI'], self::CLEAR_CACHE_NONCE, 'holler_clear_cache_single_user' ) ) ?>"
-				   class="button button-secondary"><?php _e( 'Clear user cache' ); ?></a></p>
+            <h2><?php _e( 'HollerBox' ) ?></h2>
+            <table class="form-table">
+                <tr>
+                    <th><?php _e( 'Closed popups', 'holler-box' ); ?></th>
+                    <td><?php echo implode( ', ', $closed ) ?></td>
+                </tr>
+                <tr>
+                    <th><?php _e( 'Converted popups', 'holler-box' ); ?></th>
+                    <td><?php echo implode( ', ', $converted ) ?></td>
+                </tr>
+            </table>
+            <p>
+                <a href="<?php echo esc_url( wp_nonce_url( $_SERVER['REQUEST_URI'], self::CLEAR_CACHE_NONCE, 'holler_clear_cache_single_user' ) ) ?>"
+                   class="button button-secondary"><?php _e( 'Clear user cache' ); ?></a></p>
 			<?php
 
 
@@ -299,7 +302,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		 */
 		public function settings_page() {
 			?>
-			<div id="holler-app"></div><?php
+            <div id="holler-app"></div><?php
 		}
 
 		/**
@@ -310,7 +313,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		public function reports_page() {
 
 			?>
-			<div id="holler-app"></div><?php
+            <div id="holler-app"></div><?php
 		}
 
 		/**
@@ -326,7 +329,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 
 			$groundhogg_installed = defined( 'GROUNDHOGG_VERSION' );
 
-			if ( $groundhogg_installed && function_exists( 'Groundhogg\enqueue_filter_assets' ) ){
+			if ( $groundhogg_installed && function_exists( 'Groundhogg\enqueue_filter_assets' ) ) {
 				\Groundhogg\enqueue_filter_assets();
 			}
 
@@ -440,19 +443,35 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 		}
 
 		/**
-         * Ensure we only output the stuff we need once.
+         * Yoast is being bad, so lets fix that.
          *
 		 * @return void
 		 */
-        public function maybe_render_builder() {
+        public function disable_yoast_seo_on_edit_screen() {
 
-            // only output once
-            if ( has_action( 'in_admin_footer', [ $this, 'builder_scripts' ] ) ){
+            if ( ! class_exists( 'WPSEO_Post_Type' ) ){
                 return;
             }
 
-            $this->render_builder();
+	        if ( WPSEO_Post_Type::has_metabox_enabled( 'hollerbox' ) ){
+		        WPSEO_Options::set( 'display-metabox-pt-hollerbox', false );
+	        }
         }
+
+		/**
+		 * Ensure we only output the stuff we need once.
+		 *
+		 * @return void
+		 */
+		public function maybe_render_builder() {
+
+			// only output once
+			if ( has_action( 'in_admin_footer', [ $this, 'builder_scripts' ] ) ) {
+				return;
+			}
+
+			$this->render_builder();
+		}
 
 		/**
 		 * Output HTML to for the builder
@@ -470,7 +489,7 @@ if ( ! class_exists( 'Holler_Admin' ) ) {
 
 			?>
             <div id="holler-app"></div>
-            <?php
+			<?php
 		}
 
 		/**

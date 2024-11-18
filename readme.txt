@@ -3,8 +3,8 @@
 Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
-Tested up to: 6.5
-Stable tag: 2.3.7
+Tested up to: 6.7
+Stable tag: 2.3.8
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -230,6 +230,9 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
 == Changelog ==
+
+= 2.3.8 (2024-11-18) =
+* FIXED Conflict with Yoast SEO Premium.
 
 = 2.3.7 (2024-05-13) =
 * TWEAKED When the notification popups are closed they remain in the closed state on subsequent pages.
