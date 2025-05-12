@@ -156,11 +156,12 @@ class Holler_Lead implements ArrayAccess {
 		return $ip;
 	}
 
-
+	#[ReturnTypeWillChange]
 	public function offsetExists( $offset ) {
 		return isset( $this->$offset ) || isset( $this->data[ $offset ] );
 	}
 
+	#[ReturnTypeWillChange]
 	public function offsetGet( $offset ) {
 		if ( property_exists( $this, $offset ) ) {
 			return $this->$offset;
@@ -169,6 +170,7 @@ class Holler_Lead implements ArrayAccess {
 		return $this->data[ $offset ];
 	}
 
+	#[ReturnTypeWillChange]
 	public function offsetSet( $offset, $value ) {
 		if ( property_exists( $this, $offset ) ) {
 			$this->$offset = $value;
@@ -177,6 +179,7 @@ class Holler_Lead implements ArrayAccess {
 		$this->data[ $offset ] = $value;
 	}
 
+	#[ReturnTypeWillChange]
 	public function offsetUnset( $offset ) {
 		if ( property_exists( $this, $offset ) ) {
 			return;

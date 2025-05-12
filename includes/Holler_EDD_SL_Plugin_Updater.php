@@ -21,6 +21,8 @@ class Holler_EDD_SL_Plugin_Updater {
 	private $wp_override = false;
 	private $cache_key = '';
 
+	private $beta = false;
+
 	private $health_check_timeout = 5;
 
 	/**
