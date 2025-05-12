@@ -2081,13 +2081,17 @@
     isBlocking (other) {
 
       // Don't show notifications that are in the same position
-      if (other.isNotification() && this.isNotification() && other.position ===
-        this.position) {
+      if (other.isNotification() && this.isNotification() && other.position === this.position) {
         return true
       }
 
-      // Usually, notifications are not blocking
-      return !this.isNotification()
+      // if the popup does not have an overlay, consider not blocking.
+      if ( this.overlay_enabled || this.querySelector( '.holler-box-overlay' ) ){
+        return true
+      }
+
+      // is_blocking meta setting
+      return this.is_blocking ?? false
     },
 
     maybeOpen () {
