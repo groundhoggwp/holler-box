@@ -70,6 +70,8 @@ class Holler_Frontend {
 
 	public function enqueue_scripts() {
 
+		do_action( 'hollerbox/frontend/scripts/before', $this );
+
 		$dot_min = Holler_Settings::instance()->get( 'script_debug_mode' ) ? '' : '.min';
 
 		wp_enqueue_style( 'hollerbox-popups', Holler_Box_URL . 'assets/css/popups.css', [], HOLLERBOX_VERSION );
@@ -133,7 +135,8 @@ class Holler_Frontend {
 	        $l10n['is_current_contact'] = \Groundhogg\is_a_contact( \Groundhogg\get_current_contact() );
         }
 
-		do_action( 'hollerbox/scripts' );
+		do_action( 'hollerbox/scripts', $this );
+		do_action( 'hollerbox/frontend/scripts', $this );
 
 		wp_add_inline_script( 'hollerbox-popups', "HollerBox = " . wp_json_encode( $l10n ), 'before' );
 
