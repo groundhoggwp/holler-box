@@ -361,7 +361,8 @@ class Holler_Popup implements JsonSerializable {
 	 */
 	#[\ReturnTypeWillChange]
 	public function jsonSerialize() {
-		return wp_parse_args( $this->post->to_array(), wp_parse_args( $this->settings, [
+
+		$serialized = wp_parse_args( $this->post->to_array(), wp_parse_args( $this->settings, [
 			'after_submit'    => 'close',
 			'success_message' => __( 'Thanks for subscribing.' ),
 			'has_shortcodes'  => [
@@ -369,6 +370,8 @@ class Holler_Popup implements JsonSerializable {
 				'in_success_message' => self::content_has_shortcodes( $this->success_message )
 			]
 		] ) );
+
+        return apply_filters( 'hollerbox/popup/json', $serialized, $this );
 	}
 
 	/**
@@ -568,6 +571,12 @@ class Holler_Popup implements JsonSerializable {
 
 		// Check for logged-in/out
 		self::add_display_condition( 'show_for_x_visitors', function ( $filter ) {
+
+            // if undefined ignore.
+            if ( ! isset( $filter['visitor'] ) ){
+                return true;
+            }
+
 			switch ( $filter['visitor'] ) {
 				default:
 					return true;
@@ -593,13 +602,13 @@ class Holler_Popup implements JsonSerializable {
 			$filter = wp_parse_args( $filter, [ 'regex' => '' ] );
 
 			global $wp;
-			$current_slug = trailingslashit( add_query_arg( [], $wp->request ) );
+			$current_slug = trailingslashit( add_query_arg( $wp->query_string, $wp->request ) );
 			if ( $current_slug !== '/' ) {
 				$current_slug = '/' . $current_slug;
 			}
 
 			try {
-				return preg_match( "#{$filter['regex']}#", $current_slug );
+				return preg_match( "@{$filter['regex']}@", $current_slug );
 			} catch ( Exception $e ) {
 				return false;
 			}
