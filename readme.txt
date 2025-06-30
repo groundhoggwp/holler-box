@@ -229,6 +229,10 @@ Yes, we have tools available to meet the criteria of all the worlds ANTI-SPAM & 
 = Where can I upgrade to Pro? =
 You can purchase a premium plan for access to support and our premium extensions & integrations on our [pricing page](https://www.hollerwp.com/pricing/).
 
+= How can I report security bugs? =
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team helps validate, triage and handle any security vulnerabilities. [Report a security vulnerability.]( https://patchstack.com/database/vdp/9e5fb9de-b4ff-4c66-a60b-2d04c7cc641d )
+
 == Changelog ==
 
 = 2.3.9 (2025-05-12) =
