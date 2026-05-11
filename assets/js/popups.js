@@ -2440,4 +2440,11 @@
     makeURL,
   }
 
+  HollerBox.api = {
+    apiPost,
+    // apiGet,
+    // apiPatch,
+    // apiDelete
+  }
+
 } )()

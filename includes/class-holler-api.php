@@ -202,7 +202,7 @@ class Holler_Api {
 		}
 
 		// Parse the location
-		$location = parse_url( sanitize_text_field( $request->get_param( 'location' ) ), PHP_URL_PATH );
+		$location = parse_url( esc_url_raw( $request->get_param( 'location' ) ), PHP_URL_PATH );
 		$content  = sanitize_text_field( $request->get_param( 'content' ) );
 
 		Holler_Reporting::instance()->add_conversion( $popup, $location, $content );
@@ -236,7 +236,7 @@ class Holler_Api {
 		}
 
 		// Parse the location
-		$location = parse_url( sanitize_text_field( $request->get_param( 'location' ) ), PHP_URL_PATH );
+		$location = parse_url( esc_url_raw( $request->get_param( 'location' ) ), PHP_URL_PATH );
 
 		Holler_Reporting::instance()->add_impression( $popup, $location );
 

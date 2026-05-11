@@ -50,6 +50,11 @@ class Holler_Popup implements JsonSerializable {
 
 		$this->setup( $id );
 
+        // make sure the post exists before continuing...
+        if ( ! $this->exists() ){
+            return;
+        }
+
 		// Upgrades
 		$this->maybe_upgrade_2_0();
 		$this->maybe_upgrade_2_0_integrations();

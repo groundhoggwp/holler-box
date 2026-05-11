@@ -469,7 +469,11 @@
             let conversions = ReportData.sumConversions({ location: page, id: popup.ID })
 
             return [
-              `<a href="${page}" target="_blank">${page}</a>`,
+              // `<a href="${page}" target="_blank">${page}</a>`,
+              MakeEl.makeEl( 'a', {
+                href: page,
+                target: '_blank',
+              }, page).outerHTML,
               impressions,
               conversions,
               Math.floor((conversions / Math.max(impressions, 1)) * 100) + '%',
@@ -564,7 +568,11 @@
             let conversions = ReportData.sumConversions({ location: page })
 
             return [
-              `<a href="${page}" target="_blank">${page}</a>`,
+              // `<a href="${page}" target="_blank">${page}</a>`,
+              MakeEl.makeEl( 'a', {
+                href: page,
+                target: '_blank',
+              }, page).outerHTML,
               impressions,
               conversions,
               Math.floor((conversions / impressions) * 100) + '%',
