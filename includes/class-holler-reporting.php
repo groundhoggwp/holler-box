@@ -150,6 +150,8 @@ class Holler_Reporting {
 			VALUES (%s, %d, %d, %s, %s, %s)
 			ON DUPLICATE KEY UPDATE s_count = s_count + 1",
 			$type, 1, $popup->ID, $location, $content, $date->format( 'Y-m-d' ) ) );
+
+		wp_cache_set( 'last_changed', microtime(), 'hollerbox:counts' );
 	}
 
 	/**
@@ -212,7 +214,7 @@ class Holler_Reporting {
 
 		global $wpdb;
 
-		$cache_key = md5( wp_json_encode( $query ) );
+		$cache_key = md5( wp_json_encode( $query ) ) . ':' . wp_cache_get_last_changed( 'hollerbox:counts' );
 
 		$count = wp_cache_get( $cache_key, 'hollerbox:counts', null, $found );
 

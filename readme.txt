@@ -3,8 +3,8 @@
 Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
-Tested up to: 6.8
-Stable tag: 2.3.11
+Tested up to: 7.0
+Stable tag: 2.3.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -234,6 +234,9 @@ You can purchase a premium plan for access to support and our premium extensions
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team helps validate, triage and handle any security vulnerabilities. [Report a security vulnerability.]( https://patchstack.com/database/vdp/9e5fb9de-b4ff-4c66-a60b-2d04c7cc641d )
 
 == Changelog ==
+
+= 2.3.12 (2026-07-23) =
+* FIXED Correctly invalidate statistics cache when new impressions and submissions are logged.
 
 = 2.3.11 (2026-05-11) =
 * SECURITY Fixed vulnerability responsibly disclosed by Patchstack.
