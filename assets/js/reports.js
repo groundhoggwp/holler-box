@@ -319,6 +319,17 @@
     )
   }
 
+  /**
+   * Round a floating point number to 2 decimal places
+   *
+   * @param num
+   * @param places
+   * @returns {number}
+   */
+  const roundToDecimal = (num, places = 2) => {
+    return Math.round((num + Number.EPSILON) * Math.pow(10, places)) / Math.pow(10, places);
+  }
+
   const pages = [
     {
       slug: /popup\/[0-9]+/,
@@ -454,7 +465,7 @@
 
         $('#impressions').html(impressions)
         $('#conversions').html(conversions)
-        $('#conversion-rate').html(Math.floor((conversions / Math.max(impressions, 1)) * 100) + '%')
+        $('#conversion-rate').html(roundToDecimal((conversions / Math.max(impressions, 1)) * 100, 2) + '%')
 
         Table('#pages-table', {
           headers: [
@@ -476,7 +487,7 @@
               }, page).outerHTML,
               impressions,
               conversions,
-              Math.floor((conversions / Math.max(impressions, 1)) * 100) + '%',
+              roundToDecimal((conversions / Math.max(impressions, 1)) * 100, 2) + '%',
             ]
           }).filter(([link, impressions]) => impressions > 0).sort(([la, ia, ca], [lb, ib, cb]) => {
 
@@ -553,7 +564,7 @@
 
         $('#impressions').html(impressions)
         $('#conversions').html(conversions)
-        $('#conversion-rate').html(Math.floor((conversions / Math.max(impressions, 1)) * 100) + '%')
+        $('#conversion-rate').html(roundToDecimal((conversions / Math.max(impressions, 1)) * 100, 2) + '%')
 
         Table('#pages-table', {
           headers: [
@@ -575,7 +586,7 @@
               }, page).outerHTML,
               impressions,
               conversions,
-              Math.floor((conversions / impressions) * 100) + '%',
+              roundToDecimal((conversions / impressions) * 100, 2) + '%',
             ]
           }).sort(([la, ia, ca], [lb, ib, cb]) => {
 
@@ -610,7 +621,7 @@
               `<a href="#" class="popup-link" data-id="${p.ID}">${p.post_title}</a>`,
               impressions,
               conversions,
-              Math.floor((conversions / impressions) * 100) + '%',
+              roundToDecimal((conversions / impressions) * 100, 2) + '%',
             ]
           }).sort(([la, ia, ca], [lb, ib, cb]) => {
 
