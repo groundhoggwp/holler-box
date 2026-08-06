@@ -385,27 +385,39 @@ class Holler_Api {
 	 */
 	public function submit( WP_REST_Request $request ) {
 
-		$id = absint( $request->get_param( 'popup_id' ) );
+    	$id = absint( $request->get_param( 'popup_id' ) );
 
-		$popup = new Holler_Popup( $id );
+    	$popup = new Holler_Popup( $id );
 
-		if ( ! $popup->exists() ) {
-			return self::ERROR_404();
-		}
+    	if ( ! $popup->exists() ) {
+        	return self::ERROR_404();
+    	}
 
-		$lead = new Holler_Lead( $request );
+    	$lead = new Holler_Lead( $request );
 
-		$response = $popup->submit( $lead );
+    	$response = $popup->submit( $lead );
 
-		if ( is_wp_error( $response ) ) {
-			return rest_ensure_response( $response );
-		}
+    	if ( is_wp_error( $response ) ) {
+        	return rest_ensure_response( $response );
+    	}
 
-		if ( $response['status'] === 'success' ) {
-			$this->track_conversion( $request );
-		}
+    	if ( $response['status'] === 'success' ) {
+        	// Record the conversion directly against the popup we already have,
+        	// instead of re-entering track_conversion() which rebuilds the popup
+        	// and repeats the exists() check.
+        	$location = parse_url( esc_url_raw( $request->get_param( 'location' ) ), PHP_URL_PATH );
+        	$content  = sanitize_text_field( $request->get_param( 'content' ) );
 
-		return rest_ensure_response( $response );
+        	Holler_Reporting::instance()->add_conversion( $popup, $location, $content );
+
+        	if ( is_user_logged_in() ) {
+            	$conversions   = wp_parse_id_list( get_user_meta( get_current_user_id(), 'hollerbox_popup_conversions', true ) );
+            	$conversions[] = $popup->ID;
+            	update_user_meta( get_current_user_id(), 'hollerbox_popup_conversions', implode( ',', array_unique( $conversions ) ) );
+        	}
+    	}
+
+    	return rest_ensure_response( $response );
 	}
 
 	/**
