@@ -46,13 +46,16 @@ class Holler_Reporting {
 	 */
 	public function maybe_delete_stats( $post_id, $post ) {
 
-		if ( $post->post_type !== 'hollerbox' ) {
-			return;
-		}
+    	if ( $post->post_type !== 'hollerbox' ) {
+        	return;
+    	}
 
-		global $wpdb;
+    	global $wpdb;
 
-		$wpdb->query( "DELETE FROM $this->table_name WHERE popup_id = $post_id" );
+    	$wpdb->query( $wpdb->prepare(
+       		"DELETE FROM {$this->table_name} WHERE popup_id = %d",
+        	$post_id
+    	) );
 	}
 
 	/**
