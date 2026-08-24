@@ -2134,7 +2134,7 @@
     setTemplate () {
       // Template is unregistered
       if (!PopupTemplates.hasOwnProperty(this.template)) {
-        return false
+        throw new Error( `${this.template} is not a registered templated` )
       }
 
       // polyfill methods
@@ -2154,9 +2154,7 @@
 
     init () {
 
-      if (!this.setTemplate()) {
-        return
-      }
+      this.setTemplate()
 
       Cookies.addContentView(this.ID)
 
@@ -2266,6 +2264,11 @@
       'message',
       function (event) {
         if (event.origin === window.location.origin) {
+
+          // might be impacted by browser extensions
+          if ( ! event.data.hasOwnProperty('popup') ){
+            return
+          }
 
           if (popup) {
             popup.cleanup()

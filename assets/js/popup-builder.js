@@ -1549,6 +1549,10 @@
       },
       onMount: ({ integrations = [] }, updateSetting) => {
 
+        if ( ! Array.isArray(integrations) ) {
+          integrations = []
+        }
+
         $('#add-integration').on('click', e => {
           selectIntegrationModal({
             onSelect: (i) => {

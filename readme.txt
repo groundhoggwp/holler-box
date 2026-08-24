@@ -3,8 +3,8 @@
 Contributors: trainingbusinesspros, groundhogg
 Tags: popups, optin, popup, email, marketing
 Requires at least: 5.0
-Tested up to: 7.0
-Stable tag: 2.3.13
+Tested up to: 7.1
+Stable tag: 2.3.14
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -234,6 +234,9 @@ You can purchase a premium plan for access to support and our premium extensions
 You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team helps validate, triage and handle any security vulnerabilities. [Report a security vulnerability.]( https://patchstack.com/database/vdp/9e5fb9de-b4ff-4c66-a60b-2d04c7cc641d )
 
 == Changelog ==
+
+= 2.3.14 (2026-08-24) =
+* FIXED Editor preview not working when some browser extensions enabled.
 
 = 2.3.13 (2026-07-23) =
 * TWEAKED Percentages will now show up to 2 decimal places instead of a whole number.
