@@ -307,14 +307,17 @@ class Holler_Frontend {
 			$key = strtolower( $key );
 
 			switch ( $key ) {
-				case 'style':
-					$value = self::array_to_css( $value );
-					break;
-				case 'href':
-				case 'action':
 				case 'src':
-					$value = strpos( $value, 'data:image/png;base64,' ) === false ? esc_url( $value ) : $value;
-					break;
+            		// Allow inline base64 PNGs for image sources only; everything
+            		// else is run through esc_url().
+            		$value = strpos( $value, 'data:image/png;base64,' ) === 0 ? $value : esc_url( $value );
+            		break;
+        		case 'href':
+        		case 'action':
+            		// Navigation/submission targets must always be URL-escaped;
+            		// no data: URI bypass here.
+            		$value = esc_url( $value );
+            		break;
 				default:
 					if ( is_array( $value ) ) {
 						$value = implode( ' ', $value );
