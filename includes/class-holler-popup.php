@@ -224,17 +224,20 @@ class Holler_Popup implements JsonSerializable {
 				$this->_update_meta( $setting, sanitize_text_field( $value ) );
 				break;
 			case 'fomo_time_ago':
-			case 'fomo_display_time':
-			case 'fomo_loop_delay':
-				$this->_update_meta( $setting, absint( $value ) );
-				break;
-			default:
+        	case 'fomo_display_time':
+        	case 'fomo_loop_delay':
+            	$this->_update_meta( $setting, absint( $value ) );
+            break;
+        	case 'css':
+            	$this->_update_meta( $setting, wp_strip_all_tags( (string) $value ) );
+            break;
+        default:
 
-				$key   = sanitize_key( $setting );
-				$value = apply_filters( 'hollerbox/popup/update_setting', $value, $key, $this );
+            $key   = sanitize_key( $setting );
+            $value = apply_filters( 'hollerbox/popup/update_setting', $value, $key, $this );
 
-				$this->_update_meta( $key, $value );
-				break;
+            $this->_update_meta( $key, $value );
+            break;
 		}
 	}
 
@@ -448,7 +451,8 @@ class Holler_Popup implements JsonSerializable {
 	 * @return void
 	 */
 	public function output_css() {
-		echo $this->_get_meta( 'css' );
+    	// Belt-and-suspenders: even though css is sanitized on save, escape the closing-tag sequence at output so a legacy/pre-fix stored value can't break out of the surrounding <style> block.
+    	echo str_replace( '</', '<\/', (string) $this->_get_meta( 'css' ) );
 	}
 
 	/**
