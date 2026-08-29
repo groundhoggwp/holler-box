@@ -233,28 +233,33 @@ class Holler_Reporting {
 
 		foreach ( $query as $column => $value ) {
 
-			if ( ! $this->is_valid_column( $column ) ) {
-				continue;
-			}
+        // Reject any key that isn't a known, whitelisted column before it
+        // can reach an identifier position in the SQL. 'before'/'after' are
+        // logical aliases for the s_date column, so allow them explicitly.
+        if ( ! in_array( $column, [ 'before', 'after' ], true )
+             && ! $this->is_valid_column( $column ) ) {
+            continue;
+        }
 
-			switch ( $column ) {
-				case 'before':
-					$clauses[] = $wpdb->prepare( "s_date <= %s", $value );
-					break;
-				case 'after':
-					$clauses[] = $wpdb->prepare( "s_date >= %s", $value );
-					break;
-				case 's_type':
-				case 'location':
-				case 'content':
-				case 's_date':
-					$clauses[] = $wpdb->prepare( "$column = %s", $value );
-					break;
-				default:
-					$clauses[] = $wpdb->prepare( "$column = %d", $value );
-					break;
-			}
-		}
+        switch ( $column ) {
+            case 'before':
+                $clauses[] = $wpdb->prepare( 's_date <= %s', $value );
+                break;
+            case 'after':
+                $clauses[] = $wpdb->prepare( 's_date >= %s', $value );
+                break;
+            case 's_type':
+            case 'location':
+            case 'content':
+            case 's_date':
+                $clauses[] = $wpdb->prepare( "$column = %s", $value );
+                break;
+            case 'popup_id':
+            case 's_count':
+                $clauses[] = $wpdb->prepare( "$column = %d", $value );
+                break;
+        }
+    }
 
 		$where = implode( ' AND ', $clauses );
 
