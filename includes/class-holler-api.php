@@ -165,14 +165,14 @@ class Holler_Api {
 
 		$id = absint( $request->get_param( 'popup_id' ) );
 
+		if ( ! is_user_logged_in() ) {
+			return self::ERROR_401();
+		}
+
 		$popup = new Holler_Popup( $id );
 
 		if ( ! $popup->exists() ) {
 			return self::ERROR_404();
-		}
-
-		if ( ! is_user_logged_in() ){
-			return self::ERROR_401();
 		}
 
 		$closed_popups   = wp_parse_id_list( get_user_meta( get_current_user_id(), 'hollerbox_closed_popups', true ) );
@@ -389,7 +389,8 @@ class Holler_Api {
 
 		$popup = new Holler_Popup( $id );
 
-		if ( ! $popup->exists() ) {
+		// Only published popups can receive submissions
+		if ( ! $popup->exists() || $popup->post_status !== 'publish' ) {
 			return self::ERROR_404();
 		}
 

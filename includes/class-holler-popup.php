@@ -81,6 +81,11 @@ class Holler_Popup implements JsonSerializable {
 	protected function setup( $id ) {
 		$this->post = get_post( $id );
 
+		// Only HollerBox popups are valid. Never operate on (or migrate) other post types.
+		if ( $this->post && get_post_type( $this->post ) !== 'hollerbox' ) {
+			$this->post = null;
+		}
+
 		if ( ! $this->exists() ) {
 			return;
 		}
