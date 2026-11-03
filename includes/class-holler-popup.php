@@ -233,6 +233,10 @@ class Holler_Popup implements JsonSerializable {
 			case 'fomo_loop_delay':
 				$this->_update_meta( $setting, absint( $value ) );
 				break;
+			case 'css':
+				// User-authored CSS never contains markup, strip it so nothing can break out of the <style> element
+				$this->_update_meta( $setting, wp_strip_all_tags( (string) $value ) );
+				break;
 			default:
 
 				$key   = sanitize_key( $setting );
@@ -453,7 +457,8 @@ class Holler_Popup implements JsonSerializable {
 	 * @return void
 	 */
 	public function output_css() {
-		echo $this->_get_meta( 'css' );
+		// Also escape on output, values saved before the sanitization was added are still stored as-is
+		echo str_replace( '</', '<\/', (string) $this->_get_meta( 'css' ) );
 	}
 
 	/**

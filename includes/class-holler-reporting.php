@@ -52,7 +52,7 @@ class Holler_Reporting {
 
 		global $wpdb;
 
-		$wpdb->query( "DELETE FROM $this->table_name WHERE popup_id = $post_id" );
+		$wpdb->query( $wpdb->prepare( "DELETE FROM $this->table_name WHERE popup_id = %d", $post_id ) );
 	}
 
 	/**
@@ -233,26 +233,10 @@ class Holler_Reporting {
 
 		foreach ( $query as $column => $value ) {
 
-			if ( ! $this->is_valid_column( $column ) ) {
-				continue;
-			}
+			$clause = $this->build_clause( $column, $value );
 
-			switch ( $column ) {
-				case 'before':
-					$clauses[] = $wpdb->prepare( "s_date <= %s", $value );
-					break;
-				case 'after':
-					$clauses[] = $wpdb->prepare( "s_date >= %s", $value );
-					break;
-				case 's_type':
-				case 'location':
-				case 'content':
-				case 's_date':
-					$clauses[] = $wpdb->prepare( "$column = %s", $value );
-					break;
-				default:
-					$clauses[] = $wpdb->prepare( "$column = %d", $value );
-					break;
+			if ( $clause ) {
+				$clauses[] = $clause;
 			}
 		}
 
@@ -334,7 +318,40 @@ class Holler_Reporting {
 			'location',
 			's_date',
 			'content'
-		] );
+		], true );
+	}
+
+	/**
+	 * Build a prepared WHERE clause for a single query key.
+	 * Unknown keys are rejected so they can never reach an identifier position in the SQL.
+	 *
+	 * @param $column string
+	 * @param $value  mixed
+	 *
+	 * @return string empty if the column is not valid
+	 */
+	protected function build_clause( $column, $value ) {
+
+		global $wpdb;
+
+		switch ( $column ) {
+			case 'before':
+				return $wpdb->prepare( 's_date <= %s', $value );
+			case 'after':
+				return $wpdb->prepare( 's_date >= %s', $value );
+		}
+
+		if ( ! $this->is_valid_column( $column ) ) {
+			return '';
+		}
+
+		switch ( $column ) {
+			case 'popup_id':
+			case 's_count':
+				return $wpdb->prepare( "$column = %d", $value );
+			default:
+				return $wpdb->prepare( "$column = %s", $value );
+		}
 	}
 
 	/**
@@ -358,28 +375,11 @@ class Holler_Reporting {
 		$clauses = [];
 
 		foreach ( $query as $column => $value ) {
-			switch ( $column ) {
-				case 'before':
-					$clauses[] = $wpdb->prepare( 's_date <= %s', $value );
-					break;
-				case 'after':
-					$clauses[] = $wpdb->prepare( 's_date >= %s', $value );
-					break;
-				case 's_type':
-				case 'location':
-				case 'content':
-				case 's_date':
-					$clauses[] = $wpdb->prepare( "$column = %s", $value );
-					break;
-				default:
-					if ( $this->is_valid_column( $column ) ) {
-						if ( is_numeric( $column ) ) {
-							$clauses[] = $wpdb->prepare( "$column = %d", $value );
-						} else {
-							$clauses[] = $wpdb->prepare( "$column = %s", $value );
-						}
-					}
-					break;
+
+			$clause = $this->build_clause( $column, $value );
+
+			if ( $clause ) {
+				$clauses[] = $clause;
 			}
 		}
 

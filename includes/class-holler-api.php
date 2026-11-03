@@ -201,6 +201,23 @@ class Holler_Api {
 			return self::ERROR_404();
 		}
 
+		$this->record_conversion( $popup, $request );
+
+		return rest_ensure_response( [
+			'success' => true
+		] );
+	}
+
+	/**
+	 * Record a conversion for a popup that has already been loaded
+	 *
+	 * @param Holler_Popup    $popup
+	 * @param WP_REST_Request $request
+	 *
+	 * @return void
+	 */
+	protected function record_conversion( Holler_Popup $popup, WP_REST_Request $request ) {
+
 		// Parse the location
 		$location = parse_url( esc_url_raw( $request->get_param( 'location' ) ), PHP_URL_PATH );
 		$content  = sanitize_text_field( $request->get_param( 'content' ) );
@@ -212,10 +229,6 @@ class Holler_Api {
 			$conversions[] = $popup->ID;
 			update_user_meta( get_current_user_id(), 'hollerbox_popup_conversions', implode( ',', array_unique( $conversions ) ) );
 		}
-
-		return rest_ensure_response( [
-			'success' => true
-		] );
 	}
 
 	/**
@@ -403,7 +416,7 @@ class Holler_Api {
 		}
 
 		if ( $response['status'] === 'success' ) {
-			$this->track_conversion( $request );
+			$this->record_conversion( $popup, $request );
 		}
 
 		return rest_ensure_response( $response );

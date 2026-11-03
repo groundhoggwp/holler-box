@@ -310,10 +310,13 @@ class Holler_Frontend {
 				case 'style':
 					$value = self::array_to_css( $value );
 					break;
+				case 'src':
+					// Only image sources may be inline base64 PNGs
+					$value = strpos( $value, 'data:image/png;base64,' ) === 0 ? $value : esc_url( $value );
+					break;
 				case 'href':
 				case 'action':
-				case 'src':
-					$value = strpos( $value, 'data:image/png;base64,' ) === false ? esc_url( $value ) : $value;
+					$value = esc_url( $value );
 					break;
 				default:
 					if ( is_array( $value ) ) {
