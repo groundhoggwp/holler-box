@@ -956,4 +956,16 @@ body:not(.wp-admin).admin-bar .holler-box.holler-banner .positioner.top-left {
   }
 }
 
+.holler-box .holler-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /*# sourceMappingURL=popups.css.map */

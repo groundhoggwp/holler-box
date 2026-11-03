@@ -225,13 +225,13 @@
     const closeIcons = {
       //language=HTML
       normal: `
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 365.7 365.7">
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 365.7 365.7">
               <path fill="currentColor"
                     d="M243 183 356 70c13-13 13-33 0-46L341 9a32 32 0 0 0-45 0L183 123 70 9a32 32 0 0 0-46 0L9 24a32 32 0 0 0 0 46l114 113L9 296a32 32 0 0 0 0 45l15 15c13 13 33 13 46 0l113-113 113 113c12 13 33 13 45 0l15-15c13-12 13-33 0-45zm0 0"/>
           </svg>`,
       //language=HTML
       filled: `
-          <svg viewBox="0 0 511.8 511.8" xmlns="http://www.w3.org/2000/svg">
+          <svg aria-hidden="true" viewBox="0 0 511.8 511.8" xmlns="http://www.w3.org/2000/svg">
               <path
                       d="M 286 256 L 361 180 C 366.359 174.641 368.452 166.83 366.49 159.51 C 362.264 143.736 342.547 138.453 331 150 L 256 226 L 180 150 C 174.641 144.641 166.83 142.548 159.51 144.51 C 143.736 148.736 138.453 168.453 150 180 L 226 256 L 150 331 C 144.641 336.359 142.548 344.17 144.51 351.49 C 148.736 367.264 168.453 372.547 180 361 L 256 286 L 331 361 C 336.359 366.359 344.17 368.452 351.49 366.49 C 367.264 362.264 372.547 342.547 361 331 Z"
                       style="fill: rgb(255, 255, 255);"/>
@@ -251,7 +251,7 @@
 
     //language=HTML
     return `
-        <button class="holler-box-modal-close ${ classes.join(' ') }">
+        <button class="holler-box-modal-close ${ classes.join(' ') }" aria-label="Close">
             ${ closeIcons[close_button_icon] }
         </button>`
   }
@@ -286,6 +286,27 @@
     return string.replace(/&/g, '&amp;').replace(/>/g, '&gt;').replace(/</g, '&lt;').replace(/"/g, '&quot;')
   }
 
+  let fieldCounter = 0
+
+  /**
+   * Unique id so labels can be tied to their field even with multiple popups on the page
+   *
+   * @returns {string}
+   */
+  const fieldId = () => `holler-field-${ ++fieldCounter }`
+
+  /**
+   * Visually hidden label, keeps the design but gives the field an accessible name
+   *
+   * @param id string
+   * @param text string
+   * @param fallback string used when text is empty
+   * @returns {string}
+   */
+  const fieldLabel = (id, text, fallback) => {
+    return `<label class="holler-sr-only" for="${ id }">${ escapeStr(text || fallback) }</label>`
+  }
+
   const gdprInput = () => {
 
     const HTML = createHTML(HollerBox.settings.gdpr_text)
@@ -299,20 +320,23 @@
   }
 
   const nameInput = (placeholder = 'Your name', required = true) => {
+    const id = fieldId()
     //language=HTML
-    return `<input class="holler-box-input" type="text" name="name"
+    return `${ fieldLabel(id, placeholder, 'Name') }<input id="${ id }" class="holler-box-input" type="text" name="name" autocomplete="name"
                    placeholder="${ escapeStr(placeholder) }" ${ required ? 'required' : '' }>`
   }
 
   const phoneInput = (placeholder = 'Mobile Number', required = false) => {
+    const id = fieldId()
     //language=HTML
-    return `<input class="holler-box-input" type="tel" name="phone"
+    return `${ fieldLabel(id, placeholder, 'Phone') }<input id="${ id }" class="holler-box-input" type="tel" name="phone" autocomplete="tel"
                    placeholder="${ escapeStr(placeholder) }" ${ required ? 'required' : '' }>`
   }
 
   const emailInput = (placeholder = 'Your email') => {
+    const id = fieldId()
     //language=HTML
-    return `<input class="holler-box-input" type="email" name="email"
+    return `${ fieldLabel(id, placeholder, 'Email') }<input id="${ id }" class="holler-box-input" type="email" name="email" autocomplete="email"
                    placeholder="${ escapeStr(placeholder) }" required>`
   }
 
@@ -505,14 +529,62 @@
         newForm.setAttribute('method', customForm.getAttribute('method'))
         newForm.classList.add('holler-box-form', 'custom-form')
 
+        /**
+         * Only form elements are copied over, so the original labels are lost.
+         * Create a visually hidden label for fields so they keep an accessible name.
+         *
+         * @param field
+         * @returns {HTMLLabelElement|null}
+         */
+        const accessibleLabel = (field) => {
+
+          if (field.getAttribute('aria-label') || field.getAttribute('aria-labelledby')) {
+            return null
+          }
+
+          let text = ''
+
+          if (field.id) {
+            text = customForm.querySelector(`label[for='${ CSS.escape(field.id) }']`)?.textContent
+          }
+
+          // a wrapping label around a select would include all of the option text
+          if (!text && field.tagName !== 'SELECT' && field.closest('label')) {
+            text = field.closest('label').textContent
+          }
+
+          text = ( text || field.getAttribute('placeholder') || field.getAttribute('title') || field.name || '' ).trim()
+
+          if (!text) {
+            return null
+          }
+
+          if (!field.id) {
+            field.id = fieldId()
+          }
+
+          let label = document.createElement('label')
+          label.className = 'holler-sr-only'
+          label.setAttribute('for', field.id)
+          label.textContent = text
+
+          return label
+        }
+
         Array.from(customForm.elements).forEach(el => {
 
           el.removeAttribute('style')
+
+          let hiddenLabel = null
 
           switch (el.tagName) {
             case 'INPUT':
               switch (el.type) {
                 default:
+                  el.classList.add('holler-box-input')
+                  hiddenLabel = accessibleLabel(el)
+                  break
+                case 'hidden':
                   el.classList.add('holler-box-input')
                   break
                 case 'submit':
@@ -549,10 +621,15 @@
             case 'TEXTAREA':
             case 'SELECT':
               el.classList.add('holler-box-input')
+              hiddenLabel = accessibleLabel(el)
               break
             case 'BUTTON':
               el.classList.add('holler-box-button')
               break
+          }
+
+          if (hiddenLabel) {
+            newForm.append(hiddenLabel)
           }
 
           newForm.append(el)
@@ -944,8 +1021,9 @@
           case 'message':
           case 'message_2':
             // language=HTML
-            input = `<textarea rows="1" name="message"
-                               placeholder="${ message_placeholder }"
+            const messageId = fieldId()
+            input = `${ fieldLabel(messageId, message_placeholder, 'Message') }<textarea id="${ messageId }" rows="1" name="message"
+                               placeholder="${ escapeStr(message_placeholder) }"
                                class="holler-box-input" required></textarea>`
             break
           case 'name':
@@ -990,8 +1068,8 @@
                             ${ popup.messages.join('') }
                             <form class="holler-chat-form">
                                 ${ input }
-                                <button type="submit" class="send-message">
-                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                <button type="submit" class="send-message" aria-label="Send message">
+                                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
                                          viewBox="0 0 404.644 404.644">
                                         <path fill="currentColor"
                                               d="M5.535 386.177c-3.325 15.279 8.406 21.747 19.291 16.867l367.885-188.638h.037c4.388-2.475 6.936-6.935 6.936-12.08 0-5.148-2.548-9.611-6.936-12.085h-.037L24.826 1.6C13.941-3.281 2.21 3.189 5.535 18.469c.225 1.035 21.974 97.914 33.799 150.603l192.042 33.253-192.042 33.249C27.509 288.26 5.759 385.141 5.535 386.177z"/>
